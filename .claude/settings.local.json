@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\app\\\\faq\" \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\app\\\\industries\" \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\app\\\\pricing\")",
+      "Bash(dir \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\lib\")"
+    ]
+  }
+}
