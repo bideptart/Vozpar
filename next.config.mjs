@@ -4,6 +4,7 @@ const nextConfig = {
   // its own `node_modules`. Drop it on any Node 18+ host (Hostinger, VPS,
   // Docker, etc.) and run `node server.js` — no Vercel runtime required.
   output: "standalone",
+  devIndicators: false,
   typescript: {
     ignoreBuildErrors: true,
   },

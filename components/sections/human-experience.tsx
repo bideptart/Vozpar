@@ -9,17 +9,19 @@ const items = [
     icon: Waves,
     title: "Zero-lag conversations",
     description:
-      "Native audio-to-audio modeling delivers natural warmth and real-time fluidity — no robotic dead air.",
+      "Native audio-to-audio modeling delivers natural warmth and real-time fluidity. No robotic dead air, no awkward pauses while a transcription pipeline catches up.",
   },
   {
     icon: Hand,
     title: "Smart interruptions",
-    description: "Customers can talk over the agent at any moment. It stops, listens, and responds like a human would.",
+    description:
+      "Customers can talk over the agent at any moment. It stops, listens, and responds the way a real human would — not the way a chatbot pretends to.",
   },
   {
     icon: InfinityIcon,
     title: "Unlimited capacity",
-    description: "Scale from one call to thousands simultaneously with zero busy signals or queue time.",
+    description:
+      "Scale from one call to thousands simultaneously. No busy signals, no queue time, no per-seat math.",
   },
 ]
 
@@ -49,7 +51,7 @@ export function HumanExperience() {
             <span className="text-aurora">your best agent.</span>
           </h2>
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-            9278.ai skips the brittle speech-to-text and text-to-speech relay and uses a single audio-native engine — so
+            9278.ai skips the brittle speech-to-text and text-to-speech relay and runs on a single audio-native engine — so
             your callers hear pauses, emotion, and timing that feel right.
           </p>
         </ScrollReveal>

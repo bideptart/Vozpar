@@ -9,9 +9,8 @@ type LogoProps = {
 }
 
 /**
- * 9278.ai wordmark — black-on-white JPEG.
- * Light: multiply drops the white bg against the off-white page.
- * Dark: invert flips to white-on-black, then screen drops the now-black bg.
+ * 9278.ai wordmark — white-on-transparent PNG.
+ * Reads as-is on dark backgrounds; inverts in light mode so it stays visible.
  */
 export function Logo({ className, height = 40, priority = false }: LogoProps) {
   const width = Math.round(height * 1.629)
@@ -24,13 +23,13 @@ export function Logo({ className, height = 40, priority = false }: LogoProps) {
       style={{ height }}
     >
       <Image
-        src="/9278-logo-black.jpeg"
+        src="/logo.png"
         alt=""
         width={width}
         height={height}
         priority={priority}
         draggable={false}
-        className="h-full w-auto select-none mix-blend-multiply dark:mix-blend-screen dark:invert"
+        className="h-full w-auto select-none invert dark:invert-0"
       />
     </span>
   )

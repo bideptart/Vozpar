@@ -8,19 +8,22 @@ const items = [
   {
     icon: Headset,
     title: "24/7 virtual front desk",
-    description: "An always-on receptionist that greets every caller, answers FAQs, and escalates only when needed.",
+    description:
+      "An always-on receptionist that greets every caller, answers FAQs from your knowledge base, and escalates only when needed.",
     tag: "Inbound",
   },
   {
     icon: TrendingUp,
     title: "Proactive growth",
-    description: "Automate outbound lead generation, lead revival, and instant speed-to-lead callbacks.",
+    description:
+      "Automate outbound lead generation, lead revival, and instant speed-to-lead callbacks — from one dashboard.",
     tag: "Outbound",
   },
   {
     icon: Languages,
     title: "Multilingual fluency",
-    description: "Auto-detects the caller's language and switches mid-conversation for a true local feel.",
+    description:
+      "Auto-detects the caller's language and switches mid-conversation for a true local feel — no extra setup required.",
     tag: "Global",
   },
 ]
@@ -35,8 +38,8 @@ export function UseCases() {
             Inbound & outbound
           </span>
           <h2 className="mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
-            One platform.{" "}
-            <span className="text-aurora">Every call your business makes.</span>
+            Inbound, outbound, and multilingual{" "}
+            <span className="text-aurora">— covered.</span>
           </h2>
           <p className="mt-5 text-pretty leading-relaxed text-muted-foreground md:text-lg">
             From the first hello to the follow-up that closes the deal — 9278.ai handles the entire call lifecycle.

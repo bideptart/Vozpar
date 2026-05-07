@@ -19,7 +19,7 @@ export function OrganizationJsonLd() {
         "@type": "Organization",
         name: SITE.name,
         url: SITE.url,
-        logo: absoluteUrl("/9278-logo-black.jpeg"),
+        logo: absoluteUrl("/logo.png"),
         sameAs: ["https://dashboard.9278.ai/login"],
       }}
     />

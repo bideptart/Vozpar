@@ -23,8 +23,8 @@ export function FAQ() {
               <span className="text-aurora">answered.</span>
             </h2>
             <p className="mt-5 text-pretty leading-relaxed text-muted-foreground md:text-lg">
-              The short version: $20 minimum top-up, voice credit valid 60 days, phone numbers monthly. The long version
-              is on the right.
+              The short version: $20 minimum top-up, voice credit valid 60 days, phone numbers stay with your existing carrier.
+              The long version is on the right.
             </p>
             <Link
               href="/faq"

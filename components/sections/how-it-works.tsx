@@ -1,6 +1,6 @@
 "use client"
 
-import { Wand2, PlugZap, Rocket, ArrowRight } from "lucide-react"
+import { Wand2, BookOpen, Rocket, ArrowRight } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
@@ -10,18 +10,18 @@ const steps = [
     label: "Step 01",
     title: "Design your agent",
     description:
-      "Pick a voice, write the prompt, set guardrails. Use the visual flow builder or describe the agent in plain English — both ship the same model.",
-    bullets: ["No-code flow builder", "60+ neural voices", "System prompt + personas"],
+      "Pick a voice, write the prompt, set guardrails. Describe the agent in plain English and ship it.",
+    bullets: ["System prompt + personas", "Guardrails and conversation flow", "Plain-English agent definition"],
     pillClass: "ai-pill-cyan",
     accent: "var(--ai-cyan)",
   },
   {
-    icon: PlugZap,
+    icon: BookOpen,
     label: "Step 02",
-    title: "Connect your stack",
+    title: "Connect your knowledge",
     description:
-      "Hook up the tools your team already uses — CRMs, calendars, payments, knowledge bases. Your agent calls the same APIs your humans do.",
-    bullets: ["50+ native integrations", "Function calling & webhooks", "RAG over your knowledge base"],
+      "Point the agent at your knowledge base, FAQs, or product docs. It answers from your source of truth, not a generic model.",
+    bullets: ["RAG over your knowledge base", "Live document sync", "Source citations on every answer"],
     pillClass: "ai-pill-violet",
     accent: "var(--ai-violet)",
   },
@@ -30,8 +30,8 @@ const steps = [
     label: "Step 03",
     title: "Launch & scale",
     description:
-      "Provision a phone number, embed the web widget, or wire up SMS — go live in minutes. Scale from one call to thousands without a queue.",
-    bullets: ["Carrier-grade phone numbers", "Web, SMS & inbound/outbound", "Real-time analytics"],
+      "Plug in your phone number, route inbound or outbound, and go live. Scale from one call to thousands without a queue.",
+    bullets: ["Phone number routing (inbound + outbound)", "Real-time latency tracking", "Self-hosted control panel"],
     pillClass: "ai-pill-magenta",
     accent: "var(--ai-magenta)",
   },

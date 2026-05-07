@@ -41,8 +41,7 @@ export function CTA() {
               <span className="text-aurora">you build it.</span>
             </h2>
             <p className="relative mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              Talk to a live 9278.ai agent right now, see our pricing, or book a 20-minute walkthrough with a solutions
-              engineer.
+              Talk to a live 9278.ai agent right now, see our pricing, or book a 20-minute walkthrough.
             </p>
 
             <div className="relative mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -70,16 +69,16 @@ export function CTA() {
             {/* Trust strip */}
             <div className="relative mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                SOC 2 aligned
-              </span>
-              <span className="inline-flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                99.99% uptime
+                Sub-second latency
               </span>
               <span className="inline-flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                40+ countries
+                Bring your own carrier
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                Self-hosted control panel
               </span>
               <span className="inline-flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />

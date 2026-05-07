@@ -70,7 +70,7 @@ export function Hero() {
         transition={{ duration: 22, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-4 pt-10 pb-12 md:px-6 md:pt-14 md:pb-16 lg:grid-cols-12 lg:items-center lg:gap-10">
+      <div className="relative mx-auto grid min-h-[calc(100svh-4rem)] w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-10 md:px-6 md:py-14 lg:grid-cols-12 lg:gap-10">
         {/* LEFT: Copy */}
         <div className="lg:col-span-7">
           {/* Status pill */}
@@ -91,7 +91,7 @@ export function Hero() {
             </span>
             <span className="h-3 w-px bg-border/80" />
             <Sparkles className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-            Neural voice · Sub-second latency
+            Native audio · Sub-second latency · Self-hosted
           </motion.div>
 
           {/* Headline */}
@@ -124,8 +124,8 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.85 }}
             className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground"
           >
-            Build, launch, and scale voice agents for sales, support, and operations. Native audio, real interruptions,
-            and carrier-grade phone numbers — shipped in an afternoon.
+            Build, launch, and scale voice agents on a self-hosted control panel. Native audio, real interruptions,
+            and your own phone numbers — production-ready in an afternoon.
           </motion.p>
 
           <motion.div
@@ -166,18 +166,18 @@ export function Hero() {
             className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-3 border-t border-border/40 pt-5"
           >
             <div>
-              <p className="text-2xl font-semibold tracking-tight text-aurora">40+</p>
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">Countries</p>
-            </div>
-            <div className="hidden h-10 w-px bg-border/60 sm:block" />
-            <div>
               <p className="text-2xl font-semibold tracking-tight text-aurora">&lt;300ms</p>
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">Latency</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Sub-second latency</p>
             </div>
             <div className="hidden h-10 w-px bg-border/60 sm:block" />
             <div>
-              <p className="text-2xl font-semibold tracking-tight text-aurora">99.99%</p>
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">Uptime</p>
+              <p className="text-2xl font-semibold tracking-tight text-aurora">Self-hosted</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Your data, your stack</p>
+            </div>
+            <div className="hidden h-10 w-px bg-border/60 sm:block" />
+            <div>
+              <p className="text-2xl font-semibold tracking-tight text-aurora">Unlimited</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Concurrent calls</p>
             </div>
           </motion.div>
         </div>
@@ -355,33 +355,19 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Trusted-by marquee */}
+      {/* Carrier trust strip */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 1.4 }}
-        className="relative border-t border-border/40 bg-background/50 py-4"
+        className="relative border-t border-border/40 bg-background/50 py-6"
       >
         <p className="mb-3 text-center text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-          Trusted by telecom operators in 40+ countries
+          Connect your carrier account in two clicks
         </p>
-        <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-          <div className="marquee flex w-max whitespace-nowrap text-sm font-medium tracking-wide text-muted-foreground/70">
-            {[0, 1].map((dup) => (
-              <ul
-                key={dup}
-                aria-hidden={dup === 1}
-                className="flex shrink-0 items-center gap-16 pr-16"
-              >
-                {["Telnyx Carrier", "VOIP.global", "RingNexus", "CallHub Pro", "OmniSIP", "Vonix Networks", "Twillio Bridge", "Bandwidth Loop"].map((b) => (
-                  <li key={b} className="opacity-70 transition-opacity hover:opacity-100">
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            ))}
-          </div>
-        </div>
+        <p className="mx-auto max-w-2xl text-center text-sm leading-relaxed text-muted-foreground/90">
+          Phone numbers, SIP trunks, and inbound routing flow through the carrier you already know and trust — your numbers, your billing, unchanged.
+        </p>
       </motion.div>
     </section>
   )

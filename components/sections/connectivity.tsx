@@ -8,17 +8,20 @@ const items = [
   {
     icon: PhoneForwarded,
     title: "Bring your own number",
-    description: "Port your existing business line to our high-speed SIP network in minutes — no downtime.",
+    description:
+      "Already have a carrier account? Connect it and your existing numbers route through 9278.ai instantly — no porting, no downtime.",
   },
   {
     icon: Globe2,
-    title: "Local presence, anywhere",
-    description: "Provision local DIDs in 100+ countries instantly. Look local, sound local, convert better.",
+    title: "Inbound and outbound",
+    description:
+      "One number, both directions. Trigger outbound campaigns or answer every incoming call automatically — same dashboard, same agent.",
   },
   {
     icon: ShieldCheck,
-    title: "Carrier-grade reliability",
-    description: "Crystal-clear voice quality on redundant global infrastructure with 99.99% uptime.",
+    title: "Carrier-grade voice",
+    description:
+      "Your provider's global network carries the call. We handle the brain. You keep the relationship, the billing, and the porting rights.",
   },
 ]
 
@@ -42,15 +45,15 @@ export function Connectivity() {
             <ScrollReveal>
               <span className="ai-pill-violet">
                 <Globe2 className="h-3 w-3" />
-                Global reach
+                Phone numbers
               </span>
               <h2 className="mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
-                Phone numbers and carriers,{" "}
-                <span className="text-aurora">handled.</span>
+                Your carrier account,{" "}
+                <span className="text-aurora">supercharged.</span>
               </h2>
               <p className="mt-5 text-pretty leading-relaxed text-muted-foreground md:text-lg">
-                Whether you need one toll-free number or a hundred local DIDs across continents, 9278.ai ships the
-                telephony plumbing so you can focus on the conversation — not the SIP trunks.
+                We don't sell phone numbers. We connect to the carrier you already use — so your numbers, billing, and
+                porting stay exactly where they are.
               </p>
             </ScrollReveal>
 

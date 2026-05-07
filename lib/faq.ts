@@ -23,20 +23,32 @@ export const FAQ_GROUPS: FaqGroup[] = [
         a: "Voice credit is valid for 60 days from the date of purchase. After 60 days any unused balance expires. Top up again at any time to extend — every new top-up gets its own fresh 60-day window.",
       },
       {
-        q: "What about phone numbers — do those expire?",
-        a: "Phone numbers are billed monthly and renew every 30 days. They don't expire while you're paying for them, but if you cancel a number it's released back to the carrier and the recurring fee stops. Voice credit and phone-number billing are completely separate.",
+        q: "Do I need a carrier account?",
+        a: "Yes. 9278.ai connects to the carrier you already use to handle inbound and outbound voice. We don't sell phone numbers or compete with your provider — your numbers, billing, and porting stay exactly where they are.",
       },
       {
-        q: "Can I top up more than $100?",
-        a: "Yes. You can top up multiple times in any combination — Stripe handles every charge. High-volume teams typically run 3–5 Scale top-ups a week.",
+        q: "Can I bring my existing phone numbers?",
+        a: "Yes. Connect your existing carrier account in two clicks and your current numbers route through 9278.ai instantly. No porting, no downtime, no number changes.",
       },
       {
         q: "Are there any hidden fees?",
-        a: "No. The only line items on your bill are voice credit (one-time) and phone numbers (monthly, only if you provision one). We don't charge for transcription, recording, integrations, or concurrency.",
+        a: "No. The only line item from us is voice credit. There's no setup, no contracts, and no minimums beyond your top-up. Phone numbers stay billed directly by your carrier — we don't add a markup.",
       },
       {
         q: "Do you offer refunds?",
         a: "If you experience a service issue we'll always make it right. Unused credit purchased within the last 14 days is refundable on request.",
+      },
+      {
+        q: "Is the platform self-hosted?",
+        a: "Yes. 9278.ai ships as a self-hosted control panel — your data, your stack, your infrastructure. Audio, transcripts, and metadata stay inside your environment. There is no shared multi-tenant database holding your call recordings.",
+      },
+      {
+        q: "What languages are supported?",
+        a: "English (US, UK, Australian, Indian), Spanish (LATAM and Spain), French, German, Portuguese, and Italian — with native-sounding voices and sub-second latency in all of them. The agent auto-detects the caller's language and switches mid-conversation. More languages on request.",
+      },
+      {
+        q: "Can I top up more than $100?",
+        a: "Yes. You can top up multiple times in any combination — Stripe handles every charge. High-volume teams typically run 3–5 Scale top-ups a week.",
       },
     ],
   },
@@ -45,24 +57,20 @@ export const FAQ_GROUPS: FaqGroup[] = [
     title: "Phone numbers & connectivity",
     items: [
       {
-        q: "Do I need to buy a phone number?",
-        a: "No. You can use our shared connectivity for free for outbound web-call testing and inbound demos. You only need a dedicated DID if you want a real, persistent inbound or branded outbound number.",
+        q: "Which carrier accounts do you support?",
+        a: "Any major SIP-capable carrier. If your provider supports standard SIP trunking and outbound webhook routing, you can connect it to 9278.ai in two clicks.",
       },
       {
-        q: "What does a phone number cost?",
-        a: "$2/month for US local numbers, $5/month for Canada, the UK, and most of Europe. Toll-free US numbers are available on request. Phone-number rates renew every 30 days.",
+        q: "Which countries can you route calls in?",
+        a: "Out of the box: USA, Canada, UK, Germany, France, Spain, Italy, Netherlands, Ireland, Belgium, and Portugal. We support 60+ other countries on request — your carrier provides the number, we handle the conversation.",
       },
       {
-        q: "Which countries can you provision numbers in?",
-        a: "Out of the box: USA, Canada, UK, Germany, France, Spain, Italy, Netherlands, Ireland, Belgium, and Portugal. We can provision in 60+ other countries on request.",
-      },
-      {
-        q: "Can I keep my existing number?",
-        a: "Yes — both via SIP trunking (point your existing carrier at our SIP endpoint) and via full porting. We'll handle the LOA paperwork.",
+        q: "Can the same number do inbound and outbound?",
+        a: "Yes. One number, both directions. Trigger outbound campaigns or answer every incoming call automatically — the same agent, the same dashboard, the same carrier line.",
       },
       {
         q: "Are calls truly carrier-grade?",
-        a: "Yes. We run on Tier-1 carriers in every region, with HD-voice codecs, STIR/SHAKEN attestation in the US, and call-quality monitoring on every leg.",
+        a: "Yes. Calls flow over your provider's Tier-1 network with HD-voice codecs, STIR/SHAKEN attestation in the US, and call-quality monitoring on every leg.",
       },
     ],
   },
@@ -73,10 +81,6 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         q: "How many concurrent AI agents do I get?",
         a: "1 on the Starter plan, 2 on Growth, and 3 on Scale. That means up to 1, 2, or 3 calls happening simultaneously. Need more? Reach out and we'll tailor a higher-concurrency plan.",
-      },
-      {
-        q: "What languages and accents do you support?",
-        a: "English (US, UK, Australian, Indian), Spanish (LATAM and Spain), French, German, Portuguese, and Italian — with native-sounding voices and sub-second latency in all of them. More languages on request.",
       },
       {
         q: "Can the agent transfer to a human?",

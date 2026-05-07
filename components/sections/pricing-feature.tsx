@@ -22,7 +22,8 @@ const items = [
   {
     icon: Receipt,
     title: "No hidden fees",
-    description: "No setup, no contracts, no minimums beyond your top-up. Phone numbers billed monthly, from $2/mo.",
+    description:
+      "No setup, no contracts, no minimums beyond your top-up. Phone numbers stay billed directly by your existing carrier.",
   },
 ]
 

@@ -22,7 +22,7 @@ export function SiteFooter() {
             <Logo height={40} />
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
-            AI voice agents that actually sound human. Built on native audio models and carrier-grade telephony.
+            AI voice agents that actually sound human. Native audio, sub-second latency, and a self-hosted control panel that connects to your existing carrier.
           </p>
           <a
             href="https://dashboard.9278.ai/login"

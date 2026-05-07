@@ -35,7 +35,7 @@ const testimonials = [
     metric: "99.4% deflection",
     metricAccent: "var(--ai-violet)",
     quote:
-      "We pointed our 800 number at 9278 and within a day it was triaging, scheduling, and updating Salesforce on its own. The remaining 0.6% are the calls humans should handle anyway.",
+      "We pointed our business number at 9278 and within a day it was triaging, scheduling, and updating our CRM on its own. The remaining 0.6% are the calls humans should handle anyway.",
     author: "Priya Anand",
     role: "Director of Support",
     company: "Glide Logistics",
@@ -45,7 +45,7 @@ const testimonials = [
     metric: "Live in 4 days",
     metricAccent: "var(--ai-mint)",
     quote:
-      "I was quoted 6 months by an enterprise vendor. We had a working voice agent in production by day four — connected to our calendar, CRM, and SMS — and it cost an order of magnitude less.",
+      "I was quoted 6 months by an enterprise vendor. We had a working voice agent in production by day four — connected to our calendar, CRM, and existing phone number — at an order of magnitude less.",
     author: "Daniel Reyes",
     role: "CTO",
     company: "Bright Dental Group",
@@ -80,7 +80,7 @@ export function Testimonials() {
             <span className="text-aurora">that actually convert.</span>
           </h2>
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-            From dental clinics to logistics ops, 9278.ai is answering, qualifying, and closing — 24/7, in 40+ countries.
+            From dental clinics to logistics ops, 9278.ai is answering, qualifying, and closing — 24/7, on the carrier you already use.
           </p>
         </ScrollReveal>
 
