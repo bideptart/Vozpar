@@ -37,9 +37,9 @@ export function UseCases() {
             <span className="h-1 w-1 rounded-full bg-primary" />
             Inbound & outbound
           </span>
-          <h2 className="mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
+          <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
             Inbound, outbound, and multilingual{" "}
-            <span className="text-aurora">— covered.</span>
+            <span className="text-primary">— covered.</span>
           </h2>
           <p className="mt-5 text-pretty leading-relaxed text-muted-foreground md:text-lg">
             From the first hello to the follow-up that closes the deal — 9278.ai handles the entire call lifecycle.

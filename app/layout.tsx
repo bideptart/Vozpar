@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter, Instrument_Serif, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { Suspense } from "react"
 import { SITE } from "@/lib/seo"
@@ -7,8 +7,16 @@ import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/seo/jsonld"
 import { PageviewTracker } from "@/components/analytics/pageview-tracker"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+// Acepeak typography: Inter for body/UI, Instrument Serif for display headings
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" })
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+})
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -78,10 +86,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-background" suppressHydrationWarning>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >

@@ -34,16 +34,20 @@ export default function IndustriesPage() {
       <section className="relative overflow-hidden border-b border-border/50">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(56,189,248,0.18),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
         />
-        <div className="mx-auto w-full max-w-6xl px-4 py-20 md:px-6 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+        />
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-20 md:px-6 md:py-28">
           <ScrollReveal className="mx-auto max-w-3xl text-center">
             <span className="ai-pill-magenta">
               <span className="h-1 w-1 rounded-full bg-accent" />
               Industries
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
-              Built for every kind of <span className="text-aurora">phone call.</span>
+            <h1 className="mt-6 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl">
+              Built for every kind of <span className="text-primary">phone call.</span>
             </h1>
             <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
               Pre-tuned scripts, integrations, and compliance guardrails for ten industries — and a configurable engine

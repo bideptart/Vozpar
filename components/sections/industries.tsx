@@ -60,7 +60,7 @@ export function Industries({ showHeader = true }: { showHeader?: boolean } = {})
             </span>
             <h2 className="mt-3 text-balance text-2xl font-semibold leading-[1.15] tracking-tight md:text-3xl">
               Built for every kind of{" "}
-              <span className="text-aurora">phone call.</span>
+              <span className="text-primary">phone call.</span>
             </h2>
             <p className="mt-2 text-pretty text-sm leading-relaxed text-muted-foreground">
               Pre-tuned scripts, integrations, and compliance guardrails for the workflows you actually run.

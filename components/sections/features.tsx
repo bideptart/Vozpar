@@ -122,7 +122,7 @@ export function Features() {
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_40%,oklch(0.7_0.2_290/0.06),transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
         />
         <div
           aria-hidden
@@ -134,9 +134,9 @@ export function Features() {
               <span className="h-1 w-1 rounded-full bg-accent" />
               Features
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
               Everything you need to ship a{" "}
-              <span className="text-aurora">real-world voice agent.</span>
+              <span className="text-primary">real-world voice agent.</span>
             </h1>
             <p className="mt-6 text-pretty leading-relaxed text-muted-foreground md:text-lg">
               Real-time audio, telephony, integrations, and observability — production-ready, all in one platform.

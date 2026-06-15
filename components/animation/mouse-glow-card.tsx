@@ -37,7 +37,7 @@ export function MouseGlowCard({ children, className, tiltStrength = 6, glowSize 
   const rotateX = useTransform(sy, [-0.5, 0.5], [tiltStrength, -tiltStrength])
   const rotateY = useTransform(sx, [-0.5, 0.5], [-tiltStrength, tiltStrength])
 
-  const background = useMotionTemplate`radial-gradient(${glowSize}px circle at ${mouseX}px ${mouseY}px, oklch(0.78 0.16 195 / 0.18), transparent 70%)`
+  const background = useMotionTemplate`radial-gradient(${glowSize}px circle at ${mouseX}px ${mouseY}px, oklch(0.637 0.237 25.33 / 0.18), transparent 70%)`
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = ref.current

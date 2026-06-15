@@ -64,11 +64,11 @@ export default async function PricingPage({
       <section className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_40%,rgba(56,189,248,0.18),transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
         />
         <div className="relative mx-auto w-full max-w-3xl px-4 text-center md:px-6">
           <ScrollReveal>
@@ -76,8 +76,8 @@ export default async function PricingPage({
               <span className="h-1 w-1 rounded-full bg-accent" />
               Pricing
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
-              Pricing built for <span className="text-aurora">real conversations.</span>
+            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
+              Pricing built for <span className="text-primary">real conversations.</span>
             </h1>
             <p className="mt-6 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
               One simple voice rate. Three top-up sizes. You only ever pay for the minutes your agents actually talk.
@@ -88,7 +88,7 @@ export default async function PricingPage({
 
       <section id="plans" className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
         <ScrollReveal className="mb-10">
-          <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">Choose your starting credit</h2>
+          <h2 className="text-balance text-3xl font-serif font-normal tracking-tight md:text-4xl">Choose your starting credit</h2>
           <p className="mt-3 max-w-2xl text-pretty text-muted-foreground">
             Three tiers, three rates. The more you commit, the less you pay per minute — and the more concurrent AI
             agents you unlock.
@@ -108,7 +108,7 @@ export default async function PricingPage({
 
       <section className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
         <ScrollReveal className="mb-10">
-          <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">Phone number rates</h2>
+          <h2 className="text-balance text-3xl font-serif font-normal tracking-tight md:text-4xl">Phone number rates</h2>
           <p className="mt-3 max-w-2xl text-pretty text-muted-foreground">
             Phone numbers are optional. Use our shared connectivity for free, or provision your own DID for outbound
             caller-ID and inbound calls.

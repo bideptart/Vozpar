@@ -75,9 +75,9 @@ export function Testimonials() {
             <span className="h-1 w-1 rounded-full bg-accent" />
             Loved by operators
           </span>
-          <h2 className="mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
+          <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
             Teams shipping AI voice agents{" "}
-            <span className="text-aurora">that actually convert.</span>
+            <span className="text-primary">that actually convert.</span>
           </h2>
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
             From dental clinics to logistics ops, 9278.ai is answering, qualifying, and closing — 24/7, on the carrier you already use.
@@ -95,7 +95,7 @@ export function Testimonials() {
                     <Icon className="h-5 w-5" />
                   </span>
                   <div className="min-w-0">
-                    <p className="text-2xl font-semibold tracking-tight text-aurora">{m.value}</p>
+                    <p className="text-2xl font-semibold tracking-tight text-primary">{m.value}</p>
                     <p className="text-xs uppercase tracking-widest text-muted-foreground">{m.label}</p>
                   </div>
                 </div>

@@ -36,9 +36,9 @@ export function CTA() {
               Live demo · No signup
             </span>
 
-            <h2 className="relative mt-7 text-balance text-5xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
+            <h2 className="relative mt-7 text-balance text-5xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
               Hear it before{" "}
-              <span className="text-aurora">you build it.</span>
+              <span className="text-primary">you build it.</span>
             </h2>
             <p className="relative mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
               Talk to a live 9278.ai agent right now, see our pricing, or book a 20-minute walkthrough.

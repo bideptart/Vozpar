@@ -29,7 +29,7 @@ const cities = [
   { city: "New York", code: "+1", top: "32%", left: "26%" },
   { city: "São Paulo", code: "+55", top: "70%", left: "34%" },
   { city: "London", code: "+44", top: "26%", left: "48%" },
-  { city: "Berlin", code: "+49", top: "28%", left: "53%" },
+  { city: "Berlin", code: "+49", top: "38%", left: "53%" },
   { city: "Mumbai", code: "+91", top: "52%", left: "67%" },
   { city: "Tokyo", code: "+81", top: "36%", left: "82%" },
   { city: "Sydney", code: "+61", top: "76%", left: "85%" },
@@ -47,9 +47,9 @@ export function Connectivity() {
                 <Globe2 className="h-3 w-3" />
                 Phone numbers
               </span>
-              <h2 className="mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
+              <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
                 Your carrier account,{" "}
-                <span className="text-aurora">supercharged.</span>
+                <span className="text-primary">supercharged.</span>
               </h2>
               <p className="mt-5 text-pretty leading-relaxed text-muted-foreground md:text-lg">
                 We don't sell phone numbers. We connect to the carrier you already use — so your numbers, billing, and
@@ -87,13 +87,13 @@ export function Connectivity() {
           <ScrollReveal className="lg:col-span-6">
             <div className="ring-gradient relative aspect-[4/3] overflow-hidden rounded-3xl card-glow">
               {/* radial glow base */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,oklch(0.82_0.17_196/0.06),transparent_55%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,oklch(0.577_0.245_27.33/0.06),transparent_55%)]" />
               {/* faint dotted earth texture */}
               <div
                 className="absolute inset-0 opacity-50"
                 style={{
                   backgroundImage:
-                    "radial-gradient(oklch(0.82 0.17 196 / 0.35) 1px, transparent 1px)",
+                    "radial-gradient(oklch(0.577 0.245 27.33 / 0.35) 1px, transparent 1px)",
                   backgroundSize: "16px 16px",
                   maskImage:
                     "radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 75%)",
@@ -111,9 +111,9 @@ export function Connectivity() {
               >
                 <defs>
                   <linearGradient id="arc" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="oklch(0.82 0.17 196 / 0.0)" />
-                    <stop offset="50%" stopColor="oklch(0.82 0.17 196 / 0.6)" />
-                    <stop offset="100%" stopColor="oklch(0.7 0.2 290 / 0.0)" />
+                    <stop offset="0%" stopColor="oklch(0.577 0.245 27.33 / 0.0)" />
+                    <stop offset="50%" stopColor="oklch(0.577 0.245 27.33 / 0.6)" />
+                    <stop offset="100%" stopColor="oklch(0.646 0.222 14 / 0.0)" />
                   </linearGradient>
                 </defs>
                 {[
@@ -156,7 +156,7 @@ export function Connectivity() {
                   <div className="relative -translate-x-1/2 -translate-y-1/2">
                     <span className="relative flex h-2.5 w-2.5">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
-                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_2px_oklch(0.82_0.17_196/0.6)]" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_2px_oklch(0.577_0.245_27.33/0.6)]" />
                     </span>
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md border border-border/50 bg-card/80 px-1.5 py-0.5 text-[10px] font-medium backdrop-blur">
                       {c.code} <span className="text-muted-foreground">{c.city}</span>

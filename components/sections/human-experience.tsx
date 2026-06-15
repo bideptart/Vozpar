@@ -46,9 +46,9 @@ export function HumanExperience() {
             <span className="h-1 w-1 rounded-full bg-primary" />
             The human-kind experience
           </span>
-          <h2 className="mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
+          <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
             Conversations indistinguishable from{" "}
-            <span className="text-aurora">your best agent.</span>
+            <span className="text-primary">your best agent.</span>
           </h2>
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
             9278.ai skips the brittle speech-to-text and text-to-speech relay and runs on a single audio-native engine — so

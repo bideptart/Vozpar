@@ -66,9 +66,9 @@ export function HowItWorks() {
             <span className="h-1 w-1 rounded-full bg-primary" />
             How it works
           </span>
-          <h2 className="mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight md:text-5xl">
+          <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
             From idea to live agent in{" "}
-            <span className="text-aurora">three steps.</span>
+            <span className="text-primary">three steps.</span>
           </h2>
           <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
             No infra to spin up, no models to host. Design, connect, and launch — your first agent is taking calls before lunch.

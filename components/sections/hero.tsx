@@ -99,7 +99,7 @@ export function Hero() {
             initial="hidden"
             animate="visible"
             transition={{ staggerChildren: 0.07, delayChildren: 0.2 }}
-            className="mt-5 text-balance text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl md:text-6xl"
+            className="mt-5 text-balance text-4xl font-serif font-normal leading-[1.02] tracking-tight sm:text-5xl md:text-6xl"
           >
             {headline.map((w, i) => (
               <motion.span key={`h-${i}`} variants={word} className="mr-3 inline-block">
@@ -107,13 +107,13 @@ export function Hero() {
               </motion.span>
             ))}
             <br className="hidden md:block" />
-            <motion.span variants={word} className="mr-3 inline-block text-aurora">
+            <motion.span variants={word} className="mr-3 inline-block italic text-primary">
               actually
             </motion.span>
-            <motion.span variants={word} className="mr-3 inline-block text-aurora">
+            <motion.span variants={word} className="mr-3 inline-block italic text-primary">
               sound
             </motion.span>
-            <motion.span variants={word} className="mr-3 inline-block text-aurora">
+            <motion.span variants={word} className="mr-3 inline-block italic text-primary">
               human.
             </motion.span>
           </motion.h1>
@@ -166,17 +166,17 @@ export function Hero() {
             className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-3 border-t border-border/40 pt-5"
           >
             <div>
-              <p className="text-2xl font-semibold tracking-tight text-aurora">&lt;300ms</p>
+              <p className="text-2xl font-semibold tracking-tight text-primary">&lt;300ms</p>
               <p className="text-xs uppercase tracking-widest text-muted-foreground">Sub-second latency</p>
             </div>
             <div className="hidden h-10 w-px bg-border/60 sm:block" />
             <div>
-              <p className="text-2xl font-semibold tracking-tight text-aurora">Self-hosted</p>
+              <p className="text-2xl font-semibold tracking-tight text-primary">Self-hosted</p>
               <p className="text-xs uppercase tracking-widest text-muted-foreground">Your data, your stack</p>
             </div>
             <div className="hidden h-10 w-px bg-border/60 sm:block" />
             <div>
-              <p className="text-2xl font-semibold tracking-tight text-aurora">Unlimited</p>
+              <p className="text-2xl font-semibold tracking-tight text-primary">Unlimited</p>
               <p className="text-xs uppercase tracking-widest text-muted-foreground">Concurrent calls</p>
             </div>
           </motion.div>
