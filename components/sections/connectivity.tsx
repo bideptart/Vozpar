@@ -25,14 +25,17 @@ const items = [
   },
 ]
 
+// Positions derived from each city's real lon/lat via the map's calibrated
+// linear projection:  left% = 0.351*lon + 47.5,  top% = 56.3 - 0.687*lat.
+// `flip` renders the label to the left of the pin (right-edge / crowded pins).
 const cities = [
-  { city: "New York", code: "+1", top: "32%", left: "26%" },
-  { city: "São Paulo", code: "+55", top: "70%", left: "34%" },
-  { city: "London", code: "+44", top: "26%", left: "48%" },
-  { city: "Berlin", code: "+49", top: "38%", left: "53%" },
-  { city: "Mumbai", code: "+91", top: "52%", left: "67%" },
-  { city: "Tokyo", code: "+81", top: "36%", left: "82%" },
-  { city: "Sydney", code: "+61", top: "76%", left: "85%" },
+  { city: "New York", code: "+1", top: "28%", left: "22%", flip: false },
+  { city: "São Paulo", code: "+55", top: "72%", left: "31%", flip: false },
+  { city: "London", code: "+44", top: "21%", left: "47%", flip: true },
+  { city: "Berlin", code: "+49", top: "20%", left: "52%", flip: false },
+  { city: "Mumbai", code: "+91", top: "43%", left: "73%", flip: false },
+  { city: "Tokyo", code: "+81", top: "32%", left: "95%", flip: true },
+  { city: "Sydney", code: "+61", top: "80%", left: "96%", flip: true },
 ]
 
 export function Connectivity() {
@@ -88,17 +91,38 @@ export function Connectivity() {
             <div className="ring-gradient relative aspect-[4/3] overflow-hidden rounded-3xl card-glow">
               {/* radial glow base */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,oklch(0.577_0.245_27.33/0.06),transparent_55%)]" />
-              {/* faint dotted earth texture */}
+              {/* world map silhouette — faint landmass fill */}
               <div
-                className="absolute inset-0 opacity-50"
+                aria-hidden
+                className="absolute inset-0 opacity-[0.10]"
+                style={{
+                  backgroundColor: "oklch(0.577 0.245 27.33)",
+                  WebkitMaskImage: "url(/world-map.svg)",
+                  maskImage: "url(/world-map.svg)",
+                  WebkitMaskSize: "cover",
+                  maskSize: "cover",
+                  WebkitMaskPosition: "center",
+                  maskPosition: "center",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                }}
+              />
+              {/* dotted world map — dots clipped to the continents */}
+              <div
+                aria-hidden
+                className="absolute inset-0 opacity-70"
                 style={{
                   backgroundImage:
-                    "radial-gradient(oklch(0.577 0.245 27.33 / 0.35) 1px, transparent 1px)",
-                  backgroundSize: "16px 16px",
-                  maskImage:
-                    "radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 75%)",
-                  WebkitMaskImage:
-                    "radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 75%)",
+                    "radial-gradient(oklch(0.577 0.245 27.33 / 0.55) 1px, transparent 1px)",
+                  backgroundSize: "10px 10px",
+                  WebkitMaskImage: "url(/world-map.svg)",
+                  maskImage: "url(/world-map.svg)",
+                  WebkitMaskSize: "cover",
+                  maskSize: "cover",
+                  WebkitMaskPosition: "center",
+                  maskPosition: "center",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
                 }}
               />
 
@@ -117,11 +141,11 @@ export function Connectivity() {
                   </linearGradient>
                 </defs>
                 {[
-                  ["M26,32 Q40,12 48,26"],
-                  ["M48,26 Q60,18 67,52"],
-                  ["M67,52 Q75,38 82,36"],
-                  ["M34,70 Q50,55 67,52"],
-                  ["M82,36 Q88,55 85,76"],
+                  ["M22,21 Q35,6 47,15.75"],
+                  ["M52,15 Q64,12 73,32.25"],
+                  ["M73,32.25 Q86,22 95,24"],
+                  ["M31,54 Q52,42 73,32.25"],
+                  ["M95,24 Q101,44 96,60"],
                 ].map(([d], i) => (
                   <path
                     key={i}
@@ -158,7 +182,11 @@ export function Connectivity() {
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
                       <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_2px_oklch(0.577_0.245_27.33/0.6)]" />
                     </span>
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md border border-border/50 bg-card/80 px-1.5 py-0.5 text-[10px] font-medium backdrop-blur">
+                    <span
+                      className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md border border-border/50 bg-card/80 px-1.5 py-0.5 text-[10px] font-medium backdrop-blur ${
+                        c.flip ? "right-3" : "left-3"
+                      }`}
+                    >
                       {c.code} <span className="text-muted-foreground">{c.city}</span>
                     </span>
                   </div>
