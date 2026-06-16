@@ -54,10 +54,10 @@ export default async function AdminLoginPage({
         <p className="mt-10 text-center text-xs text-muted-foreground">
           Customer dashboards live at{" "}
           <a
-            href="https://dashboard.9278.ai/login"
+            href="https://voice.9278.ai/"
             className="underline underline-offset-2 hover:text-foreground"
           >
-            dashboard.9278.ai
+            voice.9278.ai
           </a>
           .
         </p>

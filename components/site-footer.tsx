@@ -25,7 +25,7 @@ export function SiteFooter() {
             AI voice agents that actually sound human. Native audio, sub-second latency, and a self-hosted control panel that connects to your existing carrier.
           </p>
           <a
-            href="https://dashboard.9278.ai/login"
+            href="https://voice.9278.ai/"
             target="_blank"
             rel="noopener noreferrer"
             className="group mt-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-4 py-2 text-sm text-foreground transition-all hover:border-primary/50"

@@ -52,7 +52,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <Button asChild variant="ghost" size="sm" className="hidden h-9 sm:inline-flex">
-            <a href="https://dashboard.9278.ai/login" target="_blank" rel="noopener noreferrer">
+            <a href="https://voice.9278.ai/" target="_blank" rel="noopener noreferrer">
               Sign in
             </a>
           </Button>

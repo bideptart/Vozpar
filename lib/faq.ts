@@ -124,7 +124,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Where do I sign in?",
-        a: "Your dashboard lives at dashboard.9278.ai/login. You can review usage, top up credit, manage phone numbers, edit agent prompts, and download transcripts.",
+        a: "Your dashboard lives at voice.9278.ai. You can review usage, top up credit, manage phone numbers, edit agent prompts, and download transcripts.",
       },
       {
         q: "How fast can I be live?",
