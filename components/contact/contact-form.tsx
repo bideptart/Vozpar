@@ -11,13 +11,30 @@ type Status = "idle" | "submitting" | "success"
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle")
+  const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const form = e.currentTarget
+    const data = Object.fromEntries(new FormData(form).entries())
     setStatus("submitting")
-    // Front-end only — wire this to an email/CRM endpoint (e.g. Resend, a
-    // Supabase edge function, or a /api/contact route) to actually deliver.
-    setTimeout(() => setStatus("success"), 700)
+    setError(null)
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
+      if (!res.ok || !json.ok) {
+        throw new Error(json.error || "Something went wrong. Please try again.")
+      }
+      form.reset()
+      setStatus("success")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.")
+      setStatus("idle")
+    }
   }
 
   if (status === "success") {
@@ -109,6 +126,12 @@ export function ContactForm() {
         </Button>
         <p className="text-xs text-muted-foreground">We&apos;ll only use your details to reply to this enquiry.</p>
       </div>
+
+      {error && (
+        <p className="mt-3 text-sm text-destructive" role="alert">
+          {error}
+        </p>
+      )}
     </form>
   )
 }

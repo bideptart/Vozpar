@@ -540,6 +540,57 @@
   }
 }
 
+/* Legal / long-form document typography (privacy, terms, etc.) */
+.legal {
+  color: var(--muted-foreground);
+}
+.legal h2 {
+  margin-top: 3rem;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  scroll-margin-top: 6rem;
+}
+.legal h3 {
+  margin-top: 2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.legal p {
+  margin-top: 1rem;
+  line-height: 1.75;
+}
+.legal ul {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.legal li {
+  line-height: 1.7;
+}
+.legal li::marker {
+  color: var(--primary);
+}
+.legal strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.legal a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal a:hover {
+  opacity: 0.85;
+}
+
 /* --- Performance --- */
 /* Skip rendering & animating offscreen sections (Hero stays painted). */
 main > section:not(:first-of-type) {
