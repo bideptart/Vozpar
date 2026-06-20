@@ -24,8 +24,15 @@ const COMPANY: FooterLink[] = [
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
+]
+
+const LEGAL: FooterLink[] = [
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
+  { label: "Acceptable Use", href: "/acceptable-use" },
+  { label: "Cookie Policy", href: "/cookies" },
+  { label: "DPA", href: "/dpa" },
+  { label: "All policies", href: "/legal" },
 ]
 
 function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) {
@@ -67,7 +74,7 @@ export function SiteFooter() {
 
       <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-4 py-16 md:grid-cols-12 md:px-6">
         {/* Brand */}
-        <div className="md:col-span-3">
+        <div className="md:col-span-4">
           <Link href="/" className="flex items-center [&_img]:invert-0" aria-label="9278.ai home">
             <Logo height={40} />
           </Link>
@@ -95,14 +102,17 @@ export function SiteFooter() {
         </div>
 
         {/* Link columns */}
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <FooterColumn title="Platform" links={PLATFORM} />
         </div>
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <FooterColumn title="Industries" links={INDUSTRIES} />
         </div>
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <FooterColumn title="Company" links={COMPANY} />
+        </div>
+        <div className="md:col-span-2">
+          <FooterColumn title="Legal" links={LEGAL} />
         </div>
       </div>
 
