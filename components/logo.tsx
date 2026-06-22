@@ -6,14 +6,16 @@ type LogoProps = {
   /** Pixel height of the rendered logo. Width auto-scales. */
   height?: number
   priority?: boolean
+  /** Logo asset to render. Use "/logo-white.png" on dark backgrounds. */
+  src?: string
 }
 
 /**
- * 9278.ai wordmark — white-on-transparent PNG.
- * Reads as-is on dark backgrounds; inverts in light mode so it stays visible.
+ * 9278.ai brand logo — full-colour (black + red headset) on transparent.
+ * Use the default `/logo.png` on light surfaces and `/logo-white.png` on dark ones.
  */
-export function Logo({ className, height = 40, priority = false }: LogoProps) {
-  const width = Math.round(height * 1.629)
+export function Logo({ className, height = 40, priority = false, src = "/logo.png" }: LogoProps) {
+  const width = Math.round(height * 2.285)
 
   return (
     <span
@@ -23,13 +25,13 @@ export function Logo({ className, height = 40, priority = false }: LogoProps) {
       style={{ height }}
     >
       <Image
-        src="/logo.png"
+        src={src}
         alt=""
         width={width}
         height={height}
         priority={priority}
         draggable={false}
-        className="h-full w-auto select-none invert dark:invert-0"
+        className="h-full w-auto select-none"
       />
     </span>
   )

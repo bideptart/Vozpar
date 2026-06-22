@@ -75,8 +75,8 @@ export function SiteFooter() {
       <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-4 py-16 md:grid-cols-12 md:px-6">
         {/* Brand */}
         <div className="md:col-span-4">
-          <Link href="/" className="flex items-center [&_img]:invert-0" aria-label="9278.ai home">
-            <Logo height={40} />
+          <Link href="/" className="flex items-center" aria-label="9278.ai home">
+            <Logo height={40} src="/logo-white.png" />
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
             AI voice agents that actually sound human. Native audio, sub-second latency, and a self-hosted control panel that connects to your existing carrier.
@@ -90,15 +90,6 @@ export function SiteFooter() {
             Customer dashboard
             <ArrowUpRight className="h-3.5 w-3.5 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
-
-          {/* Live status */}
-          <div className="mt-8 inline-flex items-center gap-2 text-xs text-slate-400">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            All systems operational
-          </div>
         </div>
 
         {/* Link columns */}
@@ -113,6 +104,17 @@ export function SiteFooter() {
         </div>
         <div className="md:col-span-2">
           <FooterColumn title="Legal" links={LEGAL} />
+        </div>
+      </div>
+
+      {/* Live status — just above the footer divider */}
+      <div className="relative mx-auto w-full max-w-7xl px-4 pb-6 md:px-6">
+        <div className="inline-flex items-center gap-2 text-xs text-slate-400">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+          </span>
+          All systems operational
         </div>
       </div>
 

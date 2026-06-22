@@ -22,7 +22,7 @@ export function SiteHeader() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent dark:via-white/20" />
       <div className="relative mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2" aria-label="9278.ai home">
-          <Logo height={52} priority />
+          <Logo height={38} priority />
         </Link>
 
         <nav
