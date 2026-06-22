@@ -69,7 +69,7 @@ const LANGUAGES: Array<{ value: string; label: string }> = [
 const usd = (n: number) =>
   "$" + Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })
 
-export default function SignupWidget() {
+export function SignupWidget() {
   // Honor ?plan=…&cycle=… deep-links from the marketing /pricing page so the
   // customer lands on the exact plan they clicked.
   const searchParams = useSearchParams()
