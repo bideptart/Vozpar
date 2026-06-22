@@ -591,6 +591,16 @@
   opacity: 0.85;
 }
 
+/* Homepage: every section fills the viewport with content vertically centred,
+   giving a consistent full-screen rhythm. (Hero handles its own height.)
+   Content taller than a screen still grows naturally and scrolls. */
+.fit-sections > section:not(:first-child) {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* --- Performance --- */
 /* Skip rendering & animating offscreen sections (Hero stays painted). */
 main > section:not(:first-of-type) {

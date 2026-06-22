@@ -49,7 +49,7 @@ export function LegalPage({
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
         />
-        <div className="relative mx-auto w-full max-w-4xl px-4 py-20 text-center md:px-6 md:py-24">
+        <div className="relative mx-auto w-full max-w-4xl px-4 py-12 text-center md:px-6 md:py-16">
           <ScrollReveal>
             <span className="ai-pill-magenta">
               <span className="h-1 w-1 rounded-full bg-accent" />
@@ -63,7 +63,7 @@ export function LegalPage({
         </div>
       </section>
 
-      <article className="legal mx-auto w-full max-w-3xl px-4 py-16 md:px-6 md:py-20">{children}</article>
+      <article className="legal mx-auto w-full max-w-3xl px-4 py-10 md:px-6 md:py-12">{children}</article>
 
       <SiteFooter />
     </main>

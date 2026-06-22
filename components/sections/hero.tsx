@@ -70,7 +70,7 @@ export function Hero() {
         transition={{ duration: 22, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto grid min-h-[calc(100svh-4rem)] w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-10 md:px-6 md:py-14 lg:grid-cols-12 lg:gap-10">
+      <div className="relative mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-4 md:px-6 md:py-6 lg:grid-cols-12 lg:gap-10">
         {/* LEFT: Copy */}
         <div className="lg:col-span-7">
           {/* Status pill */}

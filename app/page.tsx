@@ -21,7 +21,7 @@ export default function HomePage() {
         serviceType="AI voice agent platform"
       />
       <SiteHeader />
-      <main className="flex-1">
+      <main className="fit-sections flex-1">
         <Hero />
         <HumanExperience />
         <HowItWorks />
