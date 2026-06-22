@@ -1,15 +1,17 @@
 "use client"
 
-// Inline signup widget for /get-started on www.9278.ai — fetches live plans
-// from the voice.9278.ai portal, then redirects to Stripe Checkout. After
-// payment, Stripe returns the customer to voice.9278.ai/signup/success, where
-// the portal finalizes the account and signs them in. The phone number is
-// auto-assigned server-side at checkout (no picker UI here). Fully native,
-// styled with the site's shadcn primitives.
+// Get-started signup widget for www.9278.ai — same design as 9278.io's
+// /get-started (billing toggle + 3 plan cards + account form + order-summary
+// sidebar), but wired to the voice.9278.ai portal with Stripe (USD).
 //
-// Drop-in replacement for the 9278.io SignupWidget — the only behavioural
-// differences are: voice.9278.ai base URL, USD currency, Stripe (redirect)
-// instead of Razorpay (modal+verify), and resellerPortal:"9278.ai".
+// Flow: fetch live plans from voice.9278.ai → collect account + agent details
+// → POST to /api/stripe/checkout-session/signup → redirect to Stripe Checkout.
+// After payment Stripe returns the customer to voice.9278.ai/signup/success,
+// where the portal finalizes the account and signs them in. The phone number
+// is auto-assigned server-side at checkout (no picker UI here).
+//
+// IMPORTANT: exported as a NAMED export `SignupForm` to match
+// `app/get-started/page.tsx`: import { SignupForm } from "@/components/get-started/signup-form"
 
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
@@ -38,7 +40,7 @@ type Plan = {
   label: string
   amount: number
   yearlyAmount: number
-  yearlySavingsInr?: number   // portal still names the field *Inr; it's just the savings number
+  yearlySavingsUsd?: number
   min: number
   rate: number
   overage: number
@@ -59,7 +61,7 @@ const LANGUAGES: Array<{ value: string; label: string }> = [
   { value: "bn-IN", label: "Bengali (বাংলা)" },
   { value: "te-IN", label: "Telugu (తెలుగు)" },
   { value: "mr-IN", label: "Marathi (मराठी)" },
-  { value: "ta-IN", label: "Tamil (தமিழ்)" },
+  { value: "ta-IN", label: "Tamil (தமிழ்)" },
   { value: "gu-IN", label: "Gujarati (ગુજરાતી)" },
   { value: "kn-IN", label: "Kannada (ಕನ್ನಡ)" },
   { value: "ml-IN", label: "Malayalam (മലയാളം)" },
@@ -69,9 +71,8 @@ const LANGUAGES: Array<{ value: string; label: string }> = [
 const usd = (n: number) =>
   "$" + Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })
 
-export function SignupWidget() {
-  // Honor ?plan=…&cycle=… deep-links from the marketing /pricing page so the
-  // customer lands on the exact plan they clicked.
+export function SignupForm() {
+  // Honor ?plan=…&cycle=… deep-links from the marketing /pricing page.
   const searchParams = useSearchParams()
   const initialPlanId = (() => {
     const p = searchParams.get("plan")
@@ -101,8 +102,7 @@ export function SignupWidget() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Load plans on mount. The phone number is auto-assigned by the portal
-  // at checkout — no inventory fetch needed here.
+  // Load live plans from the portal on mount.
   useEffect(() => {
     let cancelled = false
     ;(async () => {
@@ -123,7 +123,7 @@ export function SignupWidget() {
 
   const priceFor = (p: Plan) => (cycle === "yearly" ? p.yearlyAmount : p.amount)
   const yearlySavings = (p: Plan) =>
-    p.yearlySavingsInr ?? Math.max(0, p.amount * 12 - p.yearlyAmount)
+    p.yearlySavingsUsd ?? Math.max(0, p.amount * 12 - p.yearlyAmount)
 
   const updateInput =
     (field: keyof typeof form) =>
@@ -157,14 +157,11 @@ export function SignupWidget() {
       password: form.password,
 
       planLabel: selectedPlan.label,
-      planAmount: priceFor(selectedPlan),   // USD whole dollars (no paise)
+      planAmount: priceFor(selectedPlan),
       planMin: selectedPlan.min,
       planRate: selectedPlan.rate,
       planAgents: selectedPlan.agents,
       planCycle: cycle,
-
-      // The portal auto-assigns a DID at checkout and bills it as part of the
-      // plan amount — no extra `number` / `numberPrice` payload needed.
 
       voice: "Kore",
       language: form.language,
@@ -176,7 +173,6 @@ export function SignupWidget() {
       kbCompany: "",
       kbFaqs: "",
 
-      // Attribution — tags this signup to the 9278.ai reseller.
       resellerPortal: RESELLER_PORTAL,
     }
 
@@ -188,8 +184,6 @@ export function SignupWidget() {
       }).then((r) => r.json())
 
       if (session.url) {
-        // Hand off to Stripe Checkout. After payment Stripe returns the user
-        // to voice.9278.ai/signup/success, which finalizes + signs them in.
         window.location.href = session.url
       } else {
         setSubmitting(false)
@@ -218,7 +212,7 @@ export function SignupWidget() {
   }
 
   const planPrice = selectedPlan ? priceFor(selectedPlan) : 0
-  const totalAmount = planPrice // one DID included in every plan — no separate line item
+  const totalAmount = planPrice
 
   return (
     <>
