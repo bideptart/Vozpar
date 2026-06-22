@@ -8,7 +8,8 @@
 // → POST to /api/stripe/checkout-session/signup → redirect to Stripe Checkout.
 // After payment Stripe returns the customer to voice.9278.ai/signup/success,
 // where the portal finalizes the account and signs them in. The phone number
-// is auto-assigned server-side at checkout (no picker UI here).
+// is auto-assigned server-side at checkout (no picker UI here). Agent language
+// defaults to English (en-US) — no language selector.
 //
 // IMPORTANT: exported as a NAMED export `SignupForm` to match
 // `app/get-started/page.tsx`: import { SignupForm } from "@/components/get-started/signup-form"
@@ -22,18 +23,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Check, Loader2, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const PORTAL_BASE = "https://voice.9278.ai"
 const RESELLER_PORTAL = "9278.ai"
+const DEFAULT_LANGUAGE = "en-US"   // English by default — no in-form selector
 
 type Plan = {
   id: string
@@ -53,20 +48,6 @@ type Plan = {
   sub: string
   perks: string[]
 }
-
-const LANGUAGES: Array<{ value: string; label: string }> = [
-  { value: "en-US", label: "English (US)" },
-  { value: "en-IN", label: "English (India)" },
-  { value: "hi-IN", label: "Hindi (हिन्दी)" },
-  { value: "bn-IN", label: "Bengali (বাংলা)" },
-  { value: "te-IN", label: "Telugu (తెలుగు)" },
-  { value: "mr-IN", label: "Marathi (मराठी)" },
-  { value: "ta-IN", label: "Tamil (தமிழ்)" },
-  { value: "gu-IN", label: "Gujarati (ગુજરાતી)" },
-  { value: "kn-IN", label: "Kannada (ಕನ್ನಡ)" },
-  { value: "ml-IN", label: "Malayalam (മലയാളം)" },
-  { value: "pa-IN", label: "Punjabi (ਪੰਜਾਬੀ)" },
-]
 
 const usd = (n: number) =>
   "$" + Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })
@@ -94,7 +75,6 @@ export function SignupForm() {
     email: "",
     phone: "",
     password: "",
-    language: "en-US",
     agentName: "",
     greeting: "",
   })
@@ -164,7 +144,7 @@ export function SignupForm() {
       planCycle: cycle,
 
       voice: "Kore",
-      language: form.language,
+      language: DEFAULT_LANGUAGE,   // English by default
       agentName: form.agentName.trim() || `${form.company.trim()} Receptionist`,
       greeting:
         form.greeting.trim() ||
@@ -341,26 +321,6 @@ export function SignupForm() {
               no separate fee.
             </div>
 
-            <div>
-              <Label htmlFor="language" className="mb-1.5 block">
-                Agent language
-              </Label>
-              <Select value={form.language} onValueChange={(v) => setForm((f) => ({ ...f, language: v }))}>
-                <SelectTrigger id="language">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {LANGUAGES.map((l) => (
-                    <SelectItem key={l.value} value={l.value}>
-                      {l.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="hidden md:block" />
-
             <Field
               id="agentName"
               label="Agent name (optional)"
@@ -425,12 +385,6 @@ export function SignupForm() {
 
               <Row label="Phone number">
                 <span className="text-xs font-medium text-muted-foreground">Assigned at checkout</span>
-              </Row>
-
-              <Row label="Language">
-                <span className="font-semibold">
-                  {LANGUAGES.find((l) => l.value === form.language)?.label || form.language}
-                </span>
               </Row>
 
               <Separator />
