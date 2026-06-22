@@ -214,14 +214,14 @@ export function SignupForm() {
             onClick={() => setCycle("yearly")}
             className={cn(
               "flex items-center gap-2 rounded-full px-4 py-1.5 transition",
-              cycle === "yearly" ? "bg-sky-500 text-white" : "text-muted-foreground",
+              cycle === "yearly" ? "bg-red-600 text-white" : "text-muted-foreground",
             )}
           >
             Yearly
             <span
               className={cn(
                 "rounded-full px-2 py-0.5 text-[10px]",
-                cycle === "yearly" ? "bg-white/20 text-white" : "bg-sky-100 text-sky-700",
+                cycle === "yearly" ? "bg-white/20 text-white" : "bg-red-100 text-red-700",
               )}
             >
               Save 20%
@@ -232,7 +232,7 @@ export function SignupForm() {
 
       {/* Per-second billing callout */}
       <div className="mb-8 flex justify-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-sm text-sky-800 dark:border-sky-800/40 dark:bg-sky-950/40 dark:text-sky-200">
+        <div className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800 dark:border-red-800/40 dark:bg-red-950/40 dark:text-red-200">
           <span>⏱️</span>
           <span>
             <strong>Per-second billing</strong> — pay only for the seconds you use.
@@ -259,11 +259,11 @@ export function SignupForm() {
               }}
               className={cn(
                 "relative cursor-pointer transition focus:outline-none",
-                selected ? "border-sky-500 ring-2 ring-sky-500/30" : "hover:border-sky-300",
+                selected ? "border-red-600 ring-2 ring-red-600/30" : "hover:border-red-300",
               )}
             >
               {p.tag && (
-                <Badge className="absolute -top-3 left-4 bg-sky-500 hover:bg-sky-500">{p.tag}</Badge>
+                <Badge className="absolute -top-3 left-4 bg-red-600 hover:bg-red-600">{p.tag}</Badge>
               )}
               <CardHeader>
                 <CardTitle>{p.label}</CardTitle>
@@ -277,7 +277,7 @@ export function SignupForm() {
                   </span>
                 </div>
                 {cycle === "yearly" && (
-                  <div className="mb-2 text-xs text-sky-700 dark:text-sky-300">
+                  <div className="mb-2 text-xs text-red-700 dark:text-red-300">
                     Save {usd(yearlySavings(p))} vs monthly
                   </div>
                 )}
@@ -290,7 +290,7 @@ export function SignupForm() {
                     .filter((perk) => !/phone number|concurrent call/i.test(perk))
                     .map((perk) => (
                       <li key={perk} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-sky-500" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
                         <span>{perk}</span>
                       </li>
                     ))}
@@ -360,9 +360,9 @@ export function SignupForm() {
 
         {/* === RIGHT: order summary (sticky on desktop) ====================== */}
         <div className="lg:sticky lg:top-24 lg:self-start">
-          <Card className="border-sky-200/60 dark:border-sky-800/40">
+          <Card className="border-red-200/60 dark:border-red-800/40">
             <CardHeader className="pb-3">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-600 dark:text-sky-300">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-300">
                 <Sparkles className="h-3.5 w-3.5" />
                 Order summary
               </div>
