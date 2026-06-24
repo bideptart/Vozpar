@@ -69,6 +69,7 @@ export async function POST(request: Request) {
     `Company: ${company}`,
     `Subject: ${subject}`,
     "",
+    "User Query:",
     message,
   ]
   const html = `
@@ -80,7 +81,8 @@ export async function POST(request: Request) {
       <tr><td><strong>Company</strong></td><td>${escapeHtml(company)}</td></tr>
       <tr><td><strong>Subject</strong></td><td>${escapeHtml(subject)}</td></tr>
     </table>
-    <p style="white-space:pre-wrap;font-family:system-ui,sans-serif;font-size:14px;margin-top:16px">${escapeHtml(message)}</p>
+    <p style="font-family:system-ui,sans-serif;font-size:14px;font-weight:600;margin:16px 0 4px">User Query:</p>
+    <p style="white-space:pre-wrap;font-family:system-ui,sans-serif;font-size:14px;margin:0">${escapeHtml(message)}</p>
   `
 
   // Thank-you acknowledgement sent to the person who submitted the form.
@@ -97,8 +99,10 @@ export async function POST(request: Request) {
     "",
     "If it's urgent, just reply to this email or write to support@9278.ai.",
     "",
+    
+    "Warm regards,",
     "— The 9278.ai team",
-    "Ace Peak Invest Pte Ltd · https://www.9278.ai",
+
   ].join("\n")
   const ackHtml = `
     <div style="font-family:system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.6;color:#171717">
