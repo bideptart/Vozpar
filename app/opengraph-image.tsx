@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
-export const alt = "9278.ai — AI voice agents that actually sound human"
+export const alt = "9278.ai — Answer every call with AI voice agents that sound human"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -16,7 +16,7 @@ export default function OG() {
         justifyContent: "space-between",
         padding: "72px",
         background:
-          "radial-gradient(80% 60% at 50% 0%, rgba(56,189,248,0.28), rgba(15,23,42,0)) , linear-gradient(135deg, #0b1220 0%, #0f172a 60%, #0b1220 100%)",
+          "radial-gradient(80% 60% at 50% 0%, rgba(220,38,38,0.30), rgba(15,23,42,0)) , linear-gradient(135deg, #0b1220 0%, #0f172a 60%, #0b1220 100%)",
         color: "#f8fafc",
         fontFamily:
           "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
@@ -28,13 +28,13 @@ export default function OG() {
             width: 56,
             height: 56,
             borderRadius: 14,
-            background: "linear-gradient(135deg, #38bdf8, #0ea5e9)",
+            background: "linear-gradient(135deg, #ef4444, #dc2626)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontWeight: 700,
             fontSize: 26,
-            color: "#0b1220",
+            color: "#ffffff",
           }}
         >
           9
@@ -43,11 +43,11 @@ export default function OG() {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        <div style={{ fontSize: 76, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2 }}>
-          AI voice agents that actually sound human.
+        <div style={{ fontSize: 72, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2 }}>
+          Answer every call with AI that sounds human.
         </div>
         <div style={{ fontSize: 30, color: "#94a3b8", maxWidth: 980, lineHeight: 1.3 }}>
-          Carrier-grade phone numbers. Sub-second latency. Pay-as-you-go from $0.10 / minute.
+          Carrier-grade phone numbers · sub-second latency · live in an afternoon. Never miss a call again.
         </div>
       </div>
 
