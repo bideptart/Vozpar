@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
             <h1 className="mt-6 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl">
               Privacy <span className="text-primary">Policy.</span>
             </h1>
-            <p className="mt-5 text-sm text-muted-foreground">Last updated on 17 June 2026</p>
+            <p className="mt-5 text-sm text-muted-foreground">Last updated on 24 June 2026</p>
           </ScrollReveal>
         </div>
       </section>

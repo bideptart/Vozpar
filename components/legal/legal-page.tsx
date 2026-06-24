@@ -13,7 +13,7 @@ type LegalPageProps = {
   name: string
   /** Route, e.g. "/cookies" */
   path: string
-  /** e.g. "20 June 2026" */
+  /** e.g. "24 June 2026" */
   updated?: string
   /** Small eyebrow pill text */
   eyebrow?: string
@@ -25,7 +25,7 @@ export function LegalPage({
   accent,
   name,
   path,
-  updated = "20 June 2026",
+  updated = "24 June 2026",
   eyebrow = "Legal",
   children,
 }: LegalPageProps) {
