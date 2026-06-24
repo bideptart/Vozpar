@@ -99,10 +99,8 @@ export async function POST(request: Request) {
     "",
     "If it's urgent, just reply to this email or write to support@9278.ai.",
     "",
-    
     "Warm regards,",
-    "— The 9278.ai team",
-
+    "The 9278.ai Team",
   ].join("\n")
   const ackHtml = `
     <div style="font-family:system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.6;color:#171717">
@@ -110,14 +108,13 @@ export async function POST(request: Request) {
       <p>Thanks for reaching out to <strong>9278.ai</strong> — we&rsquo;ve received your message and a member of our team
       will get back to you, usually within one business day.</p>
       <p style="margin-top:20px;color:#525252">For reference, here&rsquo;s a copy of what you sent:</p>
-      <div style="border-left:3px solid #DC2626;padding:8px 14px;margin:8px 0;background:#fafafa">
+      <div style="border:1px solid #e5e5e5;border-radius:8px;padding:12px 14px;margin:8px 0;background:#fafafa">
         <p style="margin:0 0 6px"><strong>Subject:</strong> ${escapeHtml(subject)}</p>
         <p style="white-space:pre-wrap;margin:0">${escapeHtml(message)}</p>
       </div>
       <p style="color:#525252">If it&rsquo;s urgent, just reply to this email or write to
       <a href="mailto:support@9278.ai" style="color:#DC2626">support@9278.ai</a>.</p>
-      <p style="margin-top:20px">— The 9278.ai team<br/>
-      <span style="color:#737373;font-size:13px">Ace Peak Invest Pte Ltd · <a href="https://www.9278.ai" style="color:#DC2626">9278.ai</a></span></p>
+      <p style="margin-top:20px">Warm regards,<br/>The 9278.ai Team</p>
     </div>
   `
 
