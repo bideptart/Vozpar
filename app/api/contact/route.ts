@@ -83,7 +83,42 @@ export async function POST(request: Request) {
     <p style="white-space:pre-wrap;font-family:system-ui,sans-serif;font-size:14px;margin-top:16px">${escapeHtml(message)}</p>
   `
 
+  // Thank-you acknowledgement sent to the person who submitted the form.
+  const firstName = name.split(/\s+/)[0] || name
+  const ackText = [
+    `Hi ${firstName},`,
+    "",
+    "Thanks for reaching out to 9278.ai — we've received your message and a member of our team will get back to you, usually within one business day.",
+    "",
+    "For reference, here's a copy of what you sent:",
+    "",
+    `Subject: ${subject}`,
+    message,
+    "",
+    "If it's urgent, just reply to this email or write to support@9278.ai.",
+    "",
+    "— The 9278.ai team",
+    "Ace Peak Invest Pte Ltd · https://www.9278.ai",
+  ].join("\n")
+  const ackHtml = `
+    <div style="font-family:system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.6;color:#171717">
+      <p>Hi ${escapeHtml(firstName)},</p>
+      <p>Thanks for reaching out to <strong>9278.ai</strong> — we&rsquo;ve received your message and a member of our team
+      will get back to you, usually within one business day.</p>
+      <p style="margin-top:20px;color:#525252">For reference, here&rsquo;s a copy of what you sent:</p>
+      <div style="border-left:3px solid #DC2626;padding:8px 14px;margin:8px 0;background:#fafafa">
+        <p style="margin:0 0 6px"><strong>Subject:</strong> ${escapeHtml(subject)}</p>
+        <p style="white-space:pre-wrap;margin:0">${escapeHtml(message)}</p>
+      </div>
+      <p style="color:#525252">If it&rsquo;s urgent, just reply to this email or write to
+      <a href="mailto:support@9278.ai" style="color:#DC2626">support@9278.ai</a>.</p>
+      <p style="margin-top:20px">— The 9278.ai team<br/>
+      <span style="color:#737373;font-size:13px">Ace Peak Invest Pte Ltd · <a href="https://www.9278.ai" style="color:#DC2626">9278.ai</a></span></p>
+    </div>
+  `
+
   try {
+    // 1) Internal notification (required — its failure fails the request).
     await transporter.sendMail({
       from: `"9278.ai Contact" <${user}>`,
       to,
@@ -92,6 +127,21 @@ export async function POST(request: Request) {
       text: lines.join("\n"),
       html,
     })
+
+    // 2) Thank-you to the submitter (best-effort — don't fail the request if it bounces).
+    try {
+      await transporter.sendMail({
+        from: `"9278.ai" <${user}>`,
+        to: `"${name}" <${email}>`,
+        replyTo: "support@9278.ai",
+        subject: "Thanks for contacting 9278.ai — we'll be in touch",
+        text: ackText,
+        html: ackHtml,
+      })
+    } catch (ackErr) {
+      console.error("Contact form: acknowledgement email failed (notification still sent).", ackErr)
+    }
+
     return NextResponse.json({ ok: true })
   } catch (err) {
     console.error("Contact form: failed to send email.", err)
