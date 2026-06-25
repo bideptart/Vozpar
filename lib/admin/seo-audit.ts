@@ -50,7 +50,7 @@ export function getRegistry(): SeoEntry[] {
   const marketing: SeoEntry[] = [
     {
       path: "/",
-      title: `${SITE.name} — AI voice agents that actually sound human`,
+      title: `${SITE.name} — Answer every call with AI that sounds human`,
       description: SITE.description,
       canonical: absoluteUrl("/"),
       indexable: true,

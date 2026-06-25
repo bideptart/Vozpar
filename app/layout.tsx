@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — AI voice agents that actually sound human`,
+    default: `${SITE.name} — Answer every call with AI that sounds human`,
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE.url,
     siteName: SITE.name,
-    title: `${SITE.name} — AI voice agents that actually sound human`,
+    title: `${SITE.name} — Answer every call with AI that sounds human`,
     description: SITE.description,
     locale: SITE.locale,
   },
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: SITE.twitter,
     creator: SITE.twitter,
-    title: `${SITE.name} — AI voice agents that actually sound human`,
+    title: `${SITE.name} — Answer every call with AI that sounds human`,
     description: SITE.description,
   },
   robots: { index: true, follow: true },
