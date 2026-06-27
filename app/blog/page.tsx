@@ -85,10 +85,19 @@ export default function BlogIndexPage() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </span>
             </div>
-            <div
-              aria-hidden
-              className="hidden rounded-xl bg-[radial-gradient(120%_120%_at_20%_0%,rgba(220,38,38,0.14),transparent_60%)] ring-1 ring-border/60 md:block"
-            />
+            {featured.cover ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={featured.cover}
+                alt={featured.title}
+                className="hidden h-full w-full rounded-xl object-cover ring-1 ring-border/60 md:block"
+              />
+            ) : (
+              <div
+                aria-hidden
+                className="hidden rounded-xl bg-[radial-gradient(120%_120%_at_20%_0%,rgba(220,38,38,0.14),transparent_60%)] ring-1 ring-border/60 md:block"
+              />
+            )}
           </Link>
         </ScrollReveal>
 
@@ -96,7 +105,12 @@ export default function BlogIndexPage() {
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {rest.map((post) => (
             <ScrollReveal key={post.slug}>
-              <Link href={`/blog/${post.slug}`} className="card-glow group flex h-full flex-col rounded-2xl p-6">
+              <Link href={`/blog/${post.slug}`} className="card-glow group flex h-full flex-col overflow-hidden rounded-2xl">
+                {post.cover && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={post.cover} alt={post.title} className="h-40 w-full object-cover" />
+                )}
+                <div className="flex flex-1 flex-col p-6">
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
                   <span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-medium text-primary">
                     {post.category}
@@ -110,6 +124,7 @@ export default function BlogIndexPage() {
                 </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{post.excerpt}</p>
                 <span className="mt-4 text-xs text-muted-foreground">{formatPostDate(post.date)}</span>
+                </div>
               </Link>
             </ScrollReveal>
           ))}

@@ -5,9 +5,9 @@ import { ArrowLeft, CalendarDays, Clock } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
-import { BLOG_POSTS, getPost, formatPostDate } from "@/lib/blog"
+import { BLOG_POSTS, getPost, formatPostDate, type Block } from "@/lib/blog"
 import { pageSeo } from "@/lib/seo"
-import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/jsonld"
 import { RelatedLinks } from "@/components/seo/related-links"
 
 export function generateStaticParams() {
@@ -25,6 +25,86 @@ export async function generateMetadata({
   return pageSeo({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}` })
 }
 
+function BlockView({ block }: { block: Block }) {
+  switch (block.type) {
+    case "p":
+      return <p>{block.text}</p>
+    case "html":
+      return <p dangerouslySetInnerHTML={{ __html: block.html }} />
+    case "h2":
+      return <h2>{block.text}</h2>
+    case "h3":
+      return <h3>{block.text}</h3>
+    case "callout":
+      return (
+        <div className={`post-callout${block.variant === "warn" ? " warn" : ""}`}>
+          <p dangerouslySetInnerHTML={{ __html: block.html }} />
+        </div>
+      )
+    case "table":
+      return (
+        <div className="post-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                {block.head.map((h) => (
+                  <th key={h}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((row, i) => (
+                <tr key={i}>
+                  {row.map((cell, j) => (
+                    <td key={j}>{j === 0 ? <strong>{cell}</strong> : cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    case "cards":
+      return (
+        <div className="post-cards">
+          {block.items.map((c) => (
+            <div key={c.title} className="post-card">
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+            </div>
+          ))}
+        </div>
+      )
+    case "figure":
+      return (
+        <figure>
+          <div dangerouslySetInnerHTML={{ __html: block.svg }} />
+          <figcaption>{block.caption}</figcaption>
+        </figure>
+      )
+    case "image":
+      // eslint-disable-next-line @next/next/no-img-element
+      return (
+        <figure>
+          <img src={block.src} alt={block.alt} loading="lazy" />
+        </figure>
+      )
+    case "faq":
+      return (
+        <div className="post-faq">
+          {block.items.map((item) => (
+            <div key={item.q}>
+              <p className="faq-q">{item.q}</p>
+              <p>{item.a}</p>
+            </div>
+          ))}
+        </div>
+      )
+    default:
+      return null
+  }
+}
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -35,6 +115,7 @@ export default async function BlogPostPage({
   if (!post) notFound()
 
   const more = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3)
+  const faqItems = post.content.flatMap((b) => (b.type === "faq" ? b.items : []))
 
   return (
     <main className="min-h-dvh bg-background text-foreground">
@@ -47,6 +128,7 @@ export default async function BlogPostPage({
           { name: post.title, path: `/blog/${post.slug}` },
         ]}
       />
+      {faqItems.length > 0 && <FaqJsonLd items={faqItems} />}
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border/50">
@@ -83,15 +165,22 @@ export default async function BlogPostPage({
         </div>
       </section>
 
+      {/* Cover */}
+      {post.cover && (
+        <div className="mx-auto w-full max-w-3xl px-4 md:px-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.cover}
+            alt={post.title}
+            className="mt-8 w-full rounded-2xl border border-border/60"
+          />
+        </div>
+      )}
+
       {/* Body */}
       <article className="legal mx-auto w-full max-w-3xl px-4 py-12 md:px-6 md:py-14">
-        {post.content.map((section, i) => (
-          <section key={i}>
-            {section.heading && <h2>{section.heading}</h2>}
-            {section.body.map((para, j) => (
-              <p key={j}>{para}</p>
-            ))}
-          </section>
+        {post.content.map((block, i) => (
+          <BlockView key={i} block={block} />
         ))}
 
         <hr className="my-10 border-border/60" />
