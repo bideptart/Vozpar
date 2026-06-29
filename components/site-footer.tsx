@@ -8,7 +8,6 @@ const PLATFORM: FooterLink[] = [
   { label: "Features", href: "/features" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },
-  { label: "API Docs", href: "/docs" },
 ]
 
 const INDUSTRIES: FooterLink[] = [
