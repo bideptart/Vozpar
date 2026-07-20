@@ -24,33 +24,9 @@ export async function updateSession(request: NextRequest) {
   )
 
   // IMPORTANT: do not run code between createServerClient and getUser().
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const path = request.nextUrl.pathname
-
-  // Gate the admin area: must be signed in AND flagged as super_admin.
-  // The login page itself must remain reachable to unauthenticated users —
-  // otherwise the redirect below would point at the very page being gated
-  // and we'd loop forever.
-  if (path.startsWith("/admin") && !path.startsWith("/admin/login")) {
-    if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = "/admin/login"
-      url.searchParams.set("next", path)
-      return NextResponse.redirect(url)
-    }
-    const role =
-      (user.app_metadata as { role?: string } | null)?.role ??
-      (user.user_metadata as { role?: string } | null)?.role
-    if (role !== "super_admin") {
-      const url = request.nextUrl.clone()
-      url.pathname = "/admin/login"
-      url.searchParams.set("denied", "1")
-      return NextResponse.redirect(url)
-    }
-  }
+  // Refreshes the auth cookies; the admin area is no longer gated here since
+  // the sign-in page was removed.
+  await supabase.auth.getUser()
 
   return supabaseResponse
 }

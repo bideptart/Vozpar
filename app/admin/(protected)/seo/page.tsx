@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card"
-import { requireAdmin } from "@/lib/admin/auth"
 import { getAuditedRegistry, type AuditedPage } from "@/lib/admin/seo-audit"
 import { SerpPreview } from "@/components/admin/serp-preview"
 import Link from "next/link"
@@ -11,7 +10,6 @@ export const metadata = {
 }
 
 export default async function SeoPage() {
-  await requireAdmin()
   const { pages, totals } = getAuditedRegistry()
 
   // Group by section.

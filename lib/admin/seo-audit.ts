@@ -105,26 +105,7 @@ export function getRegistry(): SeoEntry[] {
     },
   ]
 
-  const internal: SeoEntry[] = [
-    {
-      path: "/admin/login",
-      title: "Super-admin sign in",
-      description: "Sign in to the 9278.ai super-admin dashboard.",
-      canonical: absoluteUrl("/admin/login"),
-      indexable: false,
-      group: "Internal",
-    },
-    {
-      path: "/auth/error",
-      title: "Sign-in link expired",
-      description: "",
-      canonical: absoluteUrl("/auth/error"),
-      indexable: false,
-      group: "Internal",
-    },
-  ]
-
-  return [...marketing, ...industries, ...funnel, ...internal]
+  return [...marketing, ...industries, ...funnel]
 }
 
 export function audit(entry: SeoEntry, allTitles: Map<string, number>): AuditedPage {

@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card"
-import { requireAdmin } from "@/lib/admin/auth"
 import { getTrafficSummary, RANGE_LABEL, type Range } from "@/lib/admin/analytics"
 import { TrafficChart } from "@/components/admin/traffic-chart"
 import Link from "next/link"
@@ -10,7 +9,6 @@ export const metadata = {
 }
 
 export default async function TrafficPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
-  await requireAdmin()
   const { range: r } = await searchParams
   const range = (r === "24h" || r === "7d" || r === "30d" || r === "90d" ? r : "30d") as Range
   const data = await getTrafficSummary(range)
