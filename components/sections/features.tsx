@@ -14,17 +14,20 @@ import {
   CalendarClock,
   Network,
   ArrowUpRight,
+  ArrowRight,
   Gauge,
   Globe2,
   Clock,
-  Headphones,
   Sparkles,
 } from "lucide-react"
+import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import type { ElementType } from "react"
 import { motion, useInView, animate, useReducedMotion } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 import { MouseGlowCard } from "@/components/animation/mouse-glow-card"
+import { FeatureOrbit } from "@/components/animation/feature-orbit"
+import { Button } from "@/components/ui/button"
 
 // Card accent rotation — kept to blue-family hues on purpose: these tint
 // icons/text/tags directly, and --features-ink resolves to near-white
@@ -38,16 +41,12 @@ const ACCENTS = [
   "var(--features-indigo)",
 ] as const
 
-// Floating icon badges scattered around the hero — small dark-glass chips
-// that bob gently, independent phase/duration per badge for an organic
-// (not synchronized) feel. Hidden below sm: too little room, would crowd
-// the heading on a narrow screen.
-const FLOATING_ICONS = [
-  { icon: PhoneCall, top: "20%", left: "9%", duration: 5.5, delay: 0 },
-  { icon: Mic, top: "68%", left: "14%", duration: 6.2, delay: 0.6 },
-  { icon: Globe2, top: "24%", left: "89%", duration: 5.8, delay: 0.3 },
-  { icon: Headphones, top: "64%", left: "86%", duration: 6.6, delay: 0.9 },
-  { icon: Sparkles, top: "85%", left: "50%", duration: 5, delay: 1.2 },
+// Status chips that float around the hero visual — small live-telemetry
+// cues that make the orbit read as a running system rather than art.
+const HERO_CHIPS = [
+  { label: "Call connected", dot: "bg-emerald-400", pos: "-left-2 top-10 md:-left-6", dur: 4, delay: 0 },
+  { label: "Booking confirmed", dot: "bg-sky-400", pos: "-right-2 top-1/3 md:-right-6", dur: 5, delay: 0.8 },
+  { label: "CRM synced", dot: "bg-indigo-400", pos: "bottom-12 left-2 md:left-0", dur: 4.6, delay: 1.4 },
 ] as const
 
 const STATS = [
@@ -190,12 +189,11 @@ export function Features() {
   const reduced = useReducedMotion()
   return (
     <>
-      {/* Hero — fits the viewport on /features. Fixed dark navy/black canvas
-          is the "black and blue" theme statement; the rest of the page stays
-          on the site's normal light surface with blue/black accents. */}
+      {/* Hero — copy left, animated orbit visual right (mirrors the
+          homepage's product-visual layout so the two pages feel related). */}
       <section
         id="features-hero"
-        className="features-hero-dark relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden border-t border-border/40"
+        className="features-hero-dark relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden border-t border-white/10"
         style={{ background: "var(--features-hero-bg)" }}
       >
         {/* Drifting glow orbs */}
@@ -216,53 +214,87 @@ export function Features() {
         {/* Light grid lines for the dark canvas */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+          className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)]"
           style={{
             backgroundImage:
               "linear-gradient(to right, oklch(1 0 0 / 0.07) 1px, transparent 1px), linear-gradient(to bottom, oklch(1 0 0 / 0.07) 1px, transparent 1px)",
             backgroundSize: "56px 56px",
           }}
         />
-        {/* Floating icon badges — gentle, independent bob per badge.
-            Centering (-translate-x/y-1/2) lives on a plain, non-motion
-            wrapper: a motion.div manages `transform` itself for the bob/
-            rotate animation and would silently overwrite a Tailwind
-            transform utility on the same element (inline style always
-            wins), so the two are split across parent/child. */}
-        {FLOATING_ICONS.map((f, i) => {
-          const Icon = f.icon
-          return (
-            <div
-              key={i}
-              aria-hidden
-              className="pointer-events-none absolute hidden -translate-x-1/2 -translate-y-1/2 sm:block"
-              style={{ top: f.top, left: f.left }}
-            >
+
+        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-4 py-20 md:px-6 lg:grid-cols-12 lg:gap-8 lg:py-0">
+          {/* LEFT — copy */}
+          <div className="lg:col-span-6">
+            <ScrollReveal>
+              <span className="ai-pill-blue">
+                <span className="h-1 w-1 rounded-full bg-current" />
+                Features
+              </span>
+              <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight text-white md:text-6xl">
+                Everything you need to ship a{" "}
+                <span className="text-aurora-blue">real-world voice agent.</span>
+              </h1>
+              <p className="mt-6 max-w-xl text-pretty leading-relaxed text-slate-300 md:text-lg">
+                Real-time audio, carrier-grade telephony, live tool calls, and full observability — production-ready,
+                all in one platform. No stitching six vendors together.
+              </p>
+
+              <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                <Button
+                  asChild
+                  size="lg"
+                  className="group border-0 text-white hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg, var(--features-blue), var(--features-blue-deep))" }}
+                >
+                  <Link href="/get-started">
+                    Start building
+                    <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                >
+                  <Link href="#features">Browse all 12 features</Link>
+                </Button>
+              </div>
+
+              <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-400">
+                <span className="inline-flex items-center gap-2">
+                  <Sparkles className="h-3.5 w-3.5" style={{ color: "var(--features-blue)" }} />
+                  No credit card to try
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Clock className="h-3.5 w-3.5" style={{ color: "var(--features-blue)" }} />
+                  Live in an afternoon
+                </span>
+              </p>
+            </ScrollReveal>
+          </div>
+
+          {/* RIGHT — orbit visual + floating status chips */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="relative lg:col-span-6"
+          >
+            <FeatureOrbit />
+            {HERO_CHIPS.map((c) => (
               <motion.div
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] backdrop-blur-md"
-                style={{ color: "var(--features-blue)" }}
-                animate={reduced ? undefined : { y: [0, -14, 0], rotate: [0, 4, 0] }}
-                transition={{ duration: f.duration, delay: f.delay, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                key={c.label}
+                aria-hidden
+                className={`absolute ${c.pos} hidden items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md sm:flex`}
+                animate={reduced ? undefined : { y: [0, -9, 0] }}
+                transition={{ duration: c.dur, delay: c.delay, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
               >
-                <Icon className="h-4 w-4" aria-hidden="true" />
+                <span className={`h-2 w-2 rounded-full ${c.dot}`} />
+                {c.label}
               </motion.div>
-            </div>
-          )
-        })}
-        <div className="relative mx-auto w-full max-w-3xl px-4 text-center md:px-6">
-          <ScrollReveal>
-            <span className="ai-pill-blue">
-              <span className="h-1 w-1 rounded-full bg-current" />
-              Features
-            </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight text-white md:text-6xl">
-              Everything you need to ship a{" "}
-              <span className="text-aurora-blue">real-world voice agent.</span>
-            </h1>
-            <p className="mt-6 text-pretty leading-relaxed text-slate-300 md:text-lg">
-              Real-time audio, telephony, integrations, and observability — production-ready, all in one platform.
-            </p>
-          </ScrollReveal>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -301,7 +333,21 @@ export function Features() {
           style={{ background: "oklch(0.4 0.16 263 / 0.25)" }}
         />
         <div className="relative mx-auto w-full max-w-7xl px-4 py-20 md:px-6 md:py-28">
-          <StaggerGroup className="grid gap-5 sm:grid-cols-2">
+          <ScrollReveal className="mb-12 max-w-2xl">
+            <span className="ai-pill-blue">
+              <span className="h-1 w-1 rounded-full bg-current" />
+              The toolkit
+            </span>
+            <h2 className="mt-5 text-balance text-3xl font-serif font-normal leading-tight tracking-tight text-white md:text-4xl">
+              Twelve building blocks, one platform.
+            </h2>
+            <p className="mt-4 text-pretty leading-relaxed text-slate-400">
+              Each one is production-grade on its own — together they cover the whole call, from the first ring to the
+              row that lands in your CRM.
+            </p>
+          </ScrollReveal>
+
+          <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f, i) => {
             const Icon = f.icon
             const accent = ACCENTS[i % ACCENTS.length]
@@ -309,56 +355,46 @@ export function Features() {
             return (
               <StaggerItem key={f.title}>
                 <MouseGlowCard
-                  glowColor={`color-mix(in oklch, ${accent} 45%, transparent)`}
-                  accentColor={accent}
-                  className="h-full overflow-hidden border-white/10 bg-white/[0.05] p-6 shadow-lg shadow-black/30 hover:border-white/20 md:p-7"
+                  glowColor={`color-mix(in oklch, ${accent} 40%, transparent)`}
+                  className="h-full overflow-hidden rounded-2xl border-white/10 bg-white/[0.04] p-6 shadow-lg shadow-black/20 hover:border-white/20 md:p-7"
                 >
-                  <div className="relative flex items-start gap-5">
-                    {/* Big numeric / icon block */}
-                    <div className="relative flex shrink-0 flex-col items-center gap-2">
+                  {/* Watermark numeral — sits behind the content, top-right */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -right-1 -top-4 select-none font-serif text-[5rem] leading-none text-white/[0.05] transition-colors duration-500 group-hover:text-white/[0.09]"
+                  >
+                    {number}
+                  </span>
+
+                  <div className="relative">
+                    {/* Icon chip */}
+                    <span
+                      className="flex h-12 w-12 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
+                      style={{
+                        background: `color-mix(in oklch, ${accent} 16%, transparent)`,
+                        borderColor: `color-mix(in oklch, ${accent} 35%, transparent)`,
+                        color: accent,
+                      }}
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+
+                    <h3 className="mt-5 text-lg font-semibold tracking-tight text-white">{f.title}</h3>
+                    <p className="mt-2.5 text-sm leading-relaxed text-slate-400">{f.description}</p>
+
+                    {/* Footer: tag + hover arrow */}
+                    <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/[0.07] pt-4">
                       <span
-                        className="font-mono text-[11px] font-medium uppercase tracking-[0.22em]"
+                        className="text-[10px] font-medium uppercase tracking-[0.18em]"
                         style={{ color: accent }}
                       >
-                        {number}
+                        {f.tag}
                       </span>
-                      <span
-                        className="relative flex h-12 w-12 items-center justify-center rounded-2xl ring-1 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
-                        style={{
-                          background: `color-mix(in oklch, ${accent} 16%, transparent)`,
-                          borderColor: `color-mix(in oklch, ${accent} 35%, transparent)`,
-                          color: accent,
-                        }}
-                      >
-                        <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
-                      </span>
-                      <span
-                        aria-hidden
-                        className="h-10 w-px bg-gradient-to-b from-white/15 to-transparent"
+                      <ArrowUpRight
+                        className="h-4 w-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                        style={{ color: accent }}
+                        aria-hidden="true"
                       />
-                    </div>
-
-                    {/* Content */}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-3">
-                        <span
-                          className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider"
-                          style={{
-                            color: accent,
-                            background: `color-mix(in oklch, ${accent} 14%, transparent)`,
-                            borderColor: `color-mix(in oklch, ${accent} 32%, transparent)`,
-                          }}
-                        >
-                          {f.tag}
-                        </span>
-                        <ArrowUpRight
-                          className="h-4 w-4 -translate-y-0.5 translate-x-1 text-slate-500 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100"
-                          style={{ color: accent }}
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <h3 className="mt-3 text-lg font-semibold tracking-tight text-white">{f.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-400">{f.description}</p>
                     </div>
                   </div>
                 </MouseGlowCard>

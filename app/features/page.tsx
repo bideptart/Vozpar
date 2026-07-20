@@ -3,6 +3,9 @@ import Link from "next/link"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Features } from "@/components/sections/features"
+import { FeaturePillars } from "@/components/sections/feature-pillars"
+import { FeatureIntegrations } from "@/components/sections/feature-integrations"
+import { FeatureComparison } from "@/components/sections/feature-comparison"
 import { Button } from "@/components/ui/button"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
@@ -28,7 +31,14 @@ export default function FeaturesPage() {
       />
 
       <main className="flex-1">
+        {/* Hero → stats → 12-feature grid */}
         <Features />
+        {/* The same features regrouped into the three stories buyers evaluate */}
+        <FeaturePillars />
+        {/* What it writes back to */}
+        <FeatureIntegrations />
+        {/* Where it sits vs legacy IVR / building in-house */}
+        <FeatureComparison />
 
         <section
           className="relative overflow-hidden border-t border-white/10 py-16 md:py-20"
