@@ -5,11 +5,26 @@ import { usePathname, useSearchParams } from "next/navigation"
 
 const SESSION_KEY = "_9278_session"
 
+// crypto.randomUUID() only exists in secure contexts (HTTPS or localhost).
+// Loading the site over plain HTTP via a LAN IP (e.g. http://192.168.x.x)
+// is an insecure context, so this falls back to crypto.getRandomValues()
+// (available everywhere) and finally to Math.random() for very old browsers.
+function generateId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID().replace(/-/g, "").slice(0, 24)
+  }
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    const bytes = crypto.getRandomValues(new Uint8Array(12))
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")
+  }
+  return Array.from({ length: 24 }, () => Math.floor(Math.random() * 16).toString(16)).join("")
+}
+
 function getOrCreateSession(): string {
   if (typeof document === "undefined") return ""
   const match = document.cookie.match(new RegExp("(?:^|; )" + SESSION_KEY + "=([^;]+)"))
   if (match?.[1]) return match[1]
-  const id = crypto.randomUUID().replace(/-/g, "").slice(0, 24)
+  const id = generateId()
   // 30 minutes idle session
   document.cookie = `${SESSION_KEY}=${id}; path=/; max-age=${30 * 60}; samesite=lax`
   return id
