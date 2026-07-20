@@ -17,9 +17,9 @@ export function SiteHeader() {
   const pathname = usePathname()
   return (
     <header className="sticky top-0 z-40 w-full">
-      <div className="absolute inset-x-0 top-0 h-full border-b border-white/40 bg-gradient-to-b from-white/70 via-white/45 to-white/25 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.22)] backdrop-blur-2xl backdrop-saturate-200 dark:border-white/10 dark:from-white/10 dark:via-white/[0.05] dark:to-white/[0.02]" />
+      <div className="absolute inset-x-0 top-0 h-full border-b border-white/10 bg-gradient-to-b from-white/[0.08] via-white/[0.04] to-transparent shadow-[0_8px_32px_-8px_rgba(0,0,0,0.45)] backdrop-blur-2xl backdrop-saturate-150" />
       {/* glossy bottom edge highlight */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent dark:via-white/20" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       <div className="relative mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2" aria-label="9278.ai home">
           <Logo height={38} priority />
@@ -27,7 +27,7 @@ export function SiteHeader() {
 
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-1 rounded-full border border-white/50 bg-gradient-to-b from-white/55 to-white/20 px-2 py-1.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.7),0_8px_24px_-8px_rgba(0,0,0,0.22)] backdrop-blur-2xl backdrop-saturate-200 dark:border-white/15 dark:from-white/10 dark:to-white/[0.04] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] md:flex"
+          className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-1.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_8px_24px_-8px_rgba(0,0,0,0.4)] backdrop-blur-2xl backdrop-saturate-150 md:flex"
         >
           {NAV.map((item) => {
             const isActive =
