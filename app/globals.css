@@ -3,119 +3,81 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Vozpar theme — derived directly from the Vozpar logo mark:
+ * a navy→electric-blue "V" swoosh, with a green / crimson / amber
+ * bar-chart accent trio. Primary/accent/ring all come from the swoosh
+ * blues; the chart and pill colors pull the green/red/amber accents so
+ * the brand's growth-chart motif shows up in real UI (dashboard charts,
+ * badges) instead of staying flat monochrome blue.
+ * The site has no working light/dark toggle wired into the header (the
+ * ThemeToggle component exists but isn't rendered anywhere), so this single
+ * dark-navy palette is the theme users actually see — it also matches the
+ * logo's white wordmark, which only reads correctly on a dark background.
+ * The .dark class is left in place (harmless) in case a toggle gets wired
+ * up later, but it no longer needs its own set of overrides.
+ */
 :root {
-  /* Acepeak canvas — clean white on neutral, charcoal ink */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.205 0 0); /* neutral-900 #171717 */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.205 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.205 0 0);
+  --background: #0b1220;
+  --foreground: #ffffff;
+  --card: #111b2d;
+  --card-foreground: #ffffff;
+  --popover: #111b2d;
+  --popover-foreground: #ffffff;
 
-  /* Acepeak brand red — red-600 #DC2626 */
-  --primary: oklch(0.577 0.245 27.33);
-  --primary-foreground: oklch(0.985 0 0);
+  /* Vozpar swoosh blue — primary brand color */
+  --primary: #1e6fd6;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.97 0 0); /* neutral-100 #F5F5F5 */
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0); /* neutral-500 #737373 */
+  --secondary: #111b2d; /* elevated navy surface, used for callouts/cards */
+  --secondary-foreground: #ffffff;
+  --muted: #ffffff0d;
+  --muted-foreground: #ccd6df;
 
-  /* Restrained neutral hover accent (Acepeak keeps red for emphasis) */
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: #2f8fe0;
+  --accent-foreground: #0b1220;
 
-  --destructive: oklch(0.577 0.245 27.33);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.922 0 0); /* neutral-200 #E5E5E5 */
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.577 0.245 27.33);
+  /* Vozpar bar-chart crimson, reused for error/destructive states */
+  --destructive: #d92b34;
+  --destructive-foreground: #ffffff;
+  --border: #1a2638;
+  --input: #ffffff12;
+  --ring: #1e6fd6;
 
-  --chart-1: oklch(0.577 0.245 27.33); /* red-600 */
-  --chart-2: oklch(0.828 0.189 84.43); /* amber-400 */
-  --chart-3: oklch(0.505 0.213 27.5);  /* red-700 */
-  --chart-4: oklch(0.646 0.222 14);    /* rose */
-  --chart-5: oklch(0.446 0.043 257);   /* slate-600 */
+  /* Chart colors pull straight from the logo's bar-chart accents so the
+     admin dashboard's revenue/traffic charts feel on-brand rather than
+     an arbitrary blue gradient. */
+  --chart-1: #1e6fd6; /* swoosh blue */
+  --chart-2: #1f9d55; /* growth green */
+  --chart-3: #d92b34; /* crimson */
+  --chart-4: #f2a71b; /* amber */
+  --chart-5: #2f8fe0; /* bright blue */
 
-  /* Brand-family extras — warm red→amber spectrum for decorative accents */
-  --ai-cyan: oklch(0.637 0.237 25.33); /* red-500 */
-  --ai-violet: oklch(0.505 0.213 27.5);/* red-700 */
-  --ai-magenta: oklch(0.646 0.222 14); /* rose */
-  --ai-mint: oklch(0.828 0.189 84.43); /* amber-400 */
+  /* Brand-family extras — the logo's green/amber/blue accent trio for badges */
+  --ai-cyan: #2f8fe0;
+  --ai-violet: #f2a71b;
+  --ai-magenta: #1f9d55;
+  --ai-mint: #1f9d55;
 
-  /* Features-page accent palette — blue/black combination (scoped: only used on /features) */
-  --features-blue: oklch(0.546 0.245 262.881);      /* blue-600 */
-  --features-blue-deep: oklch(0.424 0.199 265.638); /* blue-800 */
-  --features-ink: oklch(0.208 0.042 265.755);       /* slate-900 ("black") */
-  --features-indigo: oklch(0.457 0.24 277.023);     /* indigo-600 */
-  --features-sky: oklch(0.685 0.169 237);           /* sky-500, a fourth blue-family tone for card variety */
-  --features-hero-bg: oklch(0.16 0.035 264);        /* fixed navy-black canvas for the features hero band */
-
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.205 0 0);
-  --sidebar-primary: oklch(0.577 0.245 27.33);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.577 0.245 27.33);
-  --button-ripple-color: oklch(0.205 0 0 / 0.18);
-}
-
-.dark {
-  /* Acepeak dark — neutral-950 canvas with neutral-900 surfaces */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-
-  --primary: oklch(0.637 0.237 25.33); /* brighter red-500 for dark */
-  --primary-foreground: oklch(0.985 0 0);
-
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-
-  --destructive: oklch(0.637 0.237 25.33);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.637 0.237 25.33);
-
-  --chart-1: oklch(0.637 0.237 25.33);
-  --chart-2: oklch(0.828 0.189 84.43);
-  --chart-3: oklch(0.704 0.191 22);
-  --chart-4: oklch(0.7 0.2 13);
-  --chart-5: oklch(0.6 0.05 257);
-
-  --ai-cyan: oklch(0.7 0.2 25);
-  --ai-violet: oklch(0.637 0.237 27.5);
-  --ai-magenta: oklch(0.72 0.2 13);
-  --ai-mint: oklch(0.85 0.17 85);
-
-  /* Features-page accent palette — brighter for dark surfaces */
+  /* Features-page accent palette — scoped to /features (components/sections/features.tsx).
+     Tuned for a dark surface, which is now the site-wide default. */
   --features-blue: oklch(0.707 0.165 254.624);      /* blue-400 */
   --features-blue-deep: oklch(0.623 0.214 259.815); /* blue-500 */
-  --features-ink: oklch(0.929 0.013 255.508);       /* slate-200, stands in for "black" on dark cards */
+  --features-ink: oklch(0.929 0.013 255.508);       /* slate-200 — light "ink" for text on dark cards */
   --features-indigo: oklch(0.673 0.182 276.935);    /* indigo-400 */
-  --features-sky: oklch(0.746 0.16 232.661);        /* sky-400, brighter for dark surfaces */
+  --features-sky: oklch(0.746 0.16 232.661);        /* sky-400 */
+  --features-hero-bg: #0b1220;                      /* matches --background so /features reads as one canvas */
 
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.637 0.237 25.33);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.637 0.237 25.33);
-  --button-ripple-color: oklch(0.985 0 0 / 0.5);
+  --radius: 1rem;
+  --sidebar: #111b2d;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #1e6fd6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #16233a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #1a2638;
+  --sidebar-ring: #1e6fd6;
+  --button-ripple-color: rgba(255, 255, 255, 0.35);
 }
 
 @theme inline {
@@ -173,32 +135,21 @@
   animation-play-state: paused;
 }
 
-/* Aurora gradient text — warm Acepeak red→amber spectrum */
+/* Aurora gradient text — carrier blue spectrum */
 @keyframes aurora-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 .text-aurora {
+  /* Sweeps through the full logo palette: swoosh blue, growth green,
+     amber, and crimson, echoing the bar-chart accent colors. */
   background: linear-gradient(
     100deg,
-    oklch(0.577 0.245 27.33) 0%,
-    oklch(0.646 0.222 14) 25%,
-    oklch(0.505 0.213 27.5) 55%,
-    oklch(0.75 0.16 55) 85%,
-    oklch(0.577 0.245 27.33) 100%
-  );
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-}
-.dark .text-aurora {
-  background: linear-gradient(
-    100deg,
-    oklch(0.637 0.237 25.33) 0%,
-    oklch(0.72 0.2 13) 25%,
-    oklch(0.704 0.191 22) 55%,
-    oklch(0.85 0.17 70) 85%,
-    oklch(0.637 0.237 25.33) 100%
+    #1e6fd6 0%,
+    #1f9d55 25%,
+    #f2a71b 55%,
+    #d92b34 80%,
+    #1e6fd6 100%
   );
   -webkit-background-clip: text;
           background-clip: text;
@@ -261,11 +212,8 @@
   left: 0;
   right: 0;
   height: 30%;
-  background: linear-gradient(180deg, transparent, oklch(0.577 0.245 27.33 / 0.05), transparent);
+  background: linear-gradient(180deg, transparent, rgba(30, 111, 214, 0.08), transparent);
   animation: scan-y 6s linear infinite;
-}
-.dark .scan-line::after {
-  background: linear-gradient(180deg, transparent, oklch(0.637 0.237 25.33 / 0.06), transparent);
 }
 
 /* Floating processing dots */
@@ -286,43 +234,29 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Very faint warm brand tint — kept subtle so the canvas reads as clean white */
+    /* Ambient carrier-blue glow over the navy canvas */
     background-image:
-      radial-gradient(ellipse 80% 55% at 50% -10%, oklch(0.577 0.245 27.33 / 0.05), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 100% 25%, oklch(0.828 0.189 84.43 / 0.03), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 0% 70%, oklch(0.646 0.222 14 / 0.025), transparent 60%);
+      radial-gradient(ellipse 80% 55% at 50% -10%, rgba(30, 111, 214, 0.16), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 100% 25%, rgba(47, 143, 224, 0.08), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 0% 70%, rgba(59, 130, 246, 0.09), transparent 60%);
     background-repeat: no-repeat;
   }
-  .dark body {
-    background-image:
-      radial-gradient(ellipse 80% 55% at 50% -10%, oklch(0.637 0.237 25.33 / 0.16), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 100% 25%, oklch(0.85 0.17 85 / 0.08), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 0% 70%, oklch(0.72 0.2 13 / 0.09), transparent 60%);
-  }
   ::selection {
-    background: oklch(0.577 0.245 27.33 / 0.22);
-    color: oklch(0.205 0 0);
-  }
-  .dark ::selection {
-    background: oklch(0.637 0.237 25.33 / 0.28);
-    color: oklch(0.985 0 0);
+    background: rgba(30, 111, 214, 0.32);
+    color: #ffffff;
   }
 }
 
 @layer utilities {
-  /* Glass surface — frosted white card */
+  /* Glass surface — frosted navy card */
   .glass {
-    background: linear-gradient(180deg, oklch(1 0 0 / 0.72), oklch(1 0 0 / 0.5));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
     backdrop-filter: blur(8px) saturate(120%);
     -webkit-backdrop-filter: blur(8px) saturate(120%);
-    border: 1px solid oklch(0.205 0 0 / 0.08);
-  }
-  .dark .glass {
-    background: linear-gradient(180deg, oklch(1 0 0 / 0.04), oklch(1 0 0 / 0.015));
-    border: 1px solid oklch(1 0 0 / 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Premium gradient ring border (1px) — red → rose → crimson */
+  /* Premium gradient ring border (1px) — carrier blue spectrum */
   .ring-gradient {
     position: relative;
     background-clip: padding-box;
@@ -335,46 +269,27 @@
     border-radius: inherit;
     background: linear-gradient(
       140deg,
-      oklch(0.577 0.245 27.33 / 0.55) 0%,
-      oklch(0.646 0.222 14 / 0.45) 35%,
-      oklch(0.505 0.213 27.5 / 0.45) 65%,
-      oklch(0.205 0 0 / 0.06) 90%
+      rgba(30, 111, 214, 0.7) 0%,
+      rgba(47, 143, 224, 0.55) 35%,
+      rgba(59, 130, 246, 0.55) 65%,
+      rgba(255, 255, 255, 0.06) 90%
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
             mask-composite: exclude;
     pointer-events: none;
   }
-  .dark .ring-gradient::before {
-    background: linear-gradient(
-      140deg,
-      oklch(0.637 0.237 25.33 / 0.7) 0%,
-      oklch(0.72 0.2 13 / 0.55) 35%,
-      oklch(0.704 0.191 22 / 0.55) 65%,
-      oklch(1 0 0 / 0.05) 90%
-    );
-  }
 
   /* Glow shadows */
   .glow-primary {
     box-shadow:
-      0 0 0 1px oklch(0.577 0.245 27.33 / 0.18),
-      0 10px 40px -8px oklch(0.577 0.245 27.33 / 0.35);
+      0 0 0 1px rgba(30, 111, 214, 0.2),
+      0 10px 40px -8px rgba(30, 111, 214, 0.5);
   }
   .glow-accent {
     box-shadow:
-      0 0 0 1px oklch(0.828 0.189 84.43 / 0.18),
-      0 10px 40px -8px oklch(0.828 0.189 84.43 / 0.35);
-  }
-  .dark .glow-primary {
-    box-shadow:
-      0 0 0 1px oklch(0.637 0.237 25.33 / 0.18),
-      0 10px 40px -8px oklch(0.637 0.237 25.33 / 0.5);
-  }
-  .dark .glow-accent {
-    box-shadow:
-      0 0 0 1px oklch(0.85 0.17 85 / 0.18),
-      0 10px 40px -8px oklch(0.85 0.17 85 / 0.5);
+      0 0 0 1px rgba(47, 143, 224, 0.2),
+      0 10px 40px -8px rgba(47, 143, 224, 0.5);
   }
 
   /* Spotlight hover halo */
@@ -389,7 +304,7 @@
     border-radius: inherit;
     background: radial-gradient(
       400px circle at var(--mx, 50%) var(--my, 50%),
-      oklch(0.577 0.245 27.33 / 0.16),
+      rgba(30, 111, 214, 0.2),
       transparent 40%
     );
     opacity: 0;
@@ -397,88 +312,51 @@
     pointer-events: none;
   }
   .spotlight:hover::after { opacity: 1; }
-  .dark .spotlight::after {
-    background: radial-gradient(
-      400px circle at var(--mx, 50%) var(--my, 50%),
-      oklch(0.637 0.237 25.33 / 0.18),
-      transparent 40%
-    );
-  }
 
-  /* Grid background — neutral grid lines on light canvas */
+  /* Grid background — faint lines on navy canvas */
   .bg-grid {
     background-image:
-      linear-gradient(to right, oklch(0.205 0 0 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(0.205 0 0 / 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 56px 56px;
   }
-  .dark .bg-grid {
-    background-image:
-      linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px);
-  }
 
-  /* Dotted background — neutral dots on light canvas */
+  /* Dotted background — faint dots on navy canvas */
   .bg-dots {
-    background-image: radial-gradient(oklch(0.205 0 0 / 0.10) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
     background-size: 22px 22px;
   }
-  .dark .bg-dots {
-    background-image: radial-gradient(oklch(1 0 0 / 0.08) 1px, transparent 1px);
-  }
 
-  /* Warm-mesh: layered radial + conic gradients hinting at "compute" */
+  /* Carrier-blue mesh: layered radial + conic gradients hinting at "network" */
   .bg-neural {
     background:
-      radial-gradient(ellipse 40% 30% at 20% 30%, oklch(0.577 0.245 27.33 / 0.05), transparent 60%),
-      radial-gradient(ellipse 35% 30% at 80% 20%, oklch(0.828 0.189 84.43 / 0.045), transparent 60%),
-      radial-gradient(ellipse 40% 35% at 65% 80%, oklch(0.646 0.222 14 / 0.04), transparent 60%),
+      radial-gradient(ellipse 40% 30% at 20% 30%, rgba(30, 111, 214, 0.18), transparent 60%),
+      radial-gradient(ellipse 35% 30% at 80% 20%, rgba(47, 143, 224, 0.14), transparent 60%),
+      radial-gradient(ellipse 40% 35% at 65% 80%, rgba(59, 130, 246, 0.16), transparent 60%),
       conic-gradient(from 90deg at 50% 50%,
-        oklch(0.577 0.245 27.33 / 0.02),
-        oklch(0.828 0.189 84.43 / 0.02),
-        oklch(0.646 0.222 14 / 0.02),
-        oklch(0.577 0.245 27.33 / 0.02));
+        rgba(30, 111, 214, 0.05),
+        rgba(47, 143, 224, 0.05),
+        rgba(59, 130, 246, 0.05),
+        rgba(30, 111, 214, 0.05));
     filter: blur(0.5px);
-  }
-  .dark .bg-neural {
-    background:
-      radial-gradient(ellipse 40% 30% at 20% 30%, oklch(0.637 0.237 25.33 / 0.18), transparent 60%),
-      radial-gradient(ellipse 35% 30% at 80% 20%, oklch(0.85 0.17 85 / 0.14), transparent 60%),
-      radial-gradient(ellipse 40% 35% at 65% 80%, oklch(0.72 0.2 13 / 0.16), transparent 60%),
-      conic-gradient(from 90deg at 50% 50%,
-        oklch(0.637 0.237 25.33 / 0.05),
-        oklch(0.85 0.17 85 / 0.05),
-        oklch(0.72 0.2 13 / 0.05),
-        oklch(0.637 0.237 25.33 / 0.05));
   }
 
   /* Glassy card with gradient border on hover */
   .card-glow {
-    background: linear-gradient(180deg, oklch(1 0 0 / 0.88), oklch(1 0 0 / 0.66));
+    background: linear-gradient(180deg, rgba(17, 27, 45, 0.7), rgba(11, 18, 32, 0.45));
     backdrop-filter: blur(8px);
-    border: 1px solid oklch(0.205 0 0 / 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
   .card-glow:hover {
-    border-color: oklch(0.577 0.245 27.33 / 0.4);
+    border-color: rgba(30, 111, 214, 0.5);
     box-shadow:
-      0 0 0 1px oklch(0.577 0.245 27.33 / 0.12),
-      0 22px 60px -20px oklch(0.577 0.245 27.33 / 0.25),
-      0 0 80px -30px oklch(0.646 0.222 14 / 0.18);
-  }
-  .dark .card-glow {
-    background: linear-gradient(180deg, oklch(0.205 0 0 / 0.7), oklch(0.16 0 0 / 0.4));
-    border: 1px solid oklch(1 0 0 / 0.06);
-  }
-  .dark .card-glow:hover {
-    border-color: oklch(0.637 0.237 25.33 / 0.4);
-    box-shadow:
-      0 0 0 1px oklch(0.637 0.237 25.33 / 0.14),
-      0 22px 60px -20px oklch(0.637 0.237 25.33 / 0.35),
-      0 0 80px -30px oklch(0.72 0.2 13 / 0.35);
+      0 0 0 1px rgba(30, 111, 214, 0.16),
+      0 22px 60px -20px rgba(30, 111, 214, 0.4),
+      0 0 80px -30px rgba(47, 143, 224, 0.3);
   }
 
-  /* Tag — small status pill (red) */
+  /* Tag — small status pill (swoosh blue, matches the logo's primary blue) */
   .ai-pill-cyan {
     display: inline-flex;
     align-items: center;
@@ -488,18 +366,13 @@
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: oklch(0.577 0.245 27.33);
-    background: linear-gradient(180deg, oklch(0.637 0.237 25.33 / 0.10), oklch(0.637 0.237 25.33 / 0.04));
-    border: 1px solid oklch(0.637 0.237 25.33 / 0.3);
+    color: #7dd3fc;
+    background: linear-gradient(180deg, rgba(47, 143, 224, 0.14), rgba(47, 143, 224, 0.05));
+    border: 1px solid rgba(47, 143, 224, 0.35);
     border-radius: 9999px;
   }
-  .dark .ai-pill-cyan {
-    color: oklch(0.7 0.2 25);
-    background: linear-gradient(180deg, oklch(0.7 0.2 25 / 0.12), oklch(0.7 0.2 25 / 0.04));
-    border: 1px solid oklch(0.7 0.2 25 / 0.3);
-  }
 
-  /* Tag — amber accent pill */
+  /* Tag — growth-green accent pill (from the logo's bar-chart accent) */
   .ai-pill-magenta {
     display: inline-flex;
     align-items: center;
@@ -509,18 +382,13 @@
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: oklch(0.62 0.16 60);
-    background: linear-gradient(180deg, oklch(0.828 0.189 84.43 / 0.12), oklch(0.828 0.189 84.43 / 0.05));
-    border: 1px solid oklch(0.828 0.189 84.43 / 0.35);
+    color: #86efac;
+    background: linear-gradient(180deg, rgba(31, 157, 85, 0.16), rgba(31, 157, 85, 0.05));
+    border: 1px solid rgba(31, 157, 85, 0.35);
     border-radius: 9999px;
   }
-  .dark .ai-pill-magenta {
-    color: oklch(0.85 0.17 85);
-    background: linear-gradient(180deg, oklch(0.85 0.17 85 / 0.12), oklch(0.85 0.17 85 / 0.04));
-    border: 1px solid oklch(0.85 0.17 85 / 0.3);
-  }
 
-  /* Tag — deep crimson pill */
+  /* Tag — amber accent pill (from the logo's bar-chart accent) */
   .ai-pill-violet {
     display: inline-flex;
     align-items: center;
@@ -530,15 +398,10 @@
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: oklch(0.505 0.213 27.5);
-    background: linear-gradient(180deg, oklch(0.505 0.213 27.5 / 0.10), oklch(0.505 0.213 27.5 / 0.04));
-    border: 1px solid oklch(0.505 0.213 27.5 / 0.3);
+    color: #fcd34d;
+    background: linear-gradient(180deg, rgba(242, 167, 27, 0.16), rgba(242, 167, 27, 0.05));
+    border: 1px solid rgba(242, 167, 27, 0.35);
     border-radius: 9999px;
-  }
-  .dark .ai-pill-violet {
-    color: oklch(0.704 0.191 22);
-    background: linear-gradient(180deg, oklch(0.704 0.191 22 / 0.12), oklch(0.704 0.191 22 / 0.04));
-    border: 1px solid oklch(0.704 0.191 22 / 0.3);
   }
 
   /* Tag — features-page blue pill */
@@ -557,9 +420,10 @@
     border-radius: 9999px;
   }
 
-  /* Re-pins the blue/ink accents to their bright, dark-surface values —
-     wraps the features hero band so pill/gradient text stay legible on
-     --features-hero-bg regardless of the site's light/dark toggle. */
+  /* Pins the features accents to their dark-surface values. Since the
+     site-wide rebrand these match :root, so this is now a no-op kept for
+     intent: it guarantees the /features band stays legible even if the
+     base tokens are ever re-tuned for a lighter canvas. */
   .features-hero-dark {
     --features-blue: oklch(0.707 0.165 254.624);
     --features-blue-deep: oklch(0.623 0.214 259.815);
@@ -568,31 +432,20 @@
     --features-sky: oklch(0.746 0.16 232.661);
   }
 
-  /* Fancy gradient solid button background — Acepeak red */
+  /* Fancy gradient solid button background — mirrors the logo's own
+     navy-to-bright-blue swoosh gradient */
   .btn-ai {
-    background: linear-gradient(135deg, oklch(0.577 0.245 27.33) 0%, oklch(0.505 0.213 27.5) 50%, oklch(0.646 0.222 14) 100%);
-    color: oklch(0.985 0 0);
+    background: linear-gradient(135deg, #123170 0%, #1e6fd6 55%, #2f8fe0 100%);
+    color: #ffffff;
     box-shadow:
-      0 0 0 1px oklch(1 0 0 / 0.15) inset,
-      0 8px 30px -8px oklch(0.577 0.245 27.33 / 0.45);
+      0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+      0 8px 30px -8px rgba(30, 111, 214, 0.5);
   }
   .btn-ai:hover {
     filter: brightness(1.08);
     box-shadow:
-      0 0 0 1px oklch(1 0 0 / 0.2) inset,
-      0 14px 40px -8px oklch(0.577 0.245 27.33 / 0.6);
-  }
-  .dark .btn-ai {
-    background: linear-gradient(135deg, oklch(0.637 0.237 25.33) 0%, oklch(0.704 0.191 22) 50%, oklch(0.72 0.2 13) 100%);
-    color: oklch(0.985 0 0);
-    box-shadow:
-      0 0 0 1px oklch(1 0 0 / 0.1) inset,
-      0 8px 30px -8px oklch(0.637 0.237 25.33 / 0.6);
-  }
-  .dark .btn-ai:hover {
-    box-shadow:
-      0 0 0 1px oklch(1 0 0 / 0.15) inset,
-      0 14px 40px -8px oklch(0.637 0.237 25.33 / 0.75);
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+      0 14px 40px -8px rgba(30, 111, 214, 0.65);
   }
 }
 
@@ -658,7 +511,7 @@
   display: block;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
-  background: #fff;
+  background: var(--card);
 }
 .legal figcaption {
   margin-top: 0.5rem;
@@ -701,7 +554,7 @@
   border-radius: 0.5rem;
 }
 .legal .post-callout.warn {
-  border-left-color: oklch(0.72 0.16 60);
+  border-left-color: #fbbf24;
 }
 .legal .post-callout p {
   margin: 0;

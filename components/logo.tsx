@@ -6,26 +6,29 @@ type LogoProps = {
   /** Pixel height of the rendered logo. Width auto-scales. */
   height?: number
   priority?: boolean
-  /** Logo asset to render. Use "/logo-white.png" on dark backgrounds. */
+  /** Kept for backwards compatibility; ignored (the wordmark is baked into the asset). */
   src?: string
 }
 
+// Full Vozpar logo (bar-chart + swoosh "V" + "ozpar" wordmark) — transparent PNG.
+// The white wordmark is designed for dark surfaces, which is the site's theme.
+const LOGO_ASPECT = 1114 / 383
+
 /**
- * 9278.ai brand logo — full-colour (black + red headset) on transparent.
- * Use the default `/logo.png` on light surfaces and `/logo-white.png` on dark ones.
+ * Vozpar brand logo. Renders the official transparent logo asset as-is.
  */
-export function Logo({ className, height = 40, priority = false, src = "/logo.png" }: LogoProps) {
-  const width = Math.round(height * 2.285)
+export function Logo({ className, height = 40, priority = false }: LogoProps) {
+  const width = Math.round(height * LOGO_ASPECT)
 
   return (
     <span
       role="img"
-      aria-label="9278.ai"
+      aria-label="Vozpar"
       className={cn("inline-flex items-center", className)}
       style={{ height }}
     >
       <Image
-        src={src}
+        src="/logo.png"
         alt=""
         width={width}
         height={height}

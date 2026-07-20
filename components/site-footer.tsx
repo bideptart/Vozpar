@@ -75,7 +75,7 @@ export function SiteFooter() {
         {/* Brand */}
         <div className="md:col-span-4">
           <Link href="/" className="flex items-center" aria-label="9278.ai home">
-            <Logo height={40} src="/logo-white.png" />
+            <Logo height={40} />
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
             AI voice agents that actually sound human. Native audio, sub-second latency, and a self-hosted control panel that connects to your existing carrier.
