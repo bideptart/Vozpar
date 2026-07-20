@@ -84,7 +84,7 @@ function Ring({
             style={{ left: `${left}%`, top: `${top}%` }}
           >
             <motion.div
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.07] backdrop-blur-md"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card/85 backdrop-blur-md"
               style={{ color: "var(--features-blue)" }}
               animate={reduced ? undefined : { rotate: reverse ? 360 : -360 }}
               transition={{ duration, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
@@ -109,21 +109,21 @@ export function FeatureOrbit() {
       {/* Ambient glow */}
       <motion.div
         className="absolute inset-[12%] rounded-full blur-[70px]"
-        style={{ background: "color-mix(in oklch, var(--features-blue) 45%, transparent)" }}
+        style={{ background: "color-mix(in srgb, var(--features-blue) 45%, transparent)" }}
         animate={reduced ? undefined : { scale: [1, 1.12, 1], opacity: [0.45, 0.75, 0.45] }}
         transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
       />
 
       {/* Static ring guides */}
-      <div className="absolute inset-[8%] rounded-full border border-dashed border-white/10" />
-      <div className="absolute inset-[26%] rounded-full border border-white/10" />
+      <div className="absolute inset-[8%] rounded-full border border-dashed border-border" />
+      <div className="absolute inset-[26%] rounded-full border border-border" />
 
       {/* Expanding pulse rings */}
       {[0, 1, 2].map((i) => (
         <motion.div
           key={i}
           className="absolute inset-[30%] rounded-full border"
-          style={{ borderColor: "color-mix(in oklch, var(--features-blue) 40%, transparent)" }}
+          style={{ borderColor: "color-mix(in srgb, var(--features-blue) 40%, transparent)" }}
           initial={{ scale: 0.7, opacity: 0 }}
           animate={reduced ? undefined : { scale: [0.7, 1.9], opacity: [0.6, 0] }}
           transition={{ duration: 3.6, repeat: Number.POSITIVE_INFINITY, ease: "easeOut", delay: i * 1.2 }}
@@ -135,7 +135,7 @@ export function FeatureOrbit() {
       <Ring items={INNER} positions={INNER_POS} duration={26} reverse reduced={reduced} />
 
       {/* Core */}
-      <div className="absolute inset-[32%] flex items-center justify-center rounded-full border border-white/15 bg-white/[0.06] backdrop-blur-md">
+      <div className="absolute inset-[32%] flex items-center justify-center rounded-full border border-border bg-card/85 backdrop-blur-md">
         <div className="flex h-12 items-end gap-[3px]">
           {[0.5, 0.85, 1, 0.65, 0.95, 0.55, 0.8].map((peak, i) => (
             <motion.span
@@ -144,7 +144,7 @@ export function FeatureOrbit() {
               style={{
                 height: "100%",
                 transformOrigin: "bottom",
-                background: "linear-gradient(to top, var(--features-blue-deep), var(--features-sky))",
+                background: "linear-gradient(to top, var(--features-blue-deep), var(--features-blue))",
               }}
               initial={{ scaleY: 0.25 }}
               animate={reduced ? { scaleY: 0.6 } : { scaleY: [0.25, peak, 0.4, peak * 0.75, 0.25] }}
