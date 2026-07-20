@@ -59,14 +59,15 @@
   --ai-magenta: #1f9d55;
   --ai-mint: #1f9d55;
 
-  /* Features-page accent palette — scoped to /features (components/sections/features.tsx).
-     Tuned for a dark surface, which is now the site-wide default. */
-  --features-blue: oklch(0.707 0.165 254.624);      /* blue-400 */
-  --features-blue-deep: oklch(0.623 0.214 259.815); /* blue-500 */
-  --features-ink: oklch(0.929 0.013 255.508);       /* slate-200 — light "ink" for text on dark cards */
-  --features-indigo: oklch(0.673 0.182 276.935);    /* indigo-400 */
-  --features-sky: oklch(0.746 0.16 232.661);        /* sky-400 */
-  --features-hero-bg: #0b1220;                      /* matches --background so /features reads as one canvas */
+  /* /features accents — aliases onto the brand tokens above rather than a
+     second, hand-tuned palette, so the page can never drift from the brand
+     reference. Names kept for the components that already consume them. */
+  --features-blue: var(--accent);        /* #2F8FE0 bright blue */
+  --features-blue-deep: var(--primary);  /* #1E6FD6 swoosh blue */
+  --features-navy: #123170;              /* deep navy — gradient base only */
+  --features-green: var(--chart-2);      /* #1F9D55 growth green */
+  --features-amber: var(--chart-4);      /* #F2A71B amber */
+  --features-hero-bg: var(--background); /* #0B1220 */
 
   --radius: 1rem;
   --sidebar: #111b2d;
@@ -82,6 +83,10 @@
 
 @theme inline {
   --font-sans: var(--font-inter), 'Inter Fallback', system-ui, sans-serif;
+  /* Archivo 500 is the brand heading face — use `font-heading` on every
+     h1–h4. `font-serif` is legacy (Instrument Serif) and still used by
+     pages that haven't been migrated to the brand reference yet. */
+  --font-heading: var(--font-archivo), 'Archivo Fallback', system-ui, sans-serif;
   --font-serif: var(--font-instrument-serif), Georgia, 'Times New Roman', serif;
   --font-mono: var(--font-geist-mono), ui-monospace, 'Geist Mono Fallback', monospace;
   --color-background: var(--background);
@@ -133,6 +138,61 @@
 }
 .marquee:hover {
   animation-play-state: paused;
+}
+
+/* Same track, opposite direction — alternating rails read as a system in
+   motion rather than one belt cloned four times. Duration is meant to be
+   overridden per-instance via an inline `animationDuration`. */
+@keyframes marquee-x-reverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-reverse {
+  animation: marquee-x-reverse 35s linear infinite;
+  will-change: transform;
+}
+.marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+/* Slow rotation — drives conic-gradient "living border" rings. The rotating
+   element must be larger than its container and clipped by it, otherwise the
+   corners swing outside the rounded rect as it turns. */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow {
+  animation: spin-slow 9s linear infinite;
+}
+
+/* Specular sweep across a panel — the highlight that makes a flat surface
+   read as glass. */
+@keyframes sheen-x {
+  0% { transform: translateX(-130%) skewX(-18deg); }
+  100% { transform: translateX(230%) skewX(-18deg); }
+}
+.sheen-sweep {
+  animation: sheen-x 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Slow drift for ambient background blobs */
+@keyframes drift-blob {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(6%, -5%, 0) scale(1.08); }
+  66% { transform: translate3d(-5%, 4%, 0) scale(0.95); }
+}
+.drift-blob {
+  animation: drift-blob 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .marquee-reverse,
+  .spin-slow,
+  .sheen-sweep,
+  .drift-blob {
+    animation: none !important;
+  }
 }
 
 /* Aurora gradient text — carrier blue spectrum */
@@ -404,32 +464,30 @@
     border-radius: 9999px;
   }
 
-  /* Tag — features-page blue pill */
+  /* Eyebrow / section tag — monospace, uppercase, per the brand reference
+     (Section tags: mono 400, 10–11px, 1–2.4px tracking). */
   .ai-pill-blue {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.25rem 0.75rem;
+    font-family: var(--font-mono);
     font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    line-height: 1.2;
     text-transform: uppercase;
     color: var(--features-blue);
-    background: linear-gradient(180deg, color-mix(in oklch, var(--features-blue) 12%, transparent), color-mix(in oklch, var(--features-blue) 4%, transparent));
-    border: 1px solid color-mix(in oklch, var(--features-blue) 30%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--features-blue) 12%, transparent), color-mix(in srgb, var(--features-blue) 4%, transparent));
+    border: 1px solid color-mix(in srgb, var(--features-blue) 30%, transparent);
     border-radius: 9999px;
   }
 
-  /* Pins the features accents to their dark-surface values. Since the
-     site-wide rebrand these match :root, so this is now a no-op kept for
-     intent: it guarantees the /features band stays legible even if the
-     base tokens are ever re-tuned for a lighter canvas. */
+  /* No-op kept so the /features markup keeps a single hook for its dark
+     band. The site-wide canvas is already the dark navy from the brand
+     reference, so no per-section token overrides are needed. */
   .features-hero-dark {
-    --features-blue: oklch(0.707 0.165 254.624);
-    --features-blue-deep: oklch(0.623 0.214 259.815);
-    --features-ink: oklch(0.929 0.013 255.508);
-    --features-indigo: oklch(0.673 0.182 276.935);
-    --features-sky: oklch(0.746 0.16 232.661);
+    color-scheme: dark;
   }
 
   /* Fancy gradient solid button background — mirrors the logo's own

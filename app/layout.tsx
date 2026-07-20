@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Instrument_Serif, Geist_Mono } from "next/font/google"
+import { Inter, Instrument_Serif, Geist_Mono, Archivo } from "next/font/google"
 import "./globals.css"
 import { Suspense } from "react"
 import { SITE } from "@/lib/seo"
@@ -7,8 +7,24 @@ import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/seo/jsonld"
 import { PageviewTracker } from "@/components/analytics/pageview-tracker"
 import { ThemeProvider } from "@/components/theme-provider"
 
-// Acepeak typography: Inter for body/UI, Instrument Serif for display headings
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" })
+// Vozpar typography (per the brand reference doc):
+//   Archivo 500 — all headings, always with negative tracking
+//   Inter 300/400/500/600 — body, paragraphs, nav, buttons, UI
+//   Monospace — small uppercase eyebrow labels and tags
+// Instrument Serif is kept for now because pages outside /features still
+// reference `font-serif`; it can go once they're migrated too.
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-inter",
+  display: "swap",
+})
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--font-archivo",
+  display: "swap",
+})
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
@@ -87,7 +103,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-background" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${archivo.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider
