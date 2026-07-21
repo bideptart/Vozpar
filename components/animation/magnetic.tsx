@@ -100,15 +100,18 @@ export function SpotlightPanel({
         el.style.setProperty("--spot-y", `${e.clientY - r.top}px`)
       }}
     >
-      {!reduced && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/spot:opacity-100"
-          style={{
-            background: `radial-gradient(${size}px circle at var(--spot-x, 50%) var(--spot-y, 0%), color-mix(in srgb, ${glow} 16%, transparent), transparent 70%)`,
-          }}
-        />
-      )}
+      {/* Rendered unconditionally. Gating this node on `reduced` would drop a
+          DOM element between the server tree (where useReducedMotion() is
+          null) and the client's, which React treats as a hydration error
+          rather than a warning. The handler above is what's gated; without it
+          the highlight just sits at its default position. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/spot:opacity-100"
+        style={{
+          background: `radial-gradient(${size}px circle at var(--spot-x, 50%) var(--spot-y, 0%), color-mix(in srgb, ${glow} 16%, transparent), transparent 70%)`,
+        }}
+      />
       {children}
     </div>
   )

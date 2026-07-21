@@ -81,9 +81,14 @@ export function FeatureHero() {
   const visualY = useTransform(py, [-1, 1], [-12, 12])
 
   // ---- scroll exit -----------------------------------------------------
+  // Reduced motion is folded into the output RANGE rather than swapping the
+  // `style` prop out. `useReducedMotion()` is null on the server and a real
+  // boolean on the client's first render, so gating `style` would emit the
+  // attribute on one and omit it on the other — a hydration diff. Flattening
+  // the range keeps the attribute identical and the element still.
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] })
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 90])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 90])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, reduced ? 1 : 0])
 
   return (
     <section
@@ -105,10 +110,13 @@ export function FeatureHero() {
       }}
     >
       {/* ---- 1. aurora orbs ----
-          Positioning translates live on plain wrappers throughout this file.
-          A motion element owns its `transform` outright, so an x/y/scale
-          animation on the same node silently drops a Tailwind
-          `-translate-x-1/2` and knocks the layer out of place. */}
+          Static placement lives on plain wrappers, animation on the motion
+          child. Note this is a readability split, not a correctness one:
+          Tailwind v4 compiles `-translate-x-1/2` to the standalone `translate`
+          property, which composes with `transform` rather than being clobbered
+          by motion's inline value (that was a v3 hazard). Keeping the two
+          concerns on separate nodes just makes the offsets easier to reason
+          about when the parallax range changes. */}
       <div aria-hidden className="pointer-events-none absolute left-1/4 top-0 -z-10 -translate-x-1/2">
         <motion.div
           className="h-[26rem] w-[26rem] rounded-full blur-[110px] [will-change:transform]"
@@ -162,7 +170,7 @@ export function FeatureHero() {
 
       <motion.div
         className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 md:py-20 lg:grid-cols-12 lg:gap-8 lg:py-0"
-        style={reduced ? undefined : { y: contentY, opacity: contentOpacity }}
+        style={{ y: contentY, opacity: contentOpacity }}
       >
         {/* ---------------- LEFT — copy ---------------- */}
         <div className="lg:col-span-6">
@@ -277,8 +285,12 @@ export function FeatureHero() {
           className="relative mx-auto w-full max-w-[280px] sm:max-w-[360px] lg:col-span-6 lg:max-w-none"
         >
           {/* Parallax is a separate wrapper from the entrance scale above:
-              both would write `transform` on one node and the later one wins. */}
-          <motion.div style={reduced ? undefined : { x: visualX, y: visualY }}>
+              both would write `transform` on one node and the later one wins.
+              The inner box is pinned to the orbit's own 420px cap so the beam
+              stays concentric and the chips stay pinned to the ring — the
+              lg column is ~600px wide, and positioning them against that
+              instead leaves them floating ~90px clear of it. */}
+          <motion.div className="relative mx-auto max-w-[420px]" style={{ x: visualX, y: visualY }}>
             {/* ---- 3. conic beam ---- */}
             <div
               aria-hidden
@@ -317,7 +329,7 @@ export function FeatureHero() {
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-6 hidden flex-col items-center gap-2 lg:flex"
-        style={reduced ? undefined : { opacity: contentOpacity }}
+        style={{ opacity: contentOpacity }}
       >
         <span className="font-mono text-[9px] uppercase tracking-[0.24em] text-muted-foreground/50">Scroll</span>
         <span className="relative block h-10 w-px overflow-hidden bg-white/10">
@@ -325,7 +337,7 @@ export function FeatureHero() {
             className="absolute left-0 block h-4 w-px"
             style={{ background: "var(--features-blue)", boxShadow: "0 0 8px var(--features-blue)" }}
             initial={{ y: -16 }}
-            animate={reduced ? undefined : { y: 44 }}
+            animate={reduced ? { y: 12 } : { y: 44 }}
             transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: "easeIn" }}
           />
         </span>
