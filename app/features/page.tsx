@@ -5,10 +5,11 @@ import { Features } from "@/components/sections/features"
 import { FeatureCallDemo } from "@/components/sections/feature-call-demo"
 import { FeatureShowcase } from "@/components/sections/feature-showcase"
 import { FeatureLatencyLab } from "@/components/sections/feature-latency-lab"
-import { FeaturePillars } from "@/components/sections/feature-pillars"
+import { FeatureAnatomy } from "@/components/sections/feature-anatomy"
 import { FeatureIntegrations } from "@/components/sections/feature-integrations"
 import { FeatureIvrRace } from "@/components/sections/feature-ivr-race"
 import { FeatureComparison } from "@/components/sections/feature-comparison"
+import { FeatureTrust } from "@/components/sections/feature-trust"
 import { FeatureCta, FeatureRelated } from "@/components/sections/feature-outro"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
@@ -41,8 +42,9 @@ export default function FeaturesPage() {
         <FeatureShowcase />
         {/* Makes the headline latency claim something you can feel, not just read */}
         <FeatureLatencyLab />
-        {/* The same features regrouped into the three stories buyers evaluate */}
-        <FeaturePillars />
+        {/* The signal path a call actually takes. Replaced the old "three
+            pillars" block, which only re-listed the showcase's own bullets. */}
+        <FeatureAnatomy />
         {/* What it writes back to */}
         <FeatureIntegrations />
         {/* The emotional version of the comparison — same job, two paths, side by side.
@@ -50,6 +52,10 @@ export default function FeaturesPage() {
         <FeatureIvrRace />
         {/* Where it sits vs legacy IVR / building in-house */}
         <FeatureComparison />
+        {/* Last objection before the CTA: everything above is a performance
+            claim, this is the checkable one. Every figure is sourced from
+            /sla, /dpa, /subprocessors and /e911 and links back to them. */}
+        <FeatureTrust />
         {/* Conversion panel */}
         <FeatureCta />
 
@@ -65,16 +71,19 @@ export default function FeaturesPage() {
               href: "/pricing",
               title: "Pricing & per-minute rates",
               description: "Compare Starter, Growth and Scale top-ups and see the full phone-number rate card.",
+              icon: "pricing",
             },
             {
               href: "/industries",
               title: "Industries — pre-tuned playbooks",
               description: "Real estate, dental, healthcare, home services, restaurants, automotive, and more.",
+              icon: "industries",
             },
             {
               href: "/faq",
               title: "Frequently asked questions",
               description: "Pricing, credits, phone numbers, compliance and account access — answered.",
+              icon: "faq",
             },
           ]}
         />

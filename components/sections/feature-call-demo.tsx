@@ -415,7 +415,7 @@ export function FeatureCallDemo() {
                     type="button"
                     onClick={toggle}
                     aria-label={playing ? "Pause the call replay" : "Play the call replay"}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition-opacity hover:opacity-90"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition-opacity hover:opacity-90"
                     style={{ background: "linear-gradient(135deg, var(--features-blue), var(--features-blue-deep))" }}
                   >
                     {playing ? <Pause className="h-4 w-4" /> : <Play className="ml-0.5 h-4 w-4" />}
@@ -424,7 +424,7 @@ export function FeatureCallDemo() {
                     type="button"
                     onClick={restart}
                     aria-label="Restart the call replay"
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
                   </button>
@@ -478,7 +478,11 @@ function Readout({
 
 function Scrubber({ progress, onSeek }: { progress: number; onSeek: (f: number) => void }) {
   return (
-    <div className="relative flex-1">
+    // Vertical padding is the touch target. Without it this is a flex item in
+    // an `items-center` row, so its height collapses to the 4px track — and
+    // the transparent range input, sized `inset-0`, collapses with it. 4px is
+    // not something you can hit with a thumb.
+    <div className="relative flex flex-1 items-center py-5">
       {/* The visible track */}
       <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
         <div

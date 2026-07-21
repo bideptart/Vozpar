@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, PhoneCall } from "lucide-react"
+import type { ElementType } from "react"
+import { ArrowRight, ArrowUpRight, BookOpen, CircleQuestionMark, Layers, PhoneCall, Receipt } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { Magnetic, SpotlightPanel } from "@/components/animation/magnetic"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
@@ -25,7 +26,34 @@ const BULLETS = [
   { label: "Live in an afternoon", tint: "var(--features-green)" },
 ]
 
-export type FeatureLink = { href: string; title: string; description: string }
+/**
+ * Icons are resolved here from a string key rather than passed in as
+ * components. /features/page.tsx is a Server Component and this file is a
+ * Client Component, so a prop holding a component reference would have to
+ * cross that boundary — and React can't serialize a function. A plain string
+ * crosses fine and the lookup happens on the client.
+ */
+const LINK_ICONS = {
+  pricing: Receipt,
+  industries: Layers,
+  faq: CircleQuestionMark,
+  docs: BookOpen,
+} satisfies Record<string, ElementType>
+
+export type FeatureLink = {
+  href: string
+  title: string
+  description: string
+  /** Optional — cards fall back to a numbered tile when omitted. */
+  icon?: keyof typeof LINK_ICONS
+}
+
+/**
+ * Accent per destination, cycled by position. Three cards, three brand tints:
+ * a single blue repeated three times made the row read as one block of
+ * identical things rather than three separate places to go.
+ */
+const LINK_TINTS = ["var(--features-blue)", "var(--features-green)", "var(--features-amber)"]
 
 /* ---------------------------------------------------------------------- */
 
@@ -120,7 +148,9 @@ export function FeatureCta() {
                 </span>
               )}
 
-              <div className="relative flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
+              {/* Splits at lg, not md: at 768px the copy and the button stack
+                  side by side squeeze the CTA row to near its min-content. */}
+              <div className="relative flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
                 <div className="max-w-xl">
                   <span className="ai-pill-blue">
                     <span className="h-1 w-1 rounded-full bg-current" />
@@ -220,24 +250,63 @@ export function FeatureRelated({
       style={{ background: "var(--features-hero-bg)" }}
     >
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <ScrollReveal className="mb-8 max-w-2xl md:mb-10">
-          <span className="ai-pill-blue">
-            <span className="h-1 w-1 rounded-full bg-current" />
-            Next
-          </span>
-          <h2
-            id="related-heading"
-            className="mt-5 text-balance font-heading text-2xl font-medium leading-[1.1] tracking-[-0.03em] text-foreground md:text-3xl"
-          >
-            {heading}
-          </h2>
-          <p className="mt-3 text-pretty text-[15px] font-light leading-relaxed text-muted-foreground">
-            {description}
-          </p>
+        {/* Header runs the full width with a rule bridging to a count on the
+            right. The old version left the entire right half of the row empty,
+            which is what made the section read as an afterthought. */}
+        <ScrollReveal className="mb-8 md:mb-10">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="ai-pill-blue">
+              <span className="h-1 w-1 rounded-full bg-current" />
+              Next
+            </span>
+            <h2
+              id="related-heading"
+              className="mt-5 text-balance font-heading text-2xl font-medium leading-[1.1] tracking-[-0.03em] text-foreground md:text-3xl"
+            >
+              {heading}
+            </h2>
+            <p className="mt-3 text-pretty text-[15px] font-light leading-relaxed text-muted-foreground">
+              {description}
+            </p>
+
+            {/* Count flanked by two rules that draw outward from the middle —
+                the centred equivalent of the single rule this used to have
+                running off to the right. */}
+            <div aria-hidden className="mt-6 hidden items-center justify-center gap-4 md:flex">
+              <motion.span
+                className="block h-px w-20 origin-right"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent, color-mix(in srgb, var(--features-blue) 55%, transparent))",
+                }}
+                initial={reduced ? false : { scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              />
+              <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/50">
+                {String(links.length).padStart(2, "0")} destinations
+              </span>
+              <motion.span
+                className="block h-px w-20 origin-left"
+                style={{
+                  background:
+                    "linear-gradient(90deg, color-mix(in srgb, var(--features-blue) 55%, transparent), transparent)",
+                }}
+                initial={reduced ? false : { scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </div>
+          </div>
         </ScrollReveal>
 
         <ul className="grid gap-4 md:grid-cols-3">
-          {links.map((l, i) => (
+          {links.map((l, i) => {
+            const tint = LINK_TINTS[i % LINK_TINTS.length]
+            const Icon = l.icon ? LINK_ICONS[l.icon] : undefined
+            return (
             <motion.li
               key={l.href}
               initial={reduced ? false : { opacity: 0, y: 24 }}
@@ -251,26 +320,52 @@ export function FeatureRelated({
                   mute it — this way the glow renders over the surface and under
                   the text. */}
               <SpotlightPanel
-                glow="var(--features-blue)"
-                size={320}
-                className="h-full overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-white/25"
+                glow={tint}
+                size={340}
+                // `translate`, not `transform`: Tailwind v4 compiles
+                // -translate-y-* to the standalone `translate` property, so a
+                // transition list naming `transform` never covers it and the
+                // lift snaps instead of easing.
+                className="h-full overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-[translate,border-color] duration-300 hover:-translate-y-1.5 hover:border-white/25"
               >
                 {/* Top hairline that fills in from the left on hover */}
                 <span
                   aria-hidden
                   className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px origin-left scale-x-0 transition-transform duration-500 group-hover/spot:scale-x-100"
                   style={{
-                    background:
-                      "linear-gradient(90deg, var(--features-blue), color-mix(in srgb, var(--features-blue) 10%, transparent))",
+                    background: `linear-gradient(90deg, ${tint}, color-mix(in srgb, ${tint} 10%, transparent))`,
                   }}
                 />
 
-                <Link href={l.href} className="relative flex h-full flex-col justify-between gap-6 p-5">
-                  <div>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/40">
-                      {String(i + 1).padStart(2, "0")}
+                {/* Oversized index sunk into the corner as texture, not content */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-3 -top-5 select-none font-heading text-[5.5rem] font-medium leading-none tracking-[-0.05em] opacity-[0.06] transition-opacity duration-500 group-hover/spot:opacity-[0.13]"
+                  style={{ color: tint }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                <Link href={l.href} className="relative flex h-full flex-col gap-5 p-5 sm:p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <span
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-transform duration-300 group-hover/spot:-rotate-6 group-hover/spot:scale-105"
+                      style={{
+                        background: `color-mix(in srgb, ${tint} 16%, transparent)`,
+                        borderColor: `color-mix(in srgb, ${tint} 32%, transparent)`,
+                        color: tint,
+                      }}
+                    >
+                      {Icon ? (
+                        <Icon className="h-[18px] w-[18px]" aria-hidden />
+                      ) : (
+                        <span className="font-mono text-[11px]">{String(i + 1).padStart(2, "0")}</span>
+                      )}
                     </span>
-                    <p className="mt-3 font-heading text-base font-medium leading-snug tracking-[-0.02em] text-foreground">
+                  </div>
+
+                  <div className="flex-1">
+                    <p className="font-heading text-[17px] font-medium leading-snug tracking-[-0.02em] text-foreground">
                       {l.title}
                     </p>
                     <p className="mt-2 text-[13px] font-light leading-relaxed text-muted-foreground">
@@ -278,20 +373,33 @@ export function FeatureRelated({
                     </p>
                   </div>
 
-                  <span
-                    className="inline-flex items-center gap-1.5 text-xs font-medium"
-                    style={{ color: "var(--features-blue)" }}
-                  >
-                    Read more
-                    <ArrowRight
-                      className="size-3.5 transition-transform duration-300 group-hover/spot:translate-x-1"
+                  {/* Footer rule + arrow disc. The disc fills with the card's
+                      accent on hover, which gives the whole card one obvious
+                      affordance instead of a small blue text link. */}
+                  <div className="flex items-center justify-between gap-4 border-t border-border pt-4">
+                    <span
+                      className="text-xs font-medium transition-colors duration-300"
+                      style={{ color: tint }}
+                    >
+                      Read more
+                    </span>
+                    <span
                       aria-hidden
-                    />
-                  </span>
+                      className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border transition-colors duration-300"
+                      style={{ borderColor: `color-mix(in srgb, ${tint} 34%, transparent)`, color: tint }}
+                    >
+                      <span
+                        className="absolute inset-0 origin-bottom scale-y-0 transition-transform duration-300 ease-out group-hover/spot:scale-y-100"
+                        style={{ background: `color-mix(in srgb, ${tint} 22%, transparent)` }}
+                      />
+                      <ArrowUpRight className="relative h-4 w-4 transition-transform duration-300 group-hover/spot:translate-x-0.5 group-hover/spot:-translate-y-0.5" />
+                    </span>
+                  </div>
                 </Link>
               </SpotlightPanel>
             </motion.li>
-          ))}
+            )
+          })}
         </ul>
       </div>
     </section>

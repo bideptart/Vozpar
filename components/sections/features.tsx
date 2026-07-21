@@ -10,7 +10,11 @@ import { FeatureHero } from "@/components/sections/feature-hero"
 const STATS = [
   { icon: Gauge, prefix: "<", target: 300, decimals: 0, suffix: "ms", label: "Round-trip voice latency" },
   { icon: Globe2, prefix: "", target: 60, decimals: 0, suffix: "+", label: "Countries with local numbers" },
-  { icon: ShieldCheck, prefix: "", target: 99.95, decimals: 2, suffix: "%", label: "Platform uptime SLA" },
+  // 99.9, not 99.95 — this has to match what /sla actually commits to
+  // ("at least 99.9% of the time each calendar month"). Marketing a tighter
+  // number than the contract is the kind of thing a procurement review
+  // catches, and the credits schedule is written against 99.9.
+  { icon: ShieldCheck, prefix: "", target: 99.9, decimals: 1, suffix: "%", label: "Monthly uptime commitment" },
   { icon: Clock, prefix: "", target: 24, decimals: 0, suffix: "/7", label: "Autonomous call handling" },
 ]
 
@@ -72,7 +76,13 @@ export function Features() {
         <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 md:py-14">
           <ScrollReveal>
             <div
-              className="grid grid-cols-2 divide-y divide-border overflow-hidden rounded-2xl border border-border sm:grid-cols-4 sm:divide-x sm:divide-y-0"
+              // Explicit nth-child borders rather than `divide-*`. Tailwind's
+              // divide utilities target `:not(:last-child)`, which on a 2×2
+              // grid puts a bottom rule under cell 3 (dangling half way across
+              // the second row) and a right rule on cell 2 (doubling the
+              // container border). The two rule sets are scoped to opposite
+              // sides of `sm` so they never fight over the same property.
+              className="grid grid-cols-2 overflow-hidden rounded-2xl border border-border [&>*]:border-border max-sm:[&>*:nth-child(-n+2)]:border-b max-sm:[&>*:nth-child(odd)]:border-r sm:grid-cols-4 sm:[&>*:not(:last-child)]:border-r"
               style={{
                 background:
                   "linear-gradient(135deg, color-mix(in srgb, var(--features-blue) 10%, transparent), color-mix(in srgb, var(--features-blue-deep) 10%, transparent))",

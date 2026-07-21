@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { ComponentType, ElementType } from "react"
 import {
   AudioLines,
@@ -16,6 +16,7 @@ import {
   CalendarClock,
   Network,
   Check,
+  RadioTower,
 } from "lucide-react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
@@ -191,8 +192,13 @@ const FEATURES: Feature[] = [
     motif: "redaction",
     blurb: "Configurable PII handling out of the box.",
     detail:
-      "Redact card numbers and personal data before storage, set retention windows per region, and keep everything encrypted at rest on SOC 2-aligned infrastructure.",
-    stat: { value: "SOC 2", label: "Aligned infrastructure" },
+      // "SOC 2-aligned" was a hedge with nothing behind it: /dpa mentions SOC 2
+      // only as one option for satisfying an audit request, not as a report
+      // that exists. A security reviewer reads "aligned" as "not certified"
+      // and trusts the rest of the page less for it. These are the controls
+      // the DPA actually commits to.
+      "Redact card numbers and personal data before storage, set retention windows per region, and keep everything encrypted at rest. Art. 32 security measures are contractual, and data is deleted or returned within 30 days of termination.",
+    stat: { value: "30 days", label: "Deletion on termination" },
     points: ["Automatic PII redaction", "Per-region retention", "Encrypted at rest"],
   },
   {
@@ -360,26 +366,95 @@ function LanguagesMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 5. Carrier — a tower emitting expanding signal arcs. */
+/**
+ * 5. Carrier — DIDs on the left, your trunk on the right, the tower routing
+ * between them.
+ *
+ * The earlier version was a lone pulsing dot centred in a very wide box, which
+ * read as empty rather than minimal and said nothing about what the feature
+ * does. This one puts the actual claim on screen: numbers in many countries,
+ * on the carrier you already have.
+ *
+ * The country-code column and the trunk label drop out below sm — at 320px the
+ * five-part row would collapse into slivers, and the tower alone still reads.
+ */
 function CarrierMotif({ accent, reduced }: MotifProps) {
+  const codes = ["+1", "+44", "+91"]
+  const mix = (pct: number) => `color-mix(in srgb, ${accent} ${pct}%, transparent)`
+
   return (
     <div className={shell}>
-      {[0, 1, 2].map((i) => (
+      <div className="flex w-full max-w-sm items-center justify-center gap-2 px-2 sm:gap-3">
+        {/* Local numbers */}
+        <div className="hidden shrink-0 flex-col gap-1 sm:flex">
+          {codes.map((c, i) => (
+            <motion.span
+              key={c}
+              className="rounded-md border px-1.5 py-0.5 text-center font-mono text-[9px] leading-none"
+              style={{ borderColor: mix(30), color: accent }}
+              animate={reduced ? undefined : { opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 2.4, repeat: loop, ease: "easeInOut", delay: i * 0.5 }}
+            >
+              {c}
+            </motion.span>
+          ))}
+        </div>
+
+        <Hop accent={accent} reduced={reduced} delays={[0, 0.9]} />
+
+        {/* Tower + expanding arcs */}
+        <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
+          {[0, 1, 2].map((i) => (
+            <motion.span
+              key={i}
+              className="absolute rounded-full border"
+              style={{ height: 28, width: 28, borderColor: mix(50) }}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={reduced ? undefined : { scale: [0.5, 2.4], opacity: [0.8, 0] }}
+              transition={{ duration: 2.8, repeat: loop, ease: "easeOut", delay: i * 0.9 }}
+            />
+          ))}
+          <span
+            className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full"
+            style={{ background: mix(22) }}
+          >
+            <RadioTower className="h-4 w-4" style={{ color: accent }} aria-hidden />
+          </span>
+        </div>
+
+        <Hop accent={accent} reduced={reduced} delays={[0.45, 1.35]} />
+
+        {/* Your existing trunk */}
+        <div className="hidden shrink-0 flex-col items-center gap-1 sm:flex">
+          <span
+            className="rounded-md border px-1.5 py-0.5 font-mono text-[9px] leading-none"
+            style={{ borderColor: mix(30), color: accent }}
+          >
+            SIP
+          </span>
+          <span className="font-mono text-[8px] uppercase tracking-wider text-muted-foreground/50">
+            your trunk
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** A hairline with packets running along it. Shared by the carrier motif. */
+function Hop({ accent, reduced, delays }: MotifProps & { delays: number[] }) {
+  return (
+    <div className="relative h-px min-w-6 flex-1" style={{ background: `color-mix(in srgb, ${accent} 25%, transparent)` }}>
+      {delays.map((d) => (
         <motion.span
-          key={i}
-          className="absolute rounded-full border"
-          style={{ height: 28, width: 28, borderColor: `color-mix(in srgb, ${accent} 50%, transparent)` }}
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={reduced ? undefined : { scale: [0.5, 3], opacity: [0.8, 0] }}
-          transition={{ duration: 2.8, repeat: loop, ease: "easeOut", delay: i * 0.9 }}
+          key={d}
+          className="absolute -top-[2px] block h-[5px] w-[5px] rounded-full"
+          style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
+          initial={{ left: "0%", opacity: 0 }}
+          animate={reduced ? undefined : { left: ["0%", "calc(100% - 5px)"], opacity: [0, 1, 1, 0] }}
+          transition={{ duration: 1.7, repeat: loop, repeatDelay: 0.7, delay: d, ease: "linear" }}
         />
       ))}
-      <span
-        className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full"
-        style={{ background: `color-mix(in srgb, ${accent} 22%, transparent)` }}
-      >
-        <span className="h-3 w-3 rounded-full" style={{ background: accent }} />
-      </span>
     </div>
   )
 }
@@ -623,6 +698,46 @@ const MOTIFS: Record<MotifKey, ComponentType<MotifProps>> = {
 export function FeatureShowcase() {
   const reduced = useReducedMotion()
   const [activeIndex, setActiveIndex] = useState(0)
+
+  /**
+   * Roving arrow-key navigation.
+   *
+   * The tablist runs horizontally on phones and vertically from lg, so all
+   * four arrows are handled rather than picking an orientation — the same
+   * reason `aria-orientation` was dropped: it can't be statically correct for
+   * both. Focus moves with the selection, which is what makes the automatic
+   * activation pattern usable: without it, arrowing changed the panel while
+   * focus sat on whichever tab was tabbed to.
+   */
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const focusTab = (i: number) => {
+    const next = (i + FEATURES.length) % FEATURES.length
+    setActiveIndex(next)
+    tabRefs.current[next]?.focus()
+  }
+  const onTabKeyDown = (e: React.KeyboardEvent, i: number) => {
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault()
+        focusTab(i + 1)
+        break
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault()
+        focusTab(i - 1)
+        break
+      case "Home":
+        e.preventDefault()
+        focusTab(0)
+        break
+      case "End":
+        e.preventDefault()
+        focusTab(FEATURES.length - 1)
+        break
+    }
+  }
+
   const active = FEATURES[activeIndex]
   const accent = CATEGORY_ACCENT[active.tag]
   const ActiveIcon = active.icon
@@ -641,7 +756,9 @@ export function FeatureShowcase() {
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-24">
-        <ScrollReveal className="max-w-2xl">
+        {/* Centred to match every other section header on the page — this was
+            the only one still left-aligned. */}
+        <ScrollReveal className="mx-auto max-w-2xl text-center">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             The toolkit
@@ -651,18 +768,30 @@ export function FeatureShowcase() {
             Twelve building blocks, one platform.
           </h2>
           <p className="mt-4 text-pretty text-[15px] font-light leading-relaxed text-muted-foreground">
-            Pick any capability to see what it actually does. Together they cover the whole call — from the first ring
-            to the row that lands in your CRM.
+            Move through the list and each one opens as you reach it. Together they cover the whole call, from the
+            first ring to the row that lands in your CRM.
           </p>
         </ScrollReveal>
 
         <div className="mt-10 grid grid-cols-1 gap-4 lg:mt-14 lg:grid-cols-12 lg:gap-6">
-          {/* INDEX — horizontal rail on phones, vertical list from lg */}
-          <div
+          {/* INDEX — horizontal snap rail on phones, vertical list from lg.
+              Three things here are load-bearing:
+              · `layoutScroll` — the active background is a `layoutId` element,
+                and inside a scrollable ancestor motion measures against the
+                viewport unless told to account for scroll offset, so the
+                highlight jumped to the wrong chip once the rail was scrolled.
+              · `scroll-pl-*` — the snapport is the scrollport minus scroll
+                padding, which defaults to 0. Without it the only valid snap
+                position for chip 1 is scrollLeft:16 (it sits behind `px-4`), so
+                mandatory snapping shunts it flush to the screen edge and out of
+                line with the heading above.
+              · scrollbar hidden — `overflow-x-auto` holds until lg, so between
+                768 and 1023px Windows and Linux draw a bar under the rail. */}
+          <motion.div
+            layoutScroll
             role="tablist"
             aria-label="Platform features"
-            aria-orientation="vertical"
-            className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 lg:col-span-5 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0 lg:pb-0"
+            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:gap-0.5 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
               const isActive = i === activeIndex
@@ -671,22 +800,73 @@ export function FeatureShowcase() {
               return (
                 <button
                   key={f.title}
+                  ref={(el) => {
+                    tabRefs.current[i] = el
+                  }}
                   role="tab"
                   aria-selected={isActive}
+                  // Roving tabindex: one stop for the whole list, then arrows.
+                  // Twelve individually tabbable tabs meant a keyboard user had
+                  // to press Tab twelve times to get past this section.
+                  tabIndex={isActive ? 0 : -1}
+                  onKeyDown={(e) => onTabKeyDown(e, i)}
                   onClick={() => setActiveIndex(i)}
-                  className="group relative flex shrink-0 items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-card/50 lg:w-full lg:shrink lg:px-4"
+                  // Hover opens the panel — no click needed. Guarded to mouse:
+                  // on a touch device `pointerenter` fires on tap alongside
+                  // click, and a finger dragged down the list while scrolling
+                  // would otherwise flip panels the whole way.
+                  onPointerEnter={(e) => {
+                    if (e.pointerType === "mouse") setActiveIndex(i)
+                  }}
+                  // Keyboard gets the same behaviour: focus selects, so arrowing
+                  // through the list reveals each panel in turn. Paired with the
+                  // roving tabindex and the arrow handler above, this is the
+                  // full ARIA "automatic activation" tabs pattern.
+                  onFocus={() => setActiveIndex(i)}
+                  // Desktop rows are ~48px: py-1.5 (12) around two lines whose
+                  // line-heights stay at 20px and 16px (the arbitrary
+                  // `text-[13px]`/`text-[11px]` override font-size only). Twelve
+                  // of those plus gap-0.5 puts the index at ~598px, down from
+                  // ~770px before the padding and type sizes were tightened.
+                  //
+                  // Phone chips cap at 13rem. Uncapped, the longest title ran
+                  // ~305px against ~304px of visible track — exactly one chip
+                  // on screen at 320px. The cap buys a chip and a half, not
+                  // two; two full chips would need a ~9rem cap, which leaves
+                  // 70px of title and clips almost every one of them.
+                  className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-3 rounded-xl border border-border bg-card/30 px-3 py-2.5 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2.5 lg:border-0 lg:bg-transparent lg:py-1.5 lg:hover:translate-x-1"
                 >
                   {/* Sliding active background — one element that animates
                       between rows rather than 12 cross-fading backgrounds. */}
                   {isActive && (
                     <motion.span
                       layoutId="showcase-active"
-                      className="absolute inset-0 rounded-xl border border-border bg-card"
+                      // -inset-px, not inset-0: `inset-0` resolves to the
+                      // padding box, i.e. inside the chip's own 1px border on
+                      // mobile, stacking two borders with mismatched corner
+                      // radii. This sits on top of it instead.
+                      className="absolute -inset-px rounded-xl border border-border bg-card lg:inset-0"
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
+
+                  {/* Edge marker. Half-height on hover, full when selected, so
+                      the row still acknowledges the cursor in the instant
+                      before the active background slides across. */}
                   <span
-                    className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-colors"
+                    aria-hidden
+                    className={`absolute -left-1 top-1/2 hidden h-5 w-[2px] -translate-y-1/2 rounded-full transition-[scale,opacity] duration-300 lg:block ${
+                      isActive ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 group-hover:scale-y-50 group-hover:opacity-60"
+                    }`}
+                    style={{ background: itemAccent }}
+                  />
+
+                  <span
+                    // Back to 32px on desktop now the row carries two lines:
+                    // the text block is ~34px tall, so it drives the row height
+                    // and a 28px tile just looked undersized next to it. Costs
+                    // nothing in height.
+                    className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105 lg:h-8 lg:w-8"
                     style={{
                       background: isActive
                         ? `color-mix(in srgb, ${itemAccent} 20%, transparent)`
@@ -697,24 +877,40 @@ export function FeatureShowcase() {
                       color: isActive ? itemAccent : "var(--muted-foreground)",
                     }}
                   >
-                    <Icon className="h-[17px] w-[17px]" aria-hidden="true" />
+                    <Icon className="h-[17px] w-[17px] lg:h-4 lg:w-4" aria-hidden="true" />
                   </span>
-                  <span className="relative min-w-0">
+                  <span className="relative min-w-0 flex-1">
                     <span
-                      className={`block whitespace-nowrap text-sm font-medium transition-colors lg:whitespace-normal ${
+                      // Two lines on the rail, one in the list. With the blurb
+                      // hidden on phones the title is the only label a chip
+                      // has, and at the 13rem cap seven of the twelve would
+                      // otherwise clip mid-word ("Recording, redactio…").
+                      // Both states are line-clamp so there's no display/
+                      // white-space conflict to resolve between breakpoints.
+                      className={`text-sm font-medium transition-colors line-clamp-2 lg:line-clamp-1 lg:text-[13px] ${
                         isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
                       {f.title}
                     </span>
-                    <span className="hidden truncate text-xs font-light text-muted-foreground/70 lg:block">
+                    {/* Desktop list only. On the phone rail a second line would
+                        widen every chip and cut how many fit on screen, which is
+                        already the rail's weak point. In the vertical list it
+                        costs nothing horizontally.
+
+                        Shown on every row, never only the selected one:
+                        revealing it just for the active row would change that
+                        row's height and shove everything below it down by ~16px
+                        mid-hover, handing the cursor a different item than the
+                        one it was pointing at. */}
+                    <span className="hidden truncate text-xs font-light text-muted-foreground/60 lg:block lg:text-[11px]">
                       {f.blurb}
                     </span>
                   </span>
                 </button>
               )
             })}
-          </div>
+          </motion.div>
 
           {/* DETAIL PANEL */}
           <div className="lg:col-span-7">
@@ -736,13 +932,19 @@ export function FeatureShowcase() {
                 </span>
               </div>
 
+              {/* `mode="wait"` stays — the panel is in normal flow, so letting
+                  two versions overlap would jump the section's height. But the
+                  exit is deliberately much faster than the entrance now that
+                  hovering swaps panels: at a symmetric 0.28s each, sweeping the
+                  cursor down twelve rows queues 0.56s per swap and the panel
+                  visibly trails the pointer. Fast out, unhurried in. */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active.title}
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  exit={{ opacity: 0, y: -6, transition: { duration: 0.1, ease: "easeIn" } }}
+                  transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                   className="p-5 sm:p-7"
                   role="tabpanel"
                 >
@@ -756,7 +958,11 @@ export function FeatureShowcase() {
                     <ActiveMotif accent={accent} reduced={reduced} />
                   </div>
 
-                  <div className="mt-6 flex items-start gap-4">
+                  {/* Stacks on phones. Sitting the copy beside a 44px icon in
+                      a 246px panel leaves it ~186px — about twenty-five
+                      characters a line, so the detail paragraph ran ten
+                      lines. */}
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                     <span
                       className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
                       style={{

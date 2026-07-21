@@ -14,14 +14,14 @@ import { ScrollReveal } from "@/components/animation/scroll-reveal"
  * Still a real <table> for semantics and screen readers — the layout is
  * `table-fixed` with explicit column widths so the "best fit" cap and the
  * raised winner column can be positioned against known geometry instead of
- * whatever the auto layout algorithm decides. Below md the table becomes one
- * card per capability: four columns can't shrink past ~640px without
- * horizontal scrolling, which hides the comparison that is the whole point.
+ * whatever the auto layout algorithm decides. Below lg the table becomes one
+ * card per capability: at md the four columns give each note cell ~106px,
+ * about fifteen characters a line, so all eighteen of them ladder.
  */
 
 type Verdict = "yes" | "no" | "partial"
 
-const COLUMNS = ["9278.ai", "Legacy IVR", "Build in-house"] as const
+const COLUMNS = ["Vozpar", "Legacy IVR", "Build in-house"] as const
 
 /** Column widths — must total 100 and stay in sync with WINNER_LEFT below. */
 const COL_W = ["28%", "24%", "24%", "24%"] as const
@@ -158,7 +158,7 @@ export function FeatureComparison() {
         style={{ background: "color-mix(in srgb, var(--features-blue) 28%, transparent)" }}
       />
 
-      <div className="relative mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 md:py-24">
+      <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
         <ScrollReveal className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
@@ -174,7 +174,10 @@ export function FeatureComparison() {
         </ScrollReveal>
 
         {/* ---------- Small screens: one card per capability ---------- */}
-        <div className="space-y-3 md:hidden">
+        {/* Cards hold until lg. At md the four-column table gives each note
+            cell ~106px — about fifteen characters a line — so every one of the
+            eighteen cells ladders. */}
+        <div className="space-y-2.5 lg:hidden">
           {ROWS.map((row, ri) => (
             <motion.div
               key={row.label}
@@ -182,14 +185,17 @@ export function FeatureComparison() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: ri * 0.05 }}
-              className="rounded-2xl border border-border bg-card/50 p-5 shadow-lg shadow-black/20"
+              className="rounded-2xl border border-border bg-card/50 p-4 shadow-lg shadow-black/20 sm:p-5"
             >
               <h3 className="font-heading text-sm font-medium tracking-[-0.01em] text-foreground">{row.label}</h3>
-              <dl className="mt-4 space-y-2">
+              {/* Tighter than the desktop rhythm on purpose: six of these
+                  stacked ran ~2,300px on a phone, and the padding was doing
+                  most of it. */}
+              <dl className="mt-3 space-y-1.5">
                 {row.cells.map((cell, i) => (
                   <div
                     key={i}
-                    className="flex items-start justify-between gap-4 rounded-xl px-3 py-2"
+                    className="flex flex-col items-start gap-1 rounded-xl px-3 py-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
                     style={
                       i === 0
                         ? {
@@ -199,18 +205,36 @@ export function FeatureComparison() {
                         : undefined
                     }
                   >
+                    {/* The winner's label carries the accent colour and a
+                        marker dot. On a phone the three options are stacked
+                        rather than sitting in a highlighted column, so the
+                        tinted panel alone wasn't enough to say which one is
+                        ours at a glance. */}
                     <dt
-                      className={`font-mono text-[10px] uppercase tracking-[0.14em] ${
-                        i === 0 ? "text-foreground" : "text-muted-foreground/70"
+                      className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] ${
+                        i === 0 ? "font-medium" : "text-muted-foreground/70"
                       }`}
+                      style={i === 0 ? { color: "var(--features-blue)" } : undefined}
                     >
+                      {i === 0 && (
+                        <span
+                          aria-hidden
+                          className="h-1 w-1 rounded-full"
+                          style={{ background: "var(--features-blue)" }}
+                        />
+                      )}
                       {COLUMNS[i]}
                     </dt>
-                    <dd className="flex min-w-0 items-start gap-2 text-right">
-                      <span className={`text-sm ${i === 0 ? "text-foreground" : "text-muted-foreground"}`}>
+                    {/* Icon leads and the note runs left-aligned on phones —
+                        right-aligning it against the label in a 222px row left
+                        the note ~111px, roughly sixteen characters a line. */}
+                    <dd className="flex min-w-0 items-start gap-2 sm:justify-end sm:text-right">
+                      <VerdictIcon verdict={cell.verdict} />
+                      <span
+                        className={`text-sm ${i === 0 ? "font-medium text-foreground" : "text-muted-foreground"}`}
+                      >
                         {cell.note}
                       </span>
-                      <VerdictIcon verdict={cell.verdict} />
                     </dd>
                   </div>
                 ))}
@@ -219,8 +243,8 @@ export function FeatureComparison() {
           ))}
         </div>
 
-        {/* ---------- md+ : the real table ---------- */}
-        <div className="relative hidden pt-5 md:block">
+        {/* ---------- lg+ : the real table ---------- */}
+        <div className="relative hidden pt-5 lg:block">
           {/* Cap over the winner column. Sits on known geometry — the table is
               `table-fixed` with the widths in COL_W. */}
           <div

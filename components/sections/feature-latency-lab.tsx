@@ -163,7 +163,7 @@ export function FeatureLatencyLab() {
         transition={{ duration: 7, repeat: loop, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto w-full max-w-4xl px-4 py-16 sm:px-6 md:py-24">
+      <div className="relative mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 md:py-24">
         <ScrollReveal className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
@@ -183,6 +183,12 @@ export function FeatureLatencyLab() {
             className="relative overflow-hidden rounded-2xl border bg-card/60 p-5 shadow-xl shadow-black/30 backdrop-blur-md transition-colors duration-500 sm:p-7 md:p-8"
             style={{ borderColor: `color-mix(in srgb, ${band.tint} 30%, transparent)` }}
           >
+            {/* Two columns from lg: the readout and the exchange on the left,
+                the control and the evidence on the right. Stacked, this card ran
+                ~600px on desktop and the slider — the one thing you're meant to
+                touch — sat below the fold of its own section. */}
+            <div className="grid gap-7 lg:grid-cols-2 lg:gap-10">
+            <div className="flex flex-col">
             {/* ---- readout ---- */}
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -215,7 +221,7 @@ export function FeatureLatencyLab() {
             </div>
 
             {/* ---- the exchange ---- */}
-            <div className="mt-7 space-y-3">
+            <div className="mt-6 space-y-2.5">
               {/* Caller */}
               <div className="flex justify-end">
                 <motion.p
@@ -228,7 +234,7 @@ export function FeatureLatencyLab() {
               </div>
 
               {/* Dead air — the star of the section */}
-              <div className="flex h-12 items-center justify-center">
+              <div className="flex h-10 items-center justify-center">
                 <AnimatePresence mode="wait">
                   {stage === "gap" ? (
                     <motion.span
@@ -290,8 +296,16 @@ export function FeatureLatencyLab() {
               </div>
             </div>
 
+            </div>
+
+            {/* RIGHT — the control, and the evidence it produces.
+                `justify-start`, not `justify-between`: which column is taller
+                flips with a single extra line of verdict copy or a bubble that
+                wraps, and `justify-between` would then inject gaps between the
+                slider and its own tick captions. */}
+            <div className="flex flex-col justify-start">
             {/* ---- proportional timeline ---- */}
-            <div className="mt-7">
+            <div>
               <div className="relative flex h-7 w-full overflow-hidden rounded-lg border border-border">
                 <Segment width={pct(CALLER_S)} label="caller" background="rgba(255,255,255,0.10)" />
                 <Segment
@@ -327,7 +341,9 @@ export function FeatureLatencyLab() {
 
             {/* ---- slider ---- */}
             <div className="mt-8">
-              <div className="relative h-6">
+              {/* h-11, not h-6 — the transparent range input is sized to this
+                  box, so it was a 24px-tall drag target on touch. */}
+              <div className="relative h-11">
                 <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full bg-white/[0.08]">
                   <div
                     className="h-full rounded-full"
@@ -371,7 +387,7 @@ export function FeatureLatencyLab() {
               </div>
 
               {/* Tick labels */}
-              <div className="relative mt-2 h-8">
+              <div className="relative mt-1 h-8">
                 {MARKS.map((m) => (
                   <span
                     key={m.ms}
@@ -381,7 +397,21 @@ export function FeatureLatencyLab() {
                     <span className="block font-mono text-[10px] tabular-nums text-muted-foreground/70">
                       {m.label}
                     </span>
-                    <span className="block whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground/45">
+                    {/* The 200ms caption only survives in the middle band.
+                        It and the 300ms mark sit 12.6% apart, so the two
+                        captions need ~78px of room but only get 12.6% of the
+                        track: fine on a full-width card (115px apart), not fine
+                        on a 320px phone (39px) and — since this card went
+                        two-column — not fine at lg either, where the track is
+                        back down to ~436px and they overlap by ~23px.
+                        "Vozpar ceiling" always stays; it's the one annotation
+                        the whole section is built around. The 1.2s mark is far
+                        enough right to never collide. */}
+                    <span
+                      className={`whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground/45 ${
+                        m.ms === 200 ? "hidden sm:block lg:hidden" : "block"
+                      }`}
+                    >
                       {m.sub}
                     </span>
                   </span>
@@ -390,7 +420,16 @@ export function FeatureLatencyLab() {
             </div>
 
             {/* ---- verdict ---- */}
-            <div className="mt-6 flex flex-col gap-4 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+            {/* border-t only below lg. In two columns it would be a half-width
+                rule terminating in mid-air beside the agent bubble, with
+                nothing anchoring its left end. */}
+            <div className="mt-6 flex flex-col gap-4 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between lg:mt-7 lg:flex-col lg:items-start lg:border-t-0 lg:pt-0">
+              {/* Reserved height. `mode="wait"` unmounts the old copy before
+                  the new one mounts, and in a half-width column this paragraph
+                  runs four lines — so without a floor the row collapsed to the
+                  button's height and the whole card jumped ~53px on every band
+                  crossing while dragging the slider. */}
+              <div className="lg:min-h-[6.5rem]">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={band.name}
@@ -403,15 +442,18 @@ export function FeatureLatencyLab() {
                   {band.copy}
                 </motion.p>
               </AnimatePresence>
+              </div>
 
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-border px-4 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground sm:self-auto"
+                className="inline-flex min-h-11 shrink-0 items-center gap-2 self-start rounded-full border border-border px-5 text-xs font-medium text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground sm:self-auto"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Back to 280ms
               </button>
+            </div>
+            </div>
             </div>
           </div>
         </ScrollReveal>

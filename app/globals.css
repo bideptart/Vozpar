@@ -211,7 +211,11 @@
   .sheen-sweep,
   .drift-blob,
   .grid-drift,
-  .text-aurora-blue {
+  .text-aurora-blue,
+  .pulse-ring::before,
+  .voice-bar,
+  .dot-float,
+  .scan-line::after {
     animation: none !important;
   }
 }

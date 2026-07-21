@@ -303,7 +303,10 @@ export function FeatureIntegrations() {
                   Live connections
                 </span>
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/50">
+              {/* Hidden below sm: at 320px this and the "Live connections"
+                  label together need ~342px against 256px available, so both
+                  wrapped to two lines inside a one-line-tall header strip. */}
+              <span className="hidden font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/50 sm:inline">
                 {TOTAL} native · ∞ via webhook
               </span>
             </div>

@@ -232,7 +232,7 @@ export function FeatureIvrRace() {
               <button
                 type="button"
                 onClick={replay}
-                className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 text-xs font-medium text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Replay
@@ -362,7 +362,14 @@ function Column({
         </span>
       </div>
 
-      <ol className="relative mt-5 space-y-2.5">
+      {/* Step lists are desktop-only. Stacked on a phone the two columns sit
+          ~640px apart, so the race is over long before you've scrolled to the
+          second one — the side-by-side reading that justifies the detail
+          doesn't exist there. What carries the argument on mobile survives:
+          the proportional track bar above, each column's running clock and
+          verdict, the "8 steps · 4:25 total" line below, and the payoff strip.
+          Cutting the lists takes ~900px off a section that ran ~2,100. */}
+      <ol className="relative mt-5 hidden space-y-2.5 md:block">
         {steps.map((step, i) => {
           const state = i < activeIndex ? "done" : i === activeIndex ? "active" : "pending"
           return (
