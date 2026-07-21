@@ -39,16 +39,17 @@ export function Magnetic({
   const sx = useSpring(x, { stiffness: 260, damping: 18, mass: 0.35 })
   const sy = useSpring(y, { stiffness: 260, damping: 18, mass: 0.35 })
 
-  if (reduced) {
-    return <span className={cn("inline-flex", className)}>{children}</span>
-  }
-
+  // Reduced motion gates the handlers, never the element. `useReducedMotion()`
+  // is null on the server and a real boolean on the client's first paint, so
+  // swapping the rendered node here would hand React a different tree to
+  // hydrate — the motion values simply stay at 0 instead.
   return (
     <motion.span
       ref={ref}
       className={cn("inline-flex", className)}
       style={{ x: sx, y: sy }}
       onPointerMove={(e) => {
+        if (reduced || e.pointerType !== "mouse") return
         const el = ref.current
         if (!el) return
         const r = el.getBoundingClientRect()

@@ -68,6 +68,13 @@
   --features-green: var(--chart-2);      /* #1F9D55 growth green */
   --features-amber: var(--chart-4);      /* #F2A71B amber */
   --features-hero-bg: var(--background); /* #0B1220 */
+  /* Light mid-stop for .text-aurora-blue. Kept because that gradient still
+     interpolates through it — and an undefined var() with no fallback
+     invalidates the entire `background` declaration at computed-value time,
+     which left the /features H1 accent phrase painting transparent text over
+     nothing at all. Aliased to the body colour rather than re-introducing a
+     hand-tuned slate. */
+  --features-ink: var(--foreground);     /* #FFFFFF */
 
   --radius: 1rem;
   --sidebar: #111b2d;
@@ -175,6 +182,18 @@
   animation: sheen-x 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+/* Receding grid floor for the features hero. Scrolling the background
+   position (rather than translating the element) leaves the plane's
+   perspective transform untouched, so the lines stay converged while the
+   surface appears to travel toward the viewer. */
+@keyframes grid-drift {
+  from { background-position: 0 0; }
+  to { background-position: 0 64px; }
+}
+.grid-drift {
+  animation: grid-drift 5s linear infinite;
+}
+
 /* Slow drift for ambient background blobs */
 @keyframes drift-blob {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
@@ -190,7 +209,9 @@
   .marquee-reverse,
   .spin-slow,
   .sheen-sweep,
-  .drift-blob {
+  .drift-blob,
+  .grid-drift,
+  .text-aurora-blue {
     animation: none !important;
   }
 }
@@ -225,6 +246,10 @@
     var(--features-blue-deep) 75%,
     var(--features-blue) 100%
   );
+  /* Over-sized and slid via background-position so the light travels through
+     the words. The first and last stops match, so the loop has no seam. */
+  background-size: 220% auto;
+  animation: aurora-shift 7s ease-in-out infinite;
   -webkit-background-clip: text;
           background-clip: text;
   color: transparent;
