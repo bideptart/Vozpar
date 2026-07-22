@@ -88,8 +88,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafbfd" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b1220" },
+    // The site renders the same true-black canvas regardless of the OS
+    // preference (no toggle is wired up), so both entries match --background.
+    { media: "(prefers-color-scheme: light)", color: "#000000" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
   width: "device-width",
   initialScale: 1,

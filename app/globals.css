@@ -12,35 +12,42 @@
  * badges) instead of staying flat monochrome blue.
  * The site has no working light/dark toggle wired into the header (the
  * ThemeToggle component exists but isn't rendered anywhere), so this single
- * dark-navy palette is the theme users actually see — it also matches the
+ * dark palette is the theme users actually see — it also matches the
  * logo's white wordmark, which only reads correctly on a dark background.
  * The .dark class is left in place (harmless) in case a toggle gets wired
  * up later, but it no longer needs its own set of overrides.
+ *
+ * Surfaces follow the /industries page, which is the design reference for
+ * the whole site: a true-black canvas with near-black neutral cards lifted
+ * a few points off it and hairline white borders, so the blue swoosh and
+ * the chart accents are the only saturated colour on the page. The old
+ * navy surfaces (#0B1220 canvas / #111B2D cards) tinted every surface
+ * blue and muddied those accents.
  */
 :root {
-  --background: #0b1220;
+  --background: #000000;
   --foreground: #ffffff;
-  --card: #111b2d;
+  --card: #0a0a0d;
   --card-foreground: #ffffff;
-  --popover: #111b2d;
+  --popover: #0a0a0d;
   --popover-foreground: #ffffff;
 
   /* Vozpar swoosh blue — primary brand color */
   --primary: #1e6fd6;
   --primary-foreground: #ffffff;
 
-  --secondary: #111b2d; /* elevated navy surface, used for callouts/cards */
+  --secondary: #0b0b0e; /* elevated neutral surface, used for callouts/cards */
   --secondary-foreground: #ffffff;
   --muted: #ffffff0d;
   --muted-foreground: #ccd6df;
 
   --accent: #2f8fe0;
-  --accent-foreground: #0b1220;
+  --accent-foreground: #000000;
 
   /* Vozpar bar-chart crimson, reused for error/destructive states */
   --destructive: #d92b34;
   --destructive-foreground: #ffffff;
-  --border: #1a2638;
+  --border: #ffffff1a; /* white/10 hairline, matching the /industries surfaces */
   --input: #ffffff12;
   --ring: #1e6fd6;
 
@@ -67,7 +74,7 @@
   --features-navy: #123170;              /* deep navy — gradient base only */
   --features-green: var(--chart-2);      /* #1F9D55 growth green */
   --features-amber: var(--chart-4);      /* #F2A71B amber */
-  --features-hero-bg: var(--background); /* #0B1220 */
+  --features-hero-bg: var(--background); /* #000000 */
   /* Light mid-stop for .text-aurora-blue. Kept because that gradient still
      interpolates through it — and an undefined var() with no fallback
      invalidates the entire `background` declaration at computed-value time,
@@ -77,13 +84,13 @@
   --features-ink: var(--foreground);     /* #FFFFFF */
 
   --radius: 1rem;
-  --sidebar: #111b2d;
+  --sidebar: #0a0a0d;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #1e6fd6;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #16233a;
+  --sidebar-accent: #16161b;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #1a2638;
+  --sidebar-border: #ffffff1a;
   --sidebar-ring: #1e6fd6;
   --button-ripple-color: rgba(255, 255, 255, 0.35);
 }
@@ -319,7 +326,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Ambient carrier-blue glow over the navy canvas */
+    /* Ambient carrier-blue glow over the black canvas */
     background-image:
       radial-gradient(ellipse 80% 55% at 50% -10%, rgba(30, 111, 214, 0.16), transparent 60%),
       radial-gradient(ellipse 50% 40% at 100% 25%, rgba(47, 143, 224, 0.08), transparent 60%),
@@ -333,7 +340,7 @@
 }
 
 @layer utilities {
-  /* Glass surface — frosted navy card */
+  /* Glass surface — frosted neutral card */
   .glass {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
     backdrop-filter: blur(8px) saturate(120%);
@@ -398,7 +405,7 @@
   }
   .spotlight:hover::after { opacity: 1; }
 
-  /* Grid background — faint lines on navy canvas */
+  /* Grid background — faint lines on the black canvas */
   .bg-grid {
     background-image:
       linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
@@ -406,7 +413,7 @@
     background-size: 56px 56px;
   }
 
-  /* Dotted background — faint dots on navy canvas */
+  /* Dotted background — faint dots on the black canvas */
   .bg-dots {
     background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
     background-size: 22px 22px;
@@ -509,7 +516,7 @@
   }
 
   /* No-op kept so the /features markup keeps a single hook for its dark
-     band. The site-wide canvas is already the dark navy from the brand
+     band. The site-wide canvas is already the true black from the brand
      reference, so no per-section token overrides are needed. */
   .features-hero-dark {
     color-scheme: dark;
