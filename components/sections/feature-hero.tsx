@@ -73,10 +73,6 @@ export function FeatureHero() {
   const px = useSpring(mx, { stiffness: 70, damping: 22, mass: 0.6 })
   const py = useSpring(my, { stiffness: 70, damping: 22, mass: 0.6 })
 
-  const orbX = useTransform(px, [-1, 1], [-46, 46])
-  const orbY = useTransform(py, [-1, 1], [-30, 30])
-  const orbX2 = useTransform(px, [-1, 1], [34, -34])
-  const orbY2 = useTransform(py, [-1, 1], [22, -22])
   const visualX = useTransform(px, [-1, 1], [-18, 18])
   const visualY = useTransform(py, [-1, 1], [-12, 12])
 
@@ -109,64 +105,12 @@ export function FeatureHero() {
         my.set(0)
       }}
     >
-      {/* ---- 1. aurora orbs ----
-          Static placement lives on plain wrappers, animation on the motion
-          child. Note this is a readability split, not a correctness one:
-          Tailwind v4 compiles `-translate-x-1/2` to the standalone `translate`
-          property, which composes with `transform` rather than being clobbered
-          by motion's inline value (that was a v3 hazard). Keeping the two
-          concerns on separate nodes just makes the offsets easier to reason
-          about when the parallax range changes. */}
-      <div aria-hidden className="pointer-events-none absolute left-1/4 top-0 -z-10 -translate-x-1/2">
-        <motion.div
-          className="h-[26rem] w-[26rem] rounded-full blur-[110px] [will-change:transform]"
-          style={{ background: "color-mix(in srgb, var(--features-blue) 42%, transparent)", x: orbX, y: orbY }}
-          animate={reduced ? undefined : { scale: [1, 1.15, 1] }}
-          transition={{ duration: 16, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-        />
-      </div>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 right-1/4 -z-10 translate-x-1/3 translate-y-1/3"
-      >
-        <motion.div
-          className="h-[22rem] w-[22rem] rounded-full blur-[110px] [will-change:transform]"
-          style={{ background: "color-mix(in srgb, var(--features-blue-deep) 40%, transparent)", x: orbX2, y: orbY2 }}
-          animate={reduced ? undefined : { scale: [1, 1.1, 1] }}
-          transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-        />
-      </div>
-
-      {/* Flat grid on the upper canvas, faded out through the middle */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, oklch(1 0 0 / 0.07) 1px, transparent 1px), linear-gradient(to bottom, oklch(1 0 0 / 0.07) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }}
-      />
-
-      {/* ---- 2. perspective floor ----
-          Rotated on X and over-sized horizontally so its edges leave the
-          frame. Only the background position animates, which keeps the
-          convergence fixed while the surface appears to travel. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[38%] overflow-hidden [perspective:520px]"
-      >
-        <div
-          className="grid-drift absolute -left-1/2 -right-1/2 bottom-0 h-[220%] origin-bottom [transform:rotateX(74deg)]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, color-mix(in srgb, var(--features-blue) 26%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--features-blue) 26%, transparent) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            maskImage: "linear-gradient(to top, #000 5%, transparent 65%)",
-            WebkitMaskImage: "linear-gradient(to top, #000 5%, transparent 65%)",
-          }}
-        />
-      </div>
+      {/* Aurora orbs, flat grid, perspective floor, and the brief top-of-page
+          vignette all removed — the vignette read as an obvious blue wash
+          rather than the near-invisible tint the /industries reference has,
+          so the canvas is back to flat #000 throughout. Any colour comes only
+          from the content on top (orbit visual, chips, accents), never the
+          page itself. */}
 
       <motion.div
         className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 md:py-20 lg:grid-cols-12 lg:gap-8 lg:py-0"
@@ -286,24 +230,12 @@ export function FeatureHero() {
         >
           {/* Parallax is a separate wrapper from the entrance scale above:
               both would write `transform` on one node and the later one wins.
-              The inner box is pinned to the orbit's own 420px cap so the beam
-              stays concentric and the chips stay pinned to the ring — the
+              The inner box is pinned to the orbit's own 420px cap so the
+              chips stay pinned to the ring — the
               lg column is ~600px wide, and positioning them against that
               instead leaves them floating ~90px clear of it. */}
           <motion.div className="relative mx-auto max-w-[420px]" style={{ x: visualX, y: visualY }}>
-            {/* ---- 3. conic beam ---- */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-full"
-            >
-              <span
-                className="spin-slow absolute left-1/2 top-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  background:
-                    "conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--features-blue) 22%, transparent) 55deg, transparent 130deg, transparent 240deg, color-mix(in srgb, var(--features-blue-deep) 18%, transparent) 300deg, transparent 350deg)",
-                }}
-              />
-            </div>
+            {/* Conic beam removed — flat black canvas, no glow behind the orbit. */}
 
             <FeatureOrbit />
 

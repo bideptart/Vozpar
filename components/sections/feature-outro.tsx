@@ -83,19 +83,10 @@ export function FeatureCta() {
 
   return (
     <section
-      className="features-hero-dark relative overflow-hidden border-t border-border py-16 md:py-24"
+      className="features-hero-dark relative overflow-hidden border-t border-border py-12 md:py-16"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <div
-        aria-hidden
-        className="drift-blob pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-50 blur-[100px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue) 40%, transparent)" }}
-      />
-      <div
-        aria-hidden
-        className="drift-blob pointer-events-none absolute -bottom-24 left-0 h-80 w-80 rounded-full opacity-40 blur-[120px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue-deep) 38%, transparent)", animationDelay: "-9s" }}
-      />
+      {/* Ambient glows removed — flat black canvas per the /features theme. */}
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <ScrollReveal>
@@ -122,20 +113,9 @@ export function FeatureCta() {
             <SpotlightPanel
               glow="var(--features-blue)"
               size={520}
-              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-card/80 px-5 py-10 backdrop-blur-xl sm:px-8 md:px-12 md:py-14"
+              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-card/30 px-5 py-10 backdrop-blur-xl sm:px-8 md:px-12 md:py-14"
             >
-              {/* Engineering grid + a slow specular pass over the glass */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-[0.4]"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(color-mix(in srgb, var(--features-blue) 7%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--features-blue) 7%, transparent) 1px, transparent 1px)",
-                  backgroundSize: "48px 48px",
-                  maskImage: "radial-gradient(120% 100% at 50% 0%, #000, transparent 75%)",
-                  WebkitMaskImage: "radial-gradient(120% 100% at 50% 0%, #000, transparent 75%)",
-                }}
-              />
+              {/* A slow specular pass over the glass (grid removed) */}
               {!reduced && (
                 <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
                   <span
@@ -246,14 +226,14 @@ export function FeatureRelated({
   return (
     <section
       aria-labelledby="related-heading"
-      className="features-hero-dark relative overflow-hidden border-t border-border py-16 md:py-20"
+      className="features-hero-dark relative overflow-hidden border-t border-border py-12 md:py-14"
       style={{ background: "var(--features-hero-bg)" }}
     >
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         {/* Header runs the full width with a rule bridging to a count on the
             right. The old version left the entire right half of the row empty,
             which is what made the section read as an afterthought. */}
-        <ScrollReveal className="mb-8 md:mb-10">
+        <ScrollReveal className="mb-6 md:mb-8">
           <div className="mx-auto max-w-2xl text-center">
             <span className="ai-pill-blue">
               <span className="h-1 w-1 rounded-full bg-current" />
@@ -326,7 +306,7 @@ export function FeatureRelated({
                 // -translate-y-* to the standalone `translate` property, so a
                 // transition list naming `transform` never covers it and the
                 // lift snaps instead of easing.
-                className="h-full overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-[translate,border-color] duration-300 hover:-translate-y-1.5 hover:border-white/25"
+                className="h-full overflow-hidden rounded-2xl border border-border bg-card/30 backdrop-blur-sm transition-[translate,border-color] duration-300 hover:-translate-y-1.5 hover:border-white/25"
               >
                 {/* Top hairline that fills in from the left on hover */}
                 <span
@@ -337,64 +317,94 @@ export function FeatureRelated({
                   }}
                 />
 
-                {/* Oversized index sunk into the corner as texture, not content */}
+                {/* Accent wash from the top-left corner — hover-only now.
+                    It used to sit at 40% opacity at rest, which made every
+                    card carry a permanent colour cast (blue for some links)
+                    rather than the flat black canvas the rest of the page
+                    keeps; the corner now only warms up under the cursor. */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -right-3 -top-5 select-none font-heading text-[5.5rem] font-medium leading-none tracking-[-0.05em] opacity-[0.06] transition-opacity duration-500 group-hover/spot:opacity-[0.13]"
-                  style={{ color: tint }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover/spot:opacity-40"
+                  style={{
+                    background: `radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, ${tint} 8%, transparent), transparent 65%)`,
+                  }}
+                />
 
-                <Link href={l.href} className="relative flex h-full flex-col gap-5 p-5 sm:p-6">
+                {/* Gradient sweep — plays once on hover, dead still otherwise.
+                    Parked off the left edge via an inline transform (not a
+                    Tailwind translate class: in v4 that writes the standalone
+                    `translate` property, which then fights the keyframe's own
+                    transform). Hovering runs the shared `sheen-x` keyframe once;
+                    when it ends the element is back off-screen, invisible. */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 left-0 w-2/3 group-hover/spot:[animation:sheen-x_0.9s_ease-out]"
+                  style={{
+                    transform: "translateX(-140%) skewX(-18deg)",
+                    background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${tint} 16%, transparent), transparent)`,
+                  }}
+                />
+
+                <Link href={l.href} className="relative flex h-full flex-col p-5 sm:p-6">
+                  {/* Header — a larger icon tile carrying an accent gradient and
+                      a soft glow, with the destination path as a bordered pill.
+                      Reads as a marque, not a checklist bullet. */}
                   <div className="flex items-start justify-between gap-4">
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-transform duration-300 group-hover/spot:-rotate-6 group-hover/spot:scale-105"
+                      className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border transition-transform duration-300 group-hover/spot:-rotate-6 group-hover/spot:scale-105"
                       style={{
-                        background: `color-mix(in srgb, ${tint} 16%, transparent)`,
-                        borderColor: `color-mix(in srgb, ${tint} 32%, transparent)`,
+                        background: `linear-gradient(155deg, color-mix(in srgb, ${tint} 30%, transparent), color-mix(in srgb, ${tint} 8%, transparent))`,
+                        borderColor: `color-mix(in srgb, ${tint} 36%, transparent)`,
                         color: tint,
+                        boxShadow: `0 8px 24px -10px color-mix(in srgb, ${tint} 60%, transparent)`,
                       }}
                     >
                       {Icon ? (
-                        <Icon className="h-[18px] w-[18px]" aria-hidden />
+                        <Icon className="h-5 w-5" aria-hidden />
                       ) : (
-                        <span className="font-mono text-[11px]">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="font-mono text-xs">{String(i + 1).padStart(2, "0")}</span>
                       )}
+                    </span>
+                    <span
+                      className="rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em]"
+                      style={{
+                        color: `color-mix(in srgb, ${tint} 85%, white)`,
+                        borderColor: `color-mix(in srgb, ${tint} 26%, transparent)`,
+                        background: `color-mix(in srgb, ${tint} 8%, transparent)`,
+                      }}
+                    >
+                      {l.href}
                     </span>
                   </div>
 
-                  <div className="flex-1">
-                    <p className="font-heading text-[17px] font-medium leading-snug tracking-[-0.02em] text-foreground">
+                  <div className="mt-6 flex-1">
+                    <p className="font-heading text-lg font-medium leading-snug tracking-[-0.02em] text-foreground">
                       {l.title}
                     </p>
-                    <p className="mt-2 text-[13px] font-light leading-relaxed text-muted-foreground">
+                    <p className="mt-2.5 text-[13px] font-light leading-relaxed text-muted-foreground">
                       {l.description}
                     </p>
                   </div>
 
-                  {/* Footer rule + arrow disc. The disc fills with the card's
-                      accent on hover, which gives the whole card one obvious
-                      affordance instead of a small blue text link. */}
-                  <div className="flex items-center justify-between gap-4 border-t border-border pt-4">
-                    <span
-                      className="text-xs font-medium transition-colors duration-300"
-                      style={{ color: tint }}
-                    >
-                      Read more
-                    </span>
+                  {/* CTA bar. The whole strip is the affordance now: a bordered
+                      pill that fills left-to-right with the accent on hover,
+                      the label flipping to black against it and the arrow
+                      sliding. Bigger, more obvious, and more modern than a
+                      small text link with a separate disc. */}
+                  <span
+                    className="relative mt-6 inline-flex h-10 items-center justify-between gap-2 overflow-hidden rounded-full border px-4 text-xs font-medium"
+                    style={{ borderColor: `color-mix(in srgb, ${tint} 32%, transparent)`, color: tint }}
+                  >
                     <span
                       aria-hidden
-                      className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border transition-colors duration-300"
-                      style={{ borderColor: `color-mix(in srgb, ${tint} 34%, transparent)`, color: tint }}
-                    >
-                      <span
-                        className="absolute inset-0 origin-bottom scale-y-0 transition-transform duration-300 ease-out group-hover/spot:scale-y-100"
-                        style={{ background: `color-mix(in srgb, ${tint} 22%, transparent)` }}
-                      />
-                      <ArrowUpRight className="relative h-4 w-4 transition-transform duration-300 group-hover/spot:translate-x-0.5 group-hover/spot:-translate-y-0.5" />
+                      className="absolute inset-0 origin-left scale-x-0 transition-transform duration-[400ms] ease-out group-hover/spot:scale-x-100"
+                      style={{ background: tint }}
+                    />
+                    <span className="relative transition-colors duration-300 group-hover/spot:text-black">
+                      Explore
                     </span>
-                  </div>
+                    <ArrowUpRight className="relative h-4 w-4 transition-[transform,color] duration-300 group-hover/spot:translate-x-0.5 group-hover/spot:-translate-y-0.5 group-hover/spot:text-black" />
+                  </span>
                 </Link>
               </SpotlightPanel>
             </motion.li>

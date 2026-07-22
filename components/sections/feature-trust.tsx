@@ -107,14 +107,10 @@ export function FeatureTrust() {
       className="features-hero-dark relative isolate overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <div
-        aria-hidden
-        className="drift-blob pointer-events-none absolute right-0 top-0 -z-10 h-[26rem] w-[26rem] translate-x-1/3 rounded-full opacity-40 blur-[130px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue) 26%, transparent)" }}
-      />
+      {/* Ambient glow removed — flat black canvas per the /features theme. */}
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-        <ScrollReveal className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+      <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:py-16">
+        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             Trust &amp; operations
@@ -130,7 +126,7 @@ export function FeatureTrust() {
 
         {/* Commitment strip — the three numbers worth remembering */}
         <ScrollReveal className="mb-6 md:mb-8">
-          <div className="grid grid-cols-1 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card/50 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          <div className="grid grid-cols-1 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card/30 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             {COMMITMENTS.map((c, i) => (
               <motion.div
                 key={c.label}
@@ -154,8 +150,10 @@ export function FeatureTrust() {
           </div>
         </ScrollReveal>
 
-        {/* Four claims, each with its receipt */}
-        <div className="grid gap-4 md:grid-cols-2">
+        {/* Four claims in one row from lg — a 2×2 block ran nearly the full
+            height of the viewport on its own, so the four sit side by side on
+            wide screens and fall to 2×2 only at md and below. */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {CARDS.map((card, i) => {
             const Icon = card.icon
             return (
@@ -173,7 +171,7 @@ export function FeatureTrust() {
                 <SpotlightPanel
                   glow={card.tint}
                   size={360}
-                  className="h-full overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-[translate,border-color] duration-300 hover:-translate-y-1 hover:border-white/25"
+                  className="h-full overflow-hidden rounded-2xl border border-border bg-card/30 backdrop-blur-sm transition-[translate,border-color] duration-300 hover:-translate-y-1 hover:border-white/25"
                 >
                   <span
                     aria-hidden
@@ -183,19 +181,19 @@ export function FeatureTrust() {
                     }}
                   />
 
-                  <div className="relative flex h-full flex-col p-5 sm:p-6">
-                    <div className="flex items-center gap-3 border-b border-border pb-4">
+                  <div className="relative flex h-full flex-col p-5">
+                    <div className="flex items-start gap-3 border-b border-border pb-3.5">
                       <span
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-transform duration-300 group-hover/spot:-rotate-6 group-hover/spot:scale-105"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-transform duration-300 group-hover/spot:-rotate-6 group-hover/spot:scale-105"
                         style={{
                           background: `color-mix(in srgb, ${card.tint} 16%, transparent)`,
                           borderColor: `color-mix(in srgb, ${card.tint} 32%, transparent)`,
                           color: card.tint,
                         }}
                       >
-                        <Icon className="h-[18px] w-[18px]" aria-hidden />
+                        <Icon className="h-4 w-4" aria-hidden />
                       </span>
-                      <h3 className="font-heading text-[17px] font-medium leading-snug tracking-[-0.02em] text-foreground">
+                      <h3 className="font-heading text-[15px] font-medium leading-snug tracking-[-0.02em] text-foreground">
                         {card.title}
                       </h3>
                     </div>
@@ -203,15 +201,15 @@ export function FeatureTrust() {
                     {/* Ticks rather than dots. Every line here is something
                         committed in writing, and a check reads as exactly that
                         where a bullet reads as "assorted notes". */}
-                    <ul className="mt-4 flex-1 space-y-3">
+                    <ul className="mt-3.5 flex-1 space-y-2.5">
                       {card.lines.map((line) => (
-                        <li key={line} className="flex gap-2.5">
+                        <li key={line} className="flex gap-2">
                           <Check
                             aria-hidden
-                            className="mt-[0.15em] h-3.5 w-3.5 shrink-0"
+                            className="mt-[0.15em] h-3 w-3 shrink-0"
                             style={{ color: card.tint }}
                           />
-                          <span className="text-[13px] font-light leading-relaxed text-muted-foreground">{line}</span>
+                          <span className="text-[12.5px] font-light leading-relaxed text-muted-foreground">{line}</span>
                         </li>
                       ))}
                     </ul>
@@ -224,7 +222,7 @@ export function FeatureTrust() {
                         without needing negative margins to sit flush. */}
                     <Link
                       href={card.href}
-                      className="mt-5 inline-flex min-h-11 w-fit items-center gap-2 rounded-full border px-4 text-xs font-medium transition-colors duration-300"
+                      className="mt-4 inline-flex min-h-10 w-fit items-center gap-2 rounded-full border px-3.5 text-[11px] font-medium uppercase tracking-[0.08em] transition-colors duration-300"
                       style={{
                         color: card.tint,
                         borderColor: `color-mix(in srgb, ${card.tint} 32%, transparent)`,
@@ -250,7 +248,7 @@ export function FeatureTrust() {
             procurement reader notices in a section about trust. The contact
             page reaches the same team without asserting a second identity. */}
         <ScrollReveal className="mt-8">
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card/40 px-5 py-5 text-center backdrop-blur-sm sm:flex-row sm:justify-between sm:text-left">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card/30 px-5 py-5 text-center backdrop-blur-sm sm:flex-row sm:justify-between sm:text-left">
             <p className="text-xs font-light leading-relaxed text-muted-foreground/70">
               Operated by Ace Peak Invest Pte Ltd, 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.
             </p>

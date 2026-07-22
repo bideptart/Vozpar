@@ -104,12 +104,17 @@ export function SpotlightPanel({
           DOM element between the server tree (where useReducedMotion() is
           null) and the client's, which React treats as a hydration error
           rather than a warning. The handler above is what's gated; without it
-          the highlight just sits at its default position. */}
+          the highlight just sits at its default position.
+
+          Mix dropped from 16% to 6% and the falloff pulled in tighter (55%
+          instead of 70%) — at the old strength this read as a wash across
+          most of a large panel on hover, not the "small local glow" the
+          /features theme is supposed to keep colour to. */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/spot:opacity-100"
         style={{
-          background: `radial-gradient(${size}px circle at var(--spot-x, 50%) var(--spot-y, 0%), color-mix(in srgb, ${glow} 16%, transparent), transparent 70%)`,
+          background: `radial-gradient(${size}px circle at var(--spot-x, 50%) var(--spot-y, 0%), color-mix(in srgb, ${glow} 6%, transparent), transparent 55%)`,
         }}
       />
       {children}

@@ -6,7 +6,7 @@ import { FeatureCallDemo } from "@/components/sections/feature-call-demo"
 import { FeatureShowcase } from "@/components/sections/feature-showcase"
 import { FeatureLatencyLab } from "@/components/sections/feature-latency-lab"
 import { FeatureAnatomy } from "@/components/sections/feature-anatomy"
-import { FeatureIntegrations } from "@/components/sections/feature-integrations"
+import { FeatureJourney } from "@/components/sections/feature-journey"
 import { FeatureIvrRace } from "@/components/sections/feature-ivr-race"
 import { FeatureComparison } from "@/components/sections/feature-comparison"
 import { FeatureTrust } from "@/components/sections/feature-trust"
@@ -21,9 +21,15 @@ export const metadata: Metadata = pageSeo({
   path: "/features",
 })
 
+// suppressHydrationWarning below: a browser extension (Bitdefender and
+// similar security/ad-block extensions are the common culprits) injects a
+// `bis_skin_checked` attribute onto page elements after load. React then
+// sees an attribute on the client that wasn't in the server HTML and flags
+// it as a hydration mismatch — it isn't an app bug, the extension is
+// modifying the DOM after React already rendered it.
 export default function FeaturesPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-background text-foreground" suppressHydrationWarning>
       <SiteHeader />
 
       <BreadcrumbJsonLd
@@ -45,8 +51,11 @@ export default function FeaturesPage() {
         {/* The signal path a call actually takes. Replaced the old "three
             pillars" block, which only re-listed the showcase's own bullets. */}
         <FeatureAnatomy />
-        {/* What it writes back to */}
-        <FeatureIntegrations />
+        {/* The console around the capabilities above: five stages from first
+            agent to running the desk (build, train, test, operate, account).
+            Deliberately different content from FeatureShowcase's 12 technical
+            capabilities — this is workflow, not tech. */}
+        <FeatureJourney />
         {/* The emotional version of the comparison — same job, two paths, side by side.
             Deliberately sits directly above the table: race first, spreadsheet second. */}
         <FeatureIvrRace />

@@ -155,16 +155,10 @@ export function FeatureLatencyLab() {
       className="features-hero-dark relative overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-0 bottom-0 -z-10 h-[28rem] w-[28rem] -translate-x-1/3 rounded-full blur-[140px]"
-        style={{ background: `color-mix(in srgb, ${band.tint} 28%, transparent)` }}
-        animate={{ opacity: [0.35, 0.6, 0.35] }}
-        transition={{ duration: 7, repeat: loop, ease: "easeInOut" }}
-      />
+      {/* Ambient glow removed — flat black canvas per the /features theme. */}
 
-      <div className="relative mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 md:py-24">
-        <ScrollReveal className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
+      <div className="relative mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 md:py-16">
+        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             Latency lab
@@ -180,14 +174,14 @@ export function FeatureLatencyLab() {
 
         <ScrollReveal>
           <div
-            className="relative overflow-hidden rounded-2xl border bg-card/60 p-5 shadow-xl shadow-black/30 backdrop-blur-md transition-colors duration-500 sm:p-7 md:p-8"
+            className="relative overflow-hidden rounded-2xl border bg-card/30 p-5 shadow-xl shadow-black/30 backdrop-blur-md transition-colors duration-500 sm:p-6 md:p-7"
             style={{ borderColor: `color-mix(in srgb, ${band.tint} 30%, transparent)` }}
           >
             {/* Two columns from lg: the readout and the exchange on the left,
                 the control and the evidence on the right. Stacked, this card ran
                 ~600px on desktop and the slider — the one thing you're meant to
                 touch — sat below the fold of its own section. */}
-            <div className="grid gap-7 lg:grid-cols-2 lg:gap-10">
+            <div className="grid gap-5 lg:grid-cols-2 lg:gap-8">
             <div className="flex flex-col">
             {/* ---- readout ---- */}
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -221,7 +215,7 @@ export function FeatureLatencyLab() {
             </div>
 
             {/* ---- the exchange ---- */}
-            <div className="mt-6 space-y-2.5">
+            <div className="mt-4 space-y-2">
               {/* Caller */}
               <div className="flex justify-end">
                 <motion.p
@@ -340,7 +334,7 @@ export function FeatureLatencyLab() {
             </div>
 
             {/* ---- slider ---- */}
-            <div className="mt-8">
+            <div className="mt-5">
               {/* h-11, not h-6 — the transparent range input is sized to this
                   box, so it was a 24px-tall drag target on touch. */}
               <div className="relative h-11">
@@ -423,13 +417,13 @@ export function FeatureLatencyLab() {
             {/* border-t only below lg. In two columns it would be a half-width
                 rule terminating in mid-air beside the agent bubble, with
                 nothing anchoring its left end. */}
-            <div className="mt-6 flex flex-col gap-4 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between lg:mt-7 lg:flex-col lg:items-start lg:border-t-0 lg:pt-0">
+            <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between lg:mt-5 lg:flex-col lg:items-start lg:border-t-0 lg:pt-0">
               {/* Reserved height. `mode="wait"` unmounts the old copy before
                   the new one mounts, and in a half-width column this paragraph
                   runs four lines — so without a floor the row collapsed to the
                   button's height and the whole card jumped ~53px on every band
                   crossing while dragging the slider. */}
-              <div className="lg:min-h-[6.5rem]">
+              <div className="lg:min-h-[5.5rem]">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={band.name}
@@ -458,7 +452,7 @@ export function FeatureLatencyLab() {
           </div>
         </ScrollReveal>
 
-        <p className="mt-5 text-center text-xs text-muted-foreground/60">
+        <p className="mt-4 text-center text-xs text-muted-foreground/60">
           Vozpar targets sub-300ms round-trip. Stacks that chain speech-to-text, an LLM and text-to-speech typically
           land between 1.2 and 3 seconds.
         </p>

@@ -106,13 +106,10 @@ export function FeatureOrbit() {
       className="pointer-events-none relative mx-auto aspect-square w-full max-w-[420px]"
       aria-hidden="true"
     >
-      {/* Ambient glow */}
-      <motion.div
-        className="absolute inset-[12%] rounded-full blur-[70px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue) 45%, transparent)" }}
-        animate={reduced ? undefined : { scale: [1, 1.12, 1], opacity: [0.45, 0.75, 0.45] }}
-        transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
+      {/* Ambient glow removed — it was a 45%-strength blurred blue fill
+          behind the whole orbit, which is exactly the flat black canvas the
+          rest of /features deliberately has none of. The core's own waveform
+          bars and the ring borders below still carry the blue accent. */}
 
       {/* Static ring guides */}
       <div className="absolute inset-[8%] rounded-full border border-dashed border-border" />

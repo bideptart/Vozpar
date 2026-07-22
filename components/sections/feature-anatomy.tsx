@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import type { ElementType } from "react"
 import { AudioLines, Building2, Cable, Languages, PhoneCall, Radio, Repeat } from "lucide-react"
+import { motion, useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { CardStack, type CardStackItem } from "@/components/ui/card-stack"
 
@@ -12,19 +13,11 @@ import { CardStack, type CardStackItem } from "@/components/ui/card-stack"
  * APIs, an optional human handoff, and the record written at the end —
  * presented as a fanned deck you move through in order.
  *
- * Why a deck rather than the five-across chain this replaced: equal cards in a
- * row is a list, and it forced every stage into ~140px of text at xl and a
- * 2+2+1 orphan grid below that. The deck gives the active stage a full card and
- * keeps the sequence legible through the numbering and the fan order, at the
- * cost of only showing one stage at a time — which is the trade being made
- * deliberately here.
- *
  * Deliberately no per-stage millisecond breakdown. A latency budget split
- * across the stages would be a specific engineering claim, and inventing one
- * to fill a diagram is how a marketing page ends up asserting something the
+ * across the stages would be a specific engineering claim, and inventing one to
+ * fill a diagram is how a marketing page ends up asserting something the
  * platform doesn't do. Every line restates something the site already commits
- * to; the round-trip target stays one end-to-end number, which is the one
- * that's actually measured.
+ * to; the round-trip target stays one end-to-end number.
  */
 
 type Stage = CardStackItem & {
@@ -110,31 +103,12 @@ const CONTROLS = ["Prompt & policy", "Voice & language", "Which tools it may cal
 /* ---------------------------------------------------------------------- */
 
 /**
- * Card geometry derived from the measured container.
- *
- * Starts at a fixed desktop default and only measures after mount — reading
- * `window` during render would give the server one size and the client
- * another, which is a hydration mismatch on an inline style.
- *
- * The sizes are solved backwards from the fan's footprint rather than picked
- * by eye. A card at offset n sits at `n · cardSpacing` with `cardSpacing =
- * cardWidth · (1 − overlap)`, and rotating it by `spreadDeg` widens its
- * bounding box to roughly `0.6 · cardWidth`. So the fan needs
- *
- *     maxOffset · (1 − overlap) · cardWidth + 0.6 · cardWidth  ≤  container / 2
- *
- * Sized by eye instead, a 400px card with two neighbours each side needed a
- * 1255px container — it fitted at 1280px viewport and was clipped by 52px at
- * 1152 and 244px at 768, where the outer cards were most of the way off the
- * screen. Card COUNT is what gives way as the container narrows, not just size.
+ * Card geometry derived from the measured container. Seeded at a phone width so
+ * the server/first render is the layout that fits everywhere and expands, not a
+ * five-card fan that paints off-screen for a frame on mobile. All seven cards
+ * render at every tier — only the widths and how tightly they tuck change.
  */
 function useDeckSize(ref: React.RefObject<HTMLDivElement | null>) {
-  // Seeded at a phone width on purpose. This is what the server and the first
-  // client render use, before the observer has measured anything. Seeded at a
-  // desktop width instead, a phone painted a five-card fan ~250px off each
-  // edge for a frame before collapsing. It's also the layout a no-JS visitor
-  // keeps, since the observer never runs for them — better that they get the
-  // tucked deck than a five-card fan they can't scroll to see.
   const [width, setWidth] = useState(360)
 
   useEffect(() => {
@@ -147,63 +121,58 @@ function useDeckSize(ref: React.RefObject<HTMLDivElement | null>) {
     return () => ro.disconnect()
   }, [ref])
 
-  let maxVisible: number
   let cardWidth: number
   let overlap: number
   let spreadDeg: number
+  let depthPx: number
 
   if (width >= 900) {
-    maxVisible = 5
-    cardWidth = Math.min(380, width / 3.2)
-    overlap = 0.52
-    spreadDeg = 34
+    // Sized so the outer card lands just inside the container edge. Depth is
+    // kept low (100) because the outer card sits at z = −3·depth and the
+    // perspective shrinks it, dragging the whole fan inward if depth is large.
+    cardWidth = Math.min(420, width / 2.95)
+    overlap = 0.58
+    spreadDeg = 30
+    depthPx = 100
   } else if (width >= 560) {
-    maxVisible = 3
-    cardWidth = Math.min(340, width / 2.3)
-    overlap = 0.52
-    spreadDeg = 22
+    cardWidth = Math.min(380, width / 2.0)
+    overlap = 0.72
+    spreadDeg = 20
+    depthPx = 80
   } else {
-    // Phones keep the fan, tucked: neighbours sit almost entirely behind the
-    // active card (0.80 overlap against 0.52) with 12° of splay against 34°.
-    // Solved the other way — a fan sized to fit entirely inside 288px — the
-    // cards come out ~180px wide, leaving ~130px of text and laddering every
-    // body. So the side cards are allowed to run past the edges instead; the
-    // section clips them, and at 0.7 opacity a partly off-screen neighbour
-    // reads as "there's more", which is the whole point of a deck.
-    maxVisible = 3
-    cardWidth = width - 60
-    overlap = 0.8
-    spreadDeg = 12
+    // Phones: the card is essentially the whole container and the fan tucks
+    // almost flat behind it. Sized any smaller to fit the neighbours on screen,
+    // the card drops to ~180px and every body ladders; instead the neighbours
+    // run past the edges and the section clips them.
+    cardWidth = width - 24
+    overlap = 0.88
+    spreadDeg = 8
+    depthPx = 70
   }
 
-  // Height stays constant across tiers. It's derived from the container, and
-  // the container is only measured after mount — a height that moved with it
-  // would shift the page on every load. Headroom does scale, since a wide
-  // splay needs room for the lift and tilt and a tucked one barely any.
-  const stagePadPx = maxVisible > 3 ? 72 : width >= 560 ? 52 : 36
+  const stagePadPx = width >= 900 ? 72 : width >= 560 ? 52 : 32
 
   return {
     cardWidth: Math.round(Math.max(220, cardWidth)),
     cardHeight: 330,
-    maxVisible,
+    maxVisible: 7,
     overlap,
     spreadDeg,
+    depthPx,
     stagePadPx,
   }
 }
 
 /**
- * One stage.
- *
- * The background is a flat opaque `--card` for every stage, hero included.
- * The hero previously used a gradient whose first stop was
- * `color-mix(tint 18%, transparent)` — 82% transparent — so the fanned cards
- * stacked behind it showed straight through the top-left corner and their
- * rotated text printed over the copy. In a deck, card surfaces have to be
- * opaque; accent belongs on the border and the rule, not in the fill.
+ * One stage. The surface is a flat opaque `--card` for every card, hero
+ * included — a translucent fill let the cards stacked behind show through, so
+ * the deck read as stacked glass. Depth dimming lives on the `scrim` overlay
+ * painted over the opaque surface, keyed to how far back the card sits.
  */
-function StageCard({ stage, active }: { stage: Stage; active: boolean }) {
+function StageCard({ stage, active, offset }: { stage: Stage; active: boolean; offset: number }) {
   const Icon = stage.icon
+  const reduced = useReducedMotion()
+  const scrim = active ? 0 : Math.min(0.82, 0.5 + Math.abs(offset) * 0.16)
   return (
     <div
       className="relative flex h-full w-full flex-col overflow-hidden p-6 transition-colors duration-300"
@@ -212,7 +181,32 @@ function StageCard({ stage, active }: { stage: Stage; active: boolean }) {
         boxShadow: active ? `inset 0 0 0 1px color-mix(in srgb, ${stage.tint} 34%, transparent)` : undefined,
       }}
     >
-      {/* Accent rule along the top edge — the only tint on the surface */}
+      {/* Side lights — the active card's left and right edges glow and breathe
+          in the stage's accent. Inside the card's own overflow, so they read as
+          light running down the border rather than a halo around it. */}
+      {active && (
+        <>
+          <motion.span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[3px]"
+            style={{ background: `linear-gradient(180deg, transparent, ${stage.tint}, transparent)`, boxShadow: `0 0 16px ${stage.tint}` }}
+            initial={{ opacity: 0.5 }}
+            animate={reduced ? { opacity: 0.8 } : { opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 2.4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+          />
+          <motion.span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 right-0 z-20 w-[3px]"
+            style={{ background: `linear-gradient(180deg, transparent, ${stage.tint}, transparent)`, boxShadow: `0 0 16px ${stage.tint}` }}
+            initial={{ opacity: 0.5 }}
+            animate={reduced ? { opacity: 0.8 } : { opacity: [0.4, 1, 0.4] }}
+            // Offset half a cycle so the two sides pulse against each other.
+            transition={{ duration: 2.4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1.2 }}
+          />
+        </>
+      )}
+
+      {/* Accent rule along the top edge */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px transition-opacity duration-300"
@@ -222,12 +216,11 @@ function StageCard({ stage, active }: { stage: Stage; active: boolean }) {
         }}
       />
 
-      {/* Cards behind the active one recede rather than compete. Without this
-          the deck reads as a pile of equally-loud cards overlapping. */}
+      {/* Depth scrim over the opaque surface */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-background transition-opacity duration-300"
-        style={{ opacity: active ? 0 : 0.55 }}
+        className="pointer-events-none absolute inset-0 z-10 bg-background transition-opacity duration-300"
+        style={{ opacity: scrim }}
       />
 
       <div className="relative flex items-center gap-3">
@@ -242,7 +235,7 @@ function StageCard({ stage, active }: { stage: Stage; active: boolean }) {
           <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
         </span>
         <span className="font-mono text-[10px] uppercase tracking-[0.18em]" style={{ color: stage.tint }}>
-          {stage.kicker}
+          {stage.index} · {stage.kicker}
         </span>
       </div>
 
@@ -260,7 +253,9 @@ function StageCard({ stage, active }: { stage: Stage; active: boolean }) {
             background: `color-mix(in srgb, ${stage.tint} 12%, transparent)`,
           }}
         >
-          <span className={active ? "pulse-ring relative h-1 w-1 rounded-full bg-current" : "h-1 w-1 rounded-full bg-current"} />
+          <span
+            className={active ? "pulse-ring relative h-1 w-1 rounded-full bg-current" : "h-1 w-1 rounded-full bg-current"}
+          />
           Where the half-second is won
         </span>
       )}
@@ -272,7 +267,7 @@ function StageCard({ stage, active }: { stage: Stage; active: boolean }) {
 
 export function FeatureAnatomy() {
   const stageRef = useRef<HTMLDivElement | null>(null)
-  const { cardWidth, cardHeight, maxVisible, overlap, spreadDeg, stagePadPx } = useDeckSize(stageRef)
+  const { cardWidth, cardHeight, maxVisible, overlap, spreadDeg, depthPx, stagePadPx } = useDeckSize(stageRef)
   const [activeIndex, setActiveIndex] = useState(0)
 
   return (
@@ -280,14 +275,10 @@ export function FeatureAnatomy() {
       className="features-hero-dark relative isolate overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <div
-        aria-hidden
-        className="drift-blob pointer-events-none absolute right-0 top-0 -z-10 h-[30rem] w-[30rem] translate-x-1/3 rounded-full opacity-50 blur-[130px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue-deep) 30%, transparent)" }}
-      />
+      {/* Ambient glow removed — flat black canvas per the /features theme. */}
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-        <ScrollReveal className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:py-16">
+        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             Anatomy of a call
@@ -301,26 +292,16 @@ export function FeatureAnatomy() {
           </p>
         </ScrollReveal>
 
-        {/* Progress readout — the deck shows one stage at a time, so the
-            sequence has to be stated somewhere the eye can hold it. */}
-        {/* Readout. On a phone this is the counter alone: with the stage title
-            appended and "drag to explore" sitting beside it, the row wrapped to
-            two lines and the two halves collided. The card underneath already
-            shows the title, so on mobile it's pure duplication — but the live
-            region still needs it, hence `sm:inline` rather than dropping it
-            from the DOM. */}
+        {/* Progress readout — the deck shows one stage forward at a time, so the
+            sequence is stated where the eye can hold it. Phone shows just the
+            counter; the title is on the card already. Live region so the swap
+            is announced to a screen reader. */}
         <ScrollReveal className="mb-2 flex items-center justify-center gap-3">
-          {/* Polite, not assertive: the deck advances on its own every six
-              seconds, and an assertive region would interrupt a screen reader
-              mid-sentence each time. */}
           <span
             aria-live="polite"
             aria-atomic="true"
             className="text-center font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/50"
           >
-            {/* "Stage", not "Hop": two of the seven (language detection and the
-                human handoff) are things a call may do, not things every call
-                does, and numbering them as mandatory hops overstated it. */}
             Stage {STAGES[activeIndex].index} of {String(STAGES.length).padStart(2, "0")}
             <span className="hidden sm:inline"> — {STAGES[activeIndex].title}</span>
           </span>
@@ -340,27 +321,22 @@ export function FeatureAnatomy() {
             stagePadPx={stagePadPx}
             overlap={overlap}
             spreadDeg={spreadDeg}
-            depthPx={130}
+            depthPx={depthPx}
             tiltXDeg={8}
             activeLiftPx={18}
             activeScale={1.02}
             inactiveScale={0.93}
-            // Autoplay is only defensible because CardStack ships a real pause
-            // button beside the dots — WCAG 2.2.2 needs a mechanism, and
-            // `pauseOnHover` isn't one (it doesn't exist on touch). Six seconds
-            // is set against the longest card: stage 03 runs ~170 characters,
-            // which is roughly five seconds of reading.
             autoAdvance
             intervalMs={6000}
             pauseOnHover
             onChangeIndex={(i) => setActiveIndex(i)}
-            renderCard={(stage, { active }) => <StageCard stage={stage} active={active} />}
+            renderCard={(stage, { active, offset }) => <StageCard stage={stage} active={active} offset={offset} />}
           />
         </div>
 
         {/* What the customer configures, as opposed to what's fixed */}
         <ScrollReveal className="mt-8 md:mt-10">
-          <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card/40 px-5 py-5 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-8 sm:px-6">
+          <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card/30 px-5 py-5 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-8 sm:px-6">
             <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/60">
               Yours to configure
             </p>

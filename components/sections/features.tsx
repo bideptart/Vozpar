@@ -3,7 +3,7 @@
 import { ShieldCheck, Gauge, Globe2, Clock } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import type { ElementType } from "react"
-import { useInView, animate } from "motion/react"
+import { useInView, useReducedMotion, animate } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { FeatureHero } from "@/components/sections/feature-hero"
 
@@ -34,28 +34,58 @@ function AnimatedStat({
   label: string
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
+  // `once: false` — the count-up replays every time the band scrolls back into
+  // view, not just the first time. When it leaves the viewport the value is
+  // reset to 0 (below) so the next entry starts the run over.
+  const inView = useInView(ref, { margin: "-80px" })
+  const reduced = useReducedMotion()
   const [value, setValue] = useState(0)
 
   useEffect(() => {
-    if (!inView) return
+    if (!inView) {
+      // Left the viewport — park at 0 so re-entry animates from the start.
+      // Reduced-motion users just hold the final value; nothing to reset.
+      if (!reduced) setValue(0)
+      return
+    }
+    if (reduced) {
+      setValue(target)
+      return
+    }
     const controls = animate(0, target, {
       duration: 1.4,
       ease: [0.16, 1, 0.3, 1],
       onUpdate: (v) => setValue(v),
     })
     return () => controls.stop()
-  }, [inView, target])
+  }, [inView, target, reduced])
 
   return (
-    <div ref={ref} className="flex flex-col items-center gap-2 px-3 py-6 text-center sm:px-4 sm:py-7">
-      <Icon className="h-4 w-4" style={{ color: "var(--features-blue)" }} aria-hidden="true" />
-      <span className="font-heading text-2xl font-medium tracking-[-0.02em] text-foreground sm:text-3xl md:text-4xl">
+    <div
+      ref={ref}
+      className="group relative flex flex-col items-center gap-2 px-3 py-6 text-center transition-colors duration-300 hover:bg-white/[0.02] sm:px-4 sm:py-7"
+    >
+      {/* Bottom accent bar, same idea as the comparison table's row marker —
+          hidden until hover, so the static grid still feels alive without
+          any of the cells carrying a permanent tint. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-4 bottom-0 h-px scale-x-0 opacity-0 transition-[transform,opacity] duration-300 group-hover:scale-x-100 group-hover:opacity-100 sm:inset-x-6"
+        style={{ background: "var(--features-blue)" }}
+      />
+      <Icon
+        className="h-4 w-4 transition-transform duration-300 group-hover:scale-110"
+        style={{ color: "var(--features-blue)" }}
+        aria-hidden="true"
+      />
+      <span className="font-heading text-2xl font-medium tracking-[-0.02em] text-foreground transition-transform duration-300 group-hover:scale-[1.03] sm:text-3xl md:text-4xl">
         {prefix}
         {value.toFixed(decimals)}
         {suffix}
       </span>
-      <span className="text-[11px] leading-snug text-muted-foreground sm:text-xs">{label}</span>
+      <span className="text-[11px] leading-snug text-muted-foreground transition-colors duration-300 group-hover:text-foreground/80 sm:text-xs">
+        {label}
+      </span>
     </div>
   )
 }
@@ -83,10 +113,6 @@ export function Features() {
               // container border). The two rule sets are scoped to opposite
               // sides of `sm` so they never fight over the same property.
               className="grid grid-cols-2 overflow-hidden rounded-2xl border border-border [&>*]:border-border max-sm:[&>*:nth-child(-n+2)]:border-b max-sm:[&>*:nth-child(odd)]:border-r sm:grid-cols-4 sm:[&>*:not(:last-child)]:border-r"
-              style={{
-                background:
-                  "linear-gradient(135deg, color-mix(in srgb, var(--features-blue) 10%, transparent), color-mix(in srgb, var(--features-blue-deep) 10%, transparent))",
-              }}
             >
               {STATS.map((s) => (
                 <AnimatedStat key={s.label} {...s} />

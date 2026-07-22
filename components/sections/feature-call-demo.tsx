@@ -188,7 +188,7 @@ export function FeatureCallDemo() {
   }, [shown.length, reduced])
 
   const speakerAccent =
-    speaker === "agent" ? "var(--features-blue)" : speaker === "caller" ? "#94a3b8" : "var(--border)"
+    speaker === "agent" ? "var(--features-blue)" : speaker === "caller" ? "var(--muted-foreground)" : "var(--border)"
 
   return (
     <section
@@ -196,17 +196,10 @@ export function FeatureCallDemo() {
       className="features-hero-dark relative overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      {/* Ambient wash that breathes with playback */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/3 -z-10 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-[150px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue) 30%, transparent)" }}
-        animate={reduced || !playing ? { opacity: 0.35 } : { opacity: [0.3, 0.6, 0.3], scale: [1, 1.08, 1] }}
-        transition={{ duration: 6, repeat: loop, ease: "easeInOut" }}
-      />
+      {/* Ambient glow removed — flat black canvas per the /features theme. */}
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-24">
-        <ScrollReveal className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:py-16">
+        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             Watch a real call
@@ -224,7 +217,7 @@ export function FeatureCallDemo() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5">
             {/* ---------- CONSOLE ---------- */}
             <div className="lg:col-span-5">
-              <div className="relative h-full overflow-hidden rounded-2xl border border-border bg-card/60 p-5 shadow-xl shadow-black/30 backdrop-blur-md sm:p-6">
+              <div className="relative h-full overflow-hidden rounded-2xl border border-border bg-card/30 p-5 shadow-xl shadow-black/30 backdrop-blur-md sm:p-6">
                 {/* Live edge — a light sweeping the panel's top border while the
                     call is running. Reads as "this thing is on". */}
                 <motion.span
@@ -245,7 +238,7 @@ export function FeatureCallDemo() {
                   <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em]">
                     <motion.span
                       className="h-1.5 w-1.5 rounded-full"
-                      style={{ background: ended ? "#64748b" : "var(--features-green)" }}
+                      style={{ background: ended ? "var(--muted-foreground)" : "var(--features-green)" }}
                       animate={reduced || ended || !playing ? undefined : { opacity: [1, 0.25, 1] }}
                       transition={{ duration: 1.4, repeat: loop, ease: "easeInOut" }}
                     />
@@ -256,7 +249,7 @@ export function FeatureCallDemo() {
                 </div>
 
                 {/* Waveform — colour tells you who holds the floor */}
-                <div className="mt-6 flex h-24 items-center justify-center gap-[3px] sm:gap-1">
+                <div className="mt-4 flex h-16 items-center justify-center gap-[3px] sm:gap-1">
                   {BARS.map((peak, i) => (
                     <motion.span
                       key={i}
@@ -268,7 +261,7 @@ export function FeatureCallDemo() {
                           speaker === "agent"
                             ? "linear-gradient(to top, var(--features-blue-deep), var(--features-blue))"
                             : speaker === "caller"
-                              ? "#64748b"
+                              ? "var(--muted-foreground)"
                               : "rgba(255,255,255,0.12)",
                       }}
                       animate={
@@ -290,7 +283,7 @@ export function FeatureCallDemo() {
                 </p>
 
                 {/* Telemetry */}
-                <div className="mt-6 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-xl border border-border">
+                <div className="mt-4 grid grid-cols-3 divide-x divide-border overflow-hidden rounded-xl border border-border">
                   <Readout label="Elapsed" value={`${Math.min(time, TOTAL).toFixed(1)}s`} />
                   <Readout
                     label="Last reply"
@@ -303,7 +296,7 @@ export function FeatureCallDemo() {
                 </div>
 
                 {/* Action rail — tool calls landing as they fire */}
-                <div className="mt-5">
+                <div className="mt-4">
                   <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/60">
                     Actions taken mid-call
                   </p>
@@ -357,7 +350,7 @@ export function FeatureCallDemo() {
             {/* ---------- TRANSCRIPT ---------- */}
             <div className="lg:col-span-7">
               <div
-                className="relative flex h-full flex-col overflow-hidden rounded-2xl border bg-card/60 shadow-xl shadow-black/30 backdrop-blur-md transition-colors duration-500"
+                className="relative flex h-full flex-col overflow-hidden rounded-2xl border bg-card/30 shadow-xl shadow-black/30 backdrop-blur-md transition-colors duration-500"
                 style={{ borderColor: speaker ? `color-mix(in srgb, ${speakerAccent} 45%, transparent)` : "var(--border)" }}
               >
                 <div className="flex items-center justify-between border-b border-border px-5 py-3">
@@ -378,7 +371,12 @@ export function FeatureCallDemo() {
                 {/* Fixed height so the page doesn't jump as lines land */}
                 <div
                   ref={streamRef}
-                  className="min-h-[340px] flex-1 space-y-3 overflow-y-auto px-4 py-5 sm:px-6 md:min-h-[420px] md:max-h-[460px]"
+                  // Scrollbar hidden: the transcript auto-scrolls as lines
+                  // land, so the bar is never something you're meant to drag —
+                  // it just sat there as a grey strip down the side of what is
+                  // supposed to read as a phone call. Scrolling still works
+                  // (wheel, trackpad, keyboard); only the chrome is gone.
+                  className="min-h-[260px] flex-1 space-y-3 overflow-y-auto px-4 py-5 [scrollbar-width:none] sm:px-6 md:min-h-[300px] md:max-h-[340px] [&::-webkit-scrollbar]:hidden"
                 >
                   <AnimatePresence initial={false}>
                     {shown.map((e) => (

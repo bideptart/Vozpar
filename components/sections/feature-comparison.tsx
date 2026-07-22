@@ -152,14 +152,10 @@ export function FeatureComparison() {
       className="features-hero-dark relative overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <div
-        aria-hidden
-        className="drift-blob pointer-events-none absolute bottom-0 left-0 h-[28rem] w-[28rem] -translate-x-1/3 rounded-full opacity-50 blur-[130px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue) 28%, transparent)" }}
-      />
+      {/* Ambient glow removed — flat black canvas per the /features theme. */}
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-        <ScrollReveal className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+      <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:py-16">
+        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             Honest comparison
@@ -173,72 +169,52 @@ export function FeatureComparison() {
           </p>
         </ScrollReveal>
 
-        {/* ---------- Small screens: one card per capability ---------- */}
-        {/* Cards hold until lg. At md the four-column table gives each note
-            cell ~106px — about fifteen characters a line — so every one of the
-            eighteen cells ladders. */}
-        <div className="space-y-2.5 lg:hidden">
+        {/* ---------- Small screens: compact list ----------
+            One divided row per capability, not a card each. The winner's answer
+            is the hero line; the two alternatives collapse into a single muted
+            reference line beneath it. The old one-card-per-cell version stacked
+            eighteen bordered blocks and ran ~2,300px on a phone; this is closer
+            to a third of that while keeping every value on screen. */}
+        <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card/30 lg:hidden">
           {ROWS.map((row, ri) => (
             <motion.div
               key={row.label}
-              initial={reduced ? false : { opacity: 0, y: 20 }}
+              initial={reduced ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: ri * 0.05 }}
-              className="rounded-2xl border border-border bg-card/50 p-4 shadow-lg shadow-black/20 sm:p-5"
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: ri * 0.04 }}
+              className="p-4"
             >
-              <h3 className="font-heading text-sm font-medium tracking-[-0.01em] text-foreground">{row.label}</h3>
-              {/* Tighter than the desktop rhythm on purpose: six of these
-                  stacked ran ~2,300px on a phone, and the padding was doing
-                  most of it. */}
-              <dl className="mt-3 space-y-1.5">
-                {row.cells.map((cell, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col items-start gap-1 rounded-xl px-3 py-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
-                    style={
-                      i === 0
-                        ? {
-                            background: "color-mix(in srgb, var(--features-blue) 12%, transparent)",
-                            border: "1px solid color-mix(in srgb, var(--features-blue) 26%, transparent)",
-                          }
-                        : undefined
-                    }
-                  >
-                    {/* The winner's label carries the accent colour and a
-                        marker dot. On a phone the three options are stacked
-                        rather than sitting in a highlighted column, so the
-                        tinted panel alone wasn't enough to say which one is
-                        ours at a glance. */}
-                    <dt
-                      className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] ${
-                        i === 0 ? "font-medium" : "text-muted-foreground/70"
-                      }`}
-                      style={i === 0 ? { color: "var(--features-blue)" } : undefined}
-                    >
-                      {i === 0 && (
-                        <span
-                          aria-hidden
-                          className="h-1 w-1 rounded-full"
-                          style={{ background: "var(--features-blue)" }}
-                        />
-                      )}
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/60">{row.label}</p>
+
+              {/* Winner — the line that matters */}
+              <div className="mt-2 flex items-center gap-2">
+                <VerdictIcon verdict={row.cells[0].verdict} />
+                <span className="text-[15px] font-medium text-foreground">{row.cells[0].note}</span>
+                <span
+                  className="ml-auto shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.12em]"
+                  style={{
+                    color: "var(--features-blue)",
+                    borderColor: "color-mix(in srgb, var(--features-blue) 30%, transparent)",
+                    background: "color-mix(in srgb, var(--features-blue) 10%, transparent)",
+                  }}
+                >
+                  {COLUMNS[0]}
+                </span>
+              </div>
+
+              {/* The two alternatives, condensed to one reference line */}
+              <div className="mt-2 flex flex-col gap-1 border-t border-border/60 pt-2">
+                {[1, 2].map((i) => (
+                  <div key={i} className="flex items-center gap-2 text-[12px] text-muted-foreground/70">
+                    <VerdictIcon verdict={row.cells[i].verdict} />
+                    <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground/50">
                       {COLUMNS[i]}
-                    </dt>
-                    {/* Icon leads and the note runs left-aligned on phones —
-                        right-aligning it against the label in a 222px row left
-                        the note ~111px, roughly sixteen characters a line. */}
-                    <dd className="flex min-w-0 items-start gap-2 sm:justify-end sm:text-right">
-                      <VerdictIcon verdict={cell.verdict} />
-                      <span
-                        className={`text-sm ${i === 0 ? "font-medium text-foreground" : "text-muted-foreground"}`}
-                      >
-                        {cell.note}
-                      </span>
-                    </dd>
+                    </span>
+                    <span className="truncate">{row.cells[i].note}</span>
                   </div>
                 ))}
-              </dl>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -256,8 +232,12 @@ export function FeatureComparison() {
               style={{
                 color: "var(--features-blue)",
                 borderColor: "color-mix(in srgb, var(--features-blue) 45%, transparent)",
+                // Navy removed from this badge fill — it's the one place in
+                // the file that still referenced --features-navy. Solid
+                // black underneath the same blue-tinted top edge keeps the
+                // badge readable without introducing a navy cast.
                 background:
-                  "linear-gradient(180deg, color-mix(in srgb, var(--features-blue) 22%, transparent), color-mix(in srgb, var(--features-navy) 70%, transparent))",
+                  "linear-gradient(180deg, color-mix(in srgb, var(--features-blue) 22%, transparent), color-mix(in srgb, black 70%, transparent))",
               }}
             >
               <Sparkles className="h-3 w-3" aria-hidden />
@@ -266,15 +246,16 @@ export function FeatureComparison() {
           </div>
 
           <ScrollReveal>
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-card/50 shadow-xl shadow-black/30">
-              {/* Glow behind the winner column */}
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-card/30 shadow-xl shadow-black/30">
+              {/* Faint glow behind the winner column — enough to draw the eye
+                  without turning the column into a solid blue block. */}
               <span
                 aria-hidden
                 className="pointer-events-none absolute inset-y-0 z-0 blur-2xl"
                 style={{
                   left: WINNER_LEFT,
                   width: WINNER_W,
-                  background: "color-mix(in srgb, var(--features-blue) 18%, transparent)",
+                  background: "color-mix(in srgb, var(--features-blue) 8%, transparent)",
                 }}
               />
 
@@ -303,9 +284,12 @@ export function FeatureComparison() {
                         style={
                           i === 0
                             ? {
-                                background:
-                                  "linear-gradient(180deg, color-mix(in srgb, var(--features-blue) 22%, transparent), color-mix(in srgb, var(--features-blue) 10%, transparent))",
-                                boxShadow: "inset 1px 0 0 color-mix(in srgb, var(--features-blue) 35%, transparent), inset -1px 0 0 color-mix(in srgb, var(--features-blue) 35%, transparent), inset 0 1px 0 color-mix(in srgb, var(--features-blue) 45%, transparent)",
+                                // Only the header carries a light tint — it's
+                                // where the column is named, so that's where the
+                                // marking belongs. Body cells below stay clear.
+                                background: "color-mix(in srgb, var(--features-blue) 12%, transparent)",
+                                boxShadow:
+                                  "inset 1px 0 0 color-mix(in srgb, var(--features-blue) 28%, transparent), inset -1px 0 0 color-mix(in srgb, var(--features-blue) 28%, transparent), inset 0 1px 0 color-mix(in srgb, var(--features-blue) 40%, transparent)",
                               }
                             : undefined
                         }
@@ -359,10 +343,13 @@ export function FeatureComparison() {
                             style={
                               isWinner
                                 ? {
-                                    background: "color-mix(in srgb, var(--features-blue) 9%, transparent)",
-                                    boxShadow: `inset 1px 0 0 color-mix(in srgb, var(--features-blue) 35%, transparent), inset -1px 0 0 color-mix(in srgb, var(--features-blue) 35%, transparent)${
+                                    // No fill on the body cells — the column is
+                                    // framed by two thin blue side-lines and the
+                                    // header tint, so it reads as "the one to
+                                    // look at" without being a painted block.
+                                    boxShadow: `inset 1px 0 0 color-mix(in srgb, var(--features-blue) 28%, transparent), inset -1px 0 0 color-mix(in srgb, var(--features-blue) 28%, transparent)${
                                       isLast
-                                        ? ", inset 0 -1px 0 color-mix(in srgb, var(--features-blue) 45%, transparent)"
+                                        ? ", inset 0 -1px 0 color-mix(in srgb, var(--features-blue) 40%, transparent)"
                                         : ""
                                     }`,
                                   }
@@ -392,7 +379,7 @@ export function FeatureComparison() {
 
         {/* ---------- Payoff strip ---------- */}
         <ScrollReveal className="mt-6">
-          <div className="rounded-2xl border border-border bg-card/50 px-4 py-4 shadow-lg shadow-black/20">
+          <div className="rounded-2xl border border-border bg-card/30 px-4 py-4 shadow-lg shadow-black/20">
             <div className="grid grid-cols-1 divide-y divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
               {COLUMNS.map((c, i) => (
                 <ScoreStat key={c} value={SCORES[i]} label={`${c} — clean wins`} tint={SCORE_TINT[i]} />

@@ -17,6 +17,7 @@ import {
   Network,
   Check,
   RadioTower,
+  ArrowRight,
 } from "lucide-react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
@@ -223,7 +224,15 @@ const FEATURES: Feature[] = [
 
 type MotifProps = { accent: string; reduced: boolean | null }
 
-const shell = "relative flex h-24 items-center justify-center"
+/**
+ * `w-full` is load-bearing. The motif container in the panel is a flex box
+ * (it needs `flex-1` to absorb the slack when the panel stretches to the
+ * list's height), which makes this shell a flex item — and a flex item with
+ * no width shrinks to its content. Every motif that spans the panel then
+ * collapsed: the transfer motif's two avatars ended up touching in the middle
+ * with the connecting line squeezed out of existence.
+ */
+const shell = "relative flex h-24 w-full items-center justify-center"
 const loop = Number.POSITIVE_INFINITY
 
 /** 1. Latency — a pulse racing across a timing track against tick marks. */
@@ -297,7 +306,7 @@ function NoiseMotif({ accent, reduced }: MotifProps) {
         {noisy.map((h, i) => (
           <motion.span
             key={i}
-            className="w-1.5 rounded-full bg-slate-600"
+            className="w-1.5 rounded-full bg-muted-foreground/40"
             style={{ height: "100%", transformOrigin: "center" }}
             animate={reduced ? { scaleY: h } : { scaleY: [h, 0.25, h * 0.8, 0.4, h] }}
             transition={{ duration: 0.8, repeat: loop, delay: i * 0.04, ease: "linear" }}
@@ -695,9 +704,12 @@ const MOTIFS: Record<MotifKey, ComponentType<MotifProps>> = {
   concurrency: ConcurrencyMotif,
 }
 
+const AUTO_ADVANCE_MS = 4500
+
 export function FeatureShowcase() {
   const reduced = useReducedMotion()
   const [activeIndex, setActiveIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
 
   /**
    * Roving arrow-key navigation.
@@ -710,6 +722,33 @@ export function FeatureShowcase() {
    * focus sat on whichever tab was tabbed to.
    */
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const railRef = useRef<HTMLDivElement | null>(null)
+
+  // Same fix as the FeatureJourney stepper below: keeps the active chip
+  // visible on the phone rail whenever the selection changes — hover, click,
+  // or arrow keys — instead of leaving it to whoever's driving the selection
+  // to also happen to be looking at the right part of the scrolled-off rail.
+  useEffect(() => {
+    const container = railRef.current
+    const activeEl = tabRefs.current[activeIndex]
+    if (!container || !activeEl) return
+    const target = activeEl.offsetLeft - container.clientWidth / 2 + activeEl.clientWidth / 2
+    container.scrollTo({ left: Math.max(0, target), behavior: reduced ? "auto" : "smooth" })
+  }, [activeIndex, reduced])
+
+  // Auto-advance through the twelve capabilities, same pattern as
+  // FeatureJourney's stepper: pauses on hover/focus so a reader who's
+  // actually looking at one doesn't have it swapped out from under them,
+  // and skips entirely under reduced motion (paired with the fact that the
+  // scroll effect above also drops to an instant jump in that case).
+  useEffect(() => {
+    if (paused || reduced) return
+    const id = setTimeout(() => {
+      setActiveIndex((i) => (i + 1) % FEATURES.length)
+    }, AUTO_ADVANCE_MS)
+    return () => clearTimeout(id)
+  }, [activeIndex, paused, reduced])
+
   const focusTab = (i: number) => {
     const next = (i + FEATURES.length) % FEATURES.length
     setActiveIndex(next)
@@ -749,13 +788,9 @@ export function FeatureShowcase() {
       className="features-hero-dark relative overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/4 -z-10 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full opacity-60 blur-[140px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue-deep) 26%, transparent)" }}
-      />
+      {/* Ambient glow removed — flat black canvas per the /features theme. */}
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-24">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:py-16">
         {/* Centred to match every other section header on the page — this was
             the only one still left-aligned. */}
         <ScrollReveal className="mx-auto max-w-2xl text-center">
@@ -773,7 +808,22 @@ export function FeatureShowcase() {
           </p>
         </ScrollReveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-4 lg:mt-14 lg:grid-cols-12 lg:gap-6">
+        {/* `items-stretch` is the default, but stated explicitly because the
+            two columns matching height is the whole point of this row: the
+            list sets it and the panel fills it. */}
+        <div
+          className="mt-10 grid grid-cols-1 items-stretch gap-4 lg:mt-14 lg:grid-cols-12 lg:gap-6"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={(e) => {
+            // Only resume once focus actually leaves the whole explorer —
+            // without the `contains` check, tabbing between chips blurs one
+            // and refocuses the next on the very next tick, which would flash
+            // the auto-advance back on between them.
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false)
+          }}
+        >
           {/* INDEX — horizontal snap rail on phones, vertical list from lg.
               Three things here are load-bearing:
               · `layoutScroll` — the active background is a `layoutId` element,
@@ -788,10 +838,15 @@ export function FeatureShowcase() {
               · scrollbar hidden — `overflow-x-auto` holds until lg, so between
                 768 and 1023px Windows and Linux draw a bar under the rail. */}
           <motion.div
+            ref={railRef}
             layoutScroll
             role="tablist"
             aria-label="Platform features"
-            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:gap-0.5 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
+            // Right-edge fade on the phone rail so it's obvious the chips run
+            // off-screen and can be scrolled. It's a mask that softens the last
+            // ~2rem to transparent; switched off at lg where the list is a
+            // vertical column with nothing hidden.
+            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
               const isActive = i === activeIndex
@@ -823,18 +878,18 @@ export function FeatureShowcase() {
                   // roving tabindex and the arrow handler above, this is the
                   // full ARIA "automatic activation" tabs pattern.
                   onFocus={() => setActiveIndex(i)}
-                  // Desktop rows are ~48px: py-1.5 (12) around two lines whose
-                  // line-heights stay at 20px and 16px (the arbitrary
-                  // `text-[13px]`/`text-[11px]` override font-size only). Twelve
-                  // of those plus gap-0.5 puts the index at ~598px, down from
-                  // ~770px before the padding and type sizes were tightened.
+                  // Desktop rows are ~56px: py-2 around a 15px title and a 12px
+                  // blurb. The column is ~390px wide and the titles are short,
+                  // so at 13px the row read as mostly empty space — the type
+                  // sizes are set against the box, not shrunk to fit a height
+                  // target.
                   //
                   // Phone chips cap at 13rem. Uncapped, the longest title ran
                   // ~305px against ~304px of visible track — exactly one chip
                   // on screen at 320px. The cap buys a chip and a half, not
                   // two; two full chips would need a ~9rem cap, which leaves
                   // 70px of title and clips almost every one of them.
-                  className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-3 rounded-xl border border-border bg-card/30 px-3 py-2.5 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2.5 lg:border-0 lg:bg-transparent lg:py-1.5 lg:hover:translate-x-1"
+                  className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border border-border bg-card/30 px-3 py-2 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:border-0 lg:bg-transparent lg:py-1 lg:hover:translate-x-1"
                 >
                   {/* Sliding active background — one element that animates
                       between rows rather than 12 cross-fading backgrounds. */}
@@ -848,6 +903,28 @@ export function FeatureShowcase() {
                       className="absolute -inset-px rounded-xl border border-border bg-card lg:inset-0"
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
+                  )}
+
+                  {/* Auto-advance progress — same element as FeatureJourney's
+                      stepper: fills over AUTO_ADVANCE_MS while this chip is
+                      active, freezes mid-fill on hover/focus pause, and never
+                      renders for reduced-motion users since it never advances
+                      for them either. */}
+                  {isActive && !reduced && (
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-3 bottom-0 h-[2px] overflow-hidden rounded-full bg-white/5 lg:inset-x-0"
+                    >
+                      <span
+                        key={activeIndex}
+                        className="journey-progress-fill block h-full rounded-full"
+                        style={{
+                          background: itemAccent,
+                          animationDuration: `${AUTO_ADVANCE_MS}ms`,
+                          animationPlayState: paused ? "paused" : "running",
+                        }}
+                      />
+                    </span>
                   )}
 
                   {/* Edge marker. Half-height on hover, full when selected, so
@@ -866,7 +943,7 @@ export function FeatureShowcase() {
                     // the text block is ~34px tall, so it drives the row height
                     // and a 28px tile just looked undersized next to it. Costs
                     // nothing in height.
-                    className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105 lg:h-8 lg:w-8"
+                    className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105 lg:h-7 lg:w-7"
                     style={{
                       background: isActive
                         ? `color-mix(in srgb, ${itemAccent} 20%, transparent)`
@@ -877,7 +954,7 @@ export function FeatureShowcase() {
                       color: isActive ? itemAccent : "var(--muted-foreground)",
                     }}
                   >
-                    <Icon className="h-[17px] w-[17px] lg:h-4 lg:w-4" aria-hidden="true" />
+                    <Icon className="h-4 w-4 lg:h-3.5 lg:w-3.5" aria-hidden="true" />
                   </span>
                   <span className="relative min-w-0 flex-1">
                     <span
@@ -887,7 +964,7 @@ export function FeatureShowcase() {
                       // otherwise clip mid-word ("Recording, redactio…").
                       // Both states are line-clamp so there's no display/
                       // white-space conflict to resolve between breakpoints.
-                      className={`text-sm font-medium transition-colors line-clamp-2 lg:line-clamp-1 lg:text-[13px] ${
+                      className={`text-sm font-medium leading-snug transition-colors line-clamp-2 lg:line-clamp-1 lg:text-sm ${
                         isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
@@ -903,20 +980,63 @@ export function FeatureShowcase() {
                         row's height and shove everything below it down by ~16px
                         mid-hover, handing the cursor a different item than the
                         one it was pointing at. */}
-                    <span className="hidden truncate text-xs font-light text-muted-foreground/60 lg:block lg:text-[11px]">
+                    <span className="hidden truncate text-[11px] font-light leading-snug text-muted-foreground/70 lg:block">
                       {f.blurb}
                     </span>
+                  </span>
+
+                  {/* Category tag, desktop only. The rows are ~390px wide and
+                      the titles are short, so most of that width was empty —
+                      this fills it with the one piece of information the row
+                      was missing, and colour-codes the list into its four
+                      groups at a glance. */}
+                  <span
+                    className="relative ml-auto hidden shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] transition-opacity duration-300 lg:inline-block"
+                    style={{
+                      color: itemAccent,
+                      borderColor: `color-mix(in srgb, ${itemAccent} 30%, transparent)`,
+                      background: `color-mix(in srgb, ${itemAccent} 10%, transparent)`,
+                      opacity: isActive ? 1 : 0.55,
+                    }}
+                  >
+                    {f.tag}
                   </span>
                 </button>
               )
             })}
           </motion.div>
 
-          {/* DETAIL PANEL */}
-          <div className="lg:col-span-7">
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-card/60 shadow-xl shadow-black/30 backdrop-blur-md">
+          {/* Swipe hint — phone/tablet only, where the index is a horizontal
+              rail. Spells out that the twelve capabilities scroll, with a
+              nudging arrow, since the edge fade alone reads as decoration to
+              some. Hidden from lg up, where the list is a full vertical column
+              with nothing off-screen. */}
+          <div className="mt-3 flex items-center justify-center gap-2 lg:hidden">
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/60">
+              Swipe · all {FEATURES.length} capabilities
+            </span>
+            <motion.span
+              aria-hidden
+              className="inline-flex"
+              style={{ color: "var(--features-blue)" }}
+              animate={reduced ? undefined : { x: [0, 5, 0] }}
+              transition={{ duration: 1.4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            >
+              <ArrowRight className="h-3.5 w-3.5" />
+            </motion.span>
+          </div>
+
+          {/* DETAIL PANEL.
+              `lg:h-full` on both wrappers is what keeps the two columns the
+              same height. Twelve rows at ~56px run ~690px while the panel's own
+              content only needs ~490px, so the list used to hang three rows
+              past the bottom of the box. Grid items already stretch; the panel
+              just wasn't passing that height down to the card, so the card sat
+              at content height inside a full-height cell. */}
+          <div className="lg:col-span-7 lg:h-full">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/30 shadow-xl shadow-black/30 backdrop-blur-md">
               {/* Panel chrome */}
-              <div className="flex items-center justify-between border-b border-border px-5 py-3">
+              <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   capability · {String(activeIndex + 1).padStart(2, "0")}/12
                 </span>
@@ -945,16 +1065,20 @@ export function FeatureShowcase() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6, transition: { duration: 0.1, ease: "easeIn" } }}
                   transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                  className="p-5 sm:p-7"
+                  className="flex flex-1 flex-col p-3.5 sm:p-4"
                   role="tabpanel"
                 >
-                  {/* Motif */}
-                  <div
-                    className="rounded-xl border border-border px-4 py-5"
-                    style={{
-                      background: `linear-gradient(160deg, color-mix(in srgb, ${accent} 10%, transparent), transparent)`,
-                    }}
-                  >
+                  {/* Motif. Takes the slack when the panel is stretched to the
+                      list's height — better the illustration breathes than the
+                      copy floats away from its heading. Capped so it can't
+                      balloon the section: on a shorter list it just centers
+                      in the available space instead of filling it.
+                      Gradient fill removed — at up to 140px tall and full
+                      width this was a permanent (not hover-gated) tinted
+                      panel, which read as a navy/blue box rather than the
+                      flat black canvas the rest of the page keeps. The motif
+                      itself still carries every bit of colour. */}
+                  <div className="flex flex-1 max-h-[140px] items-center justify-center rounded-xl border border-border px-4 py-2.5">
                     <ActiveMotif accent={accent} reduced={reduced} />
                   </div>
 
@@ -962,7 +1086,7 @@ export function FeatureShowcase() {
                       a 246px panel leaves it ~186px — about twenty-five
                       characters a line, so the detail paragraph ran ten
                       lines. */}
-                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+                  <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                     <span
                       className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
                       style={{
@@ -984,7 +1108,7 @@ export function FeatureShowcase() {
                     </div>
                   </div>
 
-                  <div className="mt-6 grid gap-4 border-t border-border pt-5 sm:grid-cols-5">
+                  <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-5">
                     {/* Headline stat */}
                     <div className="sm:col-span-2">
                       <p className="font-heading text-2xl font-medium tracking-[-0.025em] text-foreground sm:text-3xl">
@@ -995,7 +1119,7 @@ export function FeatureShowcase() {
                       </p>
                     </div>
                     {/* Supporting points — Inter 400, 14px */}
-                    <ul className="space-y-2 sm:col-span-3">
+                    <ul className="space-y-1.5 sm:col-span-3">
                       {active.points.map((p) => (
                         <li key={p} className="flex items-start gap-2.5 text-sm leading-[1.4] text-muted-foreground">
                           <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accent }} aria-hidden="true" />

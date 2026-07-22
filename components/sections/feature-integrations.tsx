@@ -1,5 +1,13 @@
 "use client"
 
+/**
+ * RETIRED — no longer imported anywhere (2026-07-22). Replaced on
+ * /features by FeatureMap (components/sections/feature-map.tsx), which folds
+ * this section's connector roster into its "Integrations" category instead
+ * of giving connectors their own section. Left in place only because this
+ * session's tools can't delete a file; safe to remove entirely.
+ */
+
 import { useRef } from "react"
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import { Plug, Zap } from "lucide-react"
@@ -163,6 +171,21 @@ function AgentCore({ reduced }: { reduced: boolean | null }) {
   return (
     <div className="relative z-10 flex flex-col items-center">
       <div className="relative">
+        {/* Slow rotating conic glow behind the core — a live halo that turns
+            rather than just pulses. Clipped to a circle by the mask. */}
+        {!reduced && (
+          <span aria-hidden className="pointer-events-none absolute -inset-8 overflow-hidden rounded-full">
+            <span
+              className="spin-slow absolute left-1/2 top-1/2 h-[220%] w-[220%] -translate-x-1/2 -translate-y-1/2"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--features-blue) 22%, transparent) 60deg, transparent 130deg, transparent 230deg, color-mix(in srgb, var(--features-blue-deep) 18%, transparent) 300deg, transparent 360deg)",
+                filter: "blur(8px)",
+              }}
+            />
+          </span>
+        )}
+
         {/* Concentric emitters — three rings on staggered delays so the pulse
             reads as continuous rather than as one ring blinking. */}
         {!reduced &&
@@ -201,25 +224,38 @@ function AgentCore({ reduced }: { reduced: boolean | null }) {
         </div>
       </div>
 
-      {/* Feed line down into the board, with a packet running the length of it */}
+      {/* Feed line between the hub and the board, carrying traffic BOTH ways —
+          a write packet running down (agent → your systems) and a read packet
+          running up (systems → agent), tinted apart. That two-way flow is the
+          literal picture of the "reads & writes" the label claims. */}
       <div className="relative h-10 w-px overflow-hidden">
         <span
           aria-hidden
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, color-mix(in srgb, var(--features-blue) 60%, transparent), transparent)",
+              "linear-gradient(180deg, color-mix(in srgb, var(--features-blue) 55%, transparent), color-mix(in srgb, var(--features-blue) 20%, transparent), color-mix(in srgb, var(--features-blue) 55%, transparent))",
           }}
         />
         {!reduced && (
-          <motion.span
-            aria-hidden
-            className="absolute left-1/2 h-3 w-[3px] -translate-x-1/2 rounded-full"
-            style={{ background: "var(--features-blue)", boxShadow: "0 0 10px var(--features-blue)" }}
-            initial={{ y: -12 }}
-            animate={{ y: 44 }}
-            transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeIn" }}
-          />
+          <>
+            <motion.span
+              aria-hidden
+              className="absolute left-1/2 h-3 w-[3px] -translate-x-1/2 rounded-full"
+              style={{ background: "var(--features-blue)", boxShadow: "0 0 10px var(--features-blue)" }}
+              initial={{ y: -12 }}
+              animate={{ y: 44 }}
+              transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeIn" }}
+            />
+            <motion.span
+              aria-hidden
+              className="absolute left-1/2 h-2.5 w-[3px] -translate-x-1/2 rounded-full"
+              style={{ background: "var(--features-green)", boxShadow: "0 0 10px var(--features-green)" }}
+              initial={{ y: 44 }}
+              animate={{ y: -12 }}
+              transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, repeatDelay: 0.4, ease: "easeOut" }}
+            />
+          </>
         )}
       </div>
     </div>
@@ -244,19 +280,10 @@ export function FeatureIntegrations() {
       className="features-hero-dark relative overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <div
-        aria-hidden
-        className="drift-blob pointer-events-none absolute left-1/2 top-0 h-[26rem] w-[40rem] -translate-x-1/2 rounded-full opacity-40 blur-[140px]"
-        style={{ background: "color-mix(in srgb, var(--features-blue) 28%, transparent)" }}
-      />
-      <div
-        aria-hidden
-        className="drift-blob pointer-events-none absolute -right-24 bottom-0 h-[22rem] w-[22rem] rounded-full opacity-30 blur-[130px]"
-        style={{ background: "color-mix(in srgb, var(--features-green) 24%, transparent)", animationDelay: "-7s" }}
-      />
+      {/* Ambient glows removed — flat black canvas per the /features theme. */}
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 md:py-24">
-        <ScrollReveal className="mx-auto mb-10 max-w-2xl text-center">
+      <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:py-16">
+        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             Integrations
@@ -282,16 +309,36 @@ export function FeatureIntegrations() {
             style={reduced ? undefined : { rotateX, scale, y, willChange: "transform" }}
             className="relative overflow-hidden rounded-3xl border border-border bg-card/40 shadow-2xl shadow-black/40 backdrop-blur-md"
           >
-            {/* Faint engineering grid behind the rails */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-[0.35]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(color-mix(in srgb, var(--features-blue) 8%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--features-blue) 8%, transparent) 1px, transparent 1px)",
-                backgroundSize: "56px 56px",
-              }}
-            />
+            {/* Live sheen — a slow diagonal light sweeping the board every few
+                seconds, so the whole surface reads as active rather than a
+                static frame around the rails. One element, on the compositor. */}
+            {!reduced && (
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 z-0 w-1/4"
+                style={{
+                  skewX: -14,
+                  background:
+                    "linear-gradient(90deg, transparent, color-mix(in srgb, var(--features-blue) 9%, transparent), transparent)",
+                }}
+                initial={{ x: "-40%" }}
+                animate={{ x: "440%" }}
+                transition={{ duration: 4.5, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3.5, ease: "easeInOut" }}
+              />
+            )}
+
+            {/* Top edge light — a bright travelling point along the board's top
+                border, echoing the packet feeding in from the agent hub. */}
+            {!reduced && (
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute top-0 z-10 h-px w-24"
+                style={{ background: "linear-gradient(90deg, transparent, var(--features-blue), transparent)" }}
+                initial={{ left: "-15%" }}
+                animate={{ left: "115%" }}
+                transition={{ duration: 3.2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 1.5, ease: "easeInOut" }}
+              />
+            )}
 
             <div className="relative flex items-center justify-between gap-4 border-b border-border px-4 py-3 sm:px-6">
               <span className="inline-flex items-center gap-2">
@@ -306,7 +353,14 @@ export function FeatureIntegrations() {
               {/* Hidden below sm: at 320px this and the "Live connections"
                   label together need ~342px against 256px available, so both
                   wrapped to two lines inside a one-line-tall header strip. */}
-              <span className="hidden font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/50 sm:inline">
+              <span
+                className="hidden shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] sm:inline-flex"
+                style={{
+                  color: "color-mix(in srgb, var(--features-blue) 85%, white)",
+                  borderColor: "color-mix(in srgb, var(--features-blue) 26%, transparent)",
+                  background: "color-mix(in srgb, var(--features-blue) 8%, transparent)",
+                }}
+              >
                 {TOTAL} native · ∞ via webhook
               </span>
             </div>
@@ -315,13 +369,23 @@ export function FeatureIntegrations() {
               {RAILS.map((rail, i) => (
                 <div key={rail.kind} className="flex items-center gap-4">
                   {/* Category gutter — desktop only; on a phone the chips
-                      already carry their own category label. */}
-                  <span className="hidden w-40 shrink-0 items-center gap-2 pl-6 lg:flex">
+                      already carry their own category label. Labelled in the
+                      rail's own accent with a short lead line, so the four
+                      groups colour-code at a glance. */}
+                  <span className="hidden w-40 shrink-0 items-center gap-2.5 pl-6 lg:flex">
                     <span
-                      className="h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: KIND_ACCENT[rail.kind] }}
+                      aria-hidden
+                      className="h-px w-4 shrink-0"
+                      style={{ background: `linear-gradient(90deg, transparent, ${KIND_ACCENT[rail.kind]})` }}
                     />
-                    <span className="font-mono text-[10px] uppercase leading-tight tracking-[0.14em] text-muted-foreground/60">
+                    <span
+                      className="pulse-ring relative h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{ color: KIND_ACCENT[rail.kind], background: KIND_ACCENT[rail.kind] }}
+                    />
+                    <span
+                      className="font-mono text-[10px] uppercase leading-tight tracking-[0.14em]"
+                      style={{ color: `color-mix(in srgb, ${KIND_ACCENT[rail.kind]} 70%, white)` }}
+                    >
                       {rail.label}
                     </span>
                   </span>

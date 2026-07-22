@@ -17,44 +17,64 @@
  * The .dark class is left in place (harmless) in case a toggle gets wired
  * up later, but it no longer needs its own set of overrides.
  */
+/*
+ * Neutrals are a true-black ladder, not navy. Measured off rozper.com, which
+ * is the reference: body #000, elevated surfaces stepping 0d → 17 → 1c, and
+ * hairlines at rgba(255,255,255,0.11) rather than a tinted border colour.
+ *
+ * The blues are untouched — they still come from the Vozpar logo. Black is
+ * the canvas; the brand lives in the accents, and on #000 they read brighter
+ * than they did on navy, which is the point.
+ */
 :root {
-  --background: #0b1220;
+  --background: #000000;
   --foreground: #ffffff;
-  --card: #111b2d;
+  --card: #0d0d0d;
   --card-foreground: #ffffff;
-  --popover: #111b2d;
+  --popover: #0d0d0d;
   --popover-foreground: #ffffff;
 
-  /* Vozpar swoosh blue — primary brand color */
-  --primary: #1e6fd6;
+  /* Primary blue, measured off rozper.com (#046BD2, its dominant accent). A
+     touch deeper and more saturated than the old Vozpar swoosh #1e6fd6, which
+     is what gives the black-and-blue theme its harder edge. */
+  --primary: #046bd2;
   --primary-foreground: #ffffff;
 
-  --secondary: #111b2d; /* elevated navy surface, used for callouts/cards */
+  --secondary: #0d0d0d; /* elevated surface, used for callouts/cards */
   --secondary-foreground: #ffffff;
   --muted: #ffffff0d;
-  --muted-foreground: #ccd6df;
+  /* Neutral, and deliberately not darker. The old #ccd6df carried a blue cast
+     that reads as dirt against black — but the codebase leans hard on opacity
+     variants of this token for 8–11px mono labels, and at that size they're
+     body text for contrast purposes (4.5:1, not 3:1). At #a1a1a1 the /70
+     variant lands at 4.30:1 and /60 at 3.39:1, both failing. #b0b0b0 puts /70
+     over 5:1. */
+  --muted-foreground: #b0b0b0;
 
-  --accent: #2f8fe0;
-  --accent-foreground: #0b1220;
+  /* Brighter blue for hovers, glows and gradient ends (rozper #2D98F1). */
+  --accent: #2d98f1;
+  --accent-foreground: #000000;
 
   /* Vozpar bar-chart crimson, reused for error/destructive states */
   --destructive: #d92b34;
   --destructive-foreground: #ffffff;
-  --border: #1a2638;
+  /* rgba(255,255,255,0.11) flattened over #000. Kept opaque so it composites
+     identically on every surface in the ladder instead of drifting with
+     whatever sits behind it. */
+  --border: #1c1c1c;
   --input: #ffffff12;
-  --ring: #1e6fd6;
+  --ring: #046bd2;
 
-  /* Chart colors pull straight from the logo's bar-chart accents so the
-     admin dashboard's revenue/traffic charts feel on-brand rather than
-     an arbitrary blue gradient. */
-  --chart-1: #1e6fd6; /* swoosh blue */
+  /* Chart colors. The two blues track the primary/accent; green/amber/crimson
+     stay as the bar-chart accent trio. */
+  --chart-1: #046bd2; /* primary blue */
   --chart-2: #1f9d55; /* growth green */
   --chart-3: #d92b34; /* crimson */
   --chart-4: #f2a71b; /* amber */
-  --chart-5: #2f8fe0; /* bright blue */
+  --chart-5: #2d98f1; /* bright blue */
 
-  /* Brand-family extras — the logo's green/amber/blue accent trio for badges */
-  --ai-cyan: #2f8fe0;
+  /* Brand-family extras */
+  --ai-cyan: #2d98f1;
   --ai-violet: #f2a71b;
   --ai-magenta: #1f9d55;
   --ai-mint: #1f9d55;
@@ -62,12 +82,15 @@
   /* /features accents — aliases onto the brand tokens above rather than a
      second, hand-tuned palette, so the page can never drift from the brand
      reference. Names kept for the components that already consume them. */
-  --features-blue: var(--accent);        /* #2F8FE0 bright blue */
-  --features-blue-deep: var(--primary);  /* #1E6FD6 swoosh blue */
-  --features-navy: #123170;              /* deep navy — gradient base only */
+  --features-blue: var(--accent);        /* #2D98F1 bright blue */
+  --features-blue-deep: var(--primary);  /* #046BD2 primary blue */
+  /* Gradient base only, mixed at 45–70% behind the hero card. On the navy
+     canvas this was the darker end of the same family; on black it's the one
+     place a blue tint is still wanted, so it stays. */
+  --features-navy: #0e2246;
   --features-green: var(--chart-2);      /* #1F9D55 growth green */
   --features-amber: var(--chart-4);      /* #F2A71B amber */
-  --features-hero-bg: var(--background); /* #0B1220 */
+  --features-hero-bg: var(--background); /* #000000 */
   /* Light mid-stop for .text-aurora-blue. Kept because that gradient still
      interpolates through it — and an undefined var() with no fallback
      invalidates the entire `background` declaration at computed-value time,
@@ -77,14 +100,14 @@
   --features-ink: var(--foreground);     /* #FFFFFF */
 
   --radius: 1rem;
-  --sidebar: #111b2d;
+  --sidebar: #0d0d0d;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #1e6fd6;
+  --sidebar-primary: #046bd2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #16233a;
+  --sidebar-accent: #171717;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #1a2638;
-  --sidebar-ring: #1e6fd6;
+  --sidebar-border: #1c1c1c;
+  --sidebar-ring: #046bd2;
   --button-ripple-color: rgba(255, 255, 255, 0.35);
 }
 
@@ -204,6 +227,24 @@
   animation: drift-blob 18s ease-in-out infinite;
 }
 
+/* FeatureJourney's auto-advance indicator — width 0→100% over one stage's
+   dwell time, duration set per-use via the `animationDuration` inline style
+   since it has to match the JS timer exactly. */
+@keyframes journey-progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+.journey-progress-fill {
+  width: 0%;
+  animation-name: journey-progress-fill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee,
   .marquee-reverse,
@@ -215,6 +256,7 @@
   .pulse-ring::before,
   .voice-bar,
   .dot-float,
+  .journey-progress-fill,
   .scan-line::after {
     animation: none !important;
   }
@@ -230,11 +272,11 @@
      amber, and crimson, echoing the bar-chart accent colors. */
   background: linear-gradient(
     100deg,
-    #1e6fd6 0%,
+    #046bd2 0%,
     #1f9d55 25%,
     #f2a71b 55%,
     #d92b34 80%,
-    #1e6fd6 100%
+    #046bd2 100%
   );
   -webkit-background-clip: text;
           background-clip: text;
@@ -301,7 +343,7 @@
   left: 0;
   right: 0;
   height: 30%;
-  background: linear-gradient(180deg, transparent, rgba(30, 111, 214, 0.08), transparent);
+  background: linear-gradient(180deg, transparent, rgba(4, 107, 210, 0.08), transparent);
   animation: scan-y 6s linear infinite;
 }
 
@@ -320,18 +362,46 @@
   }
   html {
     scroll-behavior: smooth;
+    /* Firefox scrollbar — thin, blue thumb on a black track. The WebKit
+       equivalent is the ::-webkit-scrollbar block below. Both are here rather
+       than on `*` so the internal scroll containers that opt out with
+       `[scrollbar-width:none]` (the transcript, the tab rail) keep their
+       hidden bars. */
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--primary) 60%, #1c1c1c) transparent;
   }
   body {
     @apply bg-background text-foreground;
-    /* Ambient carrier-blue glow over the navy canvas */
-    background-image:
-      radial-gradient(ellipse 80% 55% at 50% -10%, rgba(30, 111, 214, 0.16), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 100% 25%, rgba(47, 143, 224, 0.08), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 0% 70%, rgba(59, 130, 246, 0.09), transparent 60%);
-    background-repeat: no-repeat;
+    /* Pure black. The ambient blue glow that used to live here was removed on
+       request — the canvas is flat #000, and any blue now comes only from the
+       elements on top of it, not the page itself. */
   }
+
+  /* WebKit / Blink scrollbar. A slim rounded blue thumb, inset from the edge
+     by a transparent border so it reads as a floating pill, brightening to the
+     full primary on hover. */
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    background-color: color-mix(in srgb, var(--primary) 45%, #1c1c1c);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--primary) 75%, #1c1c1c);
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
   ::selection {
-    background: rgba(30, 111, 214, 0.32);
+    background: rgba(4, 107, 210, 0.36);
     color: #ffffff;
   }
 }
@@ -358,9 +428,9 @@
     border-radius: inherit;
     background: linear-gradient(
       140deg,
-      rgba(30, 111, 214, 0.7) 0%,
-      rgba(47, 143, 224, 0.55) 35%,
-      rgba(59, 130, 246, 0.55) 65%,
+      rgba(4, 107, 210, 0.7) 0%,
+      rgba(45, 152, 241, 0.55) 35%,
+      rgba(45, 152, 241, 0.55) 65%,
       rgba(255, 255, 255, 0.06) 90%
     );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -372,13 +442,13 @@
   /* Glow shadows */
   .glow-primary {
     box-shadow:
-      0 0 0 1px rgba(30, 111, 214, 0.2),
-      0 10px 40px -8px rgba(30, 111, 214, 0.5);
+      0 0 0 1px rgba(4, 107, 210, 0.2),
+      0 10px 40px -8px rgba(4, 107, 210, 0.5);
   }
   .glow-accent {
     box-shadow:
-      0 0 0 1px rgba(47, 143, 224, 0.2),
-      0 10px 40px -8px rgba(47, 143, 224, 0.5);
+      0 0 0 1px rgba(45, 152, 241, 0.2),
+      0 10px 40px -8px rgba(45, 152, 241, 0.5);
   }
 
   /* Spotlight hover halo */
@@ -393,7 +463,7 @@
     border-radius: inherit;
     background: radial-gradient(
       400px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(30, 111, 214, 0.2),
+      rgba(4, 107, 210, 0.2),
       transparent 40%
     );
     opacity: 0;
@@ -402,47 +472,45 @@
   }
   .spotlight:hover::after { opacity: 1; }
 
-  /* Grid background — faint lines on navy canvas */
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 56px 56px;
-  }
-
-  /* Dotted background — faint dots on navy canvas */
+  /* Grid and dot backgrounds — neutralised on request. The classes are kept so
+     the markup that references them still resolves, but they paint nothing:
+     the theme is a flat-black canvas with no lined or dotted texture. */
+  .bg-grid,
   .bg-dots {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
-    background-size: 22px 22px;
+    background-image: none;
   }
 
   /* Carrier-blue mesh: layered radial + conic gradients hinting at "network" */
   .bg-neural {
     background:
-      radial-gradient(ellipse 40% 30% at 20% 30%, rgba(30, 111, 214, 0.18), transparent 60%),
-      radial-gradient(ellipse 35% 30% at 80% 20%, rgba(47, 143, 224, 0.14), transparent 60%),
-      radial-gradient(ellipse 40% 35% at 65% 80%, rgba(59, 130, 246, 0.16), transparent 60%),
+      radial-gradient(ellipse 40% 30% at 20% 30%, rgba(4, 107, 210, 0.18), transparent 60%),
+      radial-gradient(ellipse 35% 30% at 80% 20%, rgba(45, 152, 241, 0.14), transparent 60%),
+      radial-gradient(ellipse 40% 35% at 65% 80%, rgba(45, 152, 241, 0.16), transparent 60%),
       conic-gradient(from 90deg at 50% 50%,
-        rgba(30, 111, 214, 0.05),
-        rgba(47, 143, 224, 0.05),
-        rgba(59, 130, 246, 0.05),
-        rgba(30, 111, 214, 0.05));
+        rgba(4, 107, 210, 0.05),
+        rgba(45, 152, 241, 0.05),
+        rgba(45, 152, 241, 0.05),
+        rgba(4, 107, 210, 0.05));
     filter: blur(0.5px);
   }
 
-  /* Glassy card with gradient border on hover */
+  /* Glassy card with gradient border on hover.
+     White-alpha, not a colour: the old rgba(17,27,45)/rgba(11,18,32) pair was
+     the retired navy palette baked in literally, so on the black canvas every
+     card using this — and there are around eighteen — became a navy island.
+     An alpha ramp lifts off whatever surface it sits on instead. */
   .card-glow {
-    background: linear-gradient(180deg, rgba(17, 27, 45, 0.7), rgba(11, 18, 32, 0.45));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
   .card-glow:hover {
-    border-color: rgba(30, 111, 214, 0.5);
+    border-color: rgba(4, 107, 210, 0.5);
     box-shadow:
-      0 0 0 1px rgba(30, 111, 214, 0.16),
-      0 22px 60px -20px rgba(30, 111, 214, 0.4),
-      0 0 80px -30px rgba(47, 143, 224, 0.3);
+      0 0 0 1px rgba(4, 107, 210, 0.16),
+      0 22px 60px -20px rgba(4, 107, 210, 0.4),
+      0 0 80px -30px rgba(45, 152, 241, 0.3);
   }
 
   /* Tag — small status pill (swoosh blue, matches the logo's primary blue) */
@@ -456,8 +524,8 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #7dd3fc;
-    background: linear-gradient(180deg, rgba(47, 143, 224, 0.14), rgba(47, 143, 224, 0.05));
-    border: 1px solid rgba(47, 143, 224, 0.35);
+    background: linear-gradient(180deg, rgba(45, 152, 241, 0.14), rgba(45, 152, 241, 0.05));
+    border: 1px solid rgba(45, 152, 241, 0.35);
     border-radius: 9999px;
   }
 
@@ -522,17 +590,17 @@
   /* Fancy gradient solid button background — mirrors the logo's own
      navy-to-bright-blue swoosh gradient */
   .btn-ai {
-    background: linear-gradient(135deg, #123170 0%, #1e6fd6 55%, #2f8fe0 100%);
+    background: linear-gradient(135deg, var(--features-navy) 0%, #046bd2 55%, #2d98f1 100%);
     color: #ffffff;
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-      0 8px 30px -8px rgba(30, 111, 214, 0.5);
+      0 8px 30px -8px rgba(4, 107, 210, 0.5);
   }
   .btn-ai:hover {
     filter: brightness(1.08);
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-      0 14px 40px -8px rgba(30, 111, 214, 0.65);
+      0 14px 40px -8px rgba(4, 107, 210, 0.65);
   }
 }
 
