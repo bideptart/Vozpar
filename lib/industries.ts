@@ -31,15 +31,15 @@ export const INDUSTRIES: Industry[] = [
     name: "Real estate",
     icon: Home,
     short:
-      "Qualify buyer & seller leads 24/7, book showings on your calendar, and follow up the moment a listing gets a hit.",
+      "Qualifies every buyer and seller lead around the clock, books showings straight onto your calendar, and follows up the instant a listing gets a hit.",
     pitch:
-      "Most leads die because no one picks up in the first five minutes. 9278.ai answers every inbound call instantly, qualifies buyers and sellers, and books showings directly on your calendar — so you walk into every conversation with context, not voicemail.",
+      "Most leads go cold in the first five minutes — on hold, or leaving a voicemail nobody returns. 9278.ai answers instantly, qualifies buyers and sellers with the same discipline as your best agent, and books the showing directly on your calendar, so every conversation you join starts with context instead of a cold callback.",
     jobs: [
-      "Answer Zillow, Redfin and website leads in under 3 seconds",
-      "Qualify budget, timeline, financing, and motivation",
-      "Book and reschedule showings on your team calendar",
-      "Send listing follow-ups by SMS and email",
-      "Hand warm buyers off to your top agent live on the call",
+      "Answers Zillow, Redfin, and website leads in under three seconds",
+      "Qualifies budget, timeline, financing, and motivation before you pick up",
+      "Books and reschedules showings directly on your team calendar",
+      "Sends listing follow-ups by SMS and email, automatically",
+      "Hands warm buyers to your top agent live, mid-call",
     ],
     sampleLines: [
       "Hi! I saw you just inquired about the colonial on Maple — are you working with an agent yet?",
@@ -52,15 +52,15 @@ export const INDUSTRIES: Industry[] = [
     name: "Dental practices",
     icon: Stethoscope,
     short:
-      "Confirm appointments, fill last-minute cancellations, and answer insurance & treatment questions without tying up the front desk.",
+      "Confirms appointments, fills last-minute cancellations, and answers insurance and treatment questions — without pulling the front desk off the patient in the chair.",
     pitch:
-      "Front desks miss 20–40% of inbound calls during lunch and after hours. 9278.ai picks up every one — confirms cleanings, reschedules cancellations, answers insurance questions, and only routes the genuine emergencies to your team.",
+      "Front desks miss a fifth to nearly half of inbound calls during lunch and after hours. 9278.ai picks up every one: confirms cleanings, refills cancellations from your waitlist, answers insurance questions with precision, and routes only the genuine emergencies to your team.",
     jobs: [
-      "Confirm and reschedule cleanings, hygiene, and ortho visits",
-      "Fill last-minute openings from your cancellation list",
-      "Verify benefits and explain estimated patient cost",
-      "Triage emergencies (toothache, broken crown) and warm-transfer",
-      "Send pre-visit instructions and intake forms automatically",
+      "Confirms and reschedules cleanings, hygiene, and ortho visits",
+      "Fills last-minute openings straight from your cancellation list",
+      "Verifies benefits and explains estimated patient cost",
+      "Triages emergencies — toothache, broken crown — and warm-transfers",
+      "Sends pre-visit instructions and intake forms automatically",
     ],
     sampleLines: [
       "Hi Mrs. Patel, this is the office at Sunrise Dental confirming your cleaning tomorrow at 2:30. Reply 1 to confirm or 2 to reschedule.",
@@ -72,15 +72,16 @@ export const INDUSTRIES: Industry[] = [
     slug: "healthcare",
     name: "Healthcare clinics",
     icon: HeartPulse,
-    short: "Patient intake, prescription refills, and reminder calls with a calm, HIPAA-aware bedside tone.",
+    short:
+      "Handles patient intake, prescription refills, and reminder calls with a calm, HIPAA-aware bedside tone your patients won't distinguish from a person.",
     pitch:
-      "Health systems are drowning in repetitive phone work. 9278.ai automates intake, refill requests, post-visit follow-ups, and benefits questions — with a warm, paced bedside tone that elderly and ESL patients actually respond to.",
+      "Health systems are buried in repetitive phone work. 9278.ai automates intake, refill requests, post-visit follow-ups, and benefits questions with a warm, unhurried bedside tone that elderly and ESL patients genuinely respond to.",
     jobs: [
-      "New patient intake and demographic capture",
-      "Prescription refill requests routed to pharmacy",
-      "Post-discharge follow-up and symptom tracking",
-      "Appointment reminders with re-confirmation flow",
-      "Benefits and copay explanations",
+      "Captures new-patient intake and demographic details",
+      "Routes prescription refill requests to the pharmacy",
+      "Runs post-discharge follow-up and symptom tracking",
+      "Confirms appointments with a built-in re-confirmation flow",
+      "Explains benefits and copay details clearly, every time",
     ],
     sampleLines: [
       "Just checking in — on a scale of 0 to 10, how is your pain today compared to right after surgery?",
@@ -93,15 +94,15 @@ export const INDUSTRIES: Industry[] = [
     name: "Home services",
     icon: Wrench,
     short:
-      "Capture every after-hours service request, dispatch the right tech, and never lose a job to a slow callback again.",
+      "Captures every after-hours service request, dispatches the right technician, and makes sure a slow callback never costs you the job again.",
     pitch:
-      "HVAC, plumbing, electrical and roofing contractors live and die by callback speed. 9278.ai answers every after-hours and weekend call, captures the job details, surge-prices emergencies, and books the right technician on your dispatch board.",
+      "HVAC, plumbing, electrical, and roofing contractors live and die by callback speed. 9278.ai answers every after-hours and weekend call, captures the job details, prices emergencies correctly, and books the right technician straight onto your dispatch board.",
     jobs: [
-      "After-hours emergency intake (no AC, no heat, water leak)",
-      "Same-day vs scheduled job triage",
-      "Direct booking on ServiceTitan, Housecall Pro, and Jobber",
-      "Quote ranges based on job type and zip code",
-      "Estimate-day reminders and arrival-window updates",
+      "Handles after-hours emergency intake — no AC, no heat, water leak",
+      "Triages same-day versus scheduled work",
+      "Books directly into ServiceTitan, Housecall Pro, and Jobber",
+      "Quotes accurate price ranges by job type and zip code",
+      "Sends estimate-day reminders and arrival-window updates",
     ],
     sampleLines: [
       "Got it — no cold air, started this afternoon, and you've got a 2-year-old at home. I'm marking this priority.",
@@ -114,15 +115,15 @@ export const INDUSTRIES: Industry[] = [
     name: "Restaurants",
     icon: UtensilsCrossed,
     short:
-      "Take reservations, confirm large parties, answer hours and menu questions — fluently, in any accent.",
+      "Takes reservations, confirms large parties, and answers hours and menu questions fluently — in any accent your guests speak.",
     pitch:
-      "Phones during dinner rush are a tax on your hosts. 9278.ai handles reservations, confirms large parties, answers hours and menu questions, and routes catering inquiries — so the host stand can focus on the room.",
+      "Phones during dinner rush are a tax on your host stand. 9278.ai handles reservations, confirms large parties, answers hours and menu questions, and routes catering inquiries — so your hosts can stay focused on the room, not the receiver.",
     jobs: [
-      "Reservation booking and modification on OpenTable / Resy",
-      "Large-party and private-event qualification",
-      "Hours, parking, and dress-code questions",
-      "Allergen and dietary inquiries with menu lookups",
-      "Catering and gift-card lead capture",
+      "Books and modifies reservations on OpenTable and Resy",
+      "Qualifies large-party and private-event requests",
+      "Answers hours, parking, and dress-code questions",
+      "Handles allergen and dietary inquiries with live menu lookups",
+      "Captures catering and gift-card leads",
     ],
     sampleLines: [
       "We have a 4-top open Friday at 7:30 or 8:45 — which would you like?",
@@ -135,15 +136,15 @@ export const INDUSTRIES: Industry[] = [
     name: "Automotive",
     icon: Car,
     short:
-      "Schedule service, follow up on test drives, and keep the BDC ringing 24 hours a day across every dealership.",
+      "Books service, follows up on every test drive, and keeps the BDC lines open around the clock, across every rooftop you run.",
     pitch:
-      "Dealerships still lose deals overnight. 9278.ai handles service scheduling, test-drive follow-ups, parts inquiries, and trade-in questions — for a single rooftop or a multi-state dealer group on one platform.",
+      "Dealerships still lose deals overnight. 9278.ai handles service scheduling, test-drive follow-ups, parts inquiries, and trade-in questions — for a single rooftop or a multi-state dealer group, on one platform.",
     jobs: [
-      "Service appointment booking by VIN and mileage",
-      "Test-drive follow-up and credit pre-qual",
-      "Parts and warranty inquiries",
-      "Trade-in valuation lead capture",
-      "Loaner-vehicle dispatch coordination",
+      "Books service appointments by VIN and mileage",
+      "Follows up on test drives with credit pre-qualification",
+      "Answers parts and warranty inquiries",
+      "Captures trade-in valuation leads",
+      "Coordinates loaner-vehicle dispatch",
     ],
     sampleLines: [
       "Looks like your 2022 Outback is due for the 30k service. I have Thursday at 8 or Friday at 10:30 — which works?",
@@ -156,15 +157,15 @@ export const INDUSTRIES: Industry[] = [
     name: "Legal",
     icon: Scale,
     short:
-      "Intake new clients, qualify cases by jurisdiction and statute of limitations, and book consults — without a paralegal stuck on the phone.",
+      "Screens new clients, qualifies cases by jurisdiction and statute of limitations, and books consults — without a paralegal chained to the phone.",
     pitch:
-      "Personal-injury, immigration and family-law firms live on lead intake. 9278.ai screens every inbound call against your conflict and qualification rules, captures the facts your attorneys actually need, and books a paid consult before the lead shops you.",
+      "Personal-injury, immigration, and family-law firms live or die on lead intake. 9278.ai screens every inbound call against your conflict and qualification rules, captures the facts your attorneys actually need, and books a paid consult before the lead shops your competitor.",
     jobs: [
-      "Practice-area routing and conflict checks",
-      "Statute-of-limitations and jurisdiction screening",
-      "Paid-consult booking with payment capture",
-      "Document-collection reminders pre-consult",
-      "Spanish-language intake out of the box",
+      "Routes by practice area and runs conflict checks",
+      "Screens statute-of-limitations and jurisdiction fit",
+      "Books paid consults with payment capture",
+      "Sends pre-consult document-collection reminders",
+      "Handles Spanish-language intake out of the box",
     ],
     sampleLines: [
       "I'm sorry to hear about the accident. Was a police report filed, and were you treated at a hospital?",
@@ -177,15 +178,15 @@ export const INDUSTRIES: Industry[] = [
     name: "Education",
     icon: GraduationCap,
     short:
-      "Admissions intake, financial-aid follow-ups, and student-success calls without burning out enrollment counselors.",
+      "Runs admissions intake, financial-aid follow-ups, and student-success calls — without burning out your enrollment counselors.",
     pitch:
-      "Higher-ed and trade schools call hundreds of inquiries every day. 9278.ai handles first-touch outreach, financial-aid document chasing, and re-enrollment campaigns — so counselors only talk to leads who are actually ready.",
+      "Higher-ed and trade schools field hundreds of inquiries a day. 9278.ai handles first-touch outreach, chases financial-aid documents, and runs re-enrollment campaigns, so your counselors only talk to leads who are genuinely ready.",
     jobs: [
-      "Inquiry-form follow-up within 60 seconds",
-      "Application status checks and document chasing",
-      "Financial-aid Q&A and FAFSA reminders",
-      "Class-start reminders and orientation booking",
-      "At-risk student check-ins between terms",
+      "Follows up on inquiry forms within 60 seconds",
+      "Checks application status and chases missing documents",
+      "Answers financial-aid questions and sends FAFSA reminders",
+      "Sends class-start reminders and books orientation",
+      "Runs at-risk student check-ins between terms",
     ],
     sampleLines: [
       "Hi Marcus — I saw you started an application for the medical-assisting program. Want me to walk you through next steps?",
@@ -198,15 +199,15 @@ export const INDUSTRIES: Industry[] = [
     name: "E-commerce",
     icon: ShoppingBag,
     short:
-      "Order status, returns, fitting and sizing — handled 24/7 in any language, with a tone that matches your brand.",
+      "Handles order status, returns, and sizing questions 24/7 in any language, in a tone that matches your brand.",
     pitch:
-      "DTC brands hit support volume spikes the moment they hit a marketing milestone. 9278.ai absorbs the surge — order status, returns, sizing, and post-purchase upsells — and only escalates the genuinely angry customers to a human.",
+      "DTC brands hit support volume spikes the moment a campaign takes off. 9278.ai absorbs the surge — order status, returns, sizing, and post-purchase upsells — and escalates only the genuinely upset customers to a human.",
     jobs: [
-      "Order status and tracking updates",
-      "Returns, exchanges, and warranty intake",
-      "Sizing, fit, and product-recommendation Q&A",
-      "Upsell and replenishment follow-up calls",
-      "Win-back campaigns for lapsed customers",
+      "Provides order status and tracking updates",
+      "Handles returns, exchanges, and warranty intake",
+      "Answers sizing, fit, and product-recommendation questions",
+      "Runs upsell and replenishment follow-up calls",
+      "Executes win-back campaigns for lapsed customers",
     ],
     sampleLines: [
       "Looks like your order shipped Monday and is out for delivery today before 6pm.",
@@ -218,15 +219,16 @@ export const INDUSTRIES: Industry[] = [
     slug: "fitness",
     name: "Fitness & wellness",
     icon: Dumbbell,
-    short: "Class bookings, membership upsells, and no-show recovery for studios and gyms — without a front-desk human.",
+    short:
+      "Books classes, recovers no-shows, and sells memberships for studios and gyms — without a front-desk human on every call.",
     pitch:
-      "Boutique gyms, yoga studios and PT clinics fill classes by phone and SMS. 9278.ai books classes, recovers no-shows, sells memberships, and re-engages lapsed members — at a fraction of the cost of an answering service.",
+      "Boutique gyms, yoga studios, and PT clinics fill classes by phone and text. 9278.ai books classes, recovers no-shows within minutes, sells memberships, and re-engages lapsed members, at a fraction of the cost of an answering service.",
     jobs: [
-      "Class and trainer booking on Mindbody, Mariana Tek, ClubReady",
-      "Membership freeze, cancel, and upgrade requests",
-      "No-show recovery within minutes of class end",
-      "Trial-to-member upsell calls",
-      "Win-back to lapsed members at month-end",
+      "Books classes and trainers on Mindbody, Mariana Tek, and ClubReady",
+      "Handles membership freeze, cancel, and upgrade requests",
+      "Recovers no-shows within minutes of class ending",
+      "Runs trial-to-member upsell calls",
+      "Wins back lapsed members at month-end",
     ],
     sampleLines: [
       "Hey Sam — saw you missed the 6am class. Want me to grab you the 5pm spot tonight?",
