@@ -64,7 +64,7 @@ function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) 
 
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#0b1220] text-slate-300">
+    <footer className="relative overflow-hidden border-t border-white/10 bg-black text-slate-300">
       {/* ambient glow */}
       <div
         aria-hidden

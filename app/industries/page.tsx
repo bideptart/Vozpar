@@ -1,16 +1,25 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { industriesBody } from "@/lib/industries-fonts"
+import { headingType, bodyType, monoStyle } from "@/lib/industries-typography"
 import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
-import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
-import { IndustryRow } from "@/components/industries/industry-row"
+import { IndustryShowcase } from "@/components/industries/industry-showcase"
 import { Industries } from "@/components/sections/industries"
-import { INDUSTRIES } from "@/lib/industries"
+import {
+  FloatingAccents,
+  ParticleField,
+  AmbientWaveform,
+  PulsingDot,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
+import { IndustryMarquee } from "@/components/industries/industry-marquee"
+import { StatStrip } from "@/components/industries/stat-strip"
+import { IndustryCTA } from "@/components/industries/industry-cta"
+import { ScrollProgressBar } from "@/components/industries/scroll-progress"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
-import { RelatedLinks } from "@/components/seo/related-links"
+import { RelatedGuides } from "@/components/industries/related-guides"
+import { IndustryFooter } from "@/components/industries/industry-footer"
 
 export const metadata: Metadata = pageSeo({
   title: "Industries we power",
@@ -21,7 +30,8 @@ export const metadata: Metadata = pageSeo({
 
 export default function IndustriesPage() {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className={`min-h-dvh bg-black text-foreground ${industriesBody.className}`}>
+      <ScrollProgressBar />
       <SiteHeader />
 
       <BreadcrumbJsonLd
@@ -31,80 +41,38 @@ export default function IndustriesPage() {
         ]}
       />
 
-      <section className="relative overflow-hidden border-b border-border/50">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
-        />
+      <section className="relative overflow-hidden border-b border-border/50 bg-black">
+        <FloatingAccents />
+        <ParticleField />
+        <AmbientWaveform />
+        <FloatingIconBadges />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-20 md:px-6 md:py-28">
           <ScrollReveal className="mx-auto max-w-3xl text-center">
-            <span className="ai-pill-magenta">
-              <span className="h-1 w-1 rounded-full bg-accent" />
+            <span className="ai-pill-cyan" style={monoStyle.sectionTag}>
+              <PulsingDot />
               Industries
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl">
-              Built for every kind of <span className="text-primary">phone call.</span>
+            <h1 className={`mt-6 text-balance ${headingType.h1}`}>
+              An AI voice agent fluent in <span className="text-primary">your industry.</span>
             </h1>
-            <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              Pre-tuned scripts, integrations, and compliance guardrails for ten industries — and a configurable engine
-              for everything else. Pick the workflow closest to yours and we&apos;ll have you live in under 5 minutes.
+            <p className={`mt-5 text-pretty text-muted-foreground ${bodyType.intro}`}>
+              Ten pre-tuned playbooks, each shipped with the scripts, integrations, and compliance guardrails your
+              business already runs on. Find the closest match below and go live in under 5 minutes.
             </p>
           </ScrollReveal>
 
-          <ScrollReveal className="mt-10 flex flex-wrap justify-center gap-2">
-            {INDUSTRIES.map((i) => (
-              <Link
-                key={i.slug}
-                href={`/industries/${i.slug}`}
-                className="group inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/30 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
-              >
-                <i.icon className="size-3.5 text-primary" aria-hidden />
-                {i.name}
-              </Link>
-            ))}
-          </ScrollReveal>
+          <IndustryMarquee />
+          <StatStrip />
         </div>
       </section>
 
       <Industries showHeader={false} />
 
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
-        {INDUSTRIES.map((industry, i) => (
-          <IndustryRow key={industry.slug} slug={industry.slug} reverse={i % 2 === 1} />
-        ))}
-      </div>
+      <IndustryShowcase />
 
-      <section className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
-        <ScrollReveal className="rounded-2xl border border-border/60 bg-card/30 px-6 py-12 md:px-12 md:py-14">
-          <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="max-w-xl">
-              <h3 className="text-balance text-2xl font-semibold tracking-tight md:text-3xl">
-                Don&apos;t see your industry?
-              </h3>
-              <p className="mt-3 text-muted-foreground">
-                We&apos;ve deployed agents in security, recruiting, property management, insurance, finance, and more.
-                Tell us what calls eat your day and we&apos;ll have a prototype in 48 hours.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                <Link href="/get-started">
-                  Get started <ArrowRight className="ml-1 size-4" aria-hidden />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/pricing">View pricing</Link>
-              </Button>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
+      <IndustryCTA />
 
-      <RelatedLinks
+      <RelatedGuides
         heading="Related guides"
         description="Explore pricing, FAQs, and the get-started flow used by thousands of teams."
         links={[
@@ -126,7 +94,7 @@ export default function IndustriesPage() {
         ]}
       />
 
-      <SiteFooter />
+      <IndustryFooter />
     </main>
   )
 }
