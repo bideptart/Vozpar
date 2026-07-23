@@ -360,7 +360,7 @@ export function IndustryShowcase() {
             "more here" rather than "the row ends here") plus a one-time
             animated hint chip that fades out the moment the user taps or
             scrolls anything themselves. */}
-        {isMobile && !paused && (
+        {!paused && (
           <div className="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/60 md:hidden">
             <motion.span
               aria-hidden
@@ -385,9 +385,9 @@ export function IndustryShowcase() {
             }}
             className={cn(
               "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-              isMobile && "[mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)]",
+              "[mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] md:[mask-image:none]",
+              "overflow-x-auto md:overflow-x-visible"
             )}
-            style={{ overflowX: isMobile ? "auto" : "visible" }}
           >
             <StaggerGroup
               className="flex h-[360px] gap-2 snap-x snap-mandatory sm:h-[400px] md:h-[480px] md:snap-none md:gap-3"
@@ -400,16 +400,12 @@ export function IndustryShowcase() {
                     itemRefs.current[i] = el
                   }}
                   variants={itemVariants}
-                  className="flex h-full snap-start transition-[flex] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-                  style={{
-                    flex: isMobile
-                      ? active === i
-                        ? "0 0 min(300px, 82vw)"
-                        : "0 0 64px"
-                      : active === i
-                        ? "4.5 4.5 0%"
-                        : "1 1 0%",
-                  }}
+                  className={cn(
+                    "flex h-full snap-start transition-[flex] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    active === i
+                      ? "flex-[0_0_min(300px,82vw)] md:flex-[4.5_4.5_0%]"
+                      : "flex-[0_0_64px] md:flex-[1_1_0%]"
+                  )}
                   onMouseEnter={() => {
                     if (!isMobile) setActive(i)
                   }}
