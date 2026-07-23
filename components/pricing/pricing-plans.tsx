@@ -1,14 +1,9 @@
 "use client"
 
-// Marketing /pricing plan grid. Fetches the SAME live plans the get-started
-// signup widget uses (https://voice.9278.ai/api/plans), so any pricing update
-// in the portal is reflected here automatically. Each card deep-links into
-// /get-started?plan=<id>&cycle=<cycle>, where checkout is completed.
-
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useRef } from "react"
 import Link from "next/link"
 import { Check, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -31,6 +26,89 @@ type Plan = {
 
 const usd = (n: number) =>
   "$" + Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })
+
+function PricingTiltCard({
+  children,
+  featured,
+}: {
+  children: React.ReactNode
+  featured: boolean
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const nx = useMotionValue(0)
+  const ny = useMotionValue(0)
+
+  const springCfg = { stiffness: 180, damping: 22, mass: 0.4 }
+  const sx = useSpring(nx, springCfg)
+  const sy = useSpring(ny, springCfg)
+
+  const rotateX = useTransform(sy, [-0.5, 0.5], [6, -6])
+  const rotateY = useTransform(sx, [-0.5, 0.5], [-6, 6])
+
+  const mx = useSpring(mouseX, springCfg)
+  const my = useSpring(mouseY, springCfg)
+
+  const spotlightColor = featured
+    ? "color-mix(in oklch, var(--primary) 24%, transparent)"
+    : "color-mix(in oklch, var(--accent) 15%, transparent)"
+
+  const spotlight = useMotionTemplate`radial-gradient(320px circle at ${mx}px ${my}px, ${spotlightColor}, transparent 70%)`
+
+  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
+    const el = ref.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    mouseX.set(x)
+    mouseY.set(y)
+    nx.set(x / rect.width - 0.5)
+    ny.set(y / rect.height - 0.5)
+  }
+
+  function handleLeave() {
+    nx.set(0)
+    ny.set(0)
+    mouseX.set(0)
+    mouseY.set(0)
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      className={cn(
+        "group relative flex flex-col rounded-2xl border bg-[#08080a] p-7 transition-colors duration-300",
+        featured
+          ? "border-primary ring-1 ring-primary/40 shadow-[0_12px_45px_-12px_rgba(4,107,210,0.4)]"
+          : "border-white/10 hover:border-primary/30"
+      )}
+    >
+      {/* 3D Spotlight */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: spotlight, transform: "translateZ(10px)" }}
+      />
+
+      {/* Internal border glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 border border-primary/20 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ transform: "translateZ(5px)" }}
+      />
+
+      <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="relative flex flex-1 flex-col h-full">
+        {children}
+      </div>
+    </motion.div>
+  )
+}
 
 export function PricingPlans() {
   const [plans, setPlans] = useState<Plan[]>([])
@@ -124,40 +202,37 @@ export function PricingPlans() {
       </div>
 
       {/* Plan cards */}
-      <div className="grid gap-5 md:grid-cols-3 md:items-stretch">
+      <div className="grid gap-5 md:grid-cols-3 md:items-stretch" style={{ perspective: "1200px" }}>
         {ordered.map((p) => {
           const price = priceFor(p)
           const featured = Boolean(p.tag)
           return (
-            <Card
-              key={p.id}
-              className={cn(
-                "relative flex flex-col transition",
-                featured ? "border-primary ring-1 ring-primary/30" : "",
-              )}
-            >
+            <PricingTiltCard key={p.id} featured={featured}>
               {p.tag && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary hover:bg-primary">
+                <Badge 
+                  className="absolute -top-3 left-1/2 bg-primary hover:bg-primary select-none z-10"
+                  style={{ transform: "translateZ(45px) translateX(-50%)" }}
+                >
                   {p.tag}
                 </Badge>
               )}
-              <CardHeader>
-                <CardTitle>{p.label}</CardTitle>
+              <div style={{ transform: "translateZ(25px)", transformStyle: "preserve-3d" }} className="space-y-1.5 pb-6">
+                <h3 className="text-2xl font-semibold leading-none tracking-tight text-white">{p.label}</h3>
                 <p className="text-sm text-muted-foreground">{p.sub}</p>
-              </CardHeader>
-              <CardContent className="flex flex-1 flex-col">
-                <div className="mb-1">
-                  <span className="text-4xl font-bold tracking-tight">{usd(price)}</span>
+              </div>
+              <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="flex flex-1 flex-col">
+                <div style={{ transform: "translateZ(40px)" }} className="mb-1">
+                  <span className="text-4xl font-bold tracking-tight text-white">{usd(price)}</span>
                   <span className="ml-1 text-sm text-muted-foreground">/{cycle === "yearly" ? "yr" : "mo"}</span>
                 </div>
                 {cycle === "yearly" && (
-                  <div className="mb-2 text-xs text-primary">Save {usd(yearlySavings(p))} vs monthly</div>
+                  <div style={{ transform: "translateZ(30px)" }} className="mb-2 text-xs text-primary font-medium">Save {usd(yearlySavings(p))} vs monthly</div>
                 )}
-                <div className="mb-4 text-xs text-muted-foreground">
+                <div style={{ transform: "translateZ(25px)" }} className="mb-4 text-xs text-muted-foreground">
                   {p.min.toLocaleString("en-US")} min · {usd(p.rate)}/min ·{" "}
                   {p.agents >= 999 ? "Unlimited" : `${p.agents} agents`}
                 </div>
-                <ul className="mb-6 space-y-2 text-sm">
+                <ul style={{ transform: "translateZ(22px)" }} className="mb-6 space-y-2 text-sm flex-1">
                   {p.perks
                     .filter((perk) => !/phone number|concurrent call/i.test(perk))
                     .map((perk) => (
@@ -167,18 +242,41 @@ export function PricingPlans() {
                       </li>
                     ))}
                 </ul>
-                <Button
-                  asChild
-                  size="lg"
-                  variant={featured ? "default" : "outline"}
-                  className={cn("mt-auto w-full rounded-full", featured && "btn-ai text-primary-foreground")}
-                >
-                  <Link href={`/get-started?plan=${p.id}&cycle=${cycle}`}>
-                    {featured ? `Choose ${p.label}` : "Get started"}
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+                
+                {featured ? (
+                  <div style={{ transform: "translateZ(35px)" }} className="relative mt-auto w-full overflow-hidden rounded-full group/btn">
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full rounded-full bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-[0_8px_24px_-8px_var(--primary)] transition-all hover:shadow-[0_12px_32px_-10px_var(--primary)] hover:scale-[1.02]"
+                    >
+                      <Link href={`/get-started?plan=${p.id}&cycle=${cycle}`}>
+                        Choose {p.label}
+                      </Link>
+                    </Button>
+                    <motion.span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      animate={{ x: ["-140%", "340%"] }}
+                      transition={{ duration: 2.4, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3.5, ease: "easeInOut" }}
+                    />
+                  </div>
+                ) : (
+                  <div style={{ transform: "translateZ(30px)" }} className="mt-auto w-full">
+                    <Button
+                      asChild
+                      size="lg"
+                      variant="outline"
+                      className="w-full rounded-full border-white/10 hover:border-primary/40 hover:bg-white/[0.02]"
+                    >
+                      <Link href={`/get-started?plan=${p.id}&cycle=${cycle}`}>
+                        Get started
+                      </Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </PricingTiltCard>
           )
         })}
       </div>
