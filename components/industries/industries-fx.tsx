@@ -59,7 +59,7 @@ export function FloatingAccents() {
             top: orb.top,
             willChange: "opacity",
           }}
-          animate={{ opacity: [0.11, 0.19, 0.11] }}
+          animate={{ opacity: [0.02, 0.04, 0.02] }}
           transition={{
             duration: orb.duration + 2,
             repeat: Number.POSITIVE_INFINITY,
@@ -101,7 +101,7 @@ export function ParticleField() {
             height: p.size,
             willChange: "opacity"
           }}
-          animate={{ opacity: [0.06, 0.55, 0.06] }}
+          animate={{ opacity: [0, 0.18, 0] }}
           transition={{
             duration: p.duration,
             repeat: Number.POSITIVE_INFINITY,
