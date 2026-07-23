@@ -274,11 +274,12 @@ export function FloatingIconBadges() {
       `}</style>
       {ICON_BADGES.map((badge, i) => {
         const Icon = badge.icon
-        const accent = i % 2 === 0 ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.6)"
+        // Unify drifting icon colors with the brand's electric blue/cyan accent colors
+        const iconColor = i % 2 === 0 ? "var(--accent)" : "color-mix(in srgb, var(--accent) 75%, white)"
         return (
           <div
             key={i}
-            className="absolute flex items-center justify-center rounded-full border border-white/10 bg-black/70 backdrop-blur-sm floating-badge"
+            className="absolute flex items-center justify-center rounded-full bg-black/70 backdrop-blur-sm floating-badge"
             style={{ 
               left: badge.left, 
               top: badge.top, 
@@ -286,11 +287,13 @@ export function FloatingIconBadges() {
               height: badge.size,
               animationDuration: `${badge.duration}s`,
               animationDelay: `${badge.delay}s`,
+              border: "1px solid color-mix(in srgb, var(--primary) 25%, transparent)",
+              boxShadow: "0 0 16px -4px color-mix(in srgb, var(--primary) 30%, transparent)",
               "--drift-x": `${badge.driftX}px`,
               "--drift-y": `${badge.driftY}px`,
             } as React.CSSProperties}
           >
-            <Icon style={{ color: accent, width: "45%", height: "45%" }} aria-hidden />
+            <Icon style={{ color: iconColor, width: "45%", height: "45%" }} aria-hidden />
           </div>
         )
       })}
