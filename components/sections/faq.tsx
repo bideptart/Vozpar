@@ -10,7 +10,7 @@ export function FAQ() {
   const items = FLAT_FAQ.slice(0, 8)
   return (
     <section id="faq" className="relative overflow-hidden border-t border-border/40">
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-24 md:px-6 md:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
         <div className="grid gap-16 lg:grid-cols-12 lg:gap-12">
           {/* LEFT: Heading */}
           <ScrollReveal className="lg:col-span-4">

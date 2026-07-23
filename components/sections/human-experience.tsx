@@ -127,7 +127,7 @@ export function HumanExperience() {
         transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-24 md:px-6 md:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <span className="ai-pill-cyan">
             <span className="h-1 w-1 rounded-full bg-primary" />

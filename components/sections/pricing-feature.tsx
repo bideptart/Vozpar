@@ -34,7 +34,7 @@ export function PricingFeature() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-[300px] bg-[radial-gradient(60%_60%_at_50%_0%,oklch(0.577_0.245_27.33/0.05),transparent_70%)]"
       />
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-24 md:px-6 md:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <span className="ai-pill-violet">
             <span className="h-1 w-1 rounded-full bg-accent" />
@@ -101,7 +101,7 @@ export function PricingFeature() {
               <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
-          <Button asChild size="lg" variant="outline" className="h-12 rounded-full border-border/70 bg-card/30 px-7 backdrop-blur-md hover:border-primary/50">
+          <Button asChild size="lg" variant="outline" className="h-12 rounded-full border-border/70 bg-card/30 px-7 text-foreground backdrop-blur-md hover:border-primary/50 hover:text-foreground">
             <Link href="/get-started">Get started</Link>
           </Button>
         </ScrollReveal>
