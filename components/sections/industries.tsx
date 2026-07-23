@@ -15,6 +15,7 @@ type IndustryCardItem = {
   icon: LucideIcon
   title: string
   accent: string
+  logoColor: string
   href: string
   description: string
 }
@@ -32,6 +33,7 @@ const items: IndustryCardItem[] = [
     icon: Home,
     title: "Real estate",
     accent: "var(--primary)",
+    logoColor: "#1e6fd6",
     href: "/industries/real-estate",
     description:
       "Qualifies every buyer and seller lead the instant it arrives, books showings on your calendar, and follows up before the moment goes cold.",
@@ -41,6 +43,7 @@ const items: IndustryCardItem[] = [
     icon: Stethoscope,
     title: "Dental",
     accent: "var(--primary)",
+    logoColor: "#14b8a6",
     href: "/industries/dental",
     description:
       "Confirms appointments, fills cancellations the same day, and handles insurance questions — so the front desk never has to choose between the phone and the chair.",
@@ -50,6 +53,7 @@ const items: IndustryCardItem[] = [
     icon: HeartPulse,
     title: "Healthcare",
     accent: "var(--primary)",
+    logoColor: "#d92b34",
     href: "/industries/healthcare",
     description:
       "Manages intake, refills, and reminder calls with a calm, HIPAA-aware bedside manner patients won't distinguish from a person.",
@@ -59,6 +63,7 @@ const items: IndustryCardItem[] = [
     icon: Wrench,
     title: "Home services",
     accent: "var(--primary)",
+    logoColor: "#f2a71b",
     href: "/industries/home-services",
     description:
       "Captures every after-hours call, triages the job, and dispatches the right technician — so a slow callback never costs you the work.",
@@ -68,6 +73,7 @@ const items: IndustryCardItem[] = [
     icon: UtensilsCrossed,
     title: "Restaurants",
     accent: "var(--primary)",
+    logoColor: "#1f9d55",
     href: "/industries/restaurants",
     description:
       "Takes reservations, confirms large parties, and answers hours and menu questions fluently, in any accent your guests speak.",
@@ -77,6 +83,7 @@ const items: IndustryCardItem[] = [
     icon: Car,
     title: "Automotive",
     accent: "var(--primary)",
+    logoColor: "#8b5cf6",
     href: "/industries/automotive",
     description:
       "Books service, follows up on every test drive, and keeps the BDC lines open around the clock, across every rooftop you run.",
@@ -183,15 +190,15 @@ function IndustryFeatureCard({ item, index }: { item: IndustryCardItem; index: n
           className="relative flex size-12 flex-none items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-110"
           style={{
             background:
-              "radial-gradient(circle at 32% 28%, color-mix(in oklch, var(--card-accent) 65%, white 35%), var(--card-accent))",
-            boxShadow: "0 8px 20px -6px var(--card-accent)",
+              `radial-gradient(circle at 32% 28%, color-mix(in oklch, ${item.logoColor} 65%, white 35%), ${item.logoColor})`,
+            boxShadow: `0 8px 20px -6px ${item.logoColor}`,
           }}
         >
           {/* pulsing ring, only while hovered */}
           <motion.span
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full"
-            style={{ border: "1px solid var(--card-accent)" }}
+            style={{ border: `1px solid ${item.logoColor}` }}
             initial={{ scale: 1, opacity: 0 }}
             whileHover={{ scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] }}
             transition={{ duration: 1.7, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }}

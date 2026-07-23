@@ -34,6 +34,20 @@ type ShowcaseItem = {
   icon: LucideIcon
   href: string
   accent: string
+  logoColor: string
+}
+
+const LOGO_COLOR_BY_SLUG: Record<string, string> = {
+  "real-estate": "#3b82f6",
+  dental: "#2dd4bf",
+  healthcare: "#ef4444",
+  "home-services": "#f2a71b",
+  restaurants: "#22c55e",
+  automotive: "#8b5cf6",
+  legal: "#6366f1",
+  education: "#ec4899",
+  ecommerce: "#f97316",
+  fitness: "#84cc16",
 }
 
 /**
@@ -50,6 +64,7 @@ const items: ShowcaseItem[] = INDUSTRIES.map((industry) => ({
   icon: industry.icon,
   href: `/industries/${industry.slug}`,
   accent: "var(--primary)",
+  logoColor: LOGO_COLOR_BY_SLUG[industry.slug] ?? "#3b82f6",
 }))
 
 const itemVariants = {
@@ -150,14 +165,14 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
           className="relative flex size-12 flex-none items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-105 sm:size-14 md:size-[68px]"
           style={{
             background:
-              "radial-gradient(circle at 32% 28%, color-mix(in oklch, var(--card-accent) 65%, white 35%), var(--card-accent))",
-            boxShadow: "0 10px 26px -8px var(--card-accent)",
+              `radial-gradient(circle at 32% 28%, color-mix(in oklch, ${item.logoColor} 65%, white 35%), ${item.logoColor})`,
+            boxShadow: `0 10px 26px -8px ${item.logoColor}`,
           }}
         >
           <motion.span
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full"
-            style={{ border: "1px solid var(--card-accent)" }}
+            style={{ border: `1px solid ${item.logoColor}` }}
             animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] } : { scale: 1, opacity: 0 }}
             transition={
               hovering
@@ -212,7 +227,7 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
           <motion.span
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full"
-            style={{ border: "1px solid var(--card-accent)" }}
+            style={{ border: `1px solid ${item.logoColor}` }}
             animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] } : { scale: 1, opacity: 0 }}
             transition={
               hovering
