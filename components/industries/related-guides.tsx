@@ -35,12 +35,12 @@ export function RelatedGuides({
       aria-labelledby="related-heading"
       className="relative mx-auto w-full max-w-6xl overflow-hidden px-4 pb-24 md:px-6"
     >
-      <ScrollReveal className="relative mb-10">
+      <ScrollReveal className="relative mb-10 text-center">
         <h2 id="related-heading" className={`text-balance text-white ${headingType.h3}`}>
           {heading}
         </h2>
         <p
-          className={`mt-2.5 max-w-2xl text-pretty text-muted-foreground ${bodyType.paragraph}`}
+          className={`mx-auto mt-2.5 max-w-2xl text-pretty text-muted-foreground ${bodyType.paragraph}`}
           style={{ fontSize: "17px" }}
         >
           {description}

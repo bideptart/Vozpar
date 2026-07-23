@@ -3,7 +3,8 @@
 import type React from "react"
 import { useRef } from "react"
 import { Phone, Users, Activity, MessageCircle, Link2 } from "lucide-react"
-import { motion, useMotionValue, useSpring } from "motion/react"
+import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react"
+import { cn } from "@/lib/utils"
 
 /**
  * Small, industries-page-only animated accents:
@@ -18,9 +19,12 @@ import { motion, useMotionValue, useSpring } from "motion/react"
  *  - ParticleField: small twinkling white dots scattered across the whole
  *    hero — fills the remaining empty space with quiet ambient motion, well
  *    below the text in visual weight.
- *  - AmbientWaveform: a faint, full-width animated white bar strip evoking
- *    a voice waveform — reinforces the voice-AI product in the hero
- *    background without competing with the text on top of it.
+ *  - AmbientWaveform: a full-width animated bar strip evoking a voice
+ *    waveform, reinforcing the voice-AI product in the hero background.
+ *    Colored (blue → accent gradient per bar) per explicit user request —
+ *    the one background element on this page that's allowed brand hue,
+ *    since it's literally the product's own waveform motif rather than
+ *    generic atmosphere.
  *  - PulsingDot: a "live" pulsing dot for pill badges (foreground UI, keeps
  *    its blue default — badges are content, not page background).
  *  - FloatingIconBadges: small dark circular icon badges drifting slowly
@@ -106,29 +110,95 @@ export function ParticleField() {
 
 const WAVEFORM_BAR_COUNT = 56
 
+/**
+ * Mirrored spectrum, not a bottom-anchored bar row. Plain bars pulsing up
+ * from the floor is the generic "waveform" everyone reaches for first — this
+ * splits each column at a glowing baseline: a tall main bar above it, and a
+ * short, dim, blurred mirror of the same bar below it, the way an audio
+ * visualizer's reflection reads against a glass floor. The baseline itself
+ * is a single bright hairline with its own glow. Reads as considerably more
+ * "designed" than a flat row of bars for the same underlying data shape.
+ */
 export function AmbientWaveform() {
+  const reduced = useReducedMotion()
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-x-0 bottom-0 flex h-16 items-end justify-center gap-[3px] opacity-[0.16] md:h-24"
-    >
-      {Array.from({ length: WAVEFORM_BAR_COUNT }).map((_, i) => {
-        const peak = 0.25 + 0.65 * Math.abs(Math.sin(i * 1.37))
-        return (
+    <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-20 md:h-28">
+      <div className="relative flex h-full items-stretch justify-center gap-[3px] opacity-70">
+        {Array.from({ length: WAVEFORM_BAR_COUNT }).map((_, i) => {
+          const peak = 0.25 + 0.65 * Math.abs(Math.sin(i * 1.37))
+          // Blue-to-accent gradient per bar — this is the voice-AI product's
+          // own waveform motif, and the brand blues read as the product
+          // "speaking" rather than a generic decoration. Taller bars lean
+          // more accent-cyan, shorter ones more primary-blue.
+          const mix = 40 + peak * 40
+          const gradient = `linear-gradient(180deg, color-mix(in srgb, var(--accent) ${mix}%, var(--primary)), var(--primary))`
+          const barAnimate = { scaleY: [peak * 0.35, peak, peak * 0.35] }
+          const barTransition = {
+            duration: 1.6 + (i % 6) * 0.18,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut" as const,
+            delay: (i % 8) * 0.12,
+          }
+          return (
+            <div key={i} className="flex w-[3px] flex-none flex-col">
+              {/* Main bar — the 72% of the column above the baseline. */}
+              <div className="flex flex-[0.72] items-end justify-center">
+                <motion.span
+                  className="w-full origin-bottom rounded-full"
+                  style={{
+                    height: "100%",
+                    background: gradient,
+                    boxShadow: "0 0 8px -1px color-mix(in srgb, var(--accent) 60%, transparent)",
+                  }}
+                  animate={barAnimate}
+                  transition={barTransition}
+                />
+              </div>
+              {/* Reflection — same motion, same bar, just shorter/dimmer/
+                  blurred and growing downward instead of up. */}
+              <div className="flex flex-[0.28] items-start justify-center overflow-hidden opacity-30 blur-[0.5px]">
+                <motion.span
+                  className="w-full origin-top rounded-full"
+                  style={{ height: "100%", background: gradient }}
+                  animate={barAnimate}
+                  transition={barTransition}
+                />
+              </div>
+            </div>
+          )
+        })}
+
+        {/* Glowing baseline — sits exactly at the 72/28 split above. */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0"
+          style={{
+            bottom: "28%",
+            height: 1,
+            background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 70%, white), transparent)",
+            boxShadow: "0 0 12px 1px color-mix(in srgb, var(--accent) 50%, transparent)",
+          }}
+        />
+
+        {/* Scanning light — a bright beam that sweeps the whole strip left
+            to right on a loop, `mix-blend-mode: screen` so it genuinely
+            brightens whatever it's over rather than sitting on top as a flat
+            tint. Tinted with the accent instead of plain white so it reads
+            as the strip's own light, not a generic sheen. */}
+        {!reduced && (
           <motion.span
-            key={i}
-            className="w-[3px] flex-none origin-bottom rounded-full bg-white"
-            style={{ height: "100%" }}
-            animate={{ scaleY: [peak * 0.35, peak, peak * 0.35] }}
-            transition={{
-              duration: 1.6 + (i % 6) * 0.18,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-              delay: (i % 8) * 0.12,
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 w-24"
+            style={{
+              background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 85%, white), transparent)",
+              mixBlendMode: "screen",
+              opacity: 0.6,
             }}
+            animate={{ left: ["-10%", "110%"] }}
+            transition={{ duration: 4.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", repeatDelay: 1.5 }}
           />
-        )
-      })}
+        )}
+      </div>
     </div>
   )
 }
@@ -190,7 +260,15 @@ export function FloatingIconBadges() {
  * the element drifts a few px toward the cursor while hovered, and springs
  * back on mouse-leave.
  */
-export function Magnetic({ children, strength = 0.35 }: { children: React.ReactNode; strength?: number }) {
+export function Magnetic({
+  children,
+  strength = 0.35,
+  className,
+}: {
+  children: React.ReactNode
+  strength?: number
+  className?: string
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -216,7 +294,7 @@ export function Magnetic({ children, strength = 0.35 }: { children: React.ReactN
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       style={{ x: springX, y: springY }}
-      className="inline-block"
+      className={cn("inline-block", className)}
     >
       {children}
     </motion.div>

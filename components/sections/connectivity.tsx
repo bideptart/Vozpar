@@ -50,7 +50,7 @@ export function Connectivity() {
                 <Globe2 className="h-3 w-3" />
                 Phone numbers
               </span>
-              <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
+              <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
                 Your carrier account,{" "}
                 <span className="text-primary">supercharged.</span>
               </h2>

@@ -40,7 +40,7 @@ export function PricingFeature() {
             <span className="h-1 w-1 rounded-full bg-accent" />
             Pricing
           </span>
-          <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
+          <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
             Fair pricing.{" "}
             <span className="text-primary">Pay only for what you talk.</span>
           </h2>

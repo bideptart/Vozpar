@@ -82,7 +82,7 @@ export type CardStackProps<T extends CardStackItem> = {
   /** Hooks */
   onChangeIndex?: (index: number, item: T) => void
   /** Custom renderer (optional) */
-  renderCard?: (item: T, state: { active: boolean }) => React.ReactNode
+  renderCard?: (item: T, state: { active: boolean; offset: number }) => React.ReactNode
 }
 
 function wrapIndex(n: number, len: number) {
@@ -314,7 +314,7 @@ export function CardStack<T extends CardStackItem>({
                   onClick={() => setActive(i)}
                   {...dragProps}
                 >
-                  {renderCard ? renderCard(item, { active: isActive }) : <DefaultFanCard item={item} />}
+                  {renderCard ? renderCard(item, { active: isActive, offset: off }) : <DefaultFanCard item={item} />}
                 </motion.div>
               )
             })}

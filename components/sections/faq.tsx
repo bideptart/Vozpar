@@ -18,7 +18,7 @@ export function FAQ() {
               <HelpCircle className="h-3 w-3" />
               FAQ
             </span>
-            <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
+            <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
               Questions,{" "}
               <span className="text-primary">answered.</span>
             </h2>

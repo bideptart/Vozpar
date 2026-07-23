@@ -19,7 +19,7 @@ import { ScrollProgressBar } from "@/components/industries/scroll-progress"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 import { RelatedGuides } from "@/components/industries/related-guides"
-import { IndustryFooter } from "@/components/industries/industry-footer"
+import { SiteFooter } from "@/components/site-footer"
 
 export const metadata: Metadata = pageSeo({
   title: "Industries we power",
@@ -94,7 +94,7 @@ export default function IndustriesPage() {
         ]}
       />
 
-      <IndustryFooter />
+      <SiteFooter />
     </main>
   )
 }

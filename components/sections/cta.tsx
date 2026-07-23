@@ -36,7 +36,7 @@ export function CTA() {
               Live demo · No signup
             </span>
 
-            <h2 className="relative mt-7 text-balance text-5xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
+            <h2 className="relative mt-7 text-balance font-heading text-5xl font-medium leading-[1.05] tracking-[-0.03em] md:text-6xl">
               Hear it before{" "}
               <span className="text-primary">you build it.</span>
             </h2>
