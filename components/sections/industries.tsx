@@ -31,7 +31,7 @@ const items: IndustryCardItem[] = [
     id: "real-estate",
     icon: Home,
     title: "Real estate",
-    accent: "#1e6fd6",
+    accent: "var(--primary)",
     href: "/industries/real-estate",
     description:
       "Qualifies every buyer and seller lead the instant it arrives, books showings on your calendar, and follows up before the moment goes cold.",
@@ -40,7 +40,7 @@ const items: IndustryCardItem[] = [
     id: "dental",
     icon: Stethoscope,
     title: "Dental",
-    accent: "#14b8a6",
+    accent: "var(--primary)",
     href: "/industries/dental",
     description:
       "Confirms appointments, fills cancellations the same day, and handles insurance questions — so the front desk never has to choose between the phone and the chair.",
@@ -49,7 +49,7 @@ const items: IndustryCardItem[] = [
     id: "healthcare",
     icon: HeartPulse,
     title: "Healthcare",
-    accent: "#d92b34",
+    accent: "var(--primary)",
     href: "/industries/healthcare",
     description:
       "Manages intake, refills, and reminder calls with a calm, HIPAA-aware bedside manner patients won't distinguish from a person.",
@@ -58,7 +58,7 @@ const items: IndustryCardItem[] = [
     id: "home-services",
     icon: Wrench,
     title: "Home services",
-    accent: "#f2a71b",
+    accent: "var(--primary)",
     href: "/industries/home-services",
     description:
       "Captures every after-hours call, triages the job, and dispatches the right technician — so a slow callback never costs you the work.",
@@ -67,7 +67,7 @@ const items: IndustryCardItem[] = [
     id: "restaurants",
     icon: UtensilsCrossed,
     title: "Restaurants",
-    accent: "#1f9d55",
+    accent: "var(--primary)",
     href: "/industries/restaurants",
     description:
       "Takes reservations, confirms large parties, and answers hours and menu questions fluently, in any accent your guests speak.",
@@ -76,7 +76,7 @@ const items: IndustryCardItem[] = [
     id: "automotive",
     icon: Car,
     title: "Automotive",
-    accent: "#8b5cf6",
+    accent: "var(--primary)",
     href: "/industries/automotive",
     description:
       "Books service, follows up on every test drive, and keeps the BDC lines open around the clock, across every rooftop you run.",

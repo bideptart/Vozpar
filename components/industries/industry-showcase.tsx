@@ -43,26 +43,13 @@ type ShowcaseItem = {
  * extended to this filmstrip. Only the active/expanded card shows its accent;
  * collapsed strips stay neutral gray, keeping the existing hover behavior.
  */
-const ACCENT_BY_SLUG: Record<string, string> = {
-  "real-estate": "#3b82f6",
-  dental: "#2dd4bf",
-  healthcare: "#ef4444",
-  "home-services": "#f2a71b",
-  restaurants: "#22c55e",
-  automotive: "#8b5cf6",
-  legal: "#6366f1",
-  education: "#ec4899",
-  ecommerce: "#f97316",
-  fitness: "#84cc16",
-}
-
 const items: ShowcaseItem[] = INDUSTRIES.map((industry) => ({
   slug: industry.slug,
   name: industry.name,
   short: industry.short,
   icon: industry.icon,
   href: `/industries/${industry.slug}`,
-  accent: ACCENT_BY_SLUG[industry.slug] ?? "#3b82f6",
+  accent: "var(--primary)",
 }))
 
 const itemVariants = {
