@@ -28,7 +28,7 @@ export default function GetStartedPage() {
       <section className="relative overflow-hidden border-b border-border/50">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[360px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[360px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(4,107,210,0.10),transparent_70%)]"
         />
         <div className="mx-auto w-full max-w-6xl px-4 py-14 md:px-6 md:py-20">
           <div className="max-w-3xl">

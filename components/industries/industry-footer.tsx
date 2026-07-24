@@ -9,22 +9,21 @@ import { Logo } from "@/components/logo"
 import { bodyType, monoStyle } from "@/lib/industries-typography"
 
 /**
- * Industries-page-only footer. Replicates the same content/links as the
- * shared SiteFooter (components/site-footer.tsx) — which is used on 15+
- * other pages and is intentionally left untouched — but with new entrance
- * animations, hover micro-interactions, and styling tuned to match the rest
- * of this page (black background instead of navy, blue ambient glow instead
- * of the shared footer's red-tinted one, industries-page typography tokens).
+ * RETIRED (2026-07-23) — no longer imported anywhere. `app/industries/page.tsx`
+ * was the one page using this instead of the shared `SiteFooter`
+ * (components/site-footer.tsx), which every other page uses. The user
+ * explicitly asked for one identical header/footer across the whole site —
+ * edits to the shared footer (mobile accordion, hover chevrons, etc.) were
+ * silently not reaching this page because it never rendered `SiteFooter` to
+ * begin with. Swapped `/industries` over to `SiteFooter` to fix that. Left
+ * in place only because this session's tools can't delete a file; safe to
+ * remove outright.
  *
- * Link content/labels/hrefs are locked to match the shared footer 1:1.
- * Styling on top of that content has since been asked to evolve further
- * ("make it more attractive"): icon-badge + accent-underline column
- * headings, a gradient-filled "Customer dashboard" CTA, an ai-pill-cyan
- * status chip, and a vertical divider between the brand block and nav
- * columns — layered on the earlier animation-only pass
- * (breathing corner glow, particle field, per-link stagger cascade, link
- * hover shift, button shimmer sweep, top hairline sweep, scroll-in bottom
- * bar).
+ * Original doc, kept for history: industries-page-only footer that
+ * replicated the shared footer's links with its own animations and styling
+ * tuned to match the rest of that page (icon-badge column headings,
+ * gradient "Customer dashboard" CTA, particle field, per-link stagger,
+ * shimmer sweep, etc).
  */
 
 type FooterLink = { label: string; href: string; external?: boolean }

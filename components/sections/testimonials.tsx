@@ -69,13 +69,13 @@ export function Testimonials() {
         transition={{ duration: 14, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-24 md:px-6 md:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <span className="ai-pill-magenta">
             <span className="h-1 w-1 rounded-full bg-accent" />
             Loved by operators
           </span>
-          <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
+          <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
             Teams shipping AI voice agents{" "}
             <span className="text-primary">that actually convert.</span>
           </h2>

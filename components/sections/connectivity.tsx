@@ -41,7 +41,7 @@ const cities = [
 export function Connectivity() {
   return (
     <section className="relative overflow-hidden border-t border-border/40">
-      <div className="mx-auto w-full max-w-7xl px-4 py-24 md:px-6 md:py-32">
+      <div className="mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
         <div className="grid gap-16 lg:grid-cols-12 lg:items-center lg:gap-12">
           {/* LEFT: Copy + items */}
           <div className="lg:col-span-6">
@@ -50,7 +50,7 @@ export function Connectivity() {
                 <Globe2 className="h-3 w-3" />
                 Phone numbers
               </span>
-              <h2 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
+              <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
                 Your carrier account,{" "}
                 <span className="text-primary">supercharged.</span>
               </h2>

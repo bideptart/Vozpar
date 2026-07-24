@@ -9,7 +9,7 @@ export function CTA() {
   const reduced = useReducedMotion()
   return (
     <section id="cta" className="relative overflow-hidden border-t border-border/40">
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-24 md:px-6 md:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
         <ScrollReveal>
           <div className="ring-gradient relative overflow-hidden rounded-[28px] border border-border/40 bg-gradient-to-br from-card/80 via-card/40 to-background/40 px-6 py-16 text-center md:px-12 md:py-24">
             {/* Drifting glow */}
@@ -36,7 +36,7 @@ export function CTA() {
               Live demo · No signup
             </span>
 
-            <h2 className="relative mt-7 text-balance text-5xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
+            <h2 className="relative mt-7 text-balance font-heading text-5xl font-medium leading-[1.05] tracking-[-0.03em] md:text-6xl">
               Hear it before{" "}
               <span className="text-primary">you build it.</span>
             </h2>
@@ -55,12 +55,12 @@ export function CTA() {
               <Button
                 size="lg"
                 variant="outline"
-                className="group h-12 rounded-full border-border/70 bg-card/40 px-7 backdrop-blur-md hover:border-primary/50 hover:bg-card/60"
+                className="group h-12 rounded-full border-border/70 bg-card/40 px-7 text-foreground backdrop-blur-md hover:border-primary/50 hover:bg-card/60 hover:text-foreground"
               >
                 <PhoneCall className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12" />
                 Call me now
               </Button>
-              <Button size="lg" variant="ghost" className="h-12 rounded-full px-7 hover:bg-card/40">
+              <Button size="lg" variant="ghost" className="h-12 rounded-full px-7 text-foreground hover:bg-card/40 hover:text-foreground">
                 <CalendarDays className="mr-2 h-4 w-4" />
                 Schedule a meeting
               </Button>

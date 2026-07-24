@@ -5,9 +5,12 @@ import { SiteFooter } from "@/components/site-footer"
 import { Button } from "@/components/ui/button"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { PricingPlans } from "@/components/pricing/pricing-plans"
+import { BillingFAQ } from "@/components/pricing/billing-faq"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 import { RelatedLinks } from "@/components/seo/related-links"
+import { PricingHero3D } from "@/components/pricing/pricing-hero-3d"
+import { MouseGlowCard } from "@/components/animation/mouse-glow-card"
 
 export const metadata: Metadata = pageSeo({
   title: "Pricing — AI voice agents",
@@ -43,9 +46,10 @@ export default async function PricingPage({
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border/50">
+        <PricingHero3D />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(4,107,210,0.15),transparent_70%)]"
         />
         <div
           aria-hidden
@@ -53,11 +57,11 @@ export default async function PricingPage({
         />
         <div className="relative mx-auto w-full max-w-3xl px-4 py-20 text-center md:px-6 md:py-24">
           <ScrollReveal>
-            <span className="ai-pill-magenta">
-              <span className="h-1 w-1 rounded-full bg-accent" />
+            <span className="ai-pill-blue">
+              <span className="h-1 w-1 rounded-full bg-primary animate-pulse" />
               Pricing
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
+            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl text-white">
               Pricing built for <span className="text-primary">real conversations.</span>
             </h1>
             <p className="mt-6 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
@@ -73,31 +77,40 @@ export default async function PricingPage({
         <PricingPlans />
       </section>
 
+      {/* FAQ */}
+      <BillingFAQ />
+
       {/* CTA */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
-        <ScrollReveal className="rounded-2xl border border-border/60 bg-card/30 px-6 py-12 md:px-12 md:py-14">
-          <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="max-w-xl">
-              <h3 className="text-balance text-2xl font-serif font-normal tracking-tight md:text-3xl">
-                Try before you commit. Talk to our agent now.
-              </h3>
-              <p className="mt-3 text-muted-foreground">
-                See latency, voice quality, and conversation flow firsthand — then start only if you love it.
-              </p>
+        <ScrollReveal>
+          <MouseGlowCard
+            glowColor="rgba(4, 107, 210, 0.25)"
+            className="rounded-2xl border border-white/10 bg-[#08080a] p-8 md:p-12"
+          >
+            <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between relative z-10">
+              <div className="max-w-xl">
+                <h3 className="text-balance text-2xl font-serif font-normal tracking-tight md:text-3xl text-white">
+                  Try before you commit. Talk to our agent now.
+                </h3>
+                <p className="mt-3 text-muted-foreground text-sm md:text-base">
+                  See latency, voice quality, and conversation flow firsthand — then start only if you love it.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="lg" className="btn-ai rounded-full text-primary-foreground hover:scale-105 transition-transform duration-200">
+                  <Link href="/get-started">Get started</Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="rounded-full border-white/15 hover:bg-white/5">
+                  <Link href="/#cta">Talk to an agent</Link>
+                </Button>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="btn-ai rounded-full text-primary-foreground">
-                <Link href="/get-started">Get started</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/#cta">Talk to an agent</Link>
-              </Button>
-            </div>
-          </div>
+          </MouseGlowCard>
         </ScrollReveal>
       </section>
 
       <RelatedLinks
+        variant="flip"
         heading="More on 9278.ai"
         description="Industry playbooks, FAQs, and the get-started flow."
         links={[

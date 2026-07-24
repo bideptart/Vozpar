@@ -244,6 +244,7 @@
   .text-aurora-blue,
   .pulse-ring::before,
   .voice-bar,
+  .letter-glow,
   .dot-float,
   .journey-progress-fill,
   .scan-line::after {
@@ -298,6 +299,17 @@
 .voice-bar {
   transform-origin: center;
   animation: voice-bar 1.1s ease-in-out infinite;
+}
+
+/* Per-letter glow pulse — used by the VOZPAR logo-style nameplate, each
+   letter breathing independently on its own color instead of one gradient
+   sweeping across the whole word. */
+@keyframes letter-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.88; }
+}
+.letter-glow {
+  animation: letter-glow 2.4s ease-in-out infinite;
 }
 
 /* Pulse ring */

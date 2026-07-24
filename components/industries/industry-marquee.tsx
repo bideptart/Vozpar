@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "motion/react"
 import { INDUSTRIES } from "@/lib/industries"
 import { monoStyle } from "@/lib/industries-typography"
 
@@ -19,13 +18,11 @@ export function IndustryMarquee() {
   const edgeFade = "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-6xl overflow-hidden py-4">
-      <motion.div
-        className="flex w-max items-center gap-14"
-        style={{ maskImage: edgeFade, WebkitMaskImage: edgeFade }}
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 34, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-      >
+    <div 
+      className="relative mx-auto mt-10 w-full max-w-6xl overflow-hidden py-4"
+      style={{ maskImage: edgeFade, WebkitMaskImage: edgeFade }}
+    >
+      <div className="marquee flex w-max items-center gap-14">
         {loop.map((industry, i) => {
           const Icon = industry.icon
           return (
@@ -45,7 +42,7 @@ export function IndustryMarquee() {
             </div>
           )
         })}
-      </motion.div>
+      </div>
     </div>
   )
 }
