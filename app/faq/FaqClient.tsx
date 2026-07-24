@@ -106,7 +106,7 @@ export default function FaqClient() {
           {/* Category Cards - Infinite Scroll */}
           <ScrollReveal className="mt-10">
             <div className="overflow-hidden">
-              <div className="flex gap-4 animate-infinite-scroll">
+              <div className="flex gap-4 marquee">
                 {categoriesForScroll.map((g, idx) => (
                   <button
                     key={`${g.id}-${idx}`}
