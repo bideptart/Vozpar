@@ -1,16 +1,16 @@
 import type { Metadata } from "next"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { Features } from "@/components/sections/features"
-import { FeatureCallDemo } from "@/components/sections/feature-call-demo"
-import { FeatureShowcase } from "@/components/sections/feature-showcase"
-import { FeatureLatencyLab } from "@/components/sections/feature-latency-lab"
-import { FeatureAnatomy } from "@/components/sections/feature-anatomy"
-import { FeatureJourney } from "@/components/sections/feature-journey"
-import { FeatureIvrRace } from "@/components/sections/feature-ivr-race"
-import { FeatureComparison } from "@/components/sections/feature-comparison"
-import { FeatureTrust } from "@/components/sections/feature-trust"
-import { FeatureCta, FeatureRelated } from "@/components/sections/feature-outro"
+import {
+  Features,
+  FeatureCallDemo,
+  FeatureShowcase,
+  FeatureLatencyLab,
+  FeatureJourney,
+  FeatureIvrRace,
+  FeatureCta,
+  FeatureRelated,
+} from "@/components/features"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 
@@ -48,9 +48,6 @@ export default function FeaturesPage() {
         <FeatureShowcase />
         {/* Makes the headline latency claim something you can feel, not just read */}
         <FeatureLatencyLab />
-        {/* The signal path a call actually takes. Replaced the old "three
-            pillars" block, which only re-listed the showcase's own bullets. */}
-        <FeatureAnatomy />
         {/* The console around the capabilities above: five stages from first
             agent to running the desk (build, train, test, operate, account).
             Deliberately different content from FeatureShowcase's 12 technical
@@ -59,12 +56,6 @@ export default function FeaturesPage() {
         {/* The emotional version of the comparison — same job, two paths, side by side.
             Deliberately sits directly above the table: race first, spreadsheet second. */}
         <FeatureIvrRace />
-        {/* Where it sits vs legacy IVR / building in-house */}
-        <FeatureComparison />
-        {/* Last objection before the CTA: everything above is a performance
-            claim, this is the checkable one. Every figure is sourced from
-            /sla, /dpa, /subprocessors and /e911 and links back to them. */}
-        <FeatureTrust />
         {/* Conversion panel */}
         <FeatureCta />
 

@@ -111,7 +111,7 @@ export default async function PricingPage({
 
       <RelatedLinks
         variant="flip"
-        heading="More on 9278.ai"
+        heading="More on Vozpar"
         description="Industry playbooks, FAQs, and the get-started flow."
         links={[
           {

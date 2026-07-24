@@ -2,6 +2,8 @@
 
 import { monoStyle } from "@/lib/industries-typography"
 import { CountUp } from "@/components/industries/count-up"
+import { motion } from "motion/react"
+import { StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 /**
  * New for the onething.design-inspired redesign: a small row of stats that
@@ -22,17 +24,24 @@ const STATS = [
 export function StatStrip() {
   return (
     <div className="mt-12 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 border-t border-white/10 pt-8">
-      {STATS.map((stat) => (
-        <div key={stat.label} className="text-center">
-          <div className="text-4xl font-bold text-[var(--accent)] md:text-5xl">
-            <CountUp value={stat.value} />
-            {stat.suffix}
-          </div>
-          <div className="mt-1.5 uppercase text-white/50" style={monoStyle.sectionTag}>
-            {stat.label}
-          </div>
-        </div>
-      ))}
+      <StaggerGroup className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6" stagger={0.15}>
+        {STATS.map((stat) => (
+          <StaggerItem key={stat.label} className="text-center">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <div className="text-4xl font-bold text-[var(--accent)] md:text-5xl">
+                <CountUp value={stat.value} />
+                {stat.suffix}
+              </div>
+              <div className="mt-1.5 uppercase text-white/50" style={monoStyle.sectionTag}>
+                {stat.label}
+              </div>
+            </motion.div>
+          </StaggerItem>
+        ))}
+      </StaggerGroup>
     </div>
   )
 }

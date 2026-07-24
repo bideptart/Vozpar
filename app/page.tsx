@@ -16,7 +16,7 @@ import { ServiceJsonLd } from "@/components/seo/jsonld"
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-black text-foreground">
       <ServiceJsonLd
         name="Vozpar — AI voice agents that listen, act, and resolve"
         description="Build, deploy, and scale natural-sounding AI voice agents. Sub-300ms latency, native audio, self-hosted — connected to your existing carrier and business tools."

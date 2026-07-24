@@ -36,12 +36,12 @@ import { cn } from "@/lib/utils"
  */
 
 const ORBS = [
-  { color: "#ffffff", size: 240, left: "2%", top: "12%", duration: 9 },
-  { color: "#c8c8c8", size: 170, left: "92%", top: "4%", duration: 11 },
-  { color: "#ffffff", size: 200, left: "94%", top: "60%", duration: 10 },
-  { color: "#c8c8c8", size: 150, left: "4%", top: "68%", duration: 8 },
-  { color: "#c8c8c8", size: 130, left: "16%", top: "38%", duration: 12.5 },
-  { color: "#ffffff", size: 150, left: "82%", top: "34%", duration: 10.5 },
+  { color: "var(--primary)", size: 280, left: "2%", top: "12%", duration: 12 },
+  { color: "var(--accent)", size: 200, left: "92%", top: "4%", duration: 14 },
+  { color: "var(--primary)", size: 240, left: "94%", top: "60%", duration: 13 },
+  { color: "var(--accent)", size: 180, left: "4%", top: "68%", duration: 11 },
+  { color: "var(--secondary)", size: 160, left: "16%", top: "38%", duration: 15 },
+  { color: "var(--primary)", size: 180, left: "82%", top: "34%", duration: 13.5 },
 ]
 
 export function FloatingAccents() {
@@ -65,7 +65,7 @@ export function FloatingAccents() {
             duration: orb.duration + 2,
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
-            delay: i * 0.7,
+            delay: i * 0.9,
           }}
         />
       ))}
@@ -232,8 +232,8 @@ export function PulsingDot({ className = "h-1 w-1 rounded-full bg-accent" }: { c
   return (
     <motion.span
       className={className}
-      animate={{ scale: [1, 1.7, 1], opacity: [1, 0.4, 1] }}
-      transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+      animate={{ scale: [1, 2, 1.4, 1.7, 1], opacity: [1, 0.3, 0.6, 0.4, 1] }}
+      transition={{ duration: 2.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
     />
   )
 }
@@ -320,8 +320,8 @@ export function Magnetic({
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const springX = useSpring(x, { stiffness: 200, damping: 15, mass: 0.4 })
-  const springY = useSpring(y, { stiffness: 200, damping: 15, mass: 0.4 })
+  const springX = useSpring(x, { stiffness: 180, damping: 18, mass: 0.5 })
+  const springY = useSpring(y, { stiffness: 180, damping: 18, mass: 0.5 })
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = ref.current

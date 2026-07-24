@@ -1,6 +1,7 @@
 export type FaqItem = {
   q: string
   a: string
+  popular?: boolean
 }
 
 export type FaqGroup = {
@@ -17,10 +18,12 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         q: "How does pricing work?",
         a: "You top up with $20, $50, or $100 of voice credit. Voice minutes are billed against that credit at $0.15/min on Starter, $0.12/min on Growth, or $0.10/min on Scale. There are no setup fees, no contracts, and no monthly platform fees beyond your top-up.",
+        popular: true
       },
       {
         q: "Do my voice minutes expire?",
         a: "Voice credit is valid for 60 days from the date of purchase. After 60 days any unused balance expires. Top up again at any time to extend — every new top-up gets its own fresh 60-day window.",
+        popular: true
       },
       {
         q: "Do I need a carrier account?",
@@ -33,6 +36,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         q: "Are there any hidden fees?",
         a: "No. The only line item from us is voice credit. There's no setup, no contracts, and no minimums beyond your top-up. Phone numbers stay billed directly by your carrier — we don't add a markup.",
+        popular: true
       },
       {
         q: "Do you offer refunds?",

@@ -27,51 +27,40 @@
  * than they did on navy, which is the point.
  */
 :root {
-  --background: #000000;
+  --background: #0b1220;
   --foreground: #ffffff;
-  --card: #0d0d0d;
+  --card: rgba(255, 255, 255, 0.04);
   --card-foreground: #ffffff;
-  --popover: #0d0d0d;
+  --popover: #111b2d;
   --popover-foreground: #ffffff;
 
-  /* Primary blue, measured off rozper.com (#046BD2, its dominant accent). A
-     touch deeper and more saturated than the old Vozpar swoosh #1e6fd6, which
-     is what gives the black-and-blue theme its harder edge. */
+  /* Primary blue from the new palette */
   --primary: #046bd2;
   --primary-foreground: #ffffff;
 
-  --secondary: #0d0d0d; /* elevated surface, used for callouts/cards */
+  --secondary: #2575fc;
   --secondary-foreground: #ffffff;
-  --muted: #ffffff0d;
-  /* Neutral, and deliberately not darker. The old #ccd6df carried a blue cast
-     that reads as dirt against black — but the codebase leans hard on opacity
-     variants of this token for 8–11px mono labels, and at that size they're
-     body text for contrast purposes (4.5:1, not 3:1). At #a1a1a1 the /70
-     variant lands at 4.30:1 and /60 at 3.39:1, both failing. #b0b0b0 puts /70
-     over 5:1. */
-  --muted-foreground: #b0b0b0;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: #ccd6df;
 
-  /* Brighter blue for hovers, glows and gradient ends (rozper #2D98F1). */
-  --accent: #2d98f1;
+  /* New accent color */
+  --accent: #0086f9;
   --accent-foreground: #000000;
 
-  /* Vozpar bar-chart crimson, reused for error/destructive states */
-  --destructive: #d92b34;
+  /* Destructive color from the palette */
+  --destructive: #ff4444;
   --destructive-foreground: #ffffff;
-  /* rgba(255,255,255,0.11) flattened over #000. Kept opaque so it composites
-     identically on every surface in the ladder instead of drifting with
-     whatever sits behind it. */
-  --border: #1c1c1c;
-  --input: #ffffff12;
+
+  --border: #1a2638;
+  --input: rgba(255, 255, 255, 0.07);
   --ring: #046bd2;
 
-  /* Chart colors. The two blues track the primary/accent; green/amber/crimson
-     stay as the bar-chart accent trio. */
-  --chart-1: #046bd2; /* primary blue */
-  --chart-2: #1f9d55; /* growth green */
-  --chart-3: #d92b34; /* crimson */
-  --chart-4: #f2a71b; /* amber */
-  --chart-5: #2d98f1; /* bright blue */
+  /* New chart colors from the palette */
+  --chart-1: #046bd2;
+  --chart-2: #0078e0;
+  --chart-3: #0086f9;
+  --chart-4: #2575fc;
+  --chart-5: #2d98f1;
 
   /* Brand-family extras */
   --ai-cyan: #2d98f1;
@@ -100,13 +89,13 @@
   --features-ink: var(--foreground);     /* #FFFFFF */
 
   --radius: 1rem;
-  --sidebar: #0d0d0d;
+  --sidebar: #111b2d;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #046bd2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #171717;
+  --sidebar-accent: #0b1220;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #1c1c1c;
+  --sidebar-border: #1a2638;
   --sidebar-ring: #046bd2;
   --button-ripple-color: rgba(255, 255, 255, 0.35);
 }
