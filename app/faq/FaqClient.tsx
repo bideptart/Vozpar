@@ -92,10 +92,10 @@ export default function FaqClient() {
                   placeholder="Search questions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-32 py-4 text-base rounded-full border-2 border-primary/30 bg-card focus:outline-none focus:border-primary/50"
+                  className="w-full pl-12 pr-32 py-4 text-base rounded-full border-2 border-primary/30 bg-card focus:outline-none focus:border-primary/50 transition-all duration-300"
                 />
                 <button 
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 font-semibold flex items-center gap-2"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
                 >
                   Search <ArrowRight className="h-4 w-4" />
                 </button>
@@ -118,10 +118,10 @@ export default function FaqClient() {
                       }
                       setSearchQuery("")
                     }}
-                    className={`flex-shrink-0 flex flex-col items-center gap-3 p-6 rounded-xl border-2 min-w-[180px] transition-all ${
+                    className={`flex-shrink-0 flex flex-col items-center gap-3 p-6 rounded-xl border-2 min-w-[180px] transition-all duration-300 duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 ${
                       activeCategory === g.id
-                        ? "border-primary bg-primary/10 text-primary shadow-lg shadow-primary/20"
-                        : "border-border/50 bg-card/50 text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                        ? "border-primary bg-primary/10 text-primary shadow-lg shadow-primary/20 scale-105 scale-105"
+                        : "border-border/50 bg-card/50 text-muted-foreground hover:border-primary/50 hover:text-foreground hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
                     }`}
                   >
                     <div className="text-primary">
@@ -151,7 +151,7 @@ export default function FaqClient() {
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem 
                       value={`${group.id}-${i}`} 
-                      className="border-0 rounded-2xl bg-card/50 px-6 py-4 data-[state=open]:bg-card data-[state=open]:shadow-lg transition-all"
+                      className="border-0 rounded-2xl bg-card/50 px-6 py-4 data-[state=open]:bg-card data-[state=open]:shadow-lg transition-all duration-300 duration-300 hover:shadow-md hover:shadow-primary/10 hover:border-primary/30 hover:border-2"
                     >
                       <AccordionTrigger className="text-left text-base font-medium hover:no-underline group-hover:no-underline">
                         <div className="flex items-center gap-3">
@@ -221,12 +221,12 @@ export default function FaqClient() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Button asChild size="lg" className="bg-black text-white hover:bg-black/90 rounded-full px-8">
+                  <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 transition-all duration-300 duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30">
                     <Link href="/get-started">
                       Get started <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="rounded-full px-8 border-2">
+                  <Button asChild size="lg" variant="outline" className="rounded-full px-8 border-2 transition-all duration-300 duration-300 hover:scale-105 hover:border-primary/50">
                     <Link href="/pricing">View pricing</Link>
                   </Button>
                 </div>
