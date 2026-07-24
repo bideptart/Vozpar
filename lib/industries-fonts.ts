@@ -1,16 +1,21 @@
 import { Inter, Archivo, Poppins } from "next/font/google"
 
 /**
- * Typeface system for the /industries page only, per the provided type
- * spec: Archivo (weight 500 only, always negative tracking) for headings,
- * Inter (300/400/500/600) for body & UI text, plus a system ui-monospace
- * stack for uppercase eyebrow labels/tags (see industriesMono below — it's
- * a plain font-family string, not a webfont, so nothing to load for it).
+ * Typeface system originally built for the /industries page: Archivo
+ * (weight 500/700, always negative tracking) for headings, Inter
+ * (300/400/500/600) for body & UI text, plus a system ui-monospace stack
+ * for uppercase eyebrow labels/tags (see industriesMono below — it's a
+ * plain font-family string, not a webfont, so nothing to load for it).
  *
  * Superseded pairings, in order: Instrument Serif -> Plus Jakarta Sans ->
  * Playfair Display/DM Sans -> Fraunces/Inter -> this. Kept in its own
- * module (rather than app/layout.tsx) and imported only by industries-page
- * files, so no other page on the site is affected.
+ * module (rather than app/layout.tsx) so it's opt-in per page rather than
+ * applied site-wide. Originally imported only by industries-page files;
+ * the homepage hero (components/sections/hero.tsx) now reuses it too, per
+ * an explicit request to match the industries page's font style — this is
+ * a shared typography module, not a page-scoped visual component, so
+ * reuse across pages is expected. Any other page wanting this look should
+ * import directly from here rather than duplicating the font loads.
  */
 export const industriesBody = Inter({
   subsets: ["latin"],

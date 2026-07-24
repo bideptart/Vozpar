@@ -249,13 +249,14 @@ export function IndustryShowcase() {
 
         <ScrollReveal className="mt-16">
           <div onMouseLeave={() => setHovered(null)}>
-            <StaggerGroup className="flex h-[480px] gap-2.5 md:gap-3" stagger={0.05}>
+            <StaggerGroup className="flex h-[480px] gap-2.5 md:gap-3" stagger={0.06}>
               {items.map((item, i) => (
                 <motion.div
                   key={item.slug}
                   variants={itemVariants}
-                  className="flex h-full transition-[flex] duration-500 ease-out"
-                  style={{ flex: active === i ? "4.5 4.5 0%" : "1 1 0%" }}
+                  className="flex h-full"
+                  animate={{ flex: active === i ? "4.5 4.5 0%" : "1 1 0%" }}
+                  transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
                   onMouseEnter={() => setHovered(i)}
                 >
                   <FilmstripCard item={item} active={active === i} />

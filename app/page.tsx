@@ -13,7 +13,7 @@ import { ServiceJsonLd } from "@/components/seo/jsonld"
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-black text-foreground">
       <ServiceJsonLd
         name="9278.ai — AI voice agents for sales, support and operations"
         description="Build, launch, and scale AI voice agents that actually sound human. Carrier-grade phone numbers, sub-second latency, transparent per-minute pricing."

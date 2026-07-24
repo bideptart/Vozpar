@@ -2,14 +2,66 @@
 
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { motion } from "motion/react"
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 import { headingType, bodyType } from "@/lib/industries-typography"
+import { useRef } from "react"
 
 export type RelatedGuideLink = {
   href: string
   title: string
   description: string
+}
+
+function GlowCard({ children, href }: { children: React.ReactNode; href: string }) {
+  const ref = useRef<HTMLAnchorElement>(null)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const nx = useMotionValue(0)
+  const ny = useMotionValue(0)
+  const springCfg = { stiffness: 200, damping: 20, mass: 0.4 }
+  const sx = useSpring(nx, springCfg)
+  const sy = useSpring(ny, springCfg)
+  const rotateX = useTransform(sy, [-0.5, 0.5], [4, -4])
+  const rotateY = useTransform(sx, [-0.5, 0.5], [-4, 4])
+  const spotlight = useMotionTemplate`radial-gradient(320px circle at ${mouseX}px ${mouseY}px, color-mix(in oklch, var(--primary) 30%, transparent), transparent 70%)`
+
+  function handleMove(e: React.MouseEvent<HTMLAnchorElement>) {
+    const el = ref.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    mouseX.set(e.clientX - rect.left)
+    mouseY.set(e.clientY - rect.top)
+    nx.set((e.clientX - rect.left) / rect.width - 0.5)
+    ny.set((e.clientY - rect.top) / rect.height - 0.5)
+  }
+
+  function handleLeave() {
+    nx.set(0)
+    ny.set(0)
+  }
+
+  return (
+    <motion.a
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      href={href}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      className="group relative flex h-full min-h-[280px] flex-col justify-between gap-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-10 transition-colors duration-300 hover:border-primary/50"
+    >
+      <motion.span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: spotlight }}
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[var(--accent)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-25"
+      />
+      <div className="relative z-10">{children}</div>
+    </motion.a>
+  )
 }
 
 /**
@@ -47,45 +99,32 @@ export function RelatedGuides({
         </p>
       </ScrollReveal>
 
-      <StaggerGroup className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.12}>
+      <StaggerGroup className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.14}>
         {links.map((l) => (
           <StaggerItem key={l.href} className="h-full">
-            <motion.div
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              className="h-full"
-            >
-              <Link
-                href={l.href}
-                className="group relative flex h-full min-h-[280px] flex-col justify-between gap-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-10 transition-colors duration-300 hover:border-primary/50"
-              >
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[var(--accent)] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20"
-                />
-                <div className="relative">
-                  <p className={`text-white ${bodyType.labelEmphasis}`} style={{ fontSize: "24px", fontWeight: 700 }}>
-                    {l.title}
-                  </p>
-                  <p
-                    className={`mt-3.5 text-muted-foreground ${bodyType.smallPrint}`}
-                    style={{ fontSize: "17px", lineHeight: 1.6 }}
-                  >
-                    {l.description}
-                  </p>
-                </div>
-                <span
-                  className={`relative inline-flex items-center gap-2 text-primary ${bodyType.labelEmphasis}`}
-                  style={{ fontSize: "18px" }}
+            <GlowCard href={l.href}>
+              <div className="relative">
+                <p className={`text-white ${bodyType.labelEmphasis}`} style={{ fontSize: "24px", fontWeight: 700 }}>
+                  {l.title}
+                </p>
+                <p
+                  className={`mt-3.5 text-muted-foreground ${bodyType.smallPrint}`}
+                  style={{ fontSize: "17px", lineHeight: 1.6 }}
                 >
-                  Read more
-                  <ArrowRight
-                    className="size-5 transition-transform duration-300 group-hover:translate-x-1"
-                    aria-hidden
-                  />
-                </span>
-              </Link>
-            </motion.div>
+                  {l.description}
+                </p>
+              </div>
+              <span
+                className={`relative inline-flex items-center gap-2 text-primary ${bodyType.labelEmphasis}`}
+                style={{ fontSize: "18px" }}
+              >
+                Read more
+                <ArrowRight
+                  className="size-5 transition-transform duration-300 group-hover:translate-x-1"
+                  aria-hidden
+                />
+              </span>
+            </GlowCard>
           </StaggerItem>
         ))}
       </StaggerGroup>

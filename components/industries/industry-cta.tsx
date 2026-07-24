@@ -70,13 +70,6 @@ function GlowCard({ children }: { children: React.ReactNode }) {
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{ background: spotlight }}
       />
-      {/* periodic shimmer sweep across the card */}
-      <motion.span
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent"
-        animate={{ x: ["-140%", "260%"] }}
-        transition={{ duration: 2.8, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3, ease: "easeInOut" }}
-      />
       <div className="relative">{children}</div>
     </motion.div>
   )
@@ -87,12 +80,6 @@ export function IndustryCTA() {
     <section className="relative mx-auto w-full max-w-6xl overflow-hidden bg-black px-4 pb-24 md:px-6">
       <FloatingAccents />
       <FloatingIconBadges />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white blur-[100px]"
-        animate={{ opacity: [0.08, 0.2, 0.08], scale: [0.9, 1.05, 0.9] }}
-        transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
 
       <StaggerGroup className="relative" stagger={0.12}>
         <StaggerItem>
