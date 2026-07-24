@@ -353,11 +353,6 @@ export function IndustryShowcase() {
           </p>
         </div>
 
-<<<<<<< HEAD
-        <ScrollReveal className="mt-16">
-          <div onMouseLeave={() => setHovered(null)}>
-            <StaggerGroup className="flex h-[480px] gap-2.5 md:gap-3" stagger={0.06}>
-=======
         {/* Explicit "this scrolls" affordance for phone — the row's own
             right-edge cutoff wasn't registering as an invitation to swipe
             on its own. A right-edge fade (masks the last ~2rem to
@@ -398,7 +393,6 @@ export function IndustryShowcase() {
               className="flex h-[360px] gap-2 snap-x snap-mandatory sm:h-[400px] md:h-[480px] md:snap-none md:gap-3"
               stagger={0.05}
             >
->>>>>>> 1381d76d59ff11bc4f695c233c035fb979dd943b
               {items.map((item, i) => (
                 <motion.div
                   key={item.slug}
@@ -406,12 +400,6 @@ export function IndustryShowcase() {
                     itemRefs.current[i] = el
                   }}
                   variants={itemVariants}
-<<<<<<< HEAD
-                  className="flex h-full"
-                  animate={{ flex: active === i ? "4.5 4.5 0%" : "1 1 0%" }}
-                  transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-                  onMouseEnter={() => setHovered(i)}
-=======
                   className={cn(
                     "flex h-full snap-start transition-[flex] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
                     active === i
@@ -428,7 +416,6 @@ export function IndustryShowcase() {
                       setPaused(true)
                     }
                   }}
->>>>>>> 1381d76d59ff11bc4f695c233c035fb979dd943b
                 >
                   <FilmstripCard item={item} active={active === i} />
                 </motion.div>

@@ -87,11 +87,6 @@ export function IndustryCTA() {
   const reduced = useReducedMotion()
 
   return (
-<<<<<<< HEAD
-    <section className="relative mx-auto w-full max-w-6xl overflow-hidden bg-black px-4 pb-24 md:px-6">
-      <FloatingAccents />
-      <FloatingIconBadges />
-=======
     <section className="relative mx-auto w-full max-w-6xl overflow-hidden bg-black px-4 pb-16 pt-4 sm:pb-20 sm:pt-6 md:px-6 md:pb-24 md:pt-8">
       {/* FloatingAccents/FloatingIconBadges removed from this section — the
           card now has its own rotating conic border, cursor spotlight, and
@@ -108,7 +103,6 @@ export function IndustryCTA() {
         animate={{ opacity: [0.08, 0.2, 0.08], scale: [0.9, 1.05, 0.9] }}
         transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
       />
->>>>>>> 1381d76d59ff11bc4f695c233c035fb979dd943b
 
       <StaggerGroup className="relative" stagger={0.12}>
         <StaggerItem>
