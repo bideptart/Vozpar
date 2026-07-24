@@ -86,13 +86,8 @@ export function FeatureCta() {
       className="features-hero-dark relative overflow-hidden border-t border-border py-12 md:py-16"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      {/* Ambient glows removed — flat black canvas per the /features theme. */}
-
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <ScrollReveal>
-          {/* p-px + a rotating conic underneath = a 1px border that travels
-              around the panel. The conic has to be far larger than the panel
-              and clipped by it, or its corners swing outside as it turns. */}
           <div className="relative overflow-hidden rounded-3xl p-px">
             {!reduced && (
               <span
@@ -101,48 +96,46 @@ export function FeatureCta() {
                 style={{
                   background:
                     "conic-gradient(from 0deg, transparent 0deg, var(--features-blue) 40deg, transparent 100deg, transparent 200deg, var(--features-blue-deep) 250deg, transparent 310deg)",
-                  opacity: 0.7,
+                  opacity: 0.85,
                 }}
               />
             )}
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-3xl border border-border"
+              className="pointer-events-none absolute inset-0 rounded-3xl border"
+              style={{ borderColor: "color-mix(in srgb, var(--features-blue) 35%, transparent)" }}
             />
 
             <SpotlightPanel
               glow="var(--features-blue)"
               size={520}
-              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-card/30 px-5 py-10 backdrop-blur-xl sm:px-8 md:px-12 md:py-14"
+              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-[#0b0b0e] px-6 py-8 sm:px-8 sm:py-10 md:px-12 md:py-12"
             >
-              {/* A slow specular pass over the glass (grid removed) */}
               {!reduced && (
                 <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
                   <span
                     className="sheen-sweep absolute inset-y-0 w-1/3"
                     style={{
                       background:
-                        "linear-gradient(90deg, transparent, color-mix(in srgb, var(--features-blue) 10%, transparent), transparent)",
+                        "linear-gradient(90deg, transparent, color-mix(in srgb, var(--features-blue) 12%, transparent), transparent)",
                     }}
                   />
                 </span>
               )}
 
-              {/* Splits at lg, not md: at 768px the copy and the button stack
-                  side by side squeeze the CTA row to near its min-content. */}
-              <div className="relative flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
+              <div className="relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
                 <div className="max-w-xl">
                   <span className="ai-pill-blue">
                     <span className="h-1 w-1 rounded-full bg-current" />
                     Try it live
                   </span>
 
-                  <h2 className="mt-5 text-balance font-heading text-2xl font-medium leading-[1.15] tracking-[-0.03em] text-foreground sm:text-3xl md:text-4xl">
+                  <h2 className="mt-4 text-balance font-heading text-2xl font-medium leading-[1.15] tracking-[-0.03em] text-foreground sm:text-3xl md:text-4xl">
                     Ready to hear it for yourself?
                   </h2>
 
                   <p className="mt-3 text-[15px] font-light leading-relaxed text-muted-foreground">
-                    Spin up an agent in minutes and place a real test call — no credit card to try.
+                    Spin up an agent in minutes and place a real test call — no credit card to try. Describe the calls that consume your day, and go live in an afternoon.
                   </p>
 
                   <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
@@ -161,24 +154,6 @@ export function FeatureCta() {
                     ))}
                   </div>
                 </div>
-
-                <div className="flex w-full flex-col gap-5 sm:w-auto">
-                  {/* Live-call chip — gives the panel something with a pulse in
-                      it, so the CTA doesn't read as a static footer band. */}
-                  <div className="flex items-center gap-3 self-start rounded-2xl border border-border bg-card/60 px-4 py-3 backdrop-blur-sm sm:self-end">
-                    <span
-                      className="flex h-8 w-8 items-center justify-center rounded-xl"
-                      style={{ background: "color-mix(in srgb, var(--features-blue) 18%, transparent)" }}
-                    >
-                      <PhoneCall className="h-4 w-4" style={{ color: "var(--features-blue)" }} aria-hidden />
-                    </span>
-                    <Waveform reduced={reduced} />
-                    <span className="font-mono text-[9px] uppercase leading-tight tracking-[0.16em] text-muted-foreground/70">
-                      Agent
-                      <br />
-                      listening
-                    </span>
-                  </div>
 
                 <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
                   <Magnetic strength={0.28} className="w-full sm:w-auto">
@@ -199,7 +174,6 @@ export function FeatureCta() {
                       View pricing
                     </Link>
                   </Magnetic>
-                </div>
                 </div>
               </div>
             </SpotlightPanel>
