@@ -1,12 +1,15 @@
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Hero } from "@/components/sections/hero"
-import { PricingFeature } from "@/components/sections/pricing-feature"
-import { HumanExperience } from "@/components/sections/human-experience"
+import { Benefits } from "@/components/sections/benefits"
+import { ProductStory } from "@/components/sections/product-story"
 import { HowItWorks } from "@/components/sections/how-it-works"
-import { Connectivity } from "@/components/sections/connectivity"
 import { UseCases } from "@/components/sections/use-cases"
+import { Integrations } from "@/components/sections/integrations"
+import { Carrier } from "@/components/sections/carrier"
+import { SelfHosted } from "@/components/sections/self-hosted"
 import { Testimonials } from "@/components/sections/testimonials"
+import { PricingFeature } from "@/components/sections/pricing-feature"
 import { FAQ } from "@/components/sections/faq"
 import { CTA } from "@/components/sections/cta"
 import { ServiceJsonLd } from "@/components/seo/jsonld"
@@ -15,18 +18,21 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <ServiceJsonLd
-        name="9278.ai — AI voice agents for sales, support and operations"
-        description="Build, launch, and scale AI voice agents that actually sound human. Carrier-grade phone numbers, sub-second latency, transparent per-minute pricing."
+        name="Vozpar — AI voice agents that listen, act, and resolve"
+        description="Build, deploy, and scale natural-sounding AI voice agents. Sub-300ms latency, native audio, self-hosted — connected to your existing carrier and business tools."
         path="/"
         serviceType="AI voice agent platform"
       />
       <SiteHeader />
-      <main className="fit-sections flex-1">
+      <main className="flex-1">
         <Hero />
-        <HumanExperience />
+        <Benefits />
+        <ProductStory />
         <HowItWorks />
-        <Connectivity />
         <UseCases />
+        <Integrations />
+        <Carrier />
+        <SelfHosted />
         <Testimonials />
         <PricingFeature />
         <FAQ />

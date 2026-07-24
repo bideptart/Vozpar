@@ -1,109 +1,178 @@
 "use client"
 
 import Link from "next/link"
-import { Timer, BadgeCheck, Receipt, ArrowRight } from "lucide-react"
-import { motion } from "motion/react"
-import { Button } from "@/components/ui/button"
+import { Check, ArrowRight } from "lucide-react"
+import { motion, useReducedMotion } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
-const items = [
+const TIERS = [
   {
-    icon: Timer,
-    title: "From $0.10 per minute",
-    description:
-      "Three tiers: $0.15/min on Starter, $0.12/min on Growth, $0.10/min on Scale. The more you talk, the less you pay.",
+    id: "starter",
+    name: "Starter",
+    price: "$20",
+    rate: "$0.15 / min",
+    tagline: "Ideal for piloting your first agent.",
+    features: [
+      "1 concurrent AI agent",
+      "$0.15 per minute",
+      "$20 voice credit included",
+      "60-day credit validity",
+      "Inbound & outbound",
+      "Basic analytics",
+    ],
+    tint: "#2d98f1",
+    featured: false,
+    cta: "Get started",
   },
   {
-    icon: BadgeCheck,
-    title: "$20, $50 or $100 credit",
-    description:
-      "Pick your tier and unlock 1, 2, or 3 concurrent AI agents. Voice credit stays valid for 60 days from purchase.",
+    id: "growth",
+    name: "Growth",
+    price: "$50",
+    rate: "$0.12 / min",
+    tagline: "For teams running multiple agents.",
+    features: [
+      "2 concurrent agents",
+      "$0.12 per minute",
+      "$50 voice credit included",
+      "60-day credit validity",
+      "Inbound & outbound",
+      "Full analytics dashboard",
+      "Priority support",
+    ],
+    tint: "#046bd2",
+    featured: true,
+    cta: "Start growing",
   },
   {
-    icon: Receipt,
-    title: "No hidden fees",
-    description:
-      "No setup, no contracts, no minimums beyond your top-up. Phone numbers stay billed directly by your existing carrier.",
+    id: "scale",
+    name: "Scale",
+    price: "$100",
+    rate: "$0.10 / min",
+    tagline: "High-volume operations at the best rate.",
+    features: [
+      "3 concurrent agents",
+      "$0.10 per minute",
+      "$100 voice credit included",
+      "60-day credit validity",
+      "Inbound & outbound",
+      "Full analytics dashboard",
+      "Priority support",
+      "Custom integrations",
+    ],
+    tint: "#2d98f1",
+    featured: false,
+    cta: "Scale up",
   },
 ]
 
 export function PricingFeature() {
+  const reduced = useReducedMotion()
+
   return (
-    <section id="pricing" className="relative overflow-hidden border-t border-border/40">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[300px] bg-[radial-gradient(60%_60%_at_50%_0%,oklch(0.577_0.245_27.33/0.05),transparent_70%)]"
-      />
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
-        <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <span className="ai-pill-violet">
-            <span className="h-1 w-1 rounded-full bg-accent" />
-            Pricing
-          </span>
-          <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
-            Fair pricing.{" "}
-            <span className="text-primary">Pay only for what you talk.</span>
+    <section id="pricing" className="relative overflow-hidden border-t border-white/[0.06]">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[400px]"
+        style={{ background: "radial-gradient(50% 50% at 50% 0%, rgba(4,107,210,0.07), transparent 70%)" }} />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28">
+
+        <ScrollReveal className="mx-auto mb-14 max-w-2xl text-center">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.22em] text-[#2d98f1]">Pricing</p>
+          <h2 className="font-heading text-4xl font-medium leading-tight tracking-tight text-white md:text-5xl">
+            Simple, transparent pricing.
+            <br />
+            <span className="text-white/55">Pay only for what you use.</span>
           </h2>
-          <p className="mt-5 text-pretty leading-relaxed text-muted-foreground md:text-lg">
-            Voice from $0.10 per minute. Top up with $20, $50, or $100 of credit, unlock up to 3 concurrent AI agents,
-            and scale from a single line to a full call center — no contracts, no surprises.
+          <p className="mt-5 text-lg leading-relaxed text-white/40">
+            Top up with voice credit. No contracts, no per-seat fees, no surprises.
           </p>
         </ScrollReveal>
 
-        <StaggerGroup className="mt-16 grid gap-5 md:grid-cols-3">
-          {items.map((item, i) => {
-            const Icon = item.icon
-            const isFeatured = i === 1
-            return (
-              <StaggerItem key={item.title}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                  className="group relative h-full"
-                >
-                  <div
-                    className={`relative h-full rounded-2xl p-7 transition-all ${
-                      isFeatured
-                        ? "ring-gradient card-glow glow-primary"
-                        : "card-glow"
-                    }`}
-                  >
-                    {isFeatured && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_4px_20px_-4px_oklch(0.577_0.245_27.33/0.7)]">
-                        Most popular
-                      </span>
-                    )}
-                    <span
-                      className={`flex h-12 w-12 items-center justify-center rounded-xl ${
-                        isFeatured
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-primary/10 text-primary ring-1 ring-primary/20"
-                      }`}
-                    >
-                      <Icon
-                        className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
-                        aria-hidden="true"
-                      />
+        <StaggerGroup className="grid gap-4 md:grid-cols-3">
+          {TIERS.map(tier => (
+            <StaggerItem key={tier.id}>
+              <motion.div
+                whileHover={reduced ? undefined : { y: -5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className="group relative h-full overflow-hidden rounded-2xl border bg-[#08090e]"
+                style={{
+                  borderColor: tier.featured ? `${tier.tint}40` : "rgba(255,255,255,0.07)",
+                  boxShadow: tier.featured ? `0 0 48px ${tier.tint}14` : "none",
+                }}
+              >
+                {/* Top accent */}
+                <div className="h-[2px] w-full"
+                  style={{
+                    background: tier.featured
+                      ? `linear-gradient(to right, ${tier.tint}30, ${tier.tint}, ${tier.tint}30)`
+                      : `linear-gradient(to right, transparent, ${tier.tint}40, transparent)`,
+                  }} />
+
+                {/* Popular badge */}
+                {tier.featured && (
+                  <div className="absolute inset-x-0 top-0 flex justify-center -translate-y-0">
+                    <span className="rounded-b-xl px-4 py-0.5 text-[10px] font-semibold text-white"
+                      style={{ background: tier.tint }}>
+                      Most popular
                     </span>
-                    <h3 className="mt-6 text-lg font-semibold tracking-tight">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
                   </div>
-                </motion.div>
-              </StaggerItem>
-            )
-          })}
+                )}
+
+                {/* Hover glow */}
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{ background: `radial-gradient(55% 45% at 50% 0%, ${tier.tint}09, transparent)` }} />
+
+                <div className="relative p-7">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">{tier.name}</p>
+
+                  <div className="mt-4 flex items-end gap-1.5">
+                    <span className="font-heading text-5xl font-medium leading-none tracking-tight"
+                      style={{ color: tier.tint }}>
+                      {tier.price}
+                    </span>
+                    <span className="mb-1 text-sm text-white/35">top-up</span>
+                  </div>
+                  <p className="mt-1 text-sm text-white/35">{tier.rate}</p>
+                  <p className="mt-3 text-sm text-white/45">{tier.tagline}</p>
+
+                  <div className="my-6 h-px" style={{ background: `${tier.tint}14` }} />
+
+                  <ul className="space-y-3">
+                    {tier.features.map(f => (
+                      <li key={f} className="flex items-center gap-2.5 text-sm text-white/55">
+                        <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full"
+                          style={{ background: `${tier.tint}16` }}>
+                          <Check className="h-2.5 w-2.5" style={{ color: tier.tint }} />
+                        </span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    href="/get-started"
+                    className="mt-8 flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]"
+                    style={
+                      tier.featured
+                        ? { background: tier.tint, color: "#fff", boxShadow: `0 0 18px ${tier.tint}35` }
+                        : { background: `${tier.tint}12`, color: tier.tint, border: `1px solid ${tier.tint}25` }
+                    }
+                  >
+                    {tier.cta}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </motion.div>
+            </StaggerItem>
+          ))}
         </StaggerGroup>
 
-        <ScrollReveal className="mt-14 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild size="lg" className="group btn-ai h-12 rounded-full px-7 transition-all">
-            <Link href="/pricing">
-              View full pricing
-              <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <ScrollReveal className="mt-8 text-center">
+          <p className="text-sm text-white/30">
+            Phone numbers are billed directly by your existing carrier — not by Vozpar.{" "}
+            <Link href="/pricing" className="text-[#2d98f1] underline-offset-2 hover:underline">
+              Full pricing details →
             </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="h-12 rounded-full border-border/70 bg-card/30 px-7 text-foreground backdrop-blur-md hover:border-primary/50 hover:text-foreground">
-            <Link href="/get-started">Get started</Link>
-          </Button>
+          </p>
         </ScrollReveal>
       </div>
     </section>

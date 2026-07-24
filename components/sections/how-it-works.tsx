@@ -1,273 +1,139 @@
 "use client"
 
-import type { ReactNode } from "react"
-import { Wand2, BookOpen, Rocket, ArrowRight } from "lucide-react"
+import { Wand2, BookOpen, Plug, Rocket } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
-/** 3D "pin" card shell, in the spirit of the Aceternity/21st.dev 3D Pin
- * component: a perspective tilt on hover, a conic-gradient ring that sweeps
- * continuously around the border, and a beam dropping from the card's
- * underside to a glowing dot "landing" on the surface below — like a map
- * pin dropped onto the card. Everything is driven by `accent` so each step
- * keeps its own colour identity instead of one shared blue treatment. */
-function PinCard({
-  accent,
-  reduced,
-  children,
-}: {
-  accent: string
-  reduced: boolean
-  children: ReactNode
-}) {
-  return (
-    <div className="relative flex h-full flex-col pb-16" style={{ perspective: "1200px" }}>
-      <motion.div
-        whileHover={reduced ? undefined : { rotateX: 9, rotateY: -7, y: -8, scale: 1.02 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className="group relative flex-1 [transform-style:preserve-3d]"
-      >
-        {/* Ambient glow behind the card, blooms brighter on hover */}
-        <div
-          aria-hidden
-          className="absolute -inset-6 -z-10 rounded-[28px] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-40"
-          style={{ background: accent }}
-        />
-
-        {/* Sweeping conic-gradient ring — a bright arc plus a fainter,
-            wider "comet tail" trailing behind it — rotating continuously
-            behind a 1px-inset dark fill, so only the arcs show through. */}
-        <div className="absolute -inset-px overflow-hidden rounded-2xl">
-          {!reduced && (
-            <motion.div
-              className="absolute inset-[-60%] transition-[filter] duration-500 group-hover:brightness-125"
-              style={{
-                background: `conic-gradient(from 0deg, transparent 0deg, color-mix(in oklch, ${accent} 35%, transparent) 40deg, ${accent} 62deg, transparent 95deg, transparent 360deg)`,
-              }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            />
-          )}
-          <div className="absolute inset-px rounded-[15px] bg-[#07090d]/40" />
-        </div>
-
-        {/* Diagonal shine sweep on hover */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-px overflow-hidden rounded-[15px]"
-        >
-          <span
-            className="absolute -inset-y-4 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent opacity-0 transition-all duration-700 group-hover:left-[130%] group-hover:opacity-100"
-          />
-        </div>
-
-        <div
-          className="relative h-full m-px rounded-[15px]"
-          style={{ background: "linear-gradient(165deg, rgba(255,255,255,0.035), rgba(7,9,13,0.98) 40%)" }}
-        >
-          {children}
-        </div>
-      </motion.div>
-
-      {/* The pin: beam + glowing tip (with a soft radar ping) + a landed
-          glow on the ground. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
-        <motion.div
-          className="w-px origin-top"
-          style={{ height: 44, background: `linear-gradient(to bottom, ${accent}, transparent)` }}
-          initial={reduced ? undefined : { scaleY: 0, opacity: 0 }}
-          whileInView={reduced ? undefined : { scaleY: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-        />
-        <span className="relative -mt-0.5 flex h-2 w-2 items-center justify-center">
-          {!reduced && (
-            <motion.span
-              className="absolute h-full w-full rounded-full"
-              style={{ background: accent }}
-              animate={{ scale: [1, 2.6], opacity: [0.5, 0] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }}
-            />
-          )}
-          <motion.span
-            className="relative h-2 w-2 rounded-full"
-            style={{ background: accent, boxShadow: `0 0 10px 2px ${accent}` }}
-            animate={reduced ? undefined : { opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-          />
-        </span>
-        <div
-          className="mt-1 h-2 w-16 rounded-full blur-md"
-          style={{ background: accent, opacity: 0.35 }}
-        />
-      </div>
-    </div>
-  )
-}
-
-const steps = [
+const STEPS = [
   {
-    icon: Wand2,
-    label: "Step 01",
-    title: "Design your agent",
-    description:
-      "Pick a voice, write the prompt, set guardrails. Describe the agent in plain English and ship it.",
-    bullets: ["System prompt + personas", "Guardrails and conversation flow", "Plain-English agent definition"],
-    pillClass: "ai-pill-cyan",
-    accent: "var(--ai-cyan)",
+    n: "01", icon: Wand2, tint: "#2d98f1",
+    title: "Define your agent",
+    body: "Choose a voice persona, write your system prompt in plain English, and set conversation guardrails. No code, no ML expertise needed.",
   },
   {
-    icon: BookOpen,
-    label: "Step 02",
+    n: "02", icon: BookOpen, tint: "#046bd2",
     title: "Connect your knowledge",
-    description:
-      "Point the agent at your knowledge base, FAQs, or product docs. It answers from your source of truth, not a generic model.",
-    bullets: ["RAG over your knowledge base", "Live document sync", "Source citations on every answer"],
-    pillClass: "ai-pill-violet",
-    accent: "var(--ai-violet)",
+    body: "Upload FAQs, product docs, or pricing sheets. The agent answers directly from your source of truth — not hallucinated guesses.",
   },
   {
-    icon: Rocket,
-    label: "Step 03",
-    title: "Launch & scale",
-    description:
-      "Plug in your phone number, route inbound or outbound, and go live. Scale from one call to thousands without a queue.",
-    bullets: ["Phone number routing (inbound + outbound)", "Real-time latency tracking", "Self-hosted control panel"],
-    pillClass: "ai-pill-magenta",
-    accent: "var(--ai-magenta)",
+    n: "03", icon: Plug, tint: "#2d98f1",
+    title: "Add tools and numbers",
+    body: "Connect your calendar, CRM, and existing carrier number. The agent checks availability, books, and updates records in real time — mid-call.",
+  },
+  {
+    n: "04", icon: Rocket, tint: "#046bd2",
+    title: "Launch and improve",
+    body: "Go live in minutes. Monitor every call, review outcomes, and refine the agent from a single control panel — no redeployment needed.",
   },
 ]
 
 export function HowItWorks() {
   const reduced = useReducedMotion()
-  return (
-    <section id="how-it-works" className="relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]"
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-1/3 -z-10 h-[28rem] w-[28rem] rounded-full blur-[120px] [will-change:transform]"
-        style={{ background: "var(--ai-violet)", opacity: 0.04 }}
-        animate={reduced ? undefined : { x: [0, 40, 0], y: [0, -20, 0] }}
-        transition={{ duration: 16, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 bottom-1/4 -z-10 h-[28rem] w-[28rem] rounded-full blur-[120px] [will-change:transform]"
-        style={{ background: "var(--ai-magenta)", opacity: 0.035 }}
-        animate={reduced ? undefined : { x: [0, -30, 0], y: [0, 20, 0] }}
-        transition={{ duration: 18, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
-        <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <span className="ai-pill-cyan">
-            <span className="h-1 w-1 rounded-full bg-primary" />
-            How it works
-          </span>
-          <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
-            From idea to live agent in{" "}
-            <span className="text-primary">three steps.</span>
+  return (
+    <section id="how-it-works" className="relative overflow-hidden border-t border-white/[0.06]">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[400px]"
+        style={{ background: "radial-gradient(40% 50% at 20% 0%, rgba(4,107,210,0.07), transparent 70%)" }} />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28">
+
+        {/* Header */}
+        <ScrollReveal className="mx-auto mb-20 max-w-2xl text-center">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.22em] text-[#2d98f1]">How it works</p>
+          <h2 className="font-heading text-4xl font-medium leading-tight tracking-tight text-white md:text-5xl">
+            Getting Started is Simpler
+            <br className="hidden sm:block" />{" "}
+            <span className="text-white/55">Than You Think</span>
           </h2>
-          <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-            No infra to spin up, no models to host. Design, connect, and launch — your first agent is taking calls before lunch.
+          <p className="mt-5 text-lg leading-relaxed text-white/40">
+            From setup to your first live call in under a day. No infrastructure to provision.
           </p>
         </ScrollReveal>
 
-        {/* Connector line behind cards */}
-        <div className="relative mt-20">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 right-0 top-12 hidden h-px md:block"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, var(--ai-cyan) 20%, var(--ai-violet) 50%, var(--ai-magenta) 80%, transparent 100%)",
-              opacity: 0.35,
-            }}
-          />
+        {/* Desktop: timeline */}
+        <div className="hidden lg:block">
+          {/* Progress line */}
+          <div className="relative mx-8 mb-10 h-px">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#046bd2]/40 to-transparent" />
+            {/* Nodes */}
+            <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-between px-[10%]">
+              {STEPS.map((s, i) => (
+                <motion.div key={s.n}
+                  initial={reduced ? undefined : { scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border border-[#046bd2]/40 bg-black"
+                  style={{ boxShadow: `0 0 20px ${s.tint}20` }}
+                >
+                  {!reduced && (
+                    <motion.div className="absolute h-full w-full rounded-full border border-[#046bd2]/20"
+                      animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0, 0.4] }}
+                      transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4 }}
+                    />
+                  )}
+                  <span className="font-mono text-xs font-bold" style={{ color: s.tint }}>{s.n}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
 
-          <StaggerGroup className="grid gap-6 md:grid-cols-3 md:gap-8">
-            {steps.map((step, i) => {
-              const Icon = step.icon
+          <StaggerGroup className="grid grid-cols-4 gap-4">
+            {STEPS.map(s => {
+              const Icon = s.icon
               return (
-                <StaggerItem key={step.title}>
-                  <div className="group relative h-full">
-                    <PinCard accent={step.accent} reduced={Boolean(reduced)}>
-                      <div
-                        className="relative flex h-full flex-col overflow-hidden rounded-[15px] p-7 transition-shadow duration-500"
-                        style={{
-                          boxShadow: `0 24px 60px -30px color-mix(in oklch, ${step.accent} 55%, transparent)`,
-                        }}
-                      >
-                        {/* Accent wash across the top of the card */}
-                        <div
-                          aria-hidden
-                          className="pointer-events-none absolute inset-x-0 top-0 h-28 opacity-70"
-                          style={{
-                            background: `radial-gradient(60% 100% at 20% 0%, color-mix(in oklch, ${step.accent} 22%, transparent), transparent 70%)`,
-                          }}
-                        />
+                <StaggerItem key={s.n}>
+                  <motion.div
+                    whileHover={reduced ? undefined : { y: -4 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 26 }}
+                    className="group relative h-full overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] p-6 hover:border-[#046bd2]/30 transition-colors duration-300"
+                  >
+                    <div className="absolute inset-x-0 top-0 h-px"
+                      style={{ background: `linear-gradient(to right, transparent, ${s.tint}55, transparent)` }} />
+                    <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      style={{ background: `radial-gradient(55% 50% at 50% 0%, ${s.tint}07, transparent)` }} />
 
-                        <div className="relative flex items-center justify-between">
-                          <span className="relative flex h-12 w-12 items-center justify-center rounded-xl">
-                            <span
-                              aria-hidden
-                              className="absolute inset-0 rounded-xl opacity-25 transition-opacity duration-500 group-hover:opacity-50"
-                              style={{ background: step.accent, filter: "blur(14px)" }}
-                            />
-                            <span
-                              className="relative flex h-12 w-12 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105"
-                              style={{
-                                background: `color-mix(in oklch, ${step.accent} 16%, transparent)`,
-                                borderColor: `color-mix(in oklch, ${step.accent} 40%, transparent)`,
-                                color: step.accent,
-                              }}
-                            >
-                              <Icon className="h-5 w-5" aria-hidden="true" />
-                            </span>
-                          </span>
-                          <span className={step.pillClass}>{step.label}</span>
-                        </div>
-
-                        <div
-                          aria-hidden
-                          className="relative mt-5 h-px w-10 rounded-full"
-                          style={{ background: step.accent }}
-                        />
-
-                        <h3 className="relative mt-4 text-xl font-semibold tracking-tight">{step.title}</h3>
-                        <p className="relative mt-3 text-sm leading-relaxed text-muted-foreground">{step.description}</p>
-
-                        <ul className="relative mt-6 space-y-2.5">
-                          {step.bullets.map((b) => (
-                            <li key={b} className="flex items-center gap-2.5 text-sm text-foreground/80">
-                              <span
-                                aria-hidden
-                                className="h-1.5 w-1.5 shrink-0 rounded-full"
-                                style={{ background: step.accent, boxShadow: `0 0 8px color-mix(in oklch, ${step.accent} 70%, transparent)` }}
-                              />
-                              {b}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </PinCard>
-
-                    {i < steps.length - 1 && (
-                      <span
-                        aria-hidden
-                        className="pointer-events-none absolute -right-4 top-[calc(50%-2rem)] z-10 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border/60 bg-card/80 backdrop-blur-md md:flex"
-                      >
-                        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
-                      </span>
-                    )}
-                  </div>
+                    <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl border"
+                      style={{ borderColor: `${s.tint}22`, background: `${s.tint}10`, color: s.tint }}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="font-heading text-base font-medium tracking-tight text-white">{s.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/40">{s.body}</p>
+                  </motion.div>
                 </StaggerItem>
               )
             })}
           </StaggerGroup>
+        </div>
+
+        {/* Mobile: stacked */}
+        <div className="flex flex-col gap-4 lg:hidden">
+          {STEPS.map((s, i) => {
+            const Icon = s.icon
+            return (
+              <ScrollReveal key={s.n} delay={i * 0.07}>
+                <div className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#046bd2]/40 bg-black font-mono text-xs font-bold"
+                      style={{ color: s.tint }}>
+                      {s.n}
+                    </div>
+                    {i < STEPS.length - 1 && (
+                      <div className="mt-1 w-px flex-1 bg-gradient-to-b from-[#046bd2]/30 to-transparent" />
+                    )}
+                  </div>
+                  <div className="mb-3 flex-1 rounded-2xl border border-white/[0.07] bg-[#08090e] p-5">
+                    <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl border"
+                      style={{ borderColor: `${s.tint}22`, background: `${s.tint}10`, color: s.tint }}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <h3 className="font-heading text-base font-medium text-white">{s.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-white/40">{s.body}</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            )
+          })}
         </div>
       </div>
     </section>

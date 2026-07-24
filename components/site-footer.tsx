@@ -1,81 +1,100 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowUpRight, ChevronRight } from "lucide-react"
+import { ArrowUpRight, ChevronRight, Github, Twitter, Linkedin } from "lucide-react"
 import { Logo } from "@/components/logo"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 type FooterLink = { label: string; href: string; external?: boolean }
 
 const PLATFORM: FooterLink[] = [
-  { label: "Features", href: "/features" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "FAQ", href: "/faq" },
+  { label: "Features",   href: "/features"  },
+  { label: "Industries", href: "/industries" },
+  { label: "Pricing",    href: "/pricing"   },
+  { label: "FAQ",        href: "/faq"       },
+  { label: "Blog",       href: "/blog"      },
+]
+
+const SOLUTIONS: FooterLink[] = [
+  { label: "Appointment Booking",  href: "/industries" },
+  { label: "Customer Support",     href: "/industries" },
+  { label: "Lead Qualification",   href: "/industries" },
+  { label: "After-Hours Handling", href: "/industries" },
+  { label: "Outbound Campaigns",   href: "/industries" },
 ]
 
 const INDUSTRIES: FooterLink[] = [
-  { label: "Real Estate", href: "/industries/real-estate" },
-  { label: "Legal Services", href: "/industries/legal" },
-  { label: "E-Commerce", href: "/industries/ecommerce" },
-  { label: "Restaurants", href: "/industries/restaurants" },
-  { label: "Automotive", href: "/industries/automotive" },
-  { label: "Home Services", href: "/industries/home-services" },
+  { label: "Real Estate",    href: "/industries/real-estate"   },
+  { label: "Legal Services", href: "/industries/legal"         },
+  { label: "Restaurants",    href: "/industries/restaurants"   },
+  { label: "Automotive",     href: "/industries/automotive"    },
+  { label: "Home Services",  href: "/industries/home-services" },
+  { label: "E-Commerce",     href: "/industries/ecommerce"     },
 ]
 
 const COMPANY: FooterLink[] = [
-  { label: "About", href: "/about" },
-  { label: "Blog", href: "/blog" },
+  { label: "About",   href: "/about"   },
   { label: "Contact", href: "/contact" },
+  { label: "Blog",    href: "/blog"    },
 ]
 
 const LEGAL: FooterLink[] = [
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Service", href: "/terms" },
-  { label: "Acceptable Use", href: "/acceptable-use" },
-  { label: "Cookie Policy", href: "/cookies" },
-  { label: "DPA", href: "/dpa" },
-  { label: "All policies", href: "/legal" },
+  { label: "Privacy Policy",  href: "/privacy"         },
+  { label: "Terms of Service",href: "/terms"           },
+  { label: "Acceptable Use",  href: "/acceptable-use"  },
+  { label: "Cookie Policy",   href: "/cookies"         },
+  { label: "DPA",             href: "/dpa"             },
 ]
 
 const GROUPS = [
-  { key: "platform", title: "Platform", links: PLATFORM },
+  { key: "platform",   title: "Platform",   links: PLATFORM   },
+  { key: "solutions",  title: "Solutions",  links: SOLUTIONS  },
   { key: "industries", title: "Industries", links: INDUSTRIES },
-  { key: "company", title: "Company", links: COMPANY },
-  { key: "legal", title: "Legal", links: LEGAL },
+  { key: "company",    title: "Company",    links: COMPANY    },
+  { key: "legal",      title: "Legal",      links: LEGAL      },
 ]
 
-/** One link row. The chevron slides in from the left on hover instead of
- * just a color change — matches the header's mobile-menu link treatment so
- * the two nav surfaces feel like one system. */
-function FooterLinkRow({ link }: { link: FooterLink }) {
-  const className =
-    "group flex items-center gap-1 text-slate-400 transition-colors hover:text-white"
-  const content = (
+const SOCIALS = [
+  { icon: Twitter,  href: "#", label: "Twitter / X" },
+  { icon: Linkedin, href: "#", label: "LinkedIn"    },
+  { icon: Github,   href: "#", label: "GitHub"      },
+]
+
+function FLink({ link }: { link: FooterLink }) {
+  const cls =
+    "group flex items-center gap-1 text-sm text-white/35 transition-colors hover:text-white/80"
+  const inner = (
     <>
-      <ChevronRight className="h-3 w-3 shrink-0 -translate-x-1 text-primary opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
-      <span className="transition-transform duration-200 group-hover:translate-x-0.5">{link.label}</span>
+      <ChevronRight
+        className="h-3 w-3 -translate-x-1 text-[#046bd2] opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+        aria-hidden
+      />
+      <span className="transition-transform duration-200 group-hover:translate-x-0.5">
+        {link.label}
+      </span>
     </>
   )
   return link.external ? (
-    <a href={link.href} target="_blank" rel="noopener noreferrer" className={className}>
-      {content}
+    <a href={link.href} target="_blank" rel="noopener noreferrer" className={cls}>
+      {inner}
     </a>
   ) : (
-    <Link href={link.href} className={className}>
-      {content}
+    <Link href={link.href} className={cls}>
+      {inner}
     </Link>
   )
 }
 
-function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) {
+function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <div>
-      <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-200">{title}</h3>
-      <ul className="mt-5 space-y-3 text-sm">
-        {links.map((link) => (
-          <li key={link.label}>
-            <FooterLinkRow link={link} />
+      <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50">
+        {title}
+      </p>
+      <ul className="space-y-2.5">
+        {links.map((l) => (
+          <li key={l.label}>
+            <FLink link={l} />
           </li>
         ))}
       </ul>
@@ -83,88 +102,110 @@ function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) 
   )
 }
 
+// Mobile: collapsible group using native <details> — no JS dependency,
+// works with keyboard, locks body scroll is not needed for footer.
+function MobileGroup({ title, links }: { title: string; links: FooterLink[] }) {
+  return (
+    <details className="group border-b border-white/[0.07]">
+      <summary className="flex cursor-pointer list-none items-center justify-between py-3.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50 hover:text-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+        {title}
+        <ChevronRight
+          className="h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-90"
+          aria-hidden
+        />
+      </summary>
+      <ul className="space-y-2.5 pb-4">
+        {links.map((l) => (
+          <li key={l.label}>
+            <FLink link={l} />
+          </li>
+        ))}
+      </ul>
+    </details>
+  )
+}
+
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-black text-slate-300">
-      {/* ambient glow */}
+    <footer className="relative overflow-hidden border-t border-white/[0.07] bg-black text-white">
+      {/* Subtle top glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-24 h-64 bg-[radial-gradient(60%_60%_at_50%_0%,oklch(0.577_0.245_27.33/0.10),transparent_70%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#046bd2]/25 to-transparent"
       />
 
-      <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 sm:gap-12 sm:py-16 md:grid-cols-12 md:px-6">
-        {/* Brand */}
-        <ScrollReveal className="md:col-span-4">
-          <Link href="/" className="flex items-center" aria-label="9278.ai home">
-            <Logo height={40} />
-          </Link>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
-            AI voice agents that actually sound human. Native audio, sub-second latency, and a self-hosted control panel that connects to your existing carrier.
-          </p>
-          <a
-            href="https://voice.9278.ai/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group mt-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white transition-all hover:border-primary/60"
-          >
-            Customer dashboard
-            <ArrowUpRight className="h-3.5 w-3.5 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
-        </ScrollReveal>
+      {/* Main grid */}
+      <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 sm:py-16 md:py-20">
+        <div className="grid gap-10 md:grid-cols-12">
 
-        {/* Link columns — an accordion below `md` (four short taps instead
-            of a long scroll through every link on every page's footer), a
-            plain static grid from `md` where there's room to show all four
-            open at once. Same GROUPS data feeds both, so there's still one
-            place to edit the link set. */}
-        <div className="md:hidden">
-          <Accordion type="multiple" className="w-full">
-            {GROUPS.map((group) => (
-              <AccordionItem key={group.key} value={group.key} className="border-white/10">
-                <AccordionTrigger className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-200 hover:no-underline">
-                  {group.title}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-3 text-sm">
-                    {group.links.map((link) => (
-                      <li key={link.label}>
-                        <FooterLinkRow link={link} />
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
+          {/* Brand column */}
+          <ScrollReveal className="md:col-span-3">
+            <Link href="/" aria-label="Vozpar home" className="inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] rounded-sm">
+              <Logo height={36} />
+            </Link>
+            <p className="mt-5 max-w-[260px] text-sm leading-relaxed text-white/35">
+              AI voice agents that listen, act, and resolve. Native audio, sub-second
+              latency, your own infrastructure.
+            </p>
+
+            {/* Dashboard link */}
+            <a
+              href="https://voice.9278.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group mt-6 inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-sm text-white/60 transition-all hover:border-[#046bd2]/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]"
+            >
+              Customer dashboard
+              <ArrowUpRight className="h-3.5 w-3.5 text-[#2d98f1] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+
+            {/* Socials */}
+            <div className="mt-6 flex items-center gap-2">
+              {SOCIALS.map((s) => {
+                const Icon = s.icon
+                return (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    aria-label={s.label}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] text-white/35 transition-colors hover:border-[#046bd2]/40 hover:text-[#2d98f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]"
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                  </a>
+                )
+              })}
+            </div>
+          </ScrollReveal>
+
+          {/* Desktop link columns */}
+          <StaggerGroup className="hidden gap-8 md:col-span-9 md:grid md:grid-cols-5">
+            {GROUPS.map((g) => (
+              <StaggerItem key={g.key}>
+                <FooterCol title={g.title} links={g.links} />
+              </StaggerItem>
             ))}
-          </Accordion>
-        </div>
+          </StaggerGroup>
 
-        <StaggerGroup className="hidden gap-8 sm:gap-12 md:col-span-8 md:grid md:grid-cols-4">
-          {GROUPS.map((group) => (
-            <StaggerItem key={group.key}>
-              <FooterColumn title={group.title} links={group.links} />
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
-      </div>
-
-      {/* Live status — just above the footer divider */}
-      <div className="relative mx-auto w-full max-w-7xl px-4 pb-6 md:px-6">
-        <div className="inline-flex items-center gap-2 text-xs text-slate-400">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-          </span>
-          All systems operational
+          {/* Mobile accordion columns */}
+          <div className="md:hidden">
+            {GROUPS.map((g) => (
+              <MobileGroup key={g.key} title={g.title} links={g.links} />
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="relative border-t border-white/10">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-3 px-4 py-6 text-xs text-slate-400 md:flex-row md:items-center md:px-6">
-          <p>© {new Date().getFullYear()} 9278.ai. All rights reserved.</p>
-          <p className="inline-flex items-center gap-2">
-            <span className="h-1 w-1 rounded-full bg-primary" />
-            Made for human conversations.
-          </p>
+      {/* Bottom bar */}
+      <div className="relative border-t border-white/[0.07]">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-3 px-4 py-5 text-xs text-white/25 sm:flex-row sm:items-center sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            </span>
+            <span className="text-white/30">All systems operational</span>
+          </div>
+          <p>© {new Date().getFullYear()} Vozpar. All rights reserved.</p>
         </div>
       </div>
     </footer>

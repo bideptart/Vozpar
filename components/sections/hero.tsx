@@ -1,1178 +1,449 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, PhoneCall, Sparkles, Mic, Volume2, Cpu, Radio } from "lucide-react"
-import { AnimatePresence, animate, motion, useReducedMotion, type Variants } from "motion/react"
-import { useIsMobile } from "@/hooks/use-mobile"
+import Link from "next/link"
+import {
+  ArrowRight, PhoneCall, CheckCircle, Zap, Shield,
+  Globe2, Calendar, Headphones, TrendingUp, PhoneOutgoing, Moon,
+} from "lucide-react"
+import { motion, AnimatePresence, useReducedMotion } from "motion/react"
+import { animate } from "motion/react"
 
-/**
- * The call the panel is demoing, cycling on a loop. Previously this was two
- * hardcoded, permanently-static bubbles — the "generating" label and its
- * three dots never actually resolved into anything, so the whole panel read
- * as a screenshot rather than a live agent. Each turn now plays through a
- * caller line → a beat of "generating" → the agent's reply landing, then
- * holds before the next turn replaces it and the footer telemetry (latency/
- * sentiment/intent) updates to match.
- */
-const CALL_SCRIPT = [
+// ── Rotating headline words ───────────────────────────────────────────────────
+const WORDS = ["Books Appointments", "Qualifies Leads", "Handles Support", "Drives Revenue", "Works 24/7"] as const
+
+// ── 3D Carousel cards data ────────────────────────────────────────────────────
+const CARDS = [
   {
-    callerTime: "00:14",
-    caller: "Hi, I'm calling about the listing on Maple Street.",
-    agentTime: "00:15",
-    agent: "Of course — the 4-bed colonial. Are you looking to schedule a showing this week?",
-    intent: "Book showing",
+    icon: Calendar,
+    tag: "Booking",
+    title: "Fills Every Slot",
+    metric: "94%",
+    metricLabel: "booking rate",
+    fact: "Checks calendar, confirms slot, sends SMS — zero staff needed.",
+    color: "#2d98f1",
+    accent: "#1a7fc4",
   },
   {
-    callerTime: "00:22",
-    caller: "Actually, is it free Saturday afternoon?",
-    agentTime: "00:23",
-    agent: "Saturday at 2 PM works — you're booked, and I've texted the address over.",
-    intent: "Showing booked",
+    icon: Headphones,
+    tag: "Support",
+    title: "Resolves Instantly",
+    metric: "87%",
+    metricLabel: "first-call resolution",
+    fact: "Answers from your knowledge base. Escalates only when truly needed.",
+    color: "#6366f1",
+    accent: "#4f46e5",
   },
   {
-    callerTime: "00:31",
-    caller: "Perfect, thank you so much!",
-    agentTime: "00:32",
-    agent: "You're welcome — I'll send a reminder an hour before. Anything else?",
-    intent: "Wrapping up",
+    icon: TrendingUp,
+    tag: "Leads",
+    title: "Qualifies & Routes",
+    metric: "3×",
+    metricLabel: "qualified lead lift",
+    fact: "Scores inbound leads and sends hot prospects straight to your team.",
+    color: "#0ea5e9",
+    accent: "#0284c7",
+  },
+  {
+    icon: PhoneOutgoing,
+    tag: "Outbound",
+    title: "Follows Up at Scale",
+    metric: "41%",
+    metricLabel: "re-engagement rate",
+    fact: "Calls dormant leads and confirms appointments automatically.",
+    color: "#8b5cf6",
+    accent: "#7c3aed",
+  },
+  {
+    icon: Moon,
+    tag: "After-Hours",
+    title: "Never Misses a Call",
+    metric: "100%",
+    metricLabel: "after-hours capture",
+    fact: "Every caller is greeted and helped — even at 3 AM.",
+    color: "#10b981",
+    accent: "#059669",
   },
 ] as const
 
-const TURN_HOLD_MS = 4200
-const GENERATING_DELAY_MS = 950
+const INTERVAL = 3200
 
-/** Counts up from 0 to `target` once on mount — the trust-stat number sat
- * there fully formed with no entrance of its own, while everything else in
- * the hero animates in. `delay` lines up with the stat row's own fade-in
- * (see the `transition` on its wrapping motion.div) so the count starts
- * right as the row becomes visible instead of before or well after. */
-function AnimatedNumber({ target, delay = 0 }: { target: number; delay?: number }) {
+// ── Animated counter ──────────────────────────────────────────────────────────
+function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; delay?: number }) {
   const reduced = useReducedMotion()
-  const [value, setValue] = useState(reduced ? target : 0)
-
+  const [val, setVal] = useState(reduced ? to : 0)
   useEffect(() => {
     if (reduced) return
-    const controls = animate(0, target, {
-      duration: 1.2,
-      delay,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => setValue(Math.round(v)),
-    })
-    return () => controls.stop()
-  }, [target, delay, reduced])
-
-  return <>{value}</>
+    const c = animate(0, to, { duration: 1.6, delay, ease: [0.16, 1, 0.3, 1], onUpdate: v => setVal(Math.round(v)) })
+    return () => c.stop()
+  }, [to, delay, reduced])
+  return <>{val}{suffix}</>
 }
 
-/** Rotating call scenarios for the Voice Operations Core panel. It used to
- * hardcode a single "Maple Street" call forever — every loop replayed the
- * identical caller line, intent, and outcome, which reads as a canned demo
- * rather than a live system. Each full step-cycle now advances to the next
- * scenario, so the panel actually shows different calls over time. */
-const VOICE_SCENARIOS = [
-  {
-    callerQuote: "I need an appointment Saturday.",
-    intent: "Book appointment",
-    calendarStatus: "Checking availability",
-    crmStatus: "Customer matched",
-    outcomeLabel: "Appointment booked",
-    outcomeTime: "Saturday · 2:00 PM",
-  },
-  {
-    callerQuote: "Table for four this Friday?",
-    intent: "Reserve table",
-    calendarStatus: "Checking floor plan",
-    crmStatus: "Regular guest found",
-    outcomeLabel: "Reservation confirmed",
-    outcomeTime: "Friday · 7:30 PM",
-  },
-  {
-    callerQuote: "Can I reschedule my cleaning?",
-    intent: "Reschedule visit",
-    calendarStatus: "Finding new slot",
-    crmStatus: "Patient record pulled",
-    outcomeLabel: "Visit rescheduled",
-    outcomeTime: "Tuesday · 10:15 AM",
-  },
-  {
-    callerQuote: "Any slots for a haircut today?",
-    intent: "Book haircut",
-    calendarStatus: "Checking stylist",
-    crmStatus: "Client history loaded",
-    outcomeLabel: "Appointment booked",
-    outcomeTime: "Today · 4:45 PM",
-  },
-] as const
+// ── Waveform ──────────────────────────────────────────────────────────────────
+const BH = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8, 0.6]
+function Waveform({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+  return (
+    <div className="flex items-center gap-[3px]" aria-hidden>
+      {BH.map((h, i) => (
+        <motion.span key={i} className="block w-[2.5px] rounded-full" style={{ background: color }}
+          animate={!reduced && active
+            ? { height: [h * 6, h * 22, h * 10, h * 20, h * 6], opacity: 0.85 }
+            : { height: h * 8, opacity: 0.3 }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.07 }} />
+      ))}
+    </div>
+  )
+}
 
-/**
- * Living Voice Operations Core - Visualizes a real voice call workflow
- */
-function VoiceOperationsCore({ reduced }: { reduced: boolean }) {
-  const [step, setStep] = useState(0)
-  const [scenario, setScenario] = useState(0)
-  const [hoverCore, setHoverCore] = useState(false)
-  const [hoverTool, setHoverTool] = useState<string | null>(null)
-  const isFirstLoop = useRef(true)
+// ── 3D CAROUSEL ───────────────────────────────────────────────────────────────
+function Carousel3D({ reduced }: { reduced: boolean }) {
+  const [active, setActive] = useState(0)
+  const n = CARDS.length
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const totalSteps = 8
-  // Was 1.2s/step (a ~12s loop) — trimmed to 0.8s so the whole call resolves
-  // in well under a beat and reads as snappy/live rather than a slow slideshow.
-  const stepDuration = 0.8 // seconds
+  const start = () => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => setActive(a => (a + 1) % n), INTERVAL)
+  }
 
   useEffect(() => {
     if (reduced) return
-    const interval = setInterval(() => {
-      setStep((s) => (s + 1) % (totalSteps + 2)) // +2 for hold
-    }, (stepDuration * 1000))
-    return () => clearInterval(interval)
+    start()
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [reduced])
 
-  // Advance to the next scenario every time a loop completes (step wraps
-  // back to 0), skipping the very first mount so the initial scenario holds
-  // for a full cycle before switching.
+  // isMobile: on small screens only show front card (no 3D spread)
+  const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
-    if (step !== 0) return
-    if (isFirstLoop.current) {
-      isFirstLoop.current = false
-      return
+    const mq = window.matchMedia("(max-width: 639px)")
+    setIsMobile(mq.matches)
+    const h = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", h)
+    return () => mq.removeEventListener("change", h)
+  }, [])
+
+  // Position each card in 3D space
+  const getStyle = (i: number) => {
+    const diff = ((i - active + n) % n)
+    const angle = diff === 0 ? 0 : diff <= Math.floor(n / 2) ? diff : diff - n
+
+    if (isMobile) {
+      // On mobile: stack cards, only front visible
+      return {
+        x: 0, z: angle === 0 ? 0 : -300,
+        rotateY: 0,
+        scale: angle === 0 ? 1 : 0.85,
+        opacity: angle === 0 ? 1 : 0,
+        zIndex: angle === 0 ? 50 : 10,
+      }
     }
-    setScenario((s) => (s + 1) % VOICE_SCENARIOS.length)
-  }, [step])
 
-  const current = VOICE_SCENARIOS[scenario]
-  // Only the visible layout gets mounted (see note below) — this decides
-  // which one, on the same breakpoint the markup used to hide/show via CSS.
-  const isMobile = useIsMobile()
+    const xMap:  Record<number, number> = { 0: 0, 1: 200, 2: 310, [-1]: -200, [-2]: -310 }
+    const zMap:  Record<number, number> = { 0: 0, 1: -80, 2: -180, [-1]: -80, [-2]: -180 }
+    const ryMap: Record<number, number> = { 0: 0, 1: -22, 2: -38, [-1]: 22, [-2]: 38 }
+    const scMap: Record<number, number> = { 0: 1, 1: 0.80, 2: 0.62, [-1]: 0.80, [-2]: 0.62 }
+    const opMap: Record<number, number> = { 0: 1, 1: 0.60, 2: 0.30, [-1]: 0.60, [-2]: 0.30 }
+    const zIdx:  Record<number, number> = { 0: 50, 1: 40, 2: 30, [-1]: 40, [-2]: 30 }
 
-  const isActive = (min: number, max: number) => step >= min && step <= max
-  
+    const clamp = (v: number) => Math.max(-2, Math.min(2, v)) as -2 | -1 | 0 | 1 | 2
+    const k = clamp(angle)
+
+    return {
+      x: xMap[k] ?? 0, z: zMap[k] ?? -200,
+      rotateY: ryMap[k] ?? 0, scale: scMap[k] ?? 0.5,
+      opacity: opMap[k] ?? 0, zIndex: zIdx[k] ?? 10,
+    }
+  }
+
   return (
-    <div 
-      className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#05060B] to-[#07090D] border border-[#1e2329] p-4 shadow-[0_0_40px_rgba(56,189,248,0.05)] sm:p-6 md:p-8"
-      onClick={() => !reduced && setStep(0)}
+    <div
+      className="relative flex w-full items-center justify-center"
+      style={{
+        height: isMobile ? 420 : 460,
+        perspective: "1100px",
+        perspectiveOrigin: "50% 45%",
+      }}
     >
-      {/* Subtle animated grid background */}
-      <div 
-        className="absolute inset-0 opacity-[0.03] z-0 pointer-events-none" 
-        style={{
-          backgroundImage: 'linear-gradient(rgba(56,189,248,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.5) 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-        }}
-      >
-        <motion.div 
-          className="absolute inset-0"
-          animate={
-            reduced
-              ? undefined
-              : {
-                  backgroundPosition: ['0px 0px', '20px 20px'],
-                }
-          }
-          transition={{
-            duration: 20,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: 'linear',
-          }}
-        />
-      </div>
-      
-      {/* Content container with proper z-index */}
-      <div className="relative z-10">
-      {/* Performance indicators */}
-      <div className="mb-4 flex items-center justify-between sm:mb-6">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            Live call processing
-          </span>
-        </div>
-      </div>
 
-      {/* Desktop layout — brought back, but rescaled. The original build was
-          sized for a wide, unconstrained container (192px core, full-text
-          caller/tool cards on fixed 160px offsets); inside the hero's
-          two-column grid the panel only ever gets ~5/12 of max-w-7xl
-          (~450–500px), so at that size the caller card overlapped the core.
-          Same three-node layout and same motion/timing, just scaled down
-          (~60%) so caller, core, and tool cards all fit side by side with
-          clearance to spare even at the narrowest (1024px, lg breakpoint)
-          width. */}
-      {!isMobile && (
-      <div>
-        <div className="relative h-[260px]">
-          {/* Caller Signal (Left) */}
-          <motion.div
-            className="absolute left-0 top-1/2 -translate-y-1/2"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{
-              opacity: isActive(0, 8) ? 1 : 0,
-              x: isActive(0, 8) ? 0 : -20,
-            }}
-            transition={{ duration: 0.5 }}
+      {/* Ambient glow that changes with active card */}
+      <motion.div aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-3xl blur-[80px]"
+        animate={{ background: `radial-gradient(ellipse at 50% 60%, ${CARDS[active].color}30, transparent 65%)` }}
+        transition={{ duration: 0.7 }}
+      />
+
+      {/* Cards */}
+      {CARDS.map((card, i) => {
+        const Icon = card.icon
+        const s = getStyle(i)
+        const isFront = i === active
+
+        return (
+          <motion.div key={i}
+            className="absolute cursor-pointer"
+            style={{ transformStyle: "preserve-3d", zIndex: s.zIndex }}
+            animate={{ x: s.x, z: s.z, rotateY: s.rotateY, scale: s.scale, opacity: s.opacity }}
+            transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 200, damping: 26 }}
+            onClick={() => { setActive(i); start() }}
           >
-            <div className="relative">
-              <div className="flex items-center gap-2 bg-[#050607] border border-amber-500/40 rounded-2xl px-2.5 py-1.5 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-                <div className="flex flex-col items-center justify-center w-6 h-6 shrink-0 rounded-full bg-amber-500/10 text-amber-400">
-                  <PhoneCall className="w-3 h-3" />
-                </div>
-                <div>
-                  <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-amber-400/80">Caller</p>
-                  <p className="max-w-[92px] text-[10px] leading-snug text-foreground/90">&quot;{current.callerQuote}&quot;</p>
-                </div>
-              </div>
-              {/* Animated line to core */}
-              <motion.div
-                className="absolute left-full top-1/2 w-6 h-px bg-gradient-to-r from-amber-500/50 to-transparent origin-left"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: isActive(1, 8) ? 1 : 0 }}
-                transition={{ duration: 0.6 }}
-              />
-              {/* Pulse */}
-              {!reduced && isActive(1, 2) && (
-                <motion.div
-                  className="absolute left-full top-1/2 w-1.5 h-1.5 rounded-full bg-amber-400"
-                  initial={{ x: 0, opacity: 1 }}
-                  animate={{ x: 24, opacity: 0 }}
-                  transition={{ duration: 0.8, ease: "linear" }}
-                />
-              )}
-            </div>
-          </motion.div>
-
-          {/* Central Voice Core */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            onMouseEnter={() => setHoverCore(true)}
-            onMouseLeave={() => setHoverCore(false)}
-          >
-            <div className="relative w-28 h-28">
-              {/* Outer glow */}
-              <motion.div
-                className="absolute -inset-2 rounded-full blur-xl"
-                style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.15) 0%, transparent 70%)' }}
-                animate={
-                  reduced
-                    ? undefined
-                    : {
-                        opacity: hoverCore ? [0.2, 0.4, 0.2] : [0.15, 0.3, 0.15],
-                        scale: hoverCore ? [1, 1.1, 1] : 1,
-                      }
-                }
-                transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
-              {/* Outer breathing ring */}
-              <motion.div
-                className="absolute inset-0 rounded-full border border-primary/20"
-                animate={
-                  reduced
-                    ? undefined
-                    : {
-                        scale: hoverCore ? [1, 1.06, 1] : [1, 1.04, 1],
-                        opacity: hoverCore ? [0.35, 0.55, 0.35] : [0.25, 0.45, 0.25],
-                      }
-                }
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
-
-              {/* Middle ring */}
-              <motion.div
-                className="absolute inset-2 rounded-full border border-primary/30"
-                animate={
-                  reduced
-                    ? undefined
-                    : {
-                        scale: hoverCore ? [1, 1.04, 1] : [1, 1.02, 1],
-                        opacity: hoverCore ? [0.4, 0.6, 0.4] : [0.3, 0.5, 0.3],
-                      }
-                }
-                transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 0.2 }}
-              />
-
-              {/* Waveform lines */}
-              {!reduced && (
-                <div className="absolute inset-4 flex items-center justify-center">
-                  {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-0.5 mx-0.5 rounded-full bg-gradient-to-t from-primary/40 via-primary to-[#38bdf8]"
-                      initial={{ height: 4 }}
-                      animate={{
-                        height: isActive(2, 8) || hoverCore
-                          ? [5, 18 + (i % 4) * 3, 6, 15 + (i % 3) * 2, 5]
-                          : 4,
-                        opacity: isActive(2, 8) || hoverCore ? [0.7, 1, 0.8] : 0.6,
-                      }}
-                      transition={{
-                        duration: 0.35,
-                        repeat: Number.POSITIVE_INFINITY,
-                        delay: i * 0.08,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Inner core */}
-              <div className="absolute inset-7 rounded-full bg-[#050607] border border-primary/40 flex items-center justify-center overflow-hidden">
-                {/* Voice energy particles */}
-                {!reduced && isActive(2, 8) && (
-                  <>
-                    {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-1 h-1 rounded-full"
-                        style={{
-                          background: i % 2 === 0 ? '#38bdf8' : 'var(--ai-primary)',
-                        }}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{
-                          opacity: [0, 0.95, 0.4, 0],
-                          scale: [0, 1.3, 0.8, 0],
-                          x: Math.cos((i * Math.PI) / 4) * 23,
-                          y: Math.sin((i * Math.PI) / 4) * 23,
-                        }}
-                        transition={{
-                          duration: 2.2,
-                          repeat: Number.POSITIVE_INFINITY,
-                          delay: i * 0.2,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    ))}
-                  </>
-                )}
-
-                {/* Central sound wave indicator */}
-                <div className="relative flex items-center justify-center">
-                  <motion.div
-                    className="absolute w-7 h-7 rounded-full border border-primary/30"
-                    animate={
-                      reduced
-                        ? undefined
-                        : {
-                            scale: isActive(2, 8) ? [1, 1.4, 1] : 1,
-                            opacity: isActive(2, 8) ? [0.2, 0.5, 0.2] : 0.2,
-                          }
-                    }
-                    transition={{
-                      duration: 1.5,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                  />
-                  <motion.div
-                    className="absolute w-5 h-5 rounded-full border border-primary/40"
-                    animate={
-                      reduced
-                        ? undefined
-                        : {
-                            scale: isActive(2, 8) ? [1, 1.25, 1] : 1,
-                            opacity: isActive(2, 8) ? [0.3, 0.6, 0.3] : 0.3,
-                          }
-                    }
-                    transition={{
-                      duration: 1.2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                      delay: 0.2,
-                    }}
-                  />
-                  <div className="relative w-3 h-3 rounded-full bg-primary/20 flex items-center justify-center">
-                    <motion.div
-                      className="w-1.5 h-1.5 rounded-full bg-primary"
-                      animate={
-                        reduced
-                          ? undefined
-                          : {
-                              scale: isActive(2, 8) ? [1, 1.3, 1] : 1,
-                            }
-                      }
-                      transition={{
-                        duration: 0.8,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Intent detected label */}
-              <motion.div
-                className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: isActive(3, 8) ? 1 : 0,
-                  y: isActive(3, 8) ? 0 : 10,
-                }}
-                transition={{ duration: 0.4 }}
-              >
-                <div className="bg-[#050607] border border-primary/40 rounded-xl px-2 py-1">
-                  <p className="font-mono text-[7px] uppercase tracking-[0.15em] text-primary/80">
-                    Intent detected
-                  </p>
-                  <p className="text-[10px] text-foreground">{current.intent}</p>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Tool nodes (Right) */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2">
-            {/* Lines from core */}
-            <svg className="absolute right-9 top-0 w-9 h-9 overflow-visible">
-              <motion.path
-                d="M 0 12 Q 12 12 18 0"
-                stroke={hoverTool === "calendar" ? "#38bdf8" : "rgba(56, 189, 248, 0.3)"}
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: isActive(4, 8) ? 1 : 0 }}
-                transition={{ duration: 0.6 }}
-              />
-              {!reduced && isActive(4, 5) && (
-                <motion.circle
-                  r="2"
-                  fill="#38bdf8"
-                  initial={{ cx: 0, cy: 12 }}
-                  animate={{ cx: 18, cy: 0 }}
-                  transition={{ duration: 0.6, ease: "linear" }}
-                />
-              )}
-            </svg>
-            <svg className="absolute right-9 bottom-0 w-9 h-9 overflow-visible">
-              <motion.path
-                d="M 0 12 Q 12 12 18 24"
-                stroke={hoverTool === "crm" ? "#38bdf8" : "rgba(56, 189, 248, 0.3)"}
-                strokeWidth="1"
-                fill="none"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: isActive(4, 8) ? 1 : 0 }}
-                transition={{ duration: 0.6, delay: 0.15 }}
-              />
-              {!reduced && isActive(4, 5) && (
-                <motion.circle
-                  r="2"
-                  fill="#38bdf8"
-                  initial={{ cx: 0, cy: 12 }}
-                  animate={{ cx: 18, cy: 24 }}
-                  transition={{ duration: 0.6, ease: "linear", delay: 0.2 }}
-                />
-              )}
-            </svg>
-
-            <div className="flex flex-col gap-2">
-              {/* Calendar */}
-              <motion.div
-                onMouseEnter={() => setHoverTool("calendar")}
-                onMouseLeave={() => setHoverTool(null)}
-                className="relative bg-[#050607] border border-[#38bdf8]/40 rounded-2xl px-2.5 py-1.5 shadow-[0_0_20px_rgba(56,189,248,0.1)]"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{
-                  opacity: isActive(5, 8) ? 1 : 0,
-                  x: isActive(5, 8) ? 0 : 20,
-                  borderColor: hoverTool === "calendar" ? "rgba(56, 189, 248, 0.7)" : "rgba(56, 189, 248, 0.3)",
-                }}
-                transition={{ duration: 0.4 }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col items-center justify-center w-6 h-6 shrink-0 rounded-full bg-[#38bdf8]/10 text-[#38bdf8]">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                      <line x1="16" y1="2" x2="16" y2="6" />
-                      <line x1="8" y1="2" x2="8" y2="6" />
-                      <line x1="3" y1="10" x2="21" y2="10" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#38bdf8]/80">Calendar</p>
-                    <p className="whitespace-nowrap text-[10px] text-foreground/90">{current.calendarStatus}</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* CRM */}
-              <motion.div
-                onMouseEnter={() => setHoverTool("crm")}
-                onMouseLeave={() => setHoverTool(null)}
-                className="relative bg-[#050607] border border-[#38bdf8]/40 rounded-2xl px-2.5 py-1.5 shadow-[0_0_20px_rgba(56,189,248,0.1)]"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{
-                  opacity: isActive(5, 8) ? 1 : 0,
-                  x: isActive(5, 8) ? 0 : 20,
-                  borderColor: hoverTool === "crm" ? "rgba(56, 189, 248, 0.7)" : "rgba(56, 189, 248, 0.3)",
-                }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col items-center justify-center w-6 h-6 shrink-0 rounded-full bg-[#38bdf8]/10 text-[#38bdf8]">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#38bdf8]/80">CRM</p>
-                    <p className="whitespace-nowrap text-[10px] text-foreground/90">{current.crmStatus}</p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Outcome (Bottom) */}
-          <motion.div
-            className="absolute bottom-0 left-1/2 -translate-x-1/2"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{
-              opacity: isActive(7, 8) ? 1 : 0,
-              y: isActive(7, 8) ? 0 : -10,
-            }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="bg-[#050607] border border-emerald-500/50 rounded-2xl px-4 py-2 text-center shadow-[0_0_25px_rgba(16,185,129,0.12)]">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <span className="relative flex h-1.5 w-1.5">
-                  {!reduced && (
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  )}
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                </span>
-                <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-emerald-400/80">
-                  {current.outcomeLabel}
-                </p>
-              </div>
-              <p className="text-sm font-semibold text-foreground">{current.outcomeTime}</p>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-      )}
-
-      {/* Mobile layout — flow-based fallback below md, where the panel is
-          full viewport width but still too narrow for the scaled desktop
-          version above with comfortable touch spacing. Both layouts used to
-          be permanently mounted with Tailwind `hidden`/`md:hidden` classes
-          doing the swap — CSS `display:none` hides the paint, but every
-          motion.div underneath (waveform bars, particles, breathing rings,
-          the rotating grid) kept running its rAF loop regardless, so the
-          hero panel was animating two full copies of itself at once, all
-          the time. Now only the layout that's actually visible is mounted
-          at all, gated by the same 768px breakpoint via `useIsMobile`. */}
-      {isMobile && (
-      <div>
-        <div className="space-y-3">
-          {/* Caller */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{
-              opacity: isActive(0, 8) ? 1 : 0,
-              x: isActive(0, 8) ? 0 : -20,
-            }}
-            transition={{ duration: 0.5 }}
-            className="bg-[#050607] border border-amber-500/40 rounded-2xl px-3 py-2 shadow-[0_0_20px_rgba(245,158,11,0.1)]"
-          >
-            <div className="flex items-center gap-2.5">
-              <div className="flex flex-col items-center justify-center w-7 h-7 shrink-0 rounded-full bg-amber-500/10 text-amber-400">
-                <PhoneCall className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-amber-400/80">Caller</p>
-                <p className="text-xs text-foreground/90">&quot;{current.callerQuote}&quot;</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Core */}
-          <div className="flex justify-center py-1">
+            {/* Card shell — 280px wide */}
             <div
-              className="relative w-28 h-28"
-              onMouseEnter={() => setHoverCore(true)}
-              onMouseLeave={() => setHoverCore(false)}
+              className="relative w-[260px] overflow-hidden rounded-2xl border sm:w-[280px]"
+              style={{
+                background: "linear-gradient(145deg, #0a0d1a 0%, #060810 60%, #080b14 100%)",
+                borderColor: isFront ? `${card.color}45` : "rgba(255,255,255,0.07)",
+                boxShadow: isFront
+                  ? `0 0 0 1px ${card.color}25, 0 32px 80px -20px ${card.color}35, 0 0 60px -10px ${card.color}20`
+                  : "0 8px 32px rgba(0,0,0,0.6)",
+              }}
             >
-              {/* Outer glow */}
-              <motion.div
-                className="absolute -inset-2 rounded-full blur-xl"
-                style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.15) 0%, transparent 70%)' }}
-                animate={
-                  reduced
-                    ? undefined
-                    : {
-                        opacity: hoverCore ? [0.2, 0.4, 0.2] : [0.15, 0.3, 0.15],
-                        scale: hoverCore ? [1, 1.1, 1] : 1,
-                      }
-                }
-                transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
+              {/* Top colour bar */}
+              <div className="h-[2px] w-full"
+                style={{ background: `linear-gradient(90deg, transparent, ${card.color}, transparent)` }} />
 
-              {/* Outer breathing ring */}
-              <motion.div
-                className="absolute inset-0 rounded-full border border-primary/20"
-                animate={
-                  reduced
-                    ? undefined
-                    : {
-                        scale: hoverCore ? [1, 1.06, 1] : [1, 1.04, 1],
-                        opacity: hoverCore ? [0.35, 0.55, 0.35] : [0.25, 0.45, 0.25],
-                      }
-                }
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
+              {/* Ambient inner glow */}
+              <div className="pointer-events-none absolute inset-0"
+                style={{ background: `radial-gradient(ellipse 70% 50% at 50% -10%, ${card.color}16, transparent 65%)` }}
+                aria-hidden />
 
-              {/* Middle ring */}
-              <motion.div
-                className="absolute inset-3 rounded-full border border-primary/30"
-                animate={
-                  reduced
-                    ? undefined
-                    : {
-                        scale: hoverCore ? [1, 1.05, 1] : [1, 1.02, 1],
-                        opacity: hoverCore ? [0.4, 0.6, 0.4] : [0.3, 0.5, 0.3],
-                      }
-                }
-                transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 0.2 }}
-              />
-
-              {/* Waveform lines */}
-              {!reduced && (
-                <div className="absolute inset-6 flex items-center justify-center">
-                  {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-0.5 mx-0.5 rounded-full bg-gradient-to-t from-primary/40 via-primary to-[#38bdf8]"
-                      initial={{ height: 4 }}
-                      animate={{
-                        height: isActive(2, 8) || hoverCore
-                          ? [5, 17 + (i % 4) * 3, 6, 13 + (i % 3) * 2, 5]
-                          : 4,
-                        opacity: isActive(2, 8) || hoverCore ? [0.7, 1, 0.8] : 0.6,
-                      }}
-                      transition={{
-                        duration: 0.35,
-                        repeat: Number.POSITIVE_INFINITY,
-                        delay: i * 0.08,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  ))}
-                </div>
+              {/* Shine sweep on active */}
+              {isFront && !reduced && (
+                <motion.div aria-hidden
+                  className="pointer-events-none absolute inset-y-0 w-1/2 -skew-x-12"
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)" }}
+                  initial={{ left: "-60%" }}
+                  animate={{ left: ["−60%", "160%"] }}
+                  transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.8, ease: "easeInOut" }}
+                />
               )}
 
-              {/* Inner core */}
-              <div className="absolute inset-8 rounded-full bg-[#050607] border border-primary/40 flex items-center justify-center overflow-hidden">
-                {/* Voice energy particles */}
-                {!reduced && isActive(2, 8) && (
-                  <>
-                    {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-1 h-1 rounded-full"
-                        style={{
-                          background: i % 2 === 0 ? '#38bdf8' : 'var(--ai-primary)',
-                        }}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{
-                          opacity: [0, 0.95, 0.4, 0],
-                          scale: [0, 1.3, 0.8, 0],
-                          x: Math.cos((i * Math.PI) / 4) * 24,
-                          y: Math.sin((i * Math.PI) / 4) * 24,
-                        }}
-                        transition={{
-                          duration: 2.2,
-                          repeat: Number.POSITIVE_INFINITY,
-                          delay: i * 0.2,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    ))}
-                  </>
-                )}
+              <div className="p-6">
+                {/* Tag + live dot */}
+                <div className="flex items-center justify-between">
+                  <span className="rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em]"
+                    style={{ borderColor: `${card.color}30`, color: card.color, background: `${card.color}0e` }}>
+                    {card.tag}
+                  </span>
+                  {isFront && (
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                  )}
+                </div>
 
-                {/* Central sound wave indicator */}
-                <div className="relative flex items-center justify-center">
-                  <motion.div
-                    className="absolute w-7 h-7 rounded-full border border-primary/30"
-                    animate={
-                      reduced
-                        ? undefined
-                        : {
-                            scale: isActive(2, 8) ? [1, 1.4, 1] : 1,
-                            opacity: isActive(2, 8) ? [0.2, 0.5, 0.2] : 0.2,
-                          }
-                    }
-                    transition={{
-                      duration: 1.5,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                  />
-                  <motion.div
-                    className="absolute w-5 h-5 rounded-full border border-primary/40"
-                    animate={
-                      reduced
-                        ? undefined
-                        : {
-                            scale: isActive(2, 8) ? [1, 1.25, 1] : 1,
-                            opacity: isActive(2, 8) ? [0.3, 0.6, 0.3] : 0.3,
-                          }
-                    }
-                    transition={{
-                      duration: 1.2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                      delay: 0.2,
-                    }}
-                  />
-                  <div className="relative w-3 h-3 rounded-full bg-primary/20 flex items-center justify-center">
-                    <motion.div
-                      className="w-1.5 h-1.5 rounded-full bg-primary"
-                      animate={
-                        reduced
-                          ? undefined
-                          : {
-                              scale: isActive(2, 8) ? [1, 1.3, 1] : 1,
-                            }
-                      }
-                      transition={{
-                        duration: 0.8,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                      }}
-                    />
+                {/* Icon */}
+                <div className="mt-5 flex h-12 w-12 items-center justify-center rounded-2xl border"
+                  style={{ borderColor: `${card.color}28`, background: `${card.color}14`, color: card.color }}>
+                  <Icon className="h-5 w-5" />
+                </div>
+
+                {/* Title */}
+                <h3 className="mt-4 font-heading text-xl font-semibold tracking-tight text-white">
+                  {card.title}
+                </h3>
+
+                {/* Fact */}
+                <p className="mt-2 text-[13px] leading-relaxed text-white/40">{card.fact}</p>
+
+                {/* Waveform */}
+                <div className="mt-5">
+                  <Waveform color={card.color} active={isFront} reduced={reduced} />
+                </div>
+
+                {/* Metric */}
+                <div className="mt-4 flex items-end justify-between border-t border-white/[0.06] pt-4">
+                  <div>
+                    <p className="font-heading text-3xl font-bold" style={{ color: card.color }}>
+                      {card.metric}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-white/30">{card.metricLabel}</p>
                   </div>
+                  <CheckCircle className="mb-1 h-5 w-5" style={{ color: `${card.color}60` }} />
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Intent */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{
-              opacity: isActive(3, 8) ? 1 : 0,
-              y: isActive(3, 8) ? 0 : 10,
-            }}
-            transition={{ duration: 0.4 }}
-            className="bg-[#050607] border border-primary/40 rounded-xl px-3 py-1.5 text-center"
-          >
-            <p className="font-mono text-[8px] uppercase tracking-[0.15em] text-primary/80">
-              Intent detected
-            </p>
-            <p className="text-xs text-foreground">{current.intent}</p>
           </motion.div>
+        )
+      })}
 
-          {/* Tools */}
-          <div className="grid grid-cols-2 gap-2">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{
-                opacity: isActive(5, 8) ? 1 : 0,
-                x: isActive(5, 8) ? 0 : 20,
-              }}
-              transition={{ duration: 0.4 }}
-              onMouseEnter={() => setHoverTool("calendar")}
-              onMouseLeave={() => setHoverTool(null)}
-              className="bg-[#050607] border border-[#38bdf8]/40 rounded-2xl px-3 py-2 shadow-[0_0_20px_rgba(56,189,248,0.1)]"
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-center justify-center w-6 h-6 shrink-0 rounded-full bg-[#38bdf8]/10 text-[#38bdf8]">
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                    <line x1="16" y1="2" x2="16" y2="6" />
-                    <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-mono text-[8px] uppercase tracking-[0.15em] text-[#38bdf8]/80">Calendar</p>
-                  <p className="text-[11px] text-foreground/90">{current.calendarStatus}</p>
-                </div>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{
-                opacity: isActive(5, 8) ? 1 : 0,
-                x: isActive(5, 8) ? 0 : 20,
-              }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              onMouseEnter={() => setHoverTool("crm")}
-              onMouseLeave={() => setHoverTool(null)}
-              className="bg-[#050607] border border-[#38bdf8]/40 rounded-2xl px-3 py-2 shadow-[0_0_20px_rgba(56,189,248,0.1)]"
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-center justify-center w-6 h-6 shrink-0 rounded-full bg-[#38bdf8]/10 text-[#38bdf8]">
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-mono text-[8px] uppercase tracking-[0.15em] text-[#38bdf8]/80">CRM</p>
-                  <p className="text-[11px] text-foreground/90">{current.crmStatus}</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Outcome */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{
-              opacity: isActive(7, 8) ? 1 : 0,
-              y: isActive(7, 8) ? 0 : -10,
-            }}
-            transition={{ duration: 0.5 }}
-            className="bg-[#050607] border border-emerald-500/50 rounded-2xl px-4 py-2 text-center shadow-[0_0_25px_rgba(16,185,129,0.12)]"
+      {/* Dot indicators */}
+      <div className="absolute -bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
+        {CARDS.map((card, i) => (
+          <button key={i} onClick={() => { setActive(i); start() }}
+            aria-label={`Card ${i + 1}`}
+            className="relative overflow-hidden rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]"
+            style={{ width: i === active ? 28 : 7, height: 7, background: i === active ? CARDS[active].color : "rgba(255,255,255,0.2)" }}
           >
-            <div className="flex items-center justify-center gap-1.5 mb-0.5">
-              <span className="relative flex h-1.5 w-1.5">
-                {!reduced && (
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                )}
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              </span>
-              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-emerald-400/80">
-                {current.outcomeLabel}
-              </p>
-            </div>
-            <p className="text-sm font-semibold text-foreground">{current.outcomeTime}</p>
-          </motion.div>
-        </div>
-      </div>
-      )}
-
-      {/* Performance indicators bottom */}
-      <div className="mt-4 flex items-center justify-between gap-2 text-center sm:mt-6">
-        <div className="flex-1">
-          <p className="text-sm font-semibold tracking-tight text-primary sm:text-lg">&lt;300ms</p>
-          <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground sm:text-[10px]">Latency</p>
-        </div>
-        <div className="w-px h-6 bg-border/40 sm:h-8" />
-        <div className="flex-1">
-          <p className="text-sm font-semibold tracking-tight text-primary sm:text-lg">Natural</p>
-          <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground sm:text-[10px]">Interrupts</p>
-        </div>
-        <div className="w-px h-6 bg-border/40 sm:h-8" />
-        <div className="flex-1">
-          <p className="text-sm font-semibold tracking-tight text-emerald-400 sm:text-lg">Live</p>
-          <p className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground sm:text-[10px]">Actions</p>
-        </div>
-      </div>
+            {i === active && !reduced && (
+              <motion.span key={active}
+                className="absolute inset-y-0 left-0 rounded-full bg-white/40"
+                initial={{ width: "0%" }} animate={{ width: "100%" }}
+                transition={{ duration: INTERVAL / 1000, ease: "linear" }} />
+            )}
+          </button>
+        ))}
       </div>
     </div>
   )
 }
 
+// ── HERO ──────────────────────────────────────────────────────────────────────
 export function Hero() {
   const reduced = useReducedMotion()
-  const [turn, setTurn] = useState(0)
-  const [agentRevealed, setAgentRevealed] = useState(reduced ? true : false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const hasPlayedRef = useRef(false)
-
-  useEffect(() => {
-    const audio = new Audio("/hpvoice.mp3")
-    audio.preload = "auto"
-    audio.load()
-    audioRef.current = audio
-    return () => {
-      audio.pause()
-      audioRef.current = null
-    }
-  }, [])
-
-  // Every new turn starts with just the caller line visible and the agent
-  // bubble in its "generating" state; after a short beat the reply lands.
-  // Reduced-motion users get the resolved reply immediately — the loop
-  // itself (turn cycling) still runs, but nothing sits mid-"typing" forever
-  // for them.
-  useEffect(() => {
-    setAgentRevealed(!!reduced)
-    if (reduced) return
-    const id = setTimeout(() => setAgentRevealed(true), GENERATING_DELAY_MS)
-    return () => clearTimeout(id)
-  }, [turn, reduced])
+  const [wordIdx, setWordIdx] = useState(0)
 
   useEffect(() => {
     if (reduced) return
-    const id = setTimeout(() => setTurn((t) => (t + 1) % CALL_SCRIPT.length), TURN_HOLD_MS)
-    return () => clearTimeout(id)
-  }, [turn, reduced])
+    const t = setInterval(() => setWordIdx(i => (i + 1) % WORDS.length), 2600)
+    return () => clearInterval(t)
+  }, [reduced])
 
-  const playHoverAudio = () => {
-    if (hasPlayedRef.current) return
-    const audio = audioRef.current
-    if (!audio) return
-    hasPlayedRef.current = true
-    audio.currentTime = 0
-    audio.play().catch(() => {
-      hasPlayedRef.current = false
-    })
-  }
-
-  const word: Variants = {
-    hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
-    },
-  }
-
-  const headline = ["AI", "voice", "agents", "that"]
+  const STATS = [
+    { pre: "<", val: 300, suf: "ms",  lab: "Latency"   },
+    { pre: "",  val: 99,  suf: ".9%", lab: "Uptime"    },
+    { pre: "",  val: 30,  suf: "+",   lab: "Languages" },
+  ]
 
   return (
-    <section className="relative overflow-hidden">
-      {/* Layered background. The old `bg-grid` layer here was dead weight —
-          that class paints nothing site-wide (see globals.css, neutralised
-          on an earlier request) — so it was doing literally nothing behind
-          the content. Replaced with a real top vignette, the same technique
-          used on /industries' hero, confined to the first ~500px so it
-          reads as depth behind the headline rather than a wash over the
-          whole section. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[500px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(45,152,241,0.10),transparent_70%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[700px] bg-neural opacity-50"
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-32 top-32 h-[460px] w-[460px] rounded-full blur-[120px] [will-change:transform]"
-        style={{ background: "var(--ai-cyan)", opacity: 0.07 }}
-        animate={reduced ? undefined : { x: [0, 60, -40, 0], y: [0, -30, 20, 0] }}
-        transition={{ duration: 18, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 top-1/2 h-[420px] w-[420px] rounded-full blur-[120px] [will-change:transform]"
-        style={{ background: "var(--ai-magenta)", opacity: 0.05 }}
-        animate={reduced ? undefined : { x: [0, -50, 30, 0], y: [0, 30, -20, 0] }}
-        transition={{ duration: 22, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
+    <section className="relative min-h-screen overflow-hidden bg-black">
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-12 lg:min-h-[calc(100svh-5rem)] lg:grid-cols-12 lg:gap-10 lg:py-6">
-        {/* LEFT: Copy */}
-        <div className="lg:col-span-7">
-          {/* Status pill — the descriptor clause used to run on the same
-              line with no wrap allowed, so on a phone it either overflowed
-              the viewport or got clipped by the card's own width. Below
-              `sm` it now drops to its own line and the divider hides, so
-              "Live · v9278.audio-1" stays a tidy single row and the longer
-              claim reads as a second line instead of fighting for space. */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="inline-flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-full border border-border/60 bg-card/40 px-3.5 py-1.5 text-xs text-muted-foreground shadow-[0_0_24px_rgba(45,152,241,0.08)] backdrop-blur-md sm:px-4"
-          >
-            <span className="inline-flex items-center gap-2">
-              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary sm:h-2 sm:w-2" />
+      {/* Background atmosphere */}
+      <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-[700px] w-[700px] -translate-y-1/4 translate-x-1/4"
+        style={{ background: "radial-gradient(circle, rgba(4,107,210,0.20) 0%, transparent 65%)" }} />
+      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[500px] -translate-x-1/4 translate-y-1/4"
+        style={{ background: "radial-gradient(circle, rgba(4,107,210,0.09) 0%, transparent 65%)" }} />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.032]"
+        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.65) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+
+      {/* Main 2-col grid */}
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:min-h-screen lg:grid-cols-2 lg:gap-12 lg:py-0 xl:gap-20">
+
+        {/* ─── LEFT: copy ─────────────────────────────────────────────── */}
+        <div className="flex flex-col">
+
+          {/* Badge */}
+          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}>
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-2">
+              <span className="relative flex h-1.5 w-1.5 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </span>
-              <span className="text-[11px] font-medium text-foreground/90 sm:text-xs">Live</span>
-              <span className="h-3 w-px bg-border/80" />
-              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary sm:text-[10px]">v9278.audio-1</span>
-            </span>
-            <span className="hidden h-3 w-px bg-border/80 sm:block" />
-            <span className="hidden items-center gap-1.5 sm:inline-flex">
-              <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
-              Native audio · Sub-second latency · Self-hosted
-            </span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#2d98f1]">
+                AI Voice Platform · Native Audio
+              </span>
+            </div>
           </motion.div>
 
-          {/* Headline — Archivo (brand heading face) instead of the legacy
-              serif. The serif read as a mismatched, dated accent against
-              the rest of the site's sans-only system (already migrated on
-              /features); this brings the homepage hero in line with it. The
-              accent phrase gets a blue→cyan gradient fill rather than flat
-              italic colour, which reads as considerably more "alive" next
-              to the live agent panel on the right. */}
-          <motion.h1
-            initial="hidden"
-            animate="visible"
-            transition={{ staggerChildren: 0.07, delayChildren: 0.2 }}
-            className="mt-5 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] sm:text-5xl md:text-6xl"
-          >
-            {headline.map((w, i) => (
-              <motion.span key={`h-${i}`} variants={word} className="mr-3 inline-block">
-                {w}
-              </motion.span>
-            ))}
-            <br className="hidden md:block" />
-            <motion.span
-              variants={word}
-              className="mr-3 inline-block bg-gradient-to-r from-[var(--ai-cyan)] to-primary bg-clip-text text-transparent"
-            >
-              actually
-            </motion.span>
-            <motion.span
-              variants={word}
-              className="mr-3 inline-block bg-gradient-to-r from-[var(--ai-cyan)] to-primary bg-clip-text text-transparent"
-            >
-              sound
-            </motion.span>
-            <motion.span
-              variants={word}
-              className="mr-3 inline-block bg-gradient-to-r from-[var(--ai-cyan)] to-primary bg-clip-text text-transparent"
-            >
-              human.
-            </motion.span>
+          {/* Headline with rotating word */}
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-7 font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3.2rem] lg:text-[3.6rem]">
+            AI Voice Agent That
+            <br />
+            {/* Rotating word — slides up like a ticker */}
+            <span className="relative inline-block h-[1.12em] overflow-hidden align-bottom">
+              <AnimatePresence mode="wait">
+                <motion.span key={wordIdx}
+                  initial={{ y: "100%", opacity: 0, filter: "blur(4px)" }}
+                  animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+                  exit={{ y: "-100%", opacity: 0, filter: "blur(4px)" }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="block bg-clip-text text-transparent"
+                  style={{ backgroundImage: "linear-gradient(90deg, #2d98f1 0%, #60b8ff 45%, #2d98f1 100%)" }}>
+                  {WORDS[wordIdx]}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+            <br />
+            <span className="text-white/55">For Your Business</span>
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.85 }}
-            className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground"
-          >
-            Build, launch, and scale voice agents on a self-hosted control panel. Native audio, real interruptions,
-            and your own phone numbers — production-ready in an afternoon.
+          {/* Description */}
+          <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-6 max-w-lg text-base leading-relaxed text-white/45 sm:text-[1.05rem]">
+            Vozpar connects to your existing phone numbers and handles real
+            conversations — with sub-300ms latency, no transcription pipeline,
+            and full data ownership on your own infrastructure.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1 }}
-            className="mt-6 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center"
-          >
-            <Button
-              size="lg"
-              className="group btn-ai relative h-12 w-full overflow-hidden rounded-full px-7 text-primary-foreground shadow-[0_8px_30px_rgba(45,152,241,0.25)] transition-all sm:w-auto"
-            >
-              <span className="relative z-10">Build your first agent</span>
-              <ArrowRight
-                className="relative z-10 ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-              <span
-                aria-hidden
-                className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full"
-              />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="group h-12 w-full rounded-full border-border/70 bg-card/30 px-7 text-foreground backdrop-blur-md hover:border-primary/50 hover:bg-card/50 hover:text-foreground sm:w-auto"
-            >
-              <PhoneCall className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
-              Try the live demo
-            </Button>
+          {/* CTAs */}
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 flex flex-wrap gap-3">
+            <Link href="/get-started"
+              className="group inline-flex h-12 items-center gap-2 rounded-full bg-[#046bd2] px-7 text-sm font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_44px_rgba(4,107,210,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+              Get Started Free
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+            <Link href="/features"
+              className="inline-flex h-12 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-7 text-sm font-medium text-white/65 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+              <PhoneCall className="h-4 w-4" />
+              See How It Works
+            </Link>
           </motion.div>
 
-          {/* Trust stats — the numbers used to just appear fully formed
-              while everything else in the hero animates in. `<300ms` now
-              counts up from 0 on mount (AnimatedNumber above); the other two
-              aren't real numbers to count, so they get a matching pop-in
-              (blur + scale settling into place) timed to land together,
-              rather than sitting there static next to a counting neighbour. */}
+          {/* Trust chips */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.52 }}
+            className="mt-7 flex flex-wrap gap-x-5 gap-y-2">
+            {[
+              { icon: Shield,      text: "Self-hosted"       },
+              { icon: Globe2,      text: "Bring your number" },
+              { icon: Zap,         text: "No setup fees"     },
+              { icon: CheckCircle, text: "No contracts"      },
+            ].map(({ icon: Icon, text }) => (
+              <span key={text} className="flex items-center gap-1.5 text-xs text-white/28">
+                <Icon className="h-3.5 w-3.5 text-[#046bd2]" />
+                {text}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* Stats */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.25 }}
-            className="mt-8 grid grid-cols-3 gap-2 border-t border-border/40 pt-5 sm:flex sm:flex-wrap sm:items-center sm:gap-x-10 sm:gap-y-3 sm:border-0 sm:pt-0"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.65 }}
+            className="mt-9 border-t border-white/[0.08] pt-7"
           >
-            <div className="flex min-h-[84px] flex-col items-center justify-center gap-1 rounded-2xl border border-border/50 bg-gradient-to-b from-card/60 to-card/25 px-2 py-3 text-center shadow-[0_1px_0_0_rgba(255,255,255,0.03)_inset] backdrop-blur-sm sm:block sm:min-h-0 sm:rounded-none sm:border-0 sm:bg-none sm:p-0 sm:text-left sm:shadow-none">
-              <p className="text-[15px] font-semibold leading-tight tracking-tight text-primary sm:text-2xl">
-                &lt;<AnimatedNumber target={300} delay={1.35} />ms
-              </p>
-              <p className="text-[8px] uppercase leading-snug tracking-wide text-muted-foreground/90 sm:mt-0.5 sm:text-xs sm:tracking-widest">
-                Sub-second latency
-              </p>
-            </div>
-            <div className="hidden h-10 w-px bg-border/60 sm:block" />
-            <div className="flex min-h-[84px] flex-col items-center justify-center gap-1 rounded-2xl border border-border/50 bg-gradient-to-b from-card/60 to-card/25 px-2 py-3 text-center shadow-[0_1px_0_0_rgba(255,255,255,0.03)_inset] backdrop-blur-sm sm:block sm:min-h-0 sm:rounded-none sm:border-0 sm:bg-none sm:p-0 sm:text-left sm:shadow-none">
-              <motion.p
-                initial={reduced ? false : { opacity: 0, scale: 0.85, filter: "blur(4px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                transition={{ duration: 0.5, delay: 1.55, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[15px] font-semibold leading-tight tracking-tight text-primary sm:text-2xl"
-              >
-                Self-hosted
-              </motion.p>
-              <p className="text-[8px] uppercase leading-snug tracking-wide text-muted-foreground/90 sm:mt-0.5 sm:text-xs sm:tracking-widest">
-                Your data, your stack
-              </p>
-            </div>
-            <div className="hidden h-10 w-px bg-border/60 sm:block" />
-            <div className="flex min-h-[84px] flex-col items-center justify-center gap-1 rounded-2xl border border-border/50 bg-gradient-to-b from-card/60 to-card/25 px-2 py-3 text-center shadow-[0_1px_0_0_rgba(255,255,255,0.03)_inset] backdrop-blur-sm sm:block sm:min-h-0 sm:rounded-none sm:border-0 sm:bg-none sm:p-0 sm:text-left sm:shadow-none">
-              <motion.p
-                initial={reduced ? false : { opacity: 0, scale: 0.85, filter: "blur(4px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                transition={{ duration: 0.5, delay: 1.75, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[15px] font-semibold leading-tight tracking-tight text-primary sm:text-2xl"
-              >
-                Unlimited
-              </motion.p>
-              <p className="text-[8px] uppercase leading-snug tracking-wide text-muted-foreground/90 sm:mt-0.5 sm:text-xs sm:tracking-widest">
-                Concurrent calls
-              </p>
+            <div className="grid grid-cols-3 gap-4 sm:gap-6">
+              {STATS.map((s, i) => (
+                <div key={s.lab} className="flex flex-col">
+                  {/* Number */}
+                  <p className="font-heading text-2xl font-bold tabular-nums text-white sm:text-3xl lg:text-4xl">
+                    <span className="text-[#2d98f1]">{s.pre}</span>
+                    <span className="text-white">
+                      <Counter to={s.val} suffix="" delay={0.8 + i * 0.12} />
+                    </span>
+                    <span className="text-[#2d98f1]">{s.suf}</span>
+                  </p>
+                  {/* Divider */}
+                  <span className="mt-2 block h-[2px] w-8 rounded-full bg-[#046bd2]/60" />
+                  {/* Label */}
+                  <p className="mt-2 text-xs font-medium uppercase tracking-[0.14em] text-white/40 sm:text-[11px]">
+                    {s.lab}
+                  </p>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
 
-        {/* RIGHT: Living Voice Operations Core */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 50, rotate: 1 }}
-          animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
-          transition={{ duration: 0.9, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative lg:col-span-5"
-        >
-          <VoiceOperationsCore reduced={reduced} />
+        {/* ─── RIGHT: 3D carousel ──────────────────────────────────────── */}
+        <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.75, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="relative flex items-center justify-center pb-8">
+          <Carousel3D reduced={Boolean(reduced)} />
         </motion.div>
       </div>
 
-      {/* Carrier trust strip — was a flat two-line paragraph stack under a
-          plain border-t, easy to mistake for stray leftover text rather than
-          a deliberate section. Given the pill + gradient-line treatment used
-          elsewhere on the page, plus a row of feature chips so "your
-          numbers, your billing, unchanged" reads as three scannable claims
-          instead of one long sentence. */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 1.4 }}
-        className="relative overflow-hidden bg-background/50 py-8 sm:py-10"
-      >
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-0 h-32 w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.06] blur-[90px]"
-        />
-
-        <div className="relative mx-auto flex max-w-2xl flex-col items-center px-4 text-center">
-          <span className="ai-pill-cyan">
-            <Radio className="h-3 w-3" aria-hidden="true" />
-            Connect your carrier account in two clicks
-          </span>
-
-          <p className="mt-4 text-pretty text-sm leading-relaxed text-muted-foreground/90">
-            Phone numbers, SIP trunks, and inbound routing flow through the carrier you already know and trust.
-          </p>
-
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-            {["Your numbers", "Your billing", "Zero downtime"].map((label) => (
-              <span key={label} className="inline-flex items-center gap-1.5">
-                <span className="h-1 w-1 rounded-full bg-primary/70" aria-hidden="true" />
-                {label}
-              </span>
-            ))}
-          </div>
-        </div>
-      </motion.div>
+      {/* Bottom fade */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-28"
+        style={{ background: "linear-gradient(to bottom, transparent, #000)" }} />
     </section>
   )
 }

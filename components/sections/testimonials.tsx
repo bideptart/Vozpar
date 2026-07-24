@@ -1,164 +1,128 @@
 "use client"
 
-import { Quote, Star, TrendingUp, Clock, PhoneCall } from "lucide-react"
+// PLACEHOLDER: Replace all author/company details with real approved testimonials before launch.
+
+import { Star } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
-const metrics = [
-  { icon: PhoneCall, value: "2.4M+", label: "Calls handled / month" },
-  { icon: Clock, value: "62%", label: "Average ops time saved" },
-  { icon: TrendingUp, value: "3.1x", label: "Lift in qualified leads" },
+const METRICS = [
+  { value: "2.4M+", label: "Calls handled / month", tint: "#2d98f1" },
+  { value: "62%",   label: "Average ops time saved", tint: "#10b981" },
+  { value: "3.1×",  label: "Qualified lead lift",    tint: "#2d98f1" },
 ]
 
-const testimonials = [
+const TESTIMONIALS = [
   {
-    metric: "Saved 60 hrs / week",
-    metricAccent: "var(--ai-cyan)",
-    quote:
-      "Aria handles every inbound after-hours call now. We replaced an offshore answering service inside two weeks and our reply time dropped from 14 minutes to under one.",
-    author: "Lina Okafor",
-    role: "VP Operations",
-    company: "Marlowe Realty",
-    initial: "L",
+    quote: "We replaced our after-hours answering service in under two weeks. Every inbound call is handled, scheduled, and logged before anyone on the team sees it in the morning.",
+    author: "[Placeholder] VP of Operations",
+    company: "[Placeholder Company A]",
+    initial: "V",
+    tint: "#2d98f1",
+    metric: "Saved 60 hrs/week",
   },
   {
+    quote: "The agent handles objection rebuttals and books demos without sounding scripted. It has become our highest-volume prospecting channel inside a single quarter.",
+    author: "[Placeholder] Head of Sales",
+    company: "[Placeholder Company B]",
+    initial: "H",
+    tint: "#046bd2",
     metric: "+38% conversion",
-    metricAccent: "var(--ai-magenta)",
-    quote:
-      "The agent handles objections better than half my SDRs. Real interruptions, real follow-up questions — the prospects don't realize they're talking to AI until we tell them.",
-    author: "Marcus Chen",
-    role: "Head of Sales",
-    company: "Northwind Solar",
-    initial: "M",
   },
   {
-    metric: "99.4% deflection",
-    metricAccent: "var(--ai-violet)",
-    quote:
-      "We pointed our business number at 9278 and within a day it was triaging, scheduling, and updating our CRM on its own. The remaining 0.6% are the calls humans should handle anyway.",
-    author: "Priya Anand",
-    role: "Director of Support",
-    company: "Glide Logistics",
-    initial: "P",
-  },
-  {
+    quote: "We were quoted six months by an enterprise vendor. We had a working voice agent in production by day four — connected to our calendar, CRM, and existing number.",
+    author: "[Placeholder] CTO",
+    company: "[Placeholder Company C]",
+    initial: "C",
+    tint: "#2d98f1",
     metric: "Live in 4 days",
-    metricAccent: "var(--ai-mint)",
-    quote:
-      "I was quoted 6 months by an enterprise vendor. We had a working voice agent in production by day four — connected to our calendar, CRM, and existing phone number — at an order of magnitude less.",
-    author: "Daniel Reyes",
-    role: "CTO",
-    company: "Bright Dental Group",
+  },
+  {
+    quote: "Tier-1 support volume dropped overnight. Routine queries that used to eat two hours of every rep's morning are now fully resolved before the team logs in.",
+    author: "[Placeholder] Director of Support",
+    company: "[Placeholder Company D]",
     initial: "D",
+    tint: "#046bd2",
+    metric: "99.4% deflection",
   },
 ]
 
 export function Testimonials() {
   const reduced = useReducedMotion()
-  return (
-    <section id="testimonials" className="relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-dots [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-[120px] [will-change:transform]"
-        style={{ background: "var(--ai-cyan)", opacity: 0.035 }}
-        animate={reduced ? undefined : { scale: [1, 1.15, 1] }}
-        transition={{ duration: 14, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-6 md:py-20">
-        <ScrollReveal className="mx-auto max-w-2xl text-center">
-          <span className="ai-pill-magenta">
-            <span className="h-1 w-1 rounded-full bg-accent" />
-            Loved by operators
-          </span>
-          <h2 className="mt-6 text-balance font-heading text-4xl font-medium leading-[1.05] tracking-[-0.03em] md:text-5xl">
-            Teams shipping AI voice agents{" "}
-            <span className="text-primary">that actually convert.</span>
+  return (
+    <section id="testimonials" className="relative overflow-hidden border-t border-white/[0.06]">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[360px]"
+        style={{ background: "radial-gradient(50% 40% at 50% 0%, rgba(4,107,210,0.06), transparent 70%)" }} />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28">
+
+        <ScrollReveal className="mx-auto mb-14 max-w-2xl text-center">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.22em] text-[#2d98f1]">Customer outcomes</p>
+          <h2 className="font-heading text-4xl font-medium leading-tight tracking-tight text-white md:text-5xl">
+            Loved by teams,{" "}
+            <span className="text-white/55">trusted by results.</span>
           </h2>
-          <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-            From dental clinics to logistics ops, 9278.ai is answering, qualifying, and closing — 24/7, on the carrier you already use.
+          <p className="mt-5 text-lg leading-relaxed text-white/40">
+            From dental clinics to logistics ops — answering, qualifying, and closing 24/7.
           </p>
         </ScrollReveal>
 
         {/* Metrics row */}
-        <StaggerGroup className="mt-16 grid gap-4 sm:grid-cols-3">
-          {metrics.map((m) => {
-            const Icon = m.icon
-            return (
-              <StaggerItem key={m.label}>
-                <div className="card-glow ring-gradient relative flex items-center gap-4 rounded-2xl p-5">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-2xl font-semibold tracking-tight text-primary">{m.value}</p>
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground">{m.label}</p>
-                  </div>
-                </div>
-              </StaggerItem>
-            )
-          })}
+        <StaggerGroup className="mb-10 grid gap-3 sm:grid-cols-3">
+          {METRICS.map(m => (
+            <StaggerItem key={m.label}>
+              <div className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] px-7 py-7 text-center">
+                <div className="absolute inset-x-0 top-0 h-px"
+                  style={{ background: `linear-gradient(to right, transparent, ${m.tint}50, transparent)` }} />
+                <p className="font-heading text-4xl font-medium tracking-tight" style={{ color: m.tint }}>
+                  {m.value}
+                </p>
+                <p className="mt-2 text-sm text-white/40">{m.label}</p>
+              </div>
+            </StaggerItem>
+          ))}
         </StaggerGroup>
 
-        {/* Testimonial cards */}
-        <StaggerGroup className="mt-8 grid gap-6 md:grid-cols-2">
-          {testimonials.map((t) => (
+        {/* Cards */}
+        <StaggerGroup className="grid gap-4 md:grid-cols-2">
+          {TESTIMONIALS.map(t => (
             <StaggerItem key={t.author}>
               <motion.figure
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                className="card-glow ring-gradient relative h-full rounded-2xl p-7"
+                whileHover={reduced ? undefined : { y: -4 }}
+                transition={{ type: "spring", stiffness: 320, damping: 26 }}
+                className="group relative h-full overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] p-7"
               >
-                <span className="scan-line" aria-hidden />
-                <div className="relative flex items-start justify-between gap-4">
-                  <span
-                    className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-wider"
-                    style={{
-                      color: t.metricAccent,
-                      background: `color-mix(in oklch, ${t.metricAccent} 10%, transparent)`,
-                      borderColor: `color-mix(in oklch, ${t.metricAccent} 28%, transparent)`,
-                    }}
-                  >
-                    <TrendingUp className="h-3 w-3" />
+                <div className="absolute inset-x-0 top-0 h-px"
+                  style={{ background: `linear-gradient(to right, transparent, ${t.tint}45, transparent)` }} />
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{ background: `radial-gradient(50% 35% at 50% 0%, ${t.tint}07, transparent)` }} />
+
+                {/* Stars + metric */}
+                <div className="relative mb-5 flex items-center justify-between gap-3">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden />
+                    ))}
+                  </div>
+                  <span className="rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-medium"
+                    style={{ color: t.tint, borderColor: `${t.tint}28`, background: `${t.tint}0c` }}>
                     {t.metric}
                   </span>
-                  <Quote
-                    className="h-7 w-7 shrink-0 text-foreground/15"
-                    aria-hidden="true"
-                  />
                 </div>
 
-                <blockquote className="relative mt-6 text-pretty text-base leading-relaxed text-foreground/90 md:text-lg">
+                <blockquote className="relative text-[15px] leading-relaxed text-white/65">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
 
-                <figcaption className="relative mt-7 flex items-center justify-between border-t border-border/40 pt-5">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold ring-1"
-                      style={{
-                        background: `color-mix(in oklch, ${t.metricAccent} 14%, transparent)`,
-                        color: t.metricAccent,
-                        borderColor: `color-mix(in oklch, ${t.metricAccent} 30%, transparent)`,
-                      }}
-                    >
-                      {t.initial}
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold tracking-tight">{t.author}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {t.role} · {t.company}
-                      </p>
-                    </div>
+                <figcaption className="relative mt-6 flex items-center gap-3 border-t border-white/[0.06] pt-5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+                    style={{ background: `${t.tint}16`, color: t.tint, outline: `1px solid ${t.tint}25` }}>
+                    {t.initial}
                   </div>
-                  <div className="flex items-center gap-0.5 text-amber-300">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-current" aria-hidden="true" />
-                    ))}
+                  <div>
+                    <p className="text-sm font-semibold text-white">{t.author}</p>
+                    <p className="text-xs text-white/30">{t.company}</p>
                   </div>
                 </figcaption>
               </motion.figure>
