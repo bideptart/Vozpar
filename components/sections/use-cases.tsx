@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Calendar, Headphones, TrendingUp, PhoneOutgoing, Package, Moon,
   CheckCircle2, ArrowUpRight, Sparkles, Activity, ShieldCheck, PhoneCall, Zap, Play
@@ -151,10 +151,48 @@ const CASES = [
 
 type CaseId = (typeof CASES)[number]["id"]
 
+// Distinct micro-motion per tab icon when active — a shared generic pulse made every
+// tab feel identical, so each one now animates in a way that hints at its own content.
+const TAB_ICON_MOTION: Record<CaseId, { rotate?: number[]; scale?: number[]; y?: number[]; opacity?: number[] }> = {
+  booking: { rotate: [0, -12, 0, 12, 0] },
+  support: { scale: [1, 1.2, 1] },
+  leads: { y: [0, -3, 0, -3, 0] },
+  followup: { rotate: [0, -16, 16, -8, 0] },
+  updates: { y: [0, -3, 1, 0] },
+  afterhours: { scale: [1, 1.12, 1], opacity: [1, 0.7, 1] },
+}
+
+const CASE_INTERVAL = 5000
+
 export function UseCases() {
   const [active, setActive] = useState<CaseId>("booking")
+  const [isPaused, setIsPaused] = useState(false)
+  const [waveOffset, setWaveOffset] = useState(0)
+  const [isWaveHovered, setIsWaveHovered] = useState(false)
   const reduced = useReducedMotion()
   const cur = CASES.find(c => c.id === active)!
+
+  // Keeps the waveform pattern continuously flowing, independent of which case is active.
+  useEffect(() => {
+    if (reduced) return
+    const t = setInterval(() => setWaveOffset(o => o + 1), isWaveHovered ? 700 : 1400)
+    return () => clearInterval(t)
+  }, [reduced, isWaveHovered])
+
+  const wave = cur.audioWave
+  const rotatedWave = wave.map((_, i) => wave[(i + waveOffset) % wave.length])
+
+  // Auto-advance through the use cases; resets on manual selection, pauses on hover.
+  useEffect(() => {
+    if (reduced || isPaused) return
+    const t = setInterval(() => {
+      setActive(id => {
+        const i = CASES.findIndex(c => c.id === id)
+        return CASES[(i + 1) % CASES.length].id
+      })
+    }, CASE_INTERVAL)
+    return () => clearInterval(t)
+  }, [reduced, isPaused, active])
 
   return (
     <section id="use-cases" className="relative overflow-hidden border-t border-white/[0.06] bg-black">
@@ -167,9 +205,9 @@ export function UseCases() {
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:py-24">
         {/* Header */}
-        <ScrollReveal className="mx-auto mb-14 max-w-3xl text-center">
+        <ScrollReveal className="mx-auto mb-10 max-w-3xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1]">
             <Sparkles className="h-3 w-3 text-[#2d98f1]" />
             Versatile Voice Platform
@@ -186,7 +224,11 @@ export function UseCases() {
         </ScrollReveal>
 
         {/* Tab Navigation Pill Bar */}
-        <div className="mb-10 flex flex-wrap justify-center gap-2">
+        <div
+          className="mb-8 flex flex-wrap justify-center gap-2"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           {CASES.map(c => {
             const Icon = c.icon
             const isActive = c.id === active
@@ -194,6 +236,7 @@ export function UseCases() {
               <button
                 key={c.id}
                 onClick={() => setActive(c.id)}
+                onMouseEnter={() => setActive(c.id)}
                 aria-pressed={isActive}
                 className={`relative flex items-center gap-2 rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium transition-all duration-300 focus:outline-none ${
                   isActive ? "text-white shadow-lg" : "text-white/40 hover:text-white/70"
@@ -211,10 +254,16 @@ export function UseCases() {
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
-                <Icon
-                  className="relative z-10 h-4 w-4 shrink-0 transition-transform duration-300"
-                  style={{ color: isActive ? c.tint : "currentColor" }}
-                />
+                <motion.span
+                  className="relative z-10 inline-flex shrink-0"
+                  animate={isActive && !reduced ? TAB_ICON_MOTION[c.id] : undefined}
+                  transition={{ duration: 1.4, repeat: isActive && !reduced ? Infinity : 0, repeatDelay: 0.6, ease: "easeInOut" }}
+                >
+                  <Icon
+                    className="h-4 w-4"
+                    style={{ color: isActive ? c.tint : "currentColor" }}
+                  />
+                </motion.span>
                 <span className="relative z-10">{c.label}</span>
               </button>
             )
@@ -222,7 +271,11 @@ export function UseCases() {
         </div>
 
         {/* Main Showcase Panel */}
-        <div className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-[#07080d] shadow-2xl">
+        <div
+          className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-[#07080d] shadow-2xl"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           {/* Top colored accent line */}
           <motion.div
             className="h-[2px] w-full"
@@ -237,7 +290,7 @@ export function UseCases() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="grid gap-10 p-6 sm:p-8 md:p-10 lg:grid-cols-12 lg:items-center"
+              className="grid gap-8 p-6 sm:p-7 md:p-8 lg:grid-cols-12 lg:items-center min-h-[400px]"
             >
               {/* Left Column: Details & Objective */}
               <div className="lg:col-span-7 flex flex-col justify-between">
@@ -259,15 +312,15 @@ export function UseCases() {
                     </span>
                   </div>
 
-                  <h3 className="mt-5 font-heading text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl">
+                  <h3 className="mt-4 font-heading text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl">
                     {cur.headline}
                   </h3>
 
-                  <p className="mt-4 text-sm leading-relaxed text-white/50 sm:text-base">
+                  <p className="mt-3 text-sm leading-relaxed text-white/50 sm:text-base">
                     {cur.description}
                   </p>
 
-                  <div className="mt-6 flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
+                  <div className="mt-5 flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
                     <div
                       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border text-xs font-bold"
                       style={{ borderColor: `${cur.tint}40`, background: `${cur.tint}18`, color: cur.tint }}
@@ -286,7 +339,7 @@ export function UseCases() {
                 </div>
 
                 {/* Workflow Checklist */}
-                <div className="mt-8">
+                <div className="mt-6">
                   <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
                     Execution Workflow
                   </p>
@@ -345,12 +398,20 @@ export function UseCases() {
                   </div>
 
                   {/* Waveform Visualizer */}
-                  <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-white/[0.06] bg-black/50 p-5">
+                  <div
+                    className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-white/[0.06] bg-black/50 p-5 transition-all duration-300 hover:scale-105"
+                    onMouseEnter={() => setIsWaveHovered(true)}
+                    onMouseLeave={() => setIsWaveHovered(false)}
+                    style={{
+                      borderColor: isWaveHovered ? `${cur.tint}55` : undefined,
+                      boxShadow: isWaveHovered ? `0 0 28px -8px ${cur.tint}55` : undefined,
+                    }}
+                  >
                     <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">
                       Audio Processing Engine
                     </span>
                     <div className="flex h-12 items-center gap-[4px]">
-                      {cur.audioWave.map((h, i) => (
+                      {rotatedWave.map((h, i) => (
                         <motion.span
                           key={i}
                           className="block w-[3px] rounded-full"
@@ -364,7 +425,7 @@ export function UseCases() {
                                 }
                           }
                           transition={{
-                            duration: 1.8,
+                            duration: isWaveHovered ? 1 : 1.8,
                             repeat: Infinity,
                             ease: "easeInOut",
                             delay: i * 0.07,

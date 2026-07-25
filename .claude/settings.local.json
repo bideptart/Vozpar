@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(dir \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\app\\\\faq\" \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\app\\\\industries\" \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\app\\\\pricing\")",
-      "Bash(dir \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\lib\")"
+      "Bash(dir \"c:\\\\Users\\\\Mangesh\\\\Documents\\\\9278aivoice\\\\lib\")",
+      "Bash(git add *)",
+      "Bash(git rebase *)",
+      "Bash(git -c core.editor=true rebase --continue)"
     ]
   }
 }

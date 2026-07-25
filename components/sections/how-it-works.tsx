@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Wand2, BookOpen, Plug, Rocket, Sparkles, CheckCircle2, ArrowRight, ShieldCheck, Zap } from "lucide-react"
 import { motion, useReducedMotion, AnimatePresence } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
+
+const STEP_INTERVAL = 3000
 
 const STEPS = [
   {
@@ -63,6 +65,14 @@ const STEPS = [
 export function HowItWorks() {
   const reduced = useReducedMotion()
   const [activeStep, setActiveStep] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  // Auto-advance through the steps; pauses while a card is hovered.
+  useEffect(() => {
+    if (reduced || isPaused) return
+    const t = setInterval(() => setActiveStep(i => (i + 1) % STEPS.length), STEP_INTERVAL)
+    return () => clearInterval(t)
+  }, [reduced, isPaused])
 
   return (
     <section id="how-it-works" className="relative overflow-hidden border-t border-white/[0.06] bg-black">
@@ -81,9 +91,9 @@ export function HowItWorks() {
         style={{ background: "rgba(99,102,241,0.06)" }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:py-24">
         {/* Header */}
-        <ScrollReveal className="mx-auto mb-16 max-w-3xl text-center md:mb-20">
+        <ScrollReveal className="mx-auto mb-10 max-w-3xl text-center md:mb-14">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1]">
             <Sparkles className="h-3 w-3 text-[#2d98f1]" />
             Simplified 4-Step Process
@@ -103,7 +113,7 @@ export function HowItWorks() {
         {/* Interactive Desktop Timeline */}
         <div className="hidden lg:block">
           {/* Progress bar line */}
-          <div className="relative mx-12 mb-14 h-1 rounded-full bg-white/[0.08]">
+          <div className="relative mx-12 mb-10 h-1 rounded-full bg-white/[0.08]">
             <motion.div
               className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#2d98f1] via-[#6366f1] to-[#10b981]"
               initial={{ width: "25%" }}
@@ -120,6 +130,8 @@ export function HowItWorks() {
                   <button
                     key={s.n}
                     onClick={() => setActiveStep(i)}
+                    onMouseEnter={() => { setActiveStep(i); setIsPaused(true) }}
+                    onMouseLeave={() => setIsPaused(false)}
                     className="group relative focus:outline-none"
                     aria-label={`Jump to step ${s.n}: ${s.title}`}
                   >
@@ -162,14 +174,25 @@ export function HowItWorks() {
                 <StaggerItem key={s.n}>
                   <motion.div
                     onClick={() => setActiveStep(i)}
+                    onMouseEnter={() => { setActiveStep(i); setIsPaused(true) }}
+                    onMouseLeave={() => setIsPaused(false)}
                     whileHover={reduced ? undefined : { y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                    className={`group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border p-6 transition-all duration-300 ${
-                      isSelected
-                        ? "border-[#2d98f1]/60 bg-[#0b0e18] shadow-[0_0_40px_-10px_rgba(4,107,210,0.35)]"
-                        : "border-white/[0.08] bg-[#08090e] hover:border-white/20 hover:bg-[#0a0c14]"
-                    }`}
+                    className="group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-[#08090e] p-6"
                   >
+                    {/* Sliding active highlight — shared layoutId animates smoothly between cards */}
+                    {isSelected && (
+                      <motion.div
+                        layoutId="step-card-highlight"
+                        className="pointer-events-none absolute inset-0 rounded-2xl border bg-[#0b0e18]"
+                        style={{
+                          borderColor: `${s.tint}99`,
+                          boxShadow: `0 0 40px -10px ${s.tint}59`,
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      />
+                    )}
+
                     {/* Top gradient highlight */}
                     <div
                       className="absolute inset-x-0 top-0 h-[2px] transition-opacity duration-300"
@@ -187,7 +210,7 @@ export function HowItWorks() {
                       }}
                     />
 
-                    <div>
+                    <div className="relative">
                       {/* Step Tag + Badge */}
                       <div className="flex items-center justify-between">
                         <span

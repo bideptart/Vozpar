@@ -926,12 +926,6 @@
   justify-content: center;
 }
 
-/* --- Performance --- */
-/* Skip rendering & animating offscreen sections (Hero stays painted). */
-main > section:not(:first-of-type) {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 720px;
-}
 
 /* Honor users who prefer reduced motion — kills all the infinite loops. */
 @media (prefers-reduced-motion: reduce) {

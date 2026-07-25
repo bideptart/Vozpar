@@ -282,11 +282,11 @@ export function ProductStory() {
         style={{ background: "#046bd2", opacity: 0.055 }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-24">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-20">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
 
           {/* Left: 3D illustration */}
-          <ScrollReveal className="aspect-square w-full max-w-lg lg:max-w-none">
+          <ScrollReveal className="aspect-square w-full max-w-md lg:max-w-lg">
             <VoiceIllustration reduced={Boolean(reduced)} />
           </ScrollReveal>
 
@@ -297,20 +297,20 @@ export function ProductStory() {
                 <span className="h-1.5 w-1.5 rounded-full bg-[#2d98f1]" />
                 Voice intelligence
               </span>
-              <h2 className="mt-5 text-balance font-heading text-4xl font-medium leading-[1.04] tracking-[-0.04em] text-white md:text-5xl">
+              <h2 className="mt-4 text-balance font-heading text-4xl font-medium leading-[1.04] tracking-[-0.04em] text-white md:text-5xl">
                 A voice agent that{" "}
                 <span className="bg-gradient-to-r from-[#2d98f1] to-[#046bd2] bg-clip-text text-transparent">
                   actually listens.
                 </span>
               </h2>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-white/45">
+              <p className="mt-4 text-pretty text-lg leading-relaxed text-white/45">
                 Most voice bots transcribe speech, run it through a language model, and synthesise audio back —
                 three separate systems stitched together. Vozpar uses a single audio-native model that processes
                 voice end-to-end, removing the latency and the artefacts that make bots sound robotic.
               </p>
             </ScrollReveal>
 
-            <div className="mt-10 flex flex-col gap-6">
+            <div className="mt-7 flex flex-col gap-5">
               {POINTS.map((p, i) => {
                 const Icon = p.icon
                 return (

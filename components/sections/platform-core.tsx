@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
-  Layers, Plug, Globe2, ShieldCheck, Database, Calendar, Phone,
-  FileText, Server, Lock, CheckCircle2, ArrowRight, Zap, Cpu, Sparkles
+  Plug, Globe2, ShieldCheck, CheckCircle2, ArrowRight, Cpu, Sparkles,
+  Calendar, Database, FileText, PhoneCall, Radio, Waypoints, Server, Lock, KeyRound,
 } from "lucide-react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
@@ -22,7 +22,15 @@ const ARCHITECTURE_TABS = [
       "Retrieves verified answers from your vector DB",
       "Sends instant SMS & WhatsApp confirmations",
     ],
-    widget: "network",
+    nodes: [
+      { label: "Calendar", icon: Calendar },
+      { label: "CRM", icon: Database },
+      { label: "Knowledge Base", icon: FileText },
+    ],
+    metrics: [
+      { label: "Sync latency", value: "<200ms" },
+      { label: "Systems linked", value: "4 active" },
+    ],
   },
   {
     id: "carrier",
@@ -37,7 +45,15 @@ const ARCHITECTURE_TABS = [
       "Works with Twilio, Plivo, Telnyx, or custom SIP",
       "99.99% uptime SLA with automatic failover",
     ],
-    widget: "telephony",
+    nodes: [
+      { label: "Twilio", icon: PhoneCall },
+      { label: "Telnyx", icon: Radio },
+      { label: "SIP Trunk", icon: Waypoints },
+    ],
+    metrics: [
+      { label: "Audio latency", value: "<300ms" },
+      { label: "Uptime SLA", value: "99.99%" },
+    ],
   },
   {
     id: "security",
@@ -52,171 +68,122 @@ const ARCHITECTURE_TABS = [
       "SOC2, HIPAA & GDPR compliance ready",
       "End-to-end encrypted audio stream processing",
     ],
-    widget: "security",
+    nodes: [
+      { label: "Your VPC", icon: Server },
+      { label: "Encrypted Store", icon: Lock },
+      { label: "Access Control", icon: KeyRound },
+    ],
+    metrics: [
+      { label: "External data", value: "0 bytes" },
+      { label: "Compliance", value: "SOC2 · HIPAA" },
+    ],
   },
 ] as const
 
 type TabId = (typeof ARCHITECTURE_TABS)[number]["id"]
+type Tab = (typeof ARCHITECTURE_TABS)[number]
 
-// ── Interactive Widget 1: Integration Network ──
-function NetworkWidget({ tint, reduced }: { tint: string; reduced: boolean }) {
-  const nodes = [
-    { label: "Google Calendar", icon: Calendar, color: "#2d98f1" },
-    { label: "HubSpot / Salesforce", icon: Database, color: "#6366f1" },
-    { label: "Twilio / Telnyx SIP", icon: Phone, color: "#0ea5e9" },
-    { label: "Knowledge Base", icon: FileText, color: "#10b981" },
-  ]
+const TAB_INTERVAL = 5000
+
+// Shared coordinate space for the hub-and-node diagram — HTML nodes and the SVG
+// connection lines both derive their positions from these same numbers so they
+// never drift out of alignment.
+const CANVAS = { w: 400, h: 230 }
+const HUB_POS = { x: 200, y: 118 }
+const NODE_POS = [
+  { x: 62, y: 40 },
+  { x: 338, y: 40 },
+  { x: 200, y: 202 },
+] as const
+
+const pct = (v: number, total: number) => `${(v / total) * 100}%`
+
+// ── Live architecture visualization — glassmorphic hub with floating, connected
+//    service nodes. Content (nodes/tint/icon) is driven entirely by the active tab. ──
+function ArchitectureVisual({ current, reduced }: { current: Tab; reduced: boolean }) {
+  const Icon = current.icon
 
   return (
-    <div className="relative flex flex-col items-center justify-center p-6 text-center">
-      <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-[10px] text-white/50">
-        <Cpu className="h-3 w-3 text-[#2d98f1]" />
-        Live Voice Engine Hub
-      </div>
+    <div className="relative h-[220px] w-full overflow-hidden sm:h-[240px]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-[50%] h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-colors duration-500"
+        style={{ background: current.tint, opacity: 0.16 }}
+      />
 
-      {/* Central Core */}
-      <motion.div
-        className="relative flex h-20 w-20 items-center justify-center rounded-2xl border"
-        style={{
-          borderColor: `${tint}60`,
-          background: `linear-gradient(135deg, ${tint}25 0%, #060812 100%)`,
-          boxShadow: `0 0 35px ${tint}35`,
-        }}
-        animate={reduced ? undefined : { scale: [1, 1.04, 1] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox={`0 0 ${CANVAS.w} ${CANVAS.h}`}
+        preserveAspectRatio="none"
+        aria-hidden
       >
-        <span className="font-heading text-xs font-bold tracking-widest text-white">
-          VOZPAR
-        </span>
-        <span className="absolute -bottom-2 rounded-full bg-emerald-500 px-2 py-0.5 font-mono text-[8px] font-bold uppercase text-black">
-          Connected
+        {NODE_POS.map((n, i) => (
+          <g key={i}>
+            <line x1={HUB_POS.x} y1={HUB_POS.y} x2={n.x} y2={n.y} stroke="white" strokeOpacity={0.07} strokeWidth={1.5} />
+            {!reduced && (
+              <motion.line
+                x1={HUB_POS.x} y1={HUB_POS.y} x2={n.x} y2={n.y}
+                stroke={current.tint} strokeWidth={1.5} strokeDasharray="5 9" strokeLinecap="round"
+                animate={{ strokeDashoffset: [0, -28] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: i * 0.15 }}
+              />
+            )}
+          </g>
+        ))}
+      </svg>
+
+      {/* Hub */}
+      <motion.div
+        className="absolute flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-2xl border backdrop-blur-md"
+        style={{
+          left: pct(HUB_POS.x, CANVAS.w),
+          top: pct(HUB_POS.y, CANVAS.h),
+          borderColor: `${current.tint}55`,
+          background: `linear-gradient(155deg, ${current.tint}30, rgba(8,10,20,0.65))`,
+          boxShadow: `0 0 30px -6px ${current.tint}80`,
+        }}
+        animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
+        transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <Icon className="h-5 w-5" style={{ color: current.tint }} />
+        <span className="absolute -bottom-2 flex items-center gap-1 rounded-full bg-emerald-500 px-1.5 py-[1px] font-mono text-[7px] font-bold uppercase text-black">
+          Live
         </span>
       </motion.div>
 
-      {/* Grid of connected systems */}
-      <div className="mt-8 grid grid-cols-2 gap-3 w-full">
-        {nodes.map((n, i) => {
-          const Icon = n.icon
-          return (
-            <motion.div
-              key={n.label}
-              initial={reduced ? undefined : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: i * 0.08 }}
-              className="flex items-center gap-2.5 rounded-xl border border-white/[0.08] bg-black/40 p-3 text-left"
-            >
-              <div
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border"
-                style={{ borderColor: `${n.color}35`, background: `${n.color}15`, color: n.color }}
-              >
-                <Icon className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="font-mono text-[10px] font-semibold text-white/80 truncate">
-                  {n.label}
-                </p>
-                <p className="font-mono text-[8px] text-emerald-400">
-                  Real-time Sync
-                </p>
-              </div>
-            </motion.div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-// ── Interactive Widget 2: Carrier Telephony ──
-function TelephonyWidget({ tint, reduced }: { tint: string; reduced: boolean }) {
-  return (
-    <div className="flex flex-col gap-4 p-6">
-      <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-        <div className="flex items-center gap-2 font-mono text-xs text-white">
-          <Globe2 className="h-4 w-4 text-[#6366f1]" />
-          Carrier Network Routing
-        </div>
-        <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[9px] text-emerald-400">
-          99.99% SLA
-        </span>
-      </div>
-
-      {/* Latency meter */}
-      <div className="rounded-xl border border-white/[0.08] bg-black/50 p-4">
-        <div className="flex items-center justify-between font-mono text-[10px]">
-          <span className="text-white/40">SIP Latency Benchmark</span>
-          <span style={{ color: tint }}>240ms (Sub-300ms SLA)</span>
-        </div>
-        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
+      {/* Satellite nodes — each carries its own icon so every tab's diagram reads as a
+          distinct system map, not the same three dots relabeled. */}
+      {NODE_POS.map((pos, i) => {
+        const node = current.nodes[i]
+        const NodeIcon = node.icon
+        return (
           <motion.div
-            className="h-full rounded-full"
-            style={{ background: `linear-gradient(90deg, ${tint}, #10b981)` }}
-            initial={{ width: "0%" }}
-            animate={{ width: "82%" }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          />
-        </div>
-      </div>
-
-      {/* Live Carrier Nodes */}
-      <div className="space-y-2">
-        {[
-          { provider: "Twilio SIP Trunk", status: "Active · 12ms", flag: "🇺🇸" },
-          { provider: "Telnyx Global Direct", status: "Active · 18ms", flag: "🇪🇺" },
-          { provider: "Custom PBX / Asterisk", status: "Connected", flag: "🌐" },
-        ].map((item, i) => (
-          <div
-            key={item.provider}
-            className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-black/40 px-3.5 py-2.5 text-xs"
+            key={`${current.id}-${node.label}`}
+            className="absolute w-[112px] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/[0.05] px-2.5 py-2 text-left backdrop-blur-md transition-transform duration-300 hover:scale-[1.06] hover:border-white/25 sm:w-[130px]"
+            style={{ left: pct(pos.x, CANVAS.w), top: pct(pos.y, CANVAS.h) }}
+            initial={reduced ? undefined : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.1 + i * 0.08 }}
           >
-            <div className="flex items-center gap-2.5">
-              <span>{item.flag}</span>
-              <span className="font-mono font-medium text-white/80">{item.provider}</span>
+            <div className="flex items-center gap-1.5">
+              <span
+                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border"
+                style={{ borderColor: `${current.tint}35`, background: `${current.tint}18`, color: current.tint }}
+              >
+                <NodeIcon className="h-3 w-3" />
+              </span>
+              <span className="truncate font-mono text-[9px] font-medium text-white/75">{node.label}</span>
+              <span className="relative ml-auto flex h-1.5 w-1.5 shrink-0">
+                <span
+                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                  style={{ background: current.tint }}
+                />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: current.tint }} />
+              </span>
             </div>
-            <span className="font-mono text-[10px] text-emerald-400">{item.status}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// ── Interactive Widget 3: Security Boundary ──
-function SecurityWidget({ tint, reduced }: { tint: string; reduced: boolean }) {
-  return (
-    <div className="flex flex-col items-center justify-center p-6 text-center">
-      {/* Perimeter Box */}
-      <div className="relative w-full rounded-2xl border border-dashed border-emerald-500/40 bg-black/60 p-5">
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-emerald-500/40 bg-[#07080d] px-3 py-0.5 font-mono text-[9px] uppercase tracking-wider text-emerald-400">
-          Private Infrastructure Boundary
-        </div>
-
-        <div className="mt-3 grid gap-3">
-          <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 text-left">
-            <Server className="h-5 w-5 shrink-0 text-emerald-400" />
-            <div>
-              <p className="font-mono text-xs font-semibold text-white">Your Cloud / On-Prem VPC</p>
-              <p className="font-mono text-[9px] text-white/40">AWS, GCP, Azure, or Private Server</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 text-left">
-            <Lock className="h-5 w-5 shrink-0 text-emerald-400" />
-            <div>
-              <p className="font-mono text-xs font-semibold text-white">Vozpar Self-Hosted Engine</p>
-              <p className="font-mono text-[9px] text-white/40">Zero data leaves your perimeter</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 text-left">
-            <Database className="h-5 w-5 shrink-0 text-emerald-400" />
-            <div>
-              <p className="font-mono text-xs font-semibold text-white">Encrypted Storage & Logs</p>
-              <p className="font-mono text-[9px] text-white/40">SOC2 · HIPAA · GDPR Compliant</p>
-            </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        )
+      })}
     </div>
   )
 }
@@ -224,41 +191,56 @@ function SecurityWidget({ tint, reduced }: { tint: string; reduced: boolean }) {
 export function PlatformCore() {
   const reduced = useReducedMotion()
   const [activeTab, setActiveTab] = useState<TabId>("integrations")
+  const [isPaused, setIsPaused] = useState(false)
 
   const current = ARCHITECTURE_TABS.find(t => t.id === activeTab)!
 
+  // Auto-rotate through the tabs; pauses whenever a tab or the panel is hovered.
+  useEffect(() => {
+    if (reduced || isPaused) return
+    const t = setInterval(() => {
+      setActiveTab(id => {
+        const i = ARCHITECTURE_TABS.findIndex(tab => tab.id === id)
+        return ARCHITECTURE_TABS[(i + 1) % ARCHITECTURE_TABS.length].id
+      })
+    }, TAB_INTERVAL)
+    return () => clearInterval(t)
+  }, [reduced, isPaused])
+
   return (
     <section id="platform-core" className="relative overflow-hidden border-t border-white/[0.06] bg-black">
-      {/* Background radial glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[400px]"
         style={{
-          background:
-            "radial-gradient(50% 50% at 50% 0%, rgba(4,107,210,0.1) 0%, transparent 80%)",
+          background: "radial-gradient(50% 50% at 50% 0%, rgba(4,107,210,0.1) 0%, transparent 80%)",
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-18 lg:py-20">
         {/* Header */}
-        <ScrollReveal className="mx-auto mb-14 max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1]">
+        <ScrollReveal className="mx-auto mb-8 max-w-3xl text-center">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1]">
             <Sparkles className="h-3 w-3 text-[#2d98f1]" />
             Enterprise Infrastructure
           </div>
-          <h2 className="font-heading text-3xl font-medium leading-[1.1] tracking-[-0.03em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
+          <h2 className="font-heading text-2xl font-medium leading-[1.12] tracking-[-0.03em] text-white sm:text-3xl md:text-4xl lg:text-5xl">
             Built for Zero Downtime &{" "}
             <span className="bg-gradient-to-r from-[#2d98f1] via-[#60b8ff] to-[#10b981] bg-clip-text text-transparent">
               Total Data Privacy
             </span>
           </h2>
-          <p className="mt-4 text-base text-white/45 sm:text-lg">
+          <p className="mt-3 text-sm text-white/45 sm:text-base">
             Everything you need in one architecture — real-time tool execution, carrier independence, and 100% self-hosted data ownership.
           </p>
         </ScrollReveal>
 
         {/* Tab Switcher Pills */}
-        <div className="mb-10 flex flex-wrap justify-center gap-3">
+        <div
+          className="mb-6 flex flex-wrap justify-center gap-2"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           {ARCHITECTURE_TABS.map(tab => {
             const Icon = tab.icon
             const isSelected = tab.id === activeTab
@@ -266,8 +248,10 @@ export function PlatformCore() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex items-center gap-2.5 rounded-full px-5 py-3 text-xs sm:text-sm font-medium transition-all duration-300 focus:outline-none ${
-                  isSelected ? "text-white shadow-xl" : "text-white/40 hover:text-white/70"
+                onMouseEnter={() => setActiveTab(tab.id)}
+                aria-pressed={isSelected}
+                className={`relative flex items-center gap-2 rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium transition-all duration-300 focus:outline-none ${
+                  isSelected ? "text-white shadow-lg" : "text-white/40 hover:text-white/70"
                 }`}
               >
                 {isSelected && (
@@ -277,15 +261,12 @@ export function PlatformCore() {
                     style={{
                       borderColor: `${tab.tint}60`,
                       background: `linear-gradient(135deg, ${tab.tint}22 0%, ${tab.tint}08 100%)`,
-                      boxShadow: `0 0 25px ${tab.tint}30`,
+                      boxShadow: `0 0 22px ${tab.tint}30`,
                     }}
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
-                <Icon
-                  className="relative z-10 h-4 w-4"
-                  style={{ color: isSelected ? tab.tint : "currentColor" }}
-                />
+                <Icon className="relative z-10 h-4 w-4" style={{ color: isSelected ? tab.tint : "currentColor" }} />
                 <span className="relative z-10">{tab.tag}</span>
               </button>
             )
@@ -293,7 +274,11 @@ export function PlatformCore() {
         </div>
 
         {/* Main 2-Column Content Showcase */}
-        <div className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-[#07080d] shadow-2xl">
+        <div
+          className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-[#07080d] shadow-2xl"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           <motion.div
             className="h-[2px] w-full"
             animate={{ background: `linear-gradient(90deg, transparent, ${current.tint}, transparent)` }}
@@ -303,11 +288,11 @@ export function PlatformCore() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: reduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="grid gap-10 p-6 sm:p-8 md:p-10 lg:grid-cols-12 lg:items-center"
+              initial={{ opacity: 0, y: 10, scale: 0.99 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.99 }}
+              transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="grid gap-8 p-5 sm:p-6 md:p-7 lg:grid-cols-12 lg:items-center"
             >
               {/* Left Column: Description & Feature Points */}
               <div className="lg:col-span-7">
@@ -323,22 +308,21 @@ export function PlatformCore() {
                   {current.tag}
                 </span>
 
-                <h3 className="mt-4 font-heading text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl">
+                <h3 className="mt-3 font-heading text-xl font-semibold leading-tight text-white sm:text-2xl md:text-3xl">
                   {current.title}
                 </h3>
 
-                <p className="mt-4 text-sm leading-relaxed text-white/50 sm:text-base">
+                <p className="mt-3 text-sm leading-relaxed text-white/50">
                   {current.subtitle}
                 </p>
 
-                {/* Checklist points */}
-                <div className="mt-8 space-y-3">
+                <div className="mt-5 space-y-2">
                   {current.highlights.map((h, i) => (
                     <motion.div
                       key={h}
                       initial={reduced ? undefined : { opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: i * 0.08 }}
+                      transition={{ duration: 0.3, delay: i * 0.07 }}
                       className="flex items-center gap-3 text-xs sm:text-sm text-white/75"
                     >
                       <div
@@ -356,7 +340,7 @@ export function PlatformCore() {
                   ))}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-white/[0.08]">
+                <div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-4">
                   <a
                     href="/get-started"
                     className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-[#2d98f1] hover:underline"
@@ -367,25 +351,39 @@ export function PlatformCore() {
                 </div>
               </div>
 
-              {/* Right Column: Interactive Graphic Widget */}
+              {/* Right Column: Live Architecture Visualization */}
               <div className="lg:col-span-5">
                 <div
-                  className="relative overflow-hidden rounded-2xl border"
+                  className="relative overflow-hidden rounded-2xl border backdrop-blur-xl"
                   style={{
-                    background: "linear-gradient(145deg, #0a0d18 0%, #05070e 100%)",
+                    background: "linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(6,8,16,0.7) 60%)",
                     borderColor: `${current.tint}35`,
-                    boxShadow: `0 20px 50px -10px ${current.tint}20`,
+                    boxShadow: `0 20px 50px -12px ${current.tint}25`,
                   }}
                 >
-                  {current.widget === "network" && (
-                    <NetworkWidget tint={current.tint} reduced={Boolean(reduced)} />
-                  )}
-                  {current.widget === "telephony" && (
-                    <TelephonyWidget tint={current.tint} reduced={Boolean(reduced)} />
-                  )}
-                  {current.widget === "security" && (
-                    <SecurityWidget tint={current.tint} reduced={Boolean(reduced)} />
-                  )}
+                  <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-2.5">
+                    <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-white/40">
+                      <Cpu className="h-3 w-3 text-white/40" />
+                      Live Architecture
+                    </span>
+                    <span className="flex items-center gap-1.5 font-mono text-[9px] text-emerald-400">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                      Operational
+                    </span>
+                  </div>
+
+                  <ArchitectureVisual current={current} reduced={Boolean(reduced)} />
+
+                  <div className="grid grid-cols-2 divide-x divide-white/[0.06] border-t border-white/[0.08]">
+                    {current.metrics.map(m => (
+                      <div key={m.label} className="px-4 py-3">
+                        <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-white/35">{m.label}</p>
+                        <p className="mt-0.5 font-mono text-sm font-semibold" style={{ color: current.tint }}>
+                          {m.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.div>

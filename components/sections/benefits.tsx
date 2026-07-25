@@ -6,14 +6,14 @@ import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/
 
 // ─── Mini visuals ─────────────────────────────────────────────────────────────
 
-function WaveViz({ reduced }: { reduced: boolean }) {
+function WaveViz({ reduced, color = "#2d98f1" }: { reduced: boolean; color?: string }) {
   const bars = [0.4, 0.7, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.75, 0.4, 0.8]
   return (
     <div className="flex h-14 items-center gap-[4px]" aria-hidden>
       {bars.map((f, i) => (
         <motion.span key={i}
           className="block w-[3px] rounded-full"
-          style={{ background: `linear-gradient(to top, rgba(4,107,210,0.45), #2d98f1, rgba(45,152,241,0.6))` }}
+          style={{ background: `linear-gradient(to top, color-mix(in srgb, ${color} 45%, transparent), ${color}, color-mix(in srgb, ${color} 60%, transparent))` }}
           animate={reduced ? { height: f * 28 } : {
             height: [f * 12, f * 34, f * 18, f * 30, f * 14, f * 32, f * 12],
             opacity: [0.65, 1, 0.7, 0.95, 0.6, 1, 0.65],
@@ -72,15 +72,15 @@ function InterruptViz({ reduced }: { reduced: boolean }) {
   )
 }
 
-function ScaleViz({ reduced }: { reduced: boolean }) {
+function ScaleViz({ reduced, color = "#2d98f1" }: { reduced: boolean; color?: string }) {
   const cols = [35, 55, 42, 72, 58, 88, 65, 80]
   return (
     <div className="flex h-14 items-end gap-1.5 px-1" aria-hidden>
       {cols.map((h, i) => (
         <motion.span key={i} className="w-3.5 rounded-t"
           style={{
-            background: `linear-gradient(to top, rgba(4,107,210,0.4), #2d98f1, rgba(45,152,241,0.8))`,
-            boxShadow: "0 0 8px rgba(45,152,241,0.2)",
+            background: `linear-gradient(to top, color-mix(in srgb, ${color} 40%, transparent), ${color}, color-mix(in srgb, ${color} 80%, transparent))`,
+            boxShadow: `0 0 8px color-mix(in srgb, ${color} 20%, transparent)`,
           }}
           animate={reduced ? { height: h * 0.5 } : {
             height: [h * 0.2, h * 0.58, h * 0.3, h * 0.62, h * 0.22],
@@ -94,6 +94,33 @@ function ScaleViz({ reduced }: { reduced: boolean }) {
             repeatType: "mirror",
           }}
         />
+      ))}
+    </div>
+  )
+}
+
+function PulseNodesViz({ reduced, color = "#2d98f1" }: { reduced: boolean; color?: string }) {
+  const nodes = [0, 1, 2, 3, 4]
+  return (
+    <div className="flex h-14 items-center gap-2.5 px-1" aria-hidden>
+      {nodes.map((_, i) => (
+        <div key={i} className="flex items-center">
+          <motion.span
+            className="block h-2.5 w-2.5 shrink-0 rounded-full"
+            style={{ background: color, boxShadow: `0 0 8px color-mix(in srgb, ${color} 45%, transparent)` }}
+            animate={reduced ? { scale: 1, opacity: 0.85 } : {
+              scale: [1, 1.35, 1],
+              opacity: [0.45, 1, 0.45],
+            }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.11 }}
+          />
+          {i < nodes.length - 1 && (
+            <span
+              className="h-px w-3.5"
+              style={{ background: `color-mix(in srgb, ${color} 30%, transparent)` }}
+            />
+          )}
+        </div>
       ))}
     </div>
   )
@@ -123,17 +150,17 @@ const SECONDARY = [
   {
     icon: Database, title: "Connects to your knowledge base",
     body: "Point the agent at your FAQs, product docs, or CRM. It answers from your source of truth — not generic AI guesswork.",
-    tint: "#2d98f1",
+    tint: "#2d98f1", viz: "scale",
   },
   {
     icon: Server, title: "Self-hosted by default",
     body: "Deploy on your own infrastructure. Call data, transcripts, and business knowledge stay inside your environment.",
-    tint: "#10b981",
+    tint: "#10b981", viz: "nodes",
   },
   {
     icon: Globe, title: "Multilingual, auto-detected",
     body: "Detects the caller's language instantly and switches mid-conversation — no separate models, no manual configuration.",
-    tint: "#2d98f1",
+    tint: "#2d98f1", viz: "wave",
   },
 ]
 
@@ -197,9 +224,10 @@ function BentoCard({
       {/* Mini viz */}
       {viz && (
         <div className="mb-5">
-          {viz === "wave" && <WaveViz reduced={reduced} />}
+          {viz === "wave" && <WaveViz reduced={reduced} color={tint} />}
           {viz === "interrupt" && <InterruptViz reduced={reduced} />}
-          {viz === "scale" && <ScaleViz reduced={reduced} />}
+          {viz === "scale" && <ScaleViz reduced={reduced} color={tint} />}
+          {viz === "nodes" && <PulseNodesViz reduced={reduced} color={tint} />}
         </div>
       )}
 
@@ -255,7 +283,7 @@ export function Benefits() {
           {SECONDARY.map(c => (
             <StaggerItem key={c.title}>
               <BentoCard icon={c.icon} title={c.title} body={c.body}
-                tint={c.tint} viz={null} reduced={Boolean(reduced)} className="h-full" />
+                tint={c.tint} viz={c.viz} reduced={Boolean(reduced)} className="h-full" />
             </StaggerItem>
           ))}
         </StaggerGroup>
