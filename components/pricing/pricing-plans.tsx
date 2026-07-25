@@ -83,7 +83,7 @@ function PricingTiltCard({
       onMouseLeave={handleLeave}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       className={cn(
-        "group relative flex flex-col rounded-2xl border bg-[#08080a] p-7 transition-colors duration-300",
+        "group relative flex h-full flex-col rounded-2xl border bg-[#08080a] p-5 sm:p-6 transition-colors duration-300",
         featured
           ? "border-primary ring-1 ring-primary/40 shadow-[0_12px_45px_-12px_rgba(4,107,210,0.4)]"
           : "border-white/10 hover:border-primary/30"
@@ -110,23 +110,94 @@ function PricingTiltCard({
   )
 }
 
+const DEFAULT_PLANS: Plan[] = [
+  {
+    id: "starter",
+    label: "Starter",
+    amount: 31,
+    yearlyAmount: 298,
+    min: 250,
+    rate: 0.13,
+    agents: 2,
+    tag: null,
+    sub: "Pilot a single agent and prove the ROI.",
+    perks: [
+      "250 included minutes / mo",
+      "$0.13/min per-second voice rate",
+      "2 concurrent AI agents",
+      "1 US/CA local phone number included",
+      "Real-time transcript & call logs",
+      "Standard email support",
+    ],
+  },
+  {
+    id: "growth",
+    label: "Growth",
+    amount: 93,
+    yearlyAmount: 893,
+    min: 800,
+    rate: 0.12,
+    agents: 10,
+    tag: "Most Popular",
+    sub: "Most teams start here. Scale to a full pipeline.",
+    perks: [
+      "800 included minutes / mo",
+      "$0.12/min per-second voice rate",
+      "10 concurrent AI agents",
+      "1 US/CA local phone number included",
+      "Real-time transcript & call logs",
+      "Priority email & chat support",
+      "Custom webhooks & integrations",
+    ],
+  },
+  {
+    id: "scale",
+    label: "Scale",
+    amount: 316,
+    yearlyAmount: 3034,
+    min: 3000,
+    rate: 0.11,
+    agents: 999,
+    tag: null,
+    sub: "High-volume teams running full call centers.",
+    perks: [
+      "3,000 included minutes / mo",
+      "$0.11/min per-second voice rate",
+      "Unlimited AI agents",
+      "1 US/CA local phone number included",
+      "Real-time transcript & call logs",
+      "24/7 dedicated support & SLA",
+      "Custom webhooks & integrations",
+      "Custom voice cloning & fine-tuning",
+    ],
+  },
+]
+
 export function PricingPlans() {
-  const [plans, setPlans] = useState<Plan[]>([])
-  const [loadError, setLoadError] = useState<string | null>(null)
+  const [plans, setPlans] = useState<Plan[]>(DEFAULT_PLANS)
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly")
 
   useEffect(() => {
     let cancelled = false
-    ;(async () => {
-      try {
-        const res = await fetch(`${PORTAL_BASE}/api/plans`).then((r) => r.json())
-        if (!cancelled) setPlans(res.plans || [])
-      } catch (e) {
-        if (!cancelled) setLoadError((e as Error).message || "Could not load plans")
-      }
-    })()
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 3000)
+
+    fetch(`${PORTAL_BASE}/api/plans`, { signal: controller.signal })
+      .then((r) => r.json())
+      .then((res) => {
+        clearTimeout(timer)
+        if (!cancelled && res && Array.isArray(res.plans) && res.plans.length > 0) {
+          setPlans(res.plans)
+        }
+      })
+      .catch(() => {
+        clearTimeout(timer)
+      })
+
     return () => {
       cancelled = true
+      clearTimeout(timer)
+      controller.abort()
     }
   }, [])
 
@@ -135,37 +206,17 @@ export function PricingPlans() {
 
   const ordered = useMemo(() => plans, [plans])
 
-  if (loadError) {
-    return (
-      <div className="mx-auto max-w-md rounded-lg border border-destructive/40 bg-destructive/10 p-6 text-center text-sm text-destructive">
-        Couldn&apos;t load live pricing ({loadError}). Please refresh, or{" "}
-        <Link href="/contact" className="underline">
-          contact us
-        </Link>
-        .
-      </div>
-    )
-  }
-
-  if (plans.length === 0) {
-    return (
-      <div className="flex items-center justify-center py-16 text-sm text-muted-foreground">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading live pricing…
-      </div>
-    )
-  }
-
   return (
-    <div>
+    <div suppressHydrationWarning>
       {/* Billing cycle toggle */}
-      <div className="mb-8 flex justify-center">
-        <div className="inline-flex items-center gap-1 rounded-full border border-border bg-card p-1 text-sm">
+      <div className="mb-5 flex justify-center">
+        <div className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/[0.04] p-1.5 text-sm backdrop-blur-xl shadow-lg">
           <button
             type="button"
             onClick={() => setCycle("monthly")}
             className={cn(
-              "rounded-full px-4 py-1.5 transition",
-              cycle === "monthly" ? "bg-foreground text-background" : "text-muted-foreground",
+              "rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300",
+              cycle === "monthly" ? "bg-white text-black shadow-md" : "text-slate-400 hover:text-white",
             )}
           >
             Monthly
@@ -174,15 +225,15 @@ export function PricingPlans() {
             type="button"
             onClick={() => setCycle("yearly")}
             className={cn(
-              "flex items-center gap-2 rounded-full px-4 py-1.5 transition",
-              cycle === "yearly" ? "bg-primary text-primary-foreground" : "text-muted-foreground",
+              "flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-300",
+              cycle === "yearly" ? "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(4,107,210,0.4)]" : "text-slate-400 hover:text-white",
             )}
           >
             Yearly
             <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-[10px]",
-                cycle === "yearly" ? "bg-white/20 text-white" : "bg-primary/10 text-primary",
+                "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+                cycle === "yearly" ? "bg-white/20 text-white" : "bg-primary/20 text-primary",
               )}
             >
               Save 20%
@@ -193,88 +244,116 @@ export function PricingPlans() {
 
       {/* Per-second billing callout */}
       <div className="mb-8 flex justify-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.06] px-4 py-2 text-sm text-primary">
-          <span>⏱️</span>
+        <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/30 bg-primary/[0.08] px-5 py-2.5 text-xs sm:text-sm text-primary backdrop-blur-md shadow-[0_0_20px_rgba(4,107,210,0.15)]">
+          <span className="text-base">⏱️</span>
           <span>
-            <strong>Per-second billing</strong> — pay only for the seconds you use.
+            <strong className="text-white">Per-second billing</strong> — pay only for the seconds you use.
           </span>
         </div>
       </div>
 
       {/* Plan cards */}
-      <div className="grid gap-5 md:grid-cols-3 md:items-stretch" style={{ perspective: "1200px" }}>
+      <div className="grid gap-6 md:grid-cols-3 md:items-stretch">
         {ordered.map((p) => {
           const price = priceFor(p)
           const featured = Boolean(p.tag)
+          const visiblePerks = p.perks.filter((perk) => !/phone number|concurrent call/i.test(perk))
           return (
             <PricingTiltCard key={p.id} featured={featured}>
               {p.tag && (
                 <Badge 
-                  className="absolute -top-3 left-1/2 bg-primary hover:bg-primary select-none z-10"
+                  className="absolute -top-3 left-1/2 bg-primary hover:bg-primary select-none z-10 font-sans text-[10px] font-bold uppercase tracking-wider shadow-[0_4px_14px_rgba(4,107,210,0.4)]"
                   style={{ transform: "translateZ(45px) translateX(-50%)" }}
                 >
                   {p.tag}
                 </Badge>
               )}
-              <div style={{ transform: "translateZ(25px)", transformStyle: "preserve-3d" }} className="space-y-1.5 pb-6">
-                <h3 className="text-2xl font-semibold leading-none tracking-tight text-white">{p.label}</h3>
-                <p className="text-sm text-muted-foreground">{p.sub}</p>
+
+              {/* Title & Subtitle */}
+              <div
+                style={{ transform: "translateZ(25px)", transformStyle: "preserve-3d" }}
+                className="flex flex-col gap-0.5 pb-2"
+              >
+                <h3 className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-white">{p.label}</h3>
+                <p className="min-h-[1.5rem] font-sans text-xs text-slate-400">{p.sub}</p>
               </div>
-              <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="flex flex-1 flex-col">
-                <div style={{ transform: "translateZ(40px)" }} className="mb-1">
-                  <span className="text-4xl font-bold tracking-tight text-white">{usd(price)}</span>
-                  <span className="ml-1 text-sm text-muted-foreground">/{cycle === "yearly" ? "yr" : "mo"}</span>
-                </div>
-                {cycle === "yearly" && (
-                  <div style={{ transform: "translateZ(30px)" }} className="mb-2 text-xs text-primary font-medium">Save {usd(yearlySavings(p))} vs monthly</div>
-                )}
-                <div style={{ transform: "translateZ(25px)" }} className="mb-4 text-xs text-muted-foreground">
-                  {p.min.toLocaleString("en-US")} min · {usd(p.rate)}/min ·{" "}
-                  {p.agents >= 999 ? "Unlimited" : `${p.agents} agents`}
-                </div>
-                <ul style={{ transform: "translateZ(22px)" }} className="mb-6 space-y-2 text-sm flex-1">
-                  {p.perks
-                    .filter((perk) => !/phone number|concurrent call/i.test(perk))
-                    .map((perk) => (
-                      <li key={perk} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                        <span>{perk}</span>
+
+              <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="flex flex-1 flex-col justify-between pt-1">
+                <div>
+                  {/* Price Block */}
+                  <div style={{ transform: "translateZ(40px)" }} className="flex items-baseline gap-1">
+                    <span className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-white">{usd(price)}</span>
+                    <span className="font-sans text-xs text-slate-400">/{cycle === "yearly" ? "yr" : "mo"}</span>
+                  </div>
+
+                  {/* Yearly savings tag / Spacer */}
+                  <div className="min-h-[1rem] mt-0.5">
+                    {cycle === "yearly" ? (
+                      <div
+                        style={{ transform: "translateZ(30px)" }}
+                        className="font-sans text-[11px] font-semibold text-primary"
+                      >
+                        Save {usd(yearlySavings(p))} vs monthly
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {/* Subtext info */}
+                  <div
+                    style={{ transform: "translateZ(25px)" }}
+                    className="mt-1 mb-3 font-sans text-[11px] font-medium text-slate-400"
+                  >
+                    {p.min.toLocaleString("en-US")} min · {usd(p.rate)}/min ·{" "}
+                    {p.agents >= 999 ? "Unlimited" : `${p.agents} agents`}
+                  </div>
+
+                  {/* Perks List */}
+                  <ul
+                    style={{ transform: "translateZ(22px)" }}
+                    className="space-y-1.5 font-sans text-xs text-slate-300 mb-4"
+                  >
+                    {visiblePerks.map((perk) => (
+                      <li key={perk} className="flex items-center gap-2">
+                        <Check className="h-3.5 w-3.5 shrink-0 text-primary" />
+                        <span className="leading-tight text-slate-200">{perk}</span>
                       </li>
                     ))}
-                </ul>
+                  </ul>
+                </div>
                 
-                {featured ? (
-                  <div style={{ transform: "translateZ(35px)" }} className="relative mt-auto w-full overflow-hidden rounded-full group/btn">
+                {/* CTA Button - Always inside the card box */}
+                <div style={{ transform: "translateZ(30px)" }} className="mt-auto pt-2 w-full">
+                  {featured ? (
+                    <div className="relative w-full overflow-hidden rounded-full group/btn">
+                      <Button
+                        asChild
+                        size="sm"
+                        className="h-10 w-full rounded-full bg-gradient-to-r from-primary to-sky-400 font-sans text-xs sm:text-sm font-semibold text-primary-foreground shadow-[0_4px_16px_rgba(4,107,210,0.4)] transition-all hover:scale-[1.02] hover:shadow-[0_6px_22px_rgba(4,107,210,0.6)]"
+                      >
+                        <Link href={`/get-started?plan=${p.id}&cycle=${cycle}`}>
+                          Choose {p.label}
+                        </Link>
+                      </Button>
+                      <motion.span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        animate={{ x: ["-140%", "340%"] }}
+                        transition={{ duration: 2.4, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3.5, ease: "easeInOut" }}
+                      />
+                    </div>
+                  ) : (
                     <Button
                       asChild
-                      size="lg"
-                      className="w-full rounded-full bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-[0_8px_24px_-8px_var(--primary)] transition-all hover:shadow-[0_12px_32px_-10px_var(--primary)] hover:scale-[1.02]"
-                    >
-                      <Link href={`/get-started?plan=${p.id}&cycle=${cycle}`}>
-                        Choose {p.label}
-                      </Link>
-                    </Button>
-                    <motion.span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                      animate={{ x: ["-140%", "340%"] }}
-                      transition={{ duration: 2.4, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3.5, ease: "easeInOut" }}
-                    />
-                  </div>
-                ) : (
-                  <div style={{ transform: "translateZ(30px)" }} className="mt-auto w-full">
-                    <Button
-                      asChild
-                      size="lg"
+                      size="sm"
                       variant="outline"
-                      className="w-full rounded-full border-white/10 hover:border-primary/40 hover:bg-white/[0.02]"
+                      className="h-10 w-full rounded-full border-white/15 bg-white/[0.03] font-sans text-xs sm:text-sm font-semibold text-white transition-all hover:border-primary/50 hover:bg-white/10 hover:text-white"
                     >
                       <Link href={`/get-started?plan=${p.id}&cycle=${cycle}`}>
                         Get started
                       </Link>
                     </Button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </PricingTiltCard>
           )
