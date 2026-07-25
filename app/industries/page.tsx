@@ -46,7 +46,7 @@ export default function IndustriesPage() {
         <AmbientWaveform />
         <FloatingIconBadges />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-20 md:px-6 md:py-28">
-          <ScrollReveal className="mx-auto max-w-3xl text-center">
+          <ScrollReveal className="mx-auto max-w-3xl text-center" duration={0.9} y={22}>
             <span className="ai-pill-cyan" style={monoStyle.sectionTag}>
               <PulsingDot />
               Industries

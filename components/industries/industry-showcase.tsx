@@ -4,8 +4,9 @@ import type React from "react"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, MoveHorizontal, type LucideIcon } from "lucide-react"
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react"
+import { motion, useMotionTemplate, useMotionValue, useReducedMotion } from "motion/react"
 import { cn } from "@/lib/utils"
+import { useRafMouse } from "@/lib/use-raf-mouse"
 import { ScrollReveal, StaggerGroup } from "@/components/animation/scroll-reveal"
 import { INDUSTRIES } from "@/lib/industries"
 import { headingType, bodyType, monoStyle } from "@/lib/industries-typography"
@@ -67,96 +68,90 @@ const items: ShowcaseItem[] = INDUSTRIES.map((industry) => ({
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const } },
 }
+
+/** Shared easing — width, opacity, and color transitions stay in sync. */
+const STRIP_EASE = "cubic-bezier(0.22, 1, 0.36, 1)" as const
+const STRIP_MS = 650
 
 function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }) {
   const Icon = item.icon
   const ref = useRef<HTMLDivElement>(null)
-  const [hovering, setHovering] = useState(false)
-
-  // Same cursor-tracking tilt + spotlight + glow + pulsing-icon-ring hover
-  // language as the feature grid's IndustryFeatureCard
-  // (components/sections/industries.tsx), reused here per explicit request.
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  const nx = useMotionValue(0)
-  const ny = useMotionValue(0)
-  const springCfg = { stiffness: 220, damping: 20, mass: 0.4 }
-  const sx = useSpring(nx, springCfg)
-  const sy = useSpring(ny, springCfg)
-  const rotateX = useTransform(sy, [-0.5, 0.5], [4, -4])
-  const rotateY = useTransform(sx, [-0.5, 0.5], [-4, 4])
-  const spotlight = useMotionTemplate`radial-gradient(280px circle at ${mouseX}px ${mouseY}px, color-mix(in oklch, var(--card-accent) 30%, transparent), transparent 70%)`
+  const spotlight = useMotionTemplate`radial-gradient(280px circle at ${mouseX}px ${mouseY}px, color-mix(in oklch, var(--card-accent) 28%, transparent), transparent 70%)`
 
-  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
+  const onPointer = useRafMouse((clientX, clientY) => {
     const el = ref.current
-    if (!el) return
+    if (!el || !active) return
     const rect = el.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    mouseX.set(x)
-    mouseY.set(y)
-    nx.set(x / rect.width - 0.5)
-    ny.set(y / rect.height - 0.5)
-    setHovering(true)
-  }
-
-  function handleLeave() {
-    nx.set(0)
-    ny.set(0)
-    setHovering(false)
-  }
+    mouseX.set(clientX - rect.left)
+    mouseY.set(clientY - rect.top)
+  })
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
+      onMouseMove={active ? (e) => onPointer(e.clientX, e.clientY) : undefined}
+      className={cn(
+        "group relative flex h-full w-full min-w-0 flex-col overflow-hidden rounded-2xl border",
+        "transition-[border-color,background-color,box-shadow] ease-[var(--strip-ease)]",
+        active
+          ? "border-[color:var(--card-accent)]/50 bg-[#0b1220] shadow-[0_12px_40px_-15px_var(--card-accent)]"
+          : "border-white/10 bg-[#08080a] hover:border-white/20 hover:bg-white/[0.03]",
+      )}
       style={
         {
           "--card-accent": item.accent,
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
+          "--strip-ease": STRIP_EASE,
+          transitionDuration: `${STRIP_MS}ms`,
         } as React.CSSProperties
       }
-      className={cn(
-        "group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border transition-colors duration-300",
-        active
-          ? "border-[color:var(--card-accent)]/50 bg-[#0b1220]"
-          : "border-white/10 bg-[#08080a] hover:bg-white/[0.03]",
-      )}
     >
-      {/* cursor-tracking spotlight, tinted with this card's own accent */}
-      <motion.span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: spotlight }}
-      />
-
-      {/* soft glow around the card edge on hover */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ boxShadow: "0 0 50px -20px var(--card-accent)" }}
-      />
-
       {active && (
-        <span
+        <motion.span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[3px]"
-          style={{ background: "var(--card-accent)" }}
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ background: spotlight }}
         />
       )}
 
-      {active ? (
-        // Sizes below step at each breakpoint rather than staying pinned to
-        // the desktop values (68px icon, 28px heading, 18px body) — this
-        // card is only ever 300px/82vw wide on phone, and the desktop sizes
-        // were tuned for the much wider ~4.5fr flex-grow column it gets from
-        // `md` up, so they read as cramped/misjudged against the phone card.
-        <div className="relative z-10 flex h-full min-w-[300px] flex-col p-5 sm:p-7 md:p-8">
+      {/* soft glow around active card edge */}
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-0 rounded-2xl transition-opacity ease-[var(--strip-ease)]",
+          active ? "opacity-100" : "opacity-0 group-hover:opacity-60",
+        )}
+        style={{
+          transitionDuration: `${STRIP_MS}ms`,
+          boxShadow: "0 0 50px -20px var(--card-accent)",
+        }}
+      />
+
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 left-0 z-10 w-[3px] origin-left transition-[opacity,transform] ease-[var(--strip-ease)]",
+          active ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0",
+        )}
+        style={{ background: "var(--card-accent)", transitionDuration: `${STRIP_MS}ms` }}
+      />
+
+      {/* Both layouts stay mounted; opacity crossfade avoids the hard swap on hover. */}
+      <div className="relative z-10 h-full min-w-0">
+        <div
+          aria-hidden={active}
+          className={cn(
+            "absolute inset-0 flex h-full min-w-[300px] flex-col p-5 ease-[var(--strip-ease)] sm:p-7 md:p-8",
+            "transition-[opacity,transform]",
+            active
+              ? "pointer-events-auto translate-y-0 opacity-100 delay-150"
+              : "pointer-events-none translate-y-1 opacity-0 delay-0",
+          )}
+          style={{ transitionDuration: `${STRIP_MS}ms` }}
+        >
           <span
             className="relative flex size-12 flex-none items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-105 sm:size-14 md:size-[68px]"
             style={{
@@ -165,17 +160,6 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
               boxShadow: "0 10px 26px -8px var(--card-accent)",
             }}
           >
-            <motion.span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-full"
-              style={{ border: "1px solid var(--card-accent)" }}
-              animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] } : { scale: 1, opacity: 0 }}
-              transition={
-                hovering
-                  ? { duration: 1.7, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }
-                  : { duration: 0.3 }
-              }
-            />
             <Icon className="size-6 sm:size-7 md:size-9" aria-hidden />
           </span>
           <h3
@@ -196,6 +180,7 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
           </p>
           <Link
             href={item.href}
+            tabIndex={active ? undefined : -1}
             className={cn(
               industriesBody.className,
               "group/link relative mt-auto inline-flex w-fit items-center gap-2 pt-4 text-sm font-medium transition-opacity hover:opacity-80 sm:pt-6 sm:text-base md:text-[17px]",
@@ -209,20 +194,19 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
             />
           </Link>
         </div>
-      ) : (
-        <div className="relative z-10 flex h-full flex-col items-center gap-6 py-8">
-          <span className="relative flex size-14 flex-none items-center justify-center rounded-full bg-white/5 text-white/50 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white/80">
-            <motion.span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-full"
-              style={{ border: "1px solid var(--card-accent)" }}
-              animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] } : { scale: 1, opacity: 0 }}
-              transition={
-                hovering
-                  ? { duration: 1.7, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }
-                  : { duration: 0.3 }
-              }
-            />
+
+        <div
+          aria-hidden={!active}
+          className={cn(
+            "flex h-full flex-col items-center gap-6 py-8 ease-[var(--strip-ease)]",
+            "transition-[opacity,transform]",
+            active
+              ? "pointer-events-none -translate-y-0.5 opacity-0 delay-0"
+              : "pointer-events-auto translate-y-0 opacity-100 delay-100",
+          )}
+          style={{ transitionDuration: `${active ? 280 : STRIP_MS}ms` }}
+        >
+          <span className="relative flex size-14 flex-none items-center justify-center rounded-full bg-white/5 text-white/50 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white/80 group-hover:scale-110">
             <Icon className="size-6" aria-hidden />
           </span>
           <span
@@ -238,8 +222,8 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
             {item.name}
           </span>
         </div>
-      )}
-    </motion.div>
+      </div>
+    </div>
   )
 }
 
@@ -389,16 +373,20 @@ export function IndustryShowcase() {
                     itemRefs.current[i] = el
                   }}
                   variants={itemVariants}
-                  className="flex h-full snap-start transition-[flex] duration-500 ease-out"
-                  style={{
-                    flex: isMobile
-                      ? active === i
-                        ? "0 0 min(300px, 82vw)"
-                        : "0 0 64px"
-                      : active === i
-                        ? "4.5 4.5 0%"
-                        : "1 1 0%",
-                  }}
+                  className="flex h-full min-w-0 snap-start overflow-hidden transition-[flex] ease-[var(--strip-ease)]"
+                  style={
+                    {
+                      "--strip-ease": STRIP_EASE,
+                      transitionDuration: `${STRIP_MS}ms`,
+                      flex: isMobile
+                        ? active === i
+                          ? "0 0 min(300px, 82vw)"
+                          : "0 0 64px"
+                        : active === i
+                          ? "4.5 4.5 0%"
+                          : "1 1 0%",
+                    } as React.CSSProperties
+                  }
                   onMouseEnter={() => {
                     if (!isMobile) setActive(i)
                   }}

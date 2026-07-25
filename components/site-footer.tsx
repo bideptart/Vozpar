@@ -8,50 +8,40 @@ import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/
 type FooterLink = { label: string; href: string; external?: boolean }
 
 const PLATFORM: FooterLink[] = [
-  { label: "Features",   href: "/features"  },
-  { label: "Industries", href: "/industries" },
-  { label: "Pricing",    href: "/pricing"   },
-  { label: "FAQ",        href: "/faq"       },
-  { label: "Blog",       href: "/blog"      },
-]
-
-const SOLUTIONS: FooterLink[] = [
-  { label: "Appointment Booking",  href: "/industries" },
-  { label: "Customer Support",     href: "/industries" },
-  { label: "Lead Qualification",   href: "/industries" },
-  { label: "After-Hours Handling", href: "/industries" },
-  { label: "Outbound Campaigns",   href: "/industries" },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Dashboard", href: "https://voice.9278.ai/", external: true },
 ]
 
 const INDUSTRIES: FooterLink[] = [
-  { label: "Real Estate",    href: "/industries/real-estate"   },
-  { label: "Legal Services", href: "/industries/legal"         },
-  { label: "Restaurants",    href: "/industries/restaurants"   },
-  { label: "Automotive",     href: "/industries/automotive"    },
-  { label: "Home Services",  href: "/industries/home-services" },
-  { label: "E-Commerce",     href: "/industries/ecommerce"     },
+  { label: "Real Estate", href: "/industries/real-estate" },
+  { label: "Legal Services", href: "/industries/legal" },
+  { label: "E-Commerce", href: "/industries/ecommerce" },
+  { label: "Restaurants", href: "/industries/restaurants" },
+  { label: "Automotive", href: "/industries/automotive" },
+  { label: "Home Services", href: "/industries/home-services" },
 ]
 
 const COMPANY: FooterLink[] = [
-  { label: "About",   href: "/about"   },
+  { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
-  { label: "Blog",    href: "/blog"    },
 ]
 
 const LEGAL: FooterLink[] = [
-  { label: "Privacy Policy",  href: "/privacy"         },
-  { label: "Terms of Service",href: "/terms"           },
-  { label: "Acceptable Use",  href: "/acceptable-use"  },
-  { label: "Cookie Policy",   href: "/cookies"         },
-  { label: "DPA",             href: "/dpa"             },
+  { label: "Terms of Service", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Refund & Cancellation", href: "/refund-policy" },
+  { label: "Grievance Redressal", href: "/ai-disclosure" },
+  { label: "All policies →", href: "/legal" },
 ]
 
 const GROUPS = [
-  { key: "platform",   title: "Platform",   links: PLATFORM   },
-  { key: "solutions",  title: "Solutions",  links: SOLUTIONS  },
+  { key: "platform", title: "Platform", links: PLATFORM },
   { key: "industries", title: "Industries", links: INDUSTRIES },
-  { key: "company",    title: "Company",    links: COMPANY    },
-  { key: "legal",      title: "Legal",      links: LEGAL      },
+  { key: "company", title: "Company", links: COMPANY },
+  { key: "legal", title: "Legal", links: LEGAL },
 ]
 
 const SOCIALS = [
@@ -62,11 +52,11 @@ const SOCIALS = [
 
 function FLink({ link }: { link: FooterLink }) {
   const cls =
-    "group flex items-center gap-1 text-sm text-white/35 transition-colors hover:text-white/80"
+    "group flex items-center gap-1.5 text-base font-medium text-white/60 transition-colors hover:text-white"
   const inner = (
     <>
       <ChevronRight
-        className="h-3 w-3 -translate-x-1 text-[#046bd2] opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+        className="h-3.5 w-3.5 -translate-x-1 text-[#046bd2] opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
         aria-hidden
       />
       <span className="transition-transform duration-200 group-hover:translate-x-0.5">
@@ -88,10 +78,10 @@ function FLink({ link }: { link: FooterLink }) {
 function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <div>
-      <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50">
+      <p className="mb-4 font-mono text-xs md:text-[13px] font-bold uppercase tracking-[0.18em] text-white/80">
         {title}
       </p>
-      <ul className="space-y-2.5">
+      <ul className="space-y-3">
         {links.map((l) => (
           <li key={l.label}>
             <FLink link={l} />
@@ -107,14 +97,14 @@ function FooterCol({ title, links }: { title: string; links: FooterLink[] }) {
 function MobileGroup({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <details className="group border-b border-white/[0.07]">
-      <summary className="flex cursor-pointer list-none items-center justify-between py-3.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50 hover:text-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+      <summary className="flex cursor-pointer list-none items-center justify-between py-3.5 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
         {title}
         <ChevronRight
-          className="h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-90"
+          className="h-4 w-4 transition-transform duration-200 group-open:rotate-90"
           aria-hidden
         />
       </summary>
-      <ul className="space-y-2.5 pb-4">
+      <ul className="space-y-3 pb-4">
         {links.map((l) => (
           <li key={l.label}>
             <FLink link={l} />
@@ -178,7 +168,7 @@ export function SiteFooter() {
           </ScrollReveal>
 
           {/* Desktop link columns */}
-          <StaggerGroup className="hidden gap-8 md:col-span-9 md:grid md:grid-cols-5">
+          <StaggerGroup className="hidden gap-8 md:col-span-9 md:grid md:grid-cols-4">
             {GROUPS.map((g) => (
               <StaggerItem key={g.key}>
                 <FooterCol title={g.title} links={g.links} />

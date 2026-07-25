@@ -32,6 +32,7 @@ const PLATFORM: FooterLink[] = [
   { label: "Features", href: "/features" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },
+  { label: "Dashboard", href: "https://voice.9278.ai/", external: true },
 ]
 
 const INDUSTRIES_LINKS: FooterLink[] = [
@@ -50,17 +51,16 @@ const COMPANY: FooterLink[] = [
 ]
 
 const LEGAL: FooterLink[] = [
-  { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
-  { label: "Acceptable Use", href: "/acceptable-use" },
-  { label: "Cookie Policy", href: "/cookies" },
-  { label: "DPA", href: "/dpa" },
-  { label: "All policies", href: "/legal" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Refund & Cancellation", href: "/refund-policy" },
+  { label: "Grievance Redressal", href: "/ai-disclosure" },
+  { label: "All policies →", href: "/legal" },
 ]
 
 const linkItemVariants = {
   hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const } },
 }
 
 function FooterColumn({

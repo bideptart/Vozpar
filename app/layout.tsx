@@ -108,14 +108,14 @@ export default function RootLayout({
         className={`${inter.variable} ${archivo.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
+        <OrganizationJsonLd />
+        <WebsiteJsonLd />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >
-          <OrganizationJsonLd />
-          <WebsiteJsonLd />
           <Suspense fallback={null}>
             <PageviewTracker />
           </Suspense>

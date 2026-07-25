@@ -2,6 +2,7 @@
 
 import { monoStyle } from "@/lib/industries-typography"
 import { CountUp } from "@/components/industries/count-up"
+import { StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 /**
  * New for the onething.design-inspired redesign: a small row of stats that
@@ -21,9 +22,12 @@ const STATS = [
 
 export function StatStrip() {
   return (
-    <div className="mt-12 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 border-t border-white/10 pt-8">
+    <StaggerGroup
+      className="mt-12 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 border-t border-white/10 pt-8"
+      stagger={0.14}
+    >
       {STATS.map((stat) => (
-        <div key={stat.label} className="text-center">
+        <StaggerItem key={stat.label} className="text-center">
           <div className="text-4xl font-bold text-[var(--accent)] md:text-5xl">
             <CountUp value={stat.value} />
             {stat.suffix}
@@ -31,8 +35,8 @@ export function StatStrip() {
           <div className="mt-1.5 uppercase text-white/50" style={monoStyle.sectionTag}>
             {stat.label}
           </div>
-        </div>
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerGroup>
   )
 }

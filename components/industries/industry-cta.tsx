@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 import { Magnetic } from "@/components/industries/industries-fx"
 import { AnimatedWords } from "@/components/industries/animated-headline"
+import { useRafMouse } from "@/lib/use-raf-mouse"
 import { headingType, bodyType, monoStyle } from "@/lib/industries-typography"
 
 /**

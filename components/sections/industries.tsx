@@ -221,7 +221,7 @@ const cardEntranceVariants = (index: number) => ({
     y: 0,
     scale: 1,
     rotate: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
   },
 })
 

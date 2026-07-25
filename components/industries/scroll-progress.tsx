@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useSpring } from "motion/react"
+import { motion, useScroll, useTransform } from "motion/react"
 
 /**
  * Thin fixed bar across the very top of the viewport that fills as the
@@ -9,12 +9,13 @@ import { motion, useScroll, useSpring } from "motion/react"
  */
 export function ScrollProgressBar() {
   const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 })
+  // Direct mapping — no spring lag chasing scroll position.
+  const scaleX = useTransform(scrollYProgress, (v) => v)
 
   return (
     <motion.div
       aria-hidden
-      style={{ scaleX }}
+      style={{ scaleX, transformOrigin: "left" }}
       className="fixed inset-x-0 top-0 z-50 h-0.5 origin-left bg-gradient-to-r from-[var(--primary)] via-[var(--accent)] to-[var(--primary)]"
     />
   )

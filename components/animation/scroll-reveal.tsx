@@ -13,29 +13,27 @@ type ScrollRevealProps = {
 }
 
 const variants: Variants = {
-  hidden: { opacity: 0, y: 32, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.8, ease: [0.23, 1, 0.32, 1], delay: i },
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: i },
   }),
 }
 
-export function ScrollReveal({ children, className, delay = 0, y = 32, duration = 0.8 }: ScrollRevealProps) {
+export function ScrollReveal({ children, className, delay = 0, y = 20, duration = 0.75 }: ScrollRevealProps) {
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-80px" }}
       custom={delay}
       variants={{
-        hidden: { opacity: 0, y, filter: "blur(4px)" },
+        hidden: { opacity: 0, y },
         visible: (i: number) => ({
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
-          transition: { duration, ease: [0.23, 1, 0.32, 1], delay: i },
+          transition: { duration, ease: [0.22, 1, 0.36, 1], delay: i },
         }),
       }}
       className={cn(className)}
@@ -57,11 +55,11 @@ export function StaggerGroup({ children, className, stagger = 0.1 }: StaggerProp
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-80px" }}
       variants={{
         hidden: {},
         visible: {
-          transition: { staggerChildren: stagger, delayChildren: 0.08 },
+          transition: { staggerChildren: stagger, delayChildren: 0.12 },
         },
       }}
       className={cn(className)}

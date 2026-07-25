@@ -16,11 +16,10 @@ import { motion } from "motion/react"
  */
 
 const ORBS = [
-  { color: "var(--primary)", size: 460, left: "-8%", top: "8%", opacity: 0.14, duration: 18 },
-  { color: "var(--accent)", size: 420, left: "88%", top: "42%", opacity: 0.1, duration: 22 },
-  { color: "#ffffff", size: 200, left: "6%", top: "70%", opacity: 0.06, duration: 14 },
-  { color: "#ffffff", size: 160, left: "78%", top: "10%", opacity: 0.08, duration: 12 },
-  { color: "var(--primary)", size: 260, left: "40%", top: "85%", opacity: 0.08, duration: 16 },
+  { color: "#38bdf8", size: 240, left: "-4%", top: "12%", opacity: 0.12, duration: 18 },
+  { color: "#046bd2", size: 220, left: "92%", top: "35%", opacity: 0.10, duration: 22 },
+  { color: "#38bdf8", size: 180, left: "90%", top: "72%", opacity: 0.08, duration: 14 },
+  { color: "#046bd2", size: 170, left: "2%", top: "68%", opacity: 0.09, duration: 12 },
 ]
 
 export function HeroOrbs() {
@@ -62,9 +61,15 @@ export function HeroParticles() {
       {PARTICLES.map((p, i) => (
         <motion.span
           key={i}
-          className="absolute rounded-full bg-white"
-          style={{ left: `${p.left}%`, top: `${p.top}%`, width: p.size, height: p.size }}
-          animate={{ opacity: [0.06, 0.55, 0.06], y: [0, -10, 0] }}
+          className={`absolute rounded-full ${i % 2 === 0 ? "bg-[#2d98f1]" : "bg-[#046bd2]"}`}
+          style={{
+            left: `${p.left}%`,
+            top: `${p.top}%`,
+            width: p.size,
+            height: p.size,
+            boxShadow: `0 0 6px ${i % 2 === 0 ? "#2d98f1" : "#046bd2"}`,
+          }}
+          animate={{ opacity: [0.1, 0.75, 0.1], y: [0, -10, 0] }}
           transition={{ duration: p.duration, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: p.delay }}
         />
       ))}

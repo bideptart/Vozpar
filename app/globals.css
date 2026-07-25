@@ -234,6 +234,52 @@
   animation-fill-mode: forwards;
 }
 
+/* Industries page — compositor-only ambient motion (no JS animation loop). */
+@keyframes industries-orb-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(var(--ind-drift-x, 0), var(--ind-drift-y, -12px), 0); }
+}
+.industries-orb-drift {
+  animation: industries-orb-drift var(--ind-drift-duration, 11s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--ind-drift-delay, 0s);
+}
+
+@keyframes industries-particle {
+  0%, 100% { opacity: 0.06; transform: translate3d(0, 0, 0); }
+  50% { opacity: 0.36; transform: translate3d(0, -6px, 0); }
+}
+.industries-particle {
+  animation: industries-particle var(--ind-particle-duration, 4.5s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--ind-particle-delay, 0s);
+}
+
+@keyframes industries-wave-bar {
+  0%, 100% { transform: scaleY(var(--bar-min, 0.35)); }
+  50% { transform: scaleY(var(--bar-peak, 1)); }
+}
+.industries-wave-bar {
+  transform-origin: bottom center;
+  animation: industries-wave-bar var(--bar-duration, 2.4s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--bar-delay, 0s);
+}
+
+@keyframes industries-scan-x {
+  from { transform: translate3d(-120%, 0, 0); }
+  to { transform: translate3d(920%, 0, 0); }
+}
+.industries-scan-x {
+  animation: industries-scan-x 9s linear infinite;
+  animation-delay: 1.2s;
+}
+
+@keyframes industries-pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.28); opacity: 0.65; }
+}
+.industries-pulse-dot {
+  animation: industries-pulse-dot 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee,
   .marquee-reverse,
@@ -247,7 +293,12 @@
   .letter-glow,
   .dot-float,
   .journey-progress-fill,
-  .scan-line::after {
+  .scan-line::after,
+  .industries-orb-drift,
+  .industries-particle,
+  .industries-wave-bar,
+  .industries-scan-x,
+  .industries-pulse-dot {
     animation: none !important;
   }
 }

@@ -1,8 +1,9 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 import { INDUSTRIES } from "@/lib/industries"
 import { monoStyle } from "@/lib/industries-typography"
+import { cn } from "@/lib/utils"
 
 /**
  * Hero "trusted by" style strip — structurally modeled on a client-logo
@@ -15,23 +16,32 @@ import { monoStyle } from "@/lib/industries-typography"
  * component reading icon component refs directly, not as a prop).
  */
 export function IndustryMarquee() {
+  const reduced = useReducedMotion()
   const loop = [...INDUSTRIES, ...INDUSTRIES]
-  const edgeFade = "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
+  const edgeFade = "linear-gradient(to right, transparent, black 12%, black 88%, transparent)"
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-6xl overflow-hidden py-4">
-      <motion.div
-        className="flex w-max items-center gap-14"
-        style={{ maskImage: edgeFade, WebkitMaskImage: edgeFade }}
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 34, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+    <motion.div
+      className="relative mx-auto mt-10 w-full max-w-6xl overflow-hidden py-4"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div
+        className={cn("flex w-max items-center gap-14", !reduced && "marquee")}
+        style={{
+          maskImage: edgeFade,
+          WebkitMaskImage: edgeFade,
+          animationDuration: reduced ? undefined : "48s",
+        }}
       >
         {loop.map((industry, i) => {
           const Icon = industry.icon
           return (
             <div
               key={`${industry.slug}-${i}`}
-              className="flex flex-none items-center gap-3 opacity-75 transition-opacity hover:opacity-100"
+              className="flex flex-none items-center gap-3 opacity-70 transition-opacity duration-500 ease-out hover:opacity-100"
             >
               <span className="flex size-12 flex-none items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Icon className="size-6" aria-hidden />
@@ -45,7 +55,7 @@ export function IndustryMarquee() {
             </div>
           )
         })}
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   )
 }
