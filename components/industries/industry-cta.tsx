@@ -78,6 +78,13 @@ function GlowCard({ children }: { children: React.ReactNode }) {
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{ background: spotlight }}
       />
+      {/* periodic shimmer sweep across the card */}
+      <motion.span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent"
+        animate={{ x: ["-140%", "260%"] }}
+        transition={{ duration: 2.8, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3, ease: "easeInOut" }}
+      />
       <div className="relative">{children}</div>
     </motion.div>
   )

@@ -34,10 +34,16 @@ type ShowcaseItem = {
   icon: LucideIcon
   href: string
   accent: string
-  logoColor: string
 }
 
-const LOGO_COLOR_BY_SLUG: Record<string, string> = {
+/**
+ * Per-card accent colors — same explicit, user-requested exception to the
+ * page's black+blue lock as components/sections/industries.tsx (same hex
+ * values reused for the 6 shared industries so the two sections agree), now
+ * extended to this filmstrip. Only the active/expanded card shows its accent;
+ * collapsed strips stay neutral gray, keeping the existing hover behavior.
+ */
+const ACCENT_BY_SLUG: Record<string, string> = {
   "real-estate": "#3b82f6",
   dental: "#2dd4bf",
   healthcare: "#ef4444",
@@ -50,21 +56,13 @@ const LOGO_COLOR_BY_SLUG: Record<string, string> = {
   fitness: "#84cc16",
 }
 
-/**
- * Per-card accent colors — same explicit, user-requested exception to the
- * page's black+blue lock as components/sections/industries.tsx (same hex
- * values reused for the 6 shared industries so the two sections agree), now
- * extended to this filmstrip. Only the active/expanded card shows its accent;
- * collapsed strips stay neutral gray, keeping the existing hover behavior.
- */
 const items: ShowcaseItem[] = INDUSTRIES.map((industry) => ({
   slug: industry.slug,
   name: industry.name,
   short: industry.short,
   icon: industry.icon,
   href: `/industries/${industry.slug}`,
-  accent: "var(--primary)",
-  logoColor: LOGO_COLOR_BY_SLUG[industry.slug] ?? "#3b82f6",
+  accent: ACCENT_BY_SLUG[industry.slug] ?? "#3b82f6",
 }))
 
 const itemVariants = {
@@ -124,7 +122,7 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
         } as React.CSSProperties
       }
       className={cn(
-        "group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        "group relative flex h-full w-full flex-col overflow-hidden rounded-2xl border transition-colors duration-300",
         active
           ? "border-[color:var(--card-accent)]/50 bg-[#0b1220]"
           : "border-white/10 bg-[#08080a] hover:bg-white/[0.03]",
@@ -152,104 +150,95 @@ function FilmstripCard({ item, active }: { item: ShowcaseItem; active: boolean }
         />
       )}
 
-      {/* Active Content wrapper - Absolutely positioned and fades in/out with GPU acceleration */}
-      <div 
-        className={cn(
-          "absolute inset-0 flex flex-col p-5 sm:p-7 md:p-8 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] origin-left",
-          active 
-            ? "opacity-100 pointer-events-auto scale-100 translate-x-0" 
-            : "opacity-0 pointer-events-none scale-95 -translate-x-4"
-        )}
-      >
-        <span
-          className="relative flex size-12 flex-none items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-105 sm:size-14 md:size-[68px]"
-          style={{
-            background:
-              `radial-gradient(circle at 32% 28%, color-mix(in oklch, ${item.logoColor} 65%, white 35%), ${item.logoColor})`,
-            boxShadow: `0 10px 26px -8px ${item.logoColor}`,
-          }}
-        >
-          <motion.span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{ border: `1px solid ${item.logoColor}` }}
-            animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] } : { scale: 1, opacity: 0 }}
-            transition={
-              hovering
-                ? { duration: 1.7, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }
-                : { duration: 0.3 }
-            }
-          />
-          <Icon className="size-6 sm:size-7 md:size-9" aria-hidden />
-        </span>
-        <h3
-          className={cn(
-            industriesHeading.className,
-            "mt-4 text-lg font-medium leading-[1.25] tracking-[-0.021em] text-white sm:mt-5 sm:text-xl md:mt-6 md:text-[28px] whitespace-nowrap",
-          )}
-        >
-          {item.name}
-        </h3>
-        <p
-          className={cn(
-            industriesBody.className,
-            "mt-2.5 text-pretty text-[13px] font-light leading-[1.55] text-muted-foreground sm:mt-3 sm:text-[15px] md:text-[18px] md:leading-[1.65] line-clamp-4 md:line-clamp-none",
-          )}
-        >
-          {item.short}
-        </p>
-        <Link
-          href={item.href}
-          className={cn(
-            industriesBody.className,
-            "group/link relative mt-auto inline-flex w-fit items-center gap-2 pt-4 text-sm font-medium transition-opacity hover:opacity-80 sm:pt-6 sm:text-base md:text-[17px]",
-          )}
-          style={{ color: "var(--card-accent)" }}
-        >
-          Know more
-          <ArrowRight
-            className="size-4 transition-transform duration-300 group-hover/link:translate-x-1 md:size-[18px]"
-            aria-hidden
-          />
-        </Link>
-      </div>
-
-      {/* Collapsed Content wrapper - Absolutely positioned and fades in/out with GPU acceleration */}
-      <div 
-        className={cn(
-          "absolute inset-0 flex flex-col items-center gap-6 py-8 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] origin-right",
-          active 
-            ? "opacity-0 pointer-events-none scale-95 translate-y-4" 
-            : "opacity-100 pointer-events-auto scale-100 translate-y-0"
-        )}
-      >
-        <span className="relative flex size-14 flex-none items-center justify-center rounded-full bg-white/5 text-white/50 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white/80">
-          <motion.span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{ border: `1px solid ${item.logoColor}` }}
-            animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] } : { scale: 1, opacity: 0 }}
-            transition={
-              hovering
-                ? { duration: 1.7, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }
-                : { duration: 0.3 }
-            }
-          />
-          <Icon className="size-6" aria-hidden />
-        </span>
-        <span
-          className="flex-1 whitespace-nowrap uppercase text-white/45 transition-colors duration-300 group-hover:text-white/70"
-          style={{
-            writingMode: "vertical-rl",
-            transform: "rotate(180deg)",
-            ...monoStyle.strongLabel,
-            fontSize: "15px",
-            letterSpacing: "2px",
-          }}
-        >
-          {item.name}
-        </span>
-      </div>
+      {active ? (
+        // Sizes below step at each breakpoint rather than staying pinned to
+        // the desktop values (68px icon, 28px heading, 18px body) — this
+        // card is only ever 300px/82vw wide on phone, and the desktop sizes
+        // were tuned for the much wider ~4.5fr flex-grow column it gets from
+        // `md` up, so they read as cramped/misjudged against the phone card.
+        <div className="relative z-10 flex h-full min-w-[300px] flex-col p-5 sm:p-7 md:p-8">
+          <span
+            className="relative flex size-12 flex-none items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-105 sm:size-14 md:size-[68px]"
+            style={{
+              background:
+                "radial-gradient(circle at 32% 28%, color-mix(in oklch, var(--card-accent) 65%, white 35%), var(--card-accent))",
+              boxShadow: "0 10px 26px -8px var(--card-accent)",
+            }}
+          >
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-full"
+              style={{ border: "1px solid var(--card-accent)" }}
+              animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] } : { scale: 1, opacity: 0 }}
+              transition={
+                hovering
+                  ? { duration: 1.7, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }
+                  : { duration: 0.3 }
+              }
+            />
+            <Icon className="size-6 sm:size-7 md:size-9" aria-hidden />
+          </span>
+          <h3
+            className={cn(
+              industriesHeading.className,
+              "mt-4 text-lg font-medium leading-[1.25] tracking-[-0.021em] text-white sm:mt-5 sm:text-xl md:mt-6 md:text-[28px]",
+            )}
+          >
+            {item.name}
+          </h3>
+          <p
+            className={cn(
+              industriesBody.className,
+              "mt-2.5 text-pretty text-[13px] font-light leading-[1.55] text-muted-foreground sm:mt-3 sm:text-[15px] md:text-[18px] md:leading-[1.65]",
+            )}
+          >
+            {item.short}
+          </p>
+          <Link
+            href={item.href}
+            className={cn(
+              industriesBody.className,
+              "group/link relative mt-auto inline-flex w-fit items-center gap-2 pt-4 text-sm font-medium transition-opacity hover:opacity-80 sm:pt-6 sm:text-base md:text-[17px]",
+            )}
+            style={{ color: "var(--card-accent)" }}
+          >
+            Know more
+            <ArrowRight
+              className="size-4 transition-transform duration-300 group-hover/link:translate-x-1 md:size-[18px]"
+              aria-hidden
+            />
+          </Link>
+        </div>
+      ) : (
+        <div className="relative z-10 flex h-full flex-col items-center gap-6 py-8">
+          <span className="relative flex size-14 flex-none items-center justify-center rounded-full bg-white/5 text-white/50 transition-colors duration-300 group-hover:bg-white/10 group-hover:text-white/80">
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-full"
+              style={{ border: "1px solid var(--card-accent)" }}
+              animate={hovering ? { scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] } : { scale: 1, opacity: 0 }}
+              transition={
+                hovering
+                  ? { duration: 1.7, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }
+                  : { duration: 0.3 }
+              }
+            />
+            <Icon className="size-6" aria-hidden />
+          </span>
+          <span
+            className="flex-1 whitespace-nowrap uppercase text-white/45 transition-colors duration-300 group-hover:text-white/70"
+            style={{
+              writingMode: "vertical-rl",
+              transform: "rotate(180deg)",
+              ...monoStyle.strongLabel,
+              fontSize: "15px",
+              letterSpacing: "2px",
+            }}
+          >
+            {item.name}
+          </span>
+        </div>
+      )}
     </motion.div>
   )
 }
@@ -360,7 +349,7 @@ export function IndustryShowcase() {
             "more here" rather than "the row ends here") plus a one-time
             animated hint chip that fades out the moment the user taps or
             scrolls anything themselves. */}
-        {!paused && (
+        {isMobile && !paused && (
           <div className="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground/60 md:hidden">
             <motion.span
               aria-hidden
@@ -385,9 +374,9 @@ export function IndustryShowcase() {
             }}
             className={cn(
               "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-              "[mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] md:[mask-image:none]",
-              "overflow-x-auto md:overflow-x-visible"
+              isMobile && "[mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)]",
             )}
+            style={{ overflowX: isMobile ? "auto" : "visible" }}
           >
             <StaggerGroup
               className="flex h-[360px] gap-2 snap-x snap-mandatory sm:h-[400px] md:h-[480px] md:snap-none md:gap-3"
@@ -400,12 +389,16 @@ export function IndustryShowcase() {
                     itemRefs.current[i] = el
                   }}
                   variants={itemVariants}
-                  className={cn(
-                    "flex h-full snap-start transition-[flex] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
-                    active === i
-                      ? "flex-[0_0_min(300px,82vw)] md:flex-[4.5_4.5_0%]"
-                      : "flex-[0_0_64px] md:flex-[1_1_0%]"
-                  )}
+                  className="flex h-full snap-start transition-[flex] duration-500 ease-out"
+                  style={{
+                    flex: isMobile
+                      ? active === i
+                        ? "0 0 min(300px, 82vw)"
+                        : "0 0 64px"
+                      : active === i
+                        ? "4.5 4.5 0%"
+                        : "1 1 0%",
+                  }}
                   onMouseEnter={() => {
                     if (!isMobile) setActive(i)
                   }}

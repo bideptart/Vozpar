@@ -36,12 +36,12 @@ import { cn } from "@/lib/utils"
  */
 
 const ORBS = [
-  { color: "var(--primary)", size: 280, left: "2%", top: "12%", duration: 12 },
-  { color: "var(--accent)", size: 200, left: "92%", top: "4%", duration: 14 },
-  { color: "var(--primary)", size: 240, left: "94%", top: "60%", duration: 13 },
-  { color: "var(--accent)", size: 180, left: "4%", top: "68%", duration: 11 },
-  { color: "var(--secondary)", size: 160, left: "16%", top: "38%", duration: 15 },
-  { color: "var(--primary)", size: 180, left: "82%", top: "34%", duration: 13.5 },
+  { color: "#ffffff", size: 240, left: "2%", top: "12%", duration: 9 },
+  { color: "#c8c8c8", size: 170, left: "92%", top: "4%", duration: 11 },
+  { color: "#ffffff", size: 200, left: "94%", top: "60%", duration: 10 },
+  { color: "#c8c8c8", size: 150, left: "4%", top: "68%", duration: 8 },
+  { color: "#c8c8c8", size: 130, left: "16%", top: "38%", duration: 12.5 },
+  { color: "#ffffff", size: 150, left: "82%", top: "34%", duration: 10.5 },
 ]
 
 export function FloatingAccents() {
@@ -53,19 +53,18 @@ export function FloatingAccents() {
           className="absolute rounded-full blur-3xl"
           style={{
             background: orb.color,
+            opacity: 0.17,
             width: orb.size,
             height: orb.size,
             left: orb.left,
             top: orb.top,
-            willChange: "opacity",
           }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0.02, 0.04, 0.02] }}
+          animate={{ y: [0, -22, 0], x: [0, i % 2 === 0 ? 14 : -14, 0] }}
           transition={{
-            duration: orb.duration + 2,
+            duration: orb.duration,
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
-            delay: i * 0.9,
+            delay: i * 0.7,
           }}
         />
       ))}
@@ -73,14 +72,14 @@ export function FloatingAccents() {
   )
 }
 
-const PARTICLE_COUNT = 16
+const PARTICLE_COUNT = 30
 
 const PARTICLES = Array.from({ length: PARTICLE_COUNT }).map((_, i) => ({
-  left: (i * 57) % 100,
-  top: (i * 43) % 100,
-  size: 1.5 + (i % 2),
-  duration: 4 + (i % 4),
-  delay: (i % 5) * 0.5,
+  left: (i * 37) % 100,
+  top: (i * 53) % 100,
+  size: 2 + (i % 3),
+  duration: 3 + (i % 5),
+  delay: (i % 7) * 0.4,
 }))
 
 /**
@@ -95,15 +94,8 @@ export function ParticleField() {
         <motion.span
           key={i}
           className="absolute rounded-full bg-white"
-          style={{ 
-            left: `${p.left}%`, 
-            top: `${p.top}%`, 
-            width: p.size, 
-            height: p.size,
-            willChange: "opacity"
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.18, 0] }}
+          style={{ left: `${p.left}%`, top: `${p.top}%`, width: p.size, height: p.size }}
+          animate={{ opacity: [0.08, 0.65, 0.08], y: [0, -12, 0] }}
           transition={{
             duration: p.duration,
             repeat: Number.POSITIVE_INFINITY,
@@ -116,7 +108,7 @@ export function ParticleField() {
   )
 }
 
-const WAVEFORM_BAR_COUNT = 40
+const WAVEFORM_BAR_COUNT = 56
 
 /**
  * Mirrored spectrum, not a bottom-anchored bar row. Plain bars pulsing up
@@ -124,69 +116,52 @@ const WAVEFORM_BAR_COUNT = 40
  * splits each column at a glowing baseline: a tall main bar above it, and a
  * short, dim, blurred mirror of the same bar below it, the way an audio
  * visualizer's reflection reads against a glass floor. The baseline itself
- * is a single bright hairline with its own glow.
- *
- * Performance optimization: Switched from Framer Motion to GPU-accelerated CSS Keyframes
- * to prevent layout thrashing and JS animation loop lag.
+ * is a single bright hairline with its own glow. Reads as considerably more
+ * "designed" than a flat row of bars for the same underlying data shape.
  */
 export function AmbientWaveform() {
   const reduced = useReducedMotion()
   return (
     <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-20 md:h-28">
-      <style>{`
-        @keyframes pulse-waveform-bar {
-          0%, 100% {
-            transform: scaleY(calc(var(--peak) * 0.35));
-          }
-          50% {
-            transform: scaleY(var(--peak));
-          }
-        }
-        .waveform-bar-animate {
-          animation-name: pulse-waveform-bar;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-          will-change: transform;
-        }
-      `}</style>
-      <div className="relative flex h-full items-stretch justify-center gap-[4px] opacity-70">
+      <div className="relative flex h-full items-stretch justify-center gap-[3px] opacity-70">
         {Array.from({ length: WAVEFORM_BAR_COUNT }).map((_, i) => {
           const peak = 0.25 + 0.65 * Math.abs(Math.sin(i * 1.37))
+          // Blue-to-accent gradient per bar — this is the voice-AI product's
+          // own waveform motif, and the brand blues read as the product
+          // "speaking" rather than a generic decoration. Taller bars lean
+          // more accent-cyan, shorter ones more primary-blue.
           const mix = 40 + peak * 40
           const gradient = `linear-gradient(180deg, color-mix(in srgb, var(--accent) ${mix}%, var(--primary)), var(--primary))`
-          const duration = 1.6 + (i % 6) * 0.18
-          const delay = (i % 8) * 0.12
-          
+          const barAnimate = { scaleY: [peak * 0.35, peak, peak * 0.35] }
+          const barTransition = {
+            duration: 1.6 + (i % 6) * 0.18,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut" as const,
+            delay: (i % 8) * 0.12,
+          }
           return (
-            <div key={i} className="flex w-[4px] flex-none flex-col">
+            <div key={i} className="flex w-[3px] flex-none flex-col">
               {/* Main bar — the 72% of the column above the baseline. */}
               <div className="flex flex-[0.72] items-end justify-center">
-                <span
-                  className="w-full origin-bottom rounded-full waveform-bar-animate"
+                <motion.span
+                  className="w-full origin-bottom rounded-full"
                   style={{
                     height: "100%",
                     background: gradient,
                     boxShadow: "0 0 8px -1px color-mix(in srgb, var(--accent) 60%, transparent)",
-                    transformOrigin: "bottom",
-                    animationDuration: `${duration}s`,
-                    animationDelay: `${delay}s`,
-                    "--peak": peak,
-                  } as React.CSSProperties}
+                  }}
+                  animate={barAnimate}
+                  transition={barTransition}
                 />
               </div>
               {/* Reflection — same motion, same bar, just shorter/dimmer/
                   blurred and growing downward instead of up. */}
               <div className="flex flex-[0.28] items-start justify-center overflow-hidden opacity-30 blur-[0.5px]">
-                <span
-                  className="w-full origin-top rounded-full waveform-bar-animate"
-                  style={{
-                    height: "100%",
-                    background: gradient,
-                    transformOrigin: "top",
-                    animationDuration: `${duration}s`,
-                    animationDelay: `${delay}s`,
-                    "--peak": peak,
-                  } as React.CSSProperties}
+                <motion.span
+                  className="w-full origin-top rounded-full"
+                  style={{ height: "100%", background: gradient }}
+                  animate={barAnimate}
+                  transition={barTransition}
                 />
               </div>
             </div>
@@ -232,18 +207,18 @@ export function PulsingDot({ className = "h-1 w-1 rounded-full bg-accent" }: { c
   return (
     <motion.span
       className={className}
-      animate={{ scale: [1, 2, 1.4, 1.7, 1], opacity: [1, 0.3, 0.6, 0.4, 1] }}
-      transition={{ duration: 2.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+      animate={{ scale: [1, 1.7, 1], opacity: [1, 0.4, 1] }}
+      transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
     />
   )
 }
 
 const ICON_BADGES = [
-  { icon: Phone, left: "7%", top: "24%", size: 44, duration: 7, delay: 0, driftX: 10, driftY: -16 },
-  { icon: Users, left: "91%", top: "18%", size: 40, duration: 9, delay: 0.6, driftX: -10, driftY: -16 },
-  { icon: Activity, left: "11%", top: "74%", size: 38, duration: 8.5, delay: 1.1, driftX: 10, driftY: -16 },
-  { icon: MessageCircle, left: "88%", top: "68%", size: 46, duration: 10, delay: 0.3, driftX: -10, driftY: -16 },
-  { icon: Link2, left: "50%", top: "10%", size: 34, duration: 7.5, delay: 1.5, driftX: 8, driftY: -14 },
+  { icon: Phone, left: "7%", top: "24%", size: 44, duration: 7, delay: 0 },
+  { icon: Users, left: "91%", top: "18%", size: 40, duration: 9, delay: 0.6 },
+  { icon: Activity, left: "11%", top: "74%", size: 38, duration: 8.5, delay: 1.1 },
+  { icon: MessageCircle, left: "88%", top: "68%", size: 46, duration: 10, delay: 0.3 },
+  { icon: Link2, left: "50%", top: "10%", size: 34, duration: 7.5, delay: 1.5 },
 ]
 
 /**
@@ -252,51 +227,28 @@ const ICON_BADGES = [
  * (referenced directly by the user for the background redesign), reusing
  * our own icon set and locked primary/accent colors rather than their exact
  * palette.
- *
- * Performance optimization: Switched from Framer Motion to CSS translate3d keyframes.
  */
 export function FloatingIconBadges() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <style>{`
-        @keyframes float-badge {
-          0%, 100% {
-            transform: translate3d(0, 0, 0);
-          }
-          50% {
-            transform: translate3d(var(--drift-x), var(--drift-y), 0);
-          }
-        }
-        .floating-badge {
-          animation-name: float-badge;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-          will-change: transform;
-        }
-      `}</style>
       {ICON_BADGES.map((badge, i) => {
         const Icon = badge.icon
-        // Unify drifting icon colors with the brand's electric blue/cyan accent colors
-        const iconColor = i % 2 === 0 ? "var(--accent)" : "color-mix(in srgb, var(--accent) 75%, white)"
+        const accent = i % 2 === 0 ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.6)"
         return (
-          <div
+          <motion.div
             key={i}
-            className="absolute flex items-center justify-center rounded-full bg-black/70 backdrop-blur-sm floating-badge"
-            style={{ 
-              left: badge.left, 
-              top: badge.top, 
-              width: badge.size, 
-              height: badge.size,
-              animationDuration: `${badge.duration}s`,
-              animationDelay: `${badge.delay}s`,
-              border: "1px solid color-mix(in srgb, var(--primary) 25%, transparent)",
-              boxShadow: "0 0 16px -4px color-mix(in srgb, var(--primary) 30%, transparent)",
-              "--drift-x": `${badge.driftX}px`,
-              "--drift-y": `${badge.driftY}px`,
-            } as React.CSSProperties}
+            className="absolute flex items-center justify-center rounded-full border border-white/10 bg-black/70 backdrop-blur-sm"
+            style={{ left: badge.left, top: badge.top, width: badge.size, height: badge.size }}
+            animate={{ y: [0, -16, 0], x: [0, i % 2 === 0 ? 10 : -10, 0] }}
+            transition={{
+              duration: badge.duration,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+              delay: badge.delay,
+            }}
           >
-            <Icon style={{ color: iconColor, width: "45%", height: "45%" }} aria-hidden />
-          </div>
+            <Icon style={{ color: accent, width: "45%", height: "45%" }} aria-hidden />
+          </motion.div>
         )
       })}
     </div>
@@ -320,8 +272,8 @@ export function Magnetic({
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const springX = useSpring(x, { stiffness: 180, damping: 18, mass: 0.5 })
-  const springY = useSpring(y, { stiffness: 180, damping: 18, mass: 0.5 })
+  const springX = useSpring(x, { stiffness: 200, damping: 15, mass: 0.4 })
+  const springY = useSpring(y, { stiffness: 200, damping: 15, mass: 0.4 })
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = ref.current
