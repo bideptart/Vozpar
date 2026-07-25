@@ -4,7 +4,7 @@ import Link from "next/link"
 import type { ElementType } from "react"
 import { ArrowRight, ArrowUpRight, BookOpen, CircleQuestionMark, Layers, PhoneCall, Receipt } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
-import { Magnetic, SpotlightPanel } from "@/components/animation/magnetic"
+import { SpotlightPanel } from "@/components/animation/magnetic"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 /**
@@ -93,40 +93,22 @@ export function FeatureCta() {
           {/* p-px + a rotating conic underneath = a 1px border that travels
               around the panel. The conic has to be far larger than the panel
               and clipped by it, or its corners swing outside as it turns. */}
-          <div className="relative overflow-hidden rounded-3xl p-px">
-            {!reduced && (
-              <span
-                aria-hidden
-                className="spin-slow pointer-events-none absolute left-1/2 top-1/2 h-[300%] w-[160%] -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  background:
-                    "conic-gradient(from 0deg, transparent 0deg, var(--features-blue) 40deg, transparent 100deg, transparent 200deg, var(--features-blue-deep) 250deg, transparent 310deg)",
-                  opacity: 0.7,
-                }}
-              />
-            )}
+          <div className="group/cta relative overflow-hidden rounded-3xl p-px transition-all duration-500 hover:-translate-y-1 hover:scale-[1.01]">
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-3xl border border-border"
+              className="pointer-events-none absolute inset-0 rounded-3xl border-2 border-[var(--features-blue)] shadow-[0_0_30px_rgba(47,143,224,0.35)] transition-all duration-500 group-hover/cta:border-[#2F8FE0] group-hover/cta:shadow-[0_0_60px_rgba(47,143,224,0.65)]"
             />
 
             <SpotlightPanel
               glow="var(--features-blue)"
               size={520}
-              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-card/30 px-5 py-10 backdrop-blur-xl sm:px-8 md:px-12 md:py-14"
+              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-card/30 px-5 py-10 backdrop-blur-xl transition-all duration-500 group-hover/cta:bg-[#0c1322] sm:px-8 md:px-12 md:py-14"
             >
-              {/* A slow specular pass over the glass (grid removed) */}
-              {!reduced && (
-                <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-                  <span
-                    className="sheen-sweep absolute inset-y-0 w-1/3"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, transparent, color-mix(in srgb, var(--features-blue) 10%, transparent), transparent)",
-                    }}
-                  />
-                </span>
-              )}
+              {/* Interactive background glow effect on hover */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(47,143,224,0.22),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover/cta:opacity-100"
+              />
 
               {/* Splits at lg, not md: at 768px the copy and the button stack
                   side by side squeeze the CTA row to near its min-content. */}
@@ -180,26 +162,22 @@ export function FeatureCta() {
                     </span>
                   </div>
 
-                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-                  <Magnetic strength={0.28} className="w-full sm:w-auto">
+                  <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-end">
                     <Link
                       href="/get-started"
-                      className="btn-ai inline-flex h-11 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-[filter,box-shadow] duration-300 sm:w-auto"
+                      className="btn-ai inline-flex h-11 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-[filter,box-shadow,transform] duration-300 hover:scale-[1.03] sm:w-auto"
                     >
                       Get started
                       <ArrowRight className="h-4 w-4" aria-hidden />
                     </Link>
-                  </Magnetic>
 
-                  <Magnetic strength={0.22} className="w-full sm:w-auto">
                     <Link
                       href="/pricing"
-                      className="inline-flex h-11 w-full items-center justify-center rounded-full bg-black/80 px-6 text-sm font-medium text-foreground border border-white/10 transition-colors duration-300 hover:border-white/30 hover:bg-black sm:w-auto"
+                      className="inline-flex h-11 w-full items-center justify-center rounded-full border border-white/20 px-6 text-sm font-medium text-foreground transition-all duration-300 hover:scale-[1.03] hover:border-white/40 hover:bg-white/10 sm:w-auto"
                     >
                       View pricing
                     </Link>
-                  </Magnetic>
-                </div>
+                  </div>
                 </div>
               </div>
             </SpotlightPanel>

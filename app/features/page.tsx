@@ -1,16 +1,16 @@
 import type { Metadata } from "next"
+import { industriesBody } from "@/lib/industries-fonts"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import {
-  Features,
-  FeatureCallDemo,
-  FeatureShowcase,
-  FeatureLatencyLab,
-  FeatureJourney,
-  FeatureIvrRace,
-  FeatureCta,
-  FeatureRelated,
-} from "@/components/features"
+import { Features } from "@/components/sections/features"
+import { FeatureCallDemo } from "@/components/sections/feature-call-demo"
+import { FeatureShowcase } from "@/components/sections/feature-showcase"
+import { FeatureLatencyLab } from "@/components/sections/feature-latency-lab"
+import { FeatureJourney } from "@/components/sections/feature-journey"
+import { FeatureIvrRace } from "@/components/sections/feature-ivr-race"
+import { FeatureCta } from "@/components/sections/feature-outro"
+import { RelatedGuides } from "@/components/industries/related-guides"
+import { ScrollProgressBar } from "@/components/industries/scroll-progress"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 
@@ -21,15 +21,10 @@ export const metadata: Metadata = pageSeo({
   path: "/features",
 })
 
-// suppressHydrationWarning below: a browser extension (Bitdefender and
-// similar security/ad-block extensions are the common culprits) injects a
-// `bis_skin_checked` attribute onto page elements after load. React then
-// sees an attribute on the client that wasn't in the server HTML and flags
-// it as a hydration mismatch — it isn't an app bug, the extension is
-// modifying the DOM after React already rendered it.
 export default function FeaturesPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground" suppressHydrationWarning>
+    <main className={`min-h-dvh bg-black text-foreground ${industriesBody.className}`} suppressHydrationWarning>
+      <ScrollProgressBar />
       <SiteHeader />
 
       <BreadcrumbJsonLd
@@ -39,31 +34,24 @@ export default function FeaturesPage() {
         ]}
       />
 
-      <main className="flex-1">
+      <div className="flex-1">
         {/* Hero → stats band */}
         <Features />
         {/* Show it working before describing it: a replayable inbound call */}
         <FeatureCallDemo />
-        {/* Interactive explorer for all 12 capabilities */}
+        {/* Interactive explorer for capabilities */}
         <FeatureShowcase />
         {/* Makes the headline latency claim something you can feel, not just read */}
         <FeatureLatencyLab />
-        {/* The console around the capabilities above: five stages from first
-            agent to running the desk (build, train, test, operate, account).
-            Deliberately different content from FeatureShowcase's 12 technical
-            capabilities — this is workflow, not tech. */}
+        {/* The console around the capabilities above: five stages from first agent to running the desk */}
         <FeatureJourney />
-        {/* The emotional version of the comparison — same job, two paths, side by side.
-            Deliberately sits directly above the table: race first, spreadsheet second. */}
+        {/* Same job, two paths, side by side */}
         <FeatureIvrRace />
         {/* Conversion panel */}
         <FeatureCta />
 
-        {/* /features-scoped copy of the site-wide RelatedLinks module — same
-            outbound links, brand-reference styling. The shared component is
-            still on the legacy look and is used by pages that haven't been
-            migrated, so it's deliberately left untouched. */}
-        <FeatureRelated
+        {/* /features-scoped copy of the site-wide RelatedLinks module styled like Industries page */}
+        <RelatedGuides
           heading="Keep exploring"
           description="Where teams head next after the feature tour."
           links={[
@@ -71,25 +59,22 @@ export default function FeaturesPage() {
               href: "/pricing",
               title: "Pricing & per-minute rates",
               description: "Compare Starter, Growth and Scale top-ups and see the full phone-number rate card.",
-              icon: "pricing",
             },
             {
               href: "/industries",
               title: "Industries — pre-tuned playbooks",
               description: "Real estate, dental, healthcare, home services, restaurants, automotive, and more.",
-              icon: "industries",
             },
             {
               href: "/faq",
               title: "Frequently asked questions",
               description: "Pricing, credits, phone numbers, compliance and account access — answered.",
-              icon: "faq",
             },
           ]}
         />
-      </main>
+      </div>
 
       <SiteFooter />
-    </div>
+    </main>
   )
 }
