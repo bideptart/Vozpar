@@ -122,14 +122,14 @@ const FEATURES: Feature[] = [
   },
   {
     icon: Activity,
-    title: "Live transcript analytics and recording",
+    title: "Transcript, analytics & recording",
     tag: "Operations",
     motif: "transcript",
-    blurb: "Searchable transcripts, analytics, and PII redaction.",
+    blurb: "Real-time transcripts, sentiment analytics, and PII redaction out of the box.",
     detail:
-      "Every call streamed to text with speaker labels, sentiment, and detected intents. Automatic PII redaction and configurable retention windows keep your call recordings and analytics compliant out of the box.",
-    stat: { value: "100%", label: "Transcribed & compliant" },
-    points: ["Speaker-labelled transcripts", "Sentiment and intent analytics", "Automatic PII redaction"],
+      "Every call is streamed to text with speaker labels, sentiment detection, and conversion tracking — with automatic PII/PCI redaction before encrypted storage and customizable retention windows.",
+    stat: { value: "100%", label: "Transcribed & secured" },
+    points: ["Speaker-labelled transcripts", "Automatic PII redaction", "Sentiment & intent analytics"],
   },
   {
     icon: Network,
@@ -657,31 +657,26 @@ export function FeatureShowcase() {
   // visible on the phone rail whenever the selection changes — hover, click,
   // or arrow keys — instead of leaving it to whoever's driving the selection
   // to also happen to be looking at the right part of the scrolled-off rail.
-  const safeIndex = activeIndex >= 0 && activeIndex < FEATURES.length ? activeIndex : 0
-
-  useEffect(() => {
-    if (activeIndex >= FEATURES.length) {
-      setActiveIndex(0)
-    }
-  }, [activeIndex])
-
-  // Keeps the active chip visible on the phone rail whenever the selection changes
   useEffect(() => {
     const container = railRef.current
-    const activeEl = tabRefs.current[safeIndex]
+    const activeEl = tabRefs.current[activeIndex]
     if (!container || !activeEl) return
     const target = activeEl.offsetLeft - container.clientWidth / 2 + activeEl.clientWidth / 2
     container.scrollTo({ left: Math.max(0, target), behavior: reduced ? "auto" : "smooth" })
-  }, [safeIndex, reduced])
+  }, [activeIndex, reduced])
 
-  // Auto-advance through the capabilities
+  // Auto-advance through the twelve capabilities, same pattern as
+  // FeatureJourney's stepper: pauses on hover/focus so a reader who's
+  // actually looking at one doesn't have it swapped out from under them,
+  // and skips entirely under reduced motion (paired with the fact that the
+  // scroll effect above also drops to an instant jump in that case).
   useEffect(() => {
     if (paused || reduced) return
     const id = setTimeout(() => {
       setActiveIndex((i) => (i + 1) % FEATURES.length)
     }, AUTO_ADVANCE_MS)
     return () => clearTimeout(id)
-  }, [paused, reduced])
+  }, [activeIndex, paused, reduced])
 
   const focusTab = (i: number) => {
     const next = (i + FEATURES.length) % FEATURES.length
@@ -711,7 +706,7 @@ export function FeatureShowcase() {
     }
   }
 
-  const active = FEATURES[safeIndex]
+  const active = FEATURES[activeIndex]
   const accent = CATEGORY_ACCENT[active.tag]
   const ActiveIcon = active.icon
   const ActiveMotif = MOTIFS[active.motif]
@@ -758,15 +753,32 @@ export function FeatureShowcase() {
             if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false)
           }}
         >
+          {/* INDEX — horizontal snap rail on phones, vertical list from lg.
+              Three things here are load-bearing:
+              · `layoutScroll` — the active background is a `layoutId` element,
+                and inside a scrollable ancestor motion measures against the
+                viewport unless told to account for scroll offset, so the
+                highlight jumped to the wrong chip once the rail was scrolled.
+              · `scroll-pl-*` — the snapport is the scrollport minus scroll
+                padding, which defaults to 0. Without it the only valid snap
+                position for chip 1 is scrollLeft:16 (it sits behind `px-4`), so
+                mandatory snapping shunts it flush to the screen edge and out of
+                line with the heading above.
+              · scrollbar hidden — `overflow-x-auto` holds until lg, so between
+                768 and 1023px Windows and Linux draw a bar under the rail. */}
           <motion.div
             ref={railRef}
             layoutScroll
             role="tablist"
             aria-label="Platform features"
+            // Right-edge fade on the phone rail so it's obvious the chips run
+            // off-screen and can be scrolled. It's a mask that softens the last
+            // ~2rem to transparent; switched off at lg where the list is a
+            // vertical column with nothing hidden.
             className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
-              const isActive = i === safeIndex
+              const isActive = i === activeIndex
               const Icon = f.icon
               const itemAccent = CATEGORY_ACCENT[f.tag]
               return (
@@ -955,7 +967,7 @@ export function FeatureShowcase() {
               {/* Panel chrome */}
               <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
-                  capability · {String(safeIndex + 1).padStart(2, "0")}/{String(FEATURES.length).padStart(2, "0")}
+                  capability · {String(activeIndex + 1).padStart(2, "0")}/{String(FEATURES.length).padStart(2, "0")}
                 </span>
                 <span
                   className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider"
