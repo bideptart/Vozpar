@@ -31,28 +31,51 @@ export default function BlogIndexPage() {
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border/50">
+      <section className="relative overflow-hidden border-b border-border/50 py-20 md:py-28">
+        {/* Glow ambient background effects */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 -top-24 h-[500px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(220,38,38,0.18),transparent_75%)]"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+          className="pointer-events-none absolute left-1/2 top-10 h-72 w-96 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
         />
-        <div className="relative mx-auto w-full max-w-4xl px-4 py-16 text-center md:px-6 md:py-20">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]"
+        />
+
+        <div className="relative mx-auto w-full max-w-4xl px-4 text-center md:px-6">
           <ScrollReveal>
-            <span className="ai-pill-magenta">
-              <span className="h-1 w-1 rounded-full bg-accent" />
-              Blog
-            </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
-              Notes on <span className="text-primary">voice AI.</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary backdrop-blur-md shadow-[0_0_15px_rgba(220,38,38,0.15)]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              VOICE AI INSIGHTS & ENGINEERING
+            </div>
+
+            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.08] tracking-tight sm:text-5xl md:text-7xl">
+              Voice AI <span className="bg-gradient-to-r from-primary via-red-400 to-accent bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(220,38,38,0.25)]">Notes.</span>
             </h1>
-            <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              Product, engineering, platform, and compliance insights from the team building AI voice agents that
-              actually sound human.
+
+            <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
+              Behind-the-scenes insights into the technology, engineering, and strategies powering AI voice agents built to communicate like humans.
             </p>
+
+            {/* Quick Feature Stats Bar */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-muted-foreground sm:gap-8">
+              <div className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 backdrop-blur-sm">
+                <span className="font-semibold text-foreground">10+</span> In-Depth Guides
+              </div>
+              <div className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 backdrop-blur-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Technical & Compliance Focus
+              </div>
+              <div className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 backdrop-blur-sm">
+                <span className="font-semibold text-foreground">Sub-300ms</span> Architecture
+              </div>
+            </div>
           </ScrollReveal>
         </div>
       </section>
