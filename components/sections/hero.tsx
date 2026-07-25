@@ -85,8 +85,6 @@ function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; 
   return <>{val}{suffix}</>
 }
 
-<<<<<<< HEAD
-=======
 // ── Floating Particles ────────────────────────────────────────────────────────
 function Particle({ color, reduced }: { color: string; reduced: boolean }) {
   const count = 12
@@ -164,7 +162,6 @@ function OrbitRing({ r, color, duration, reduced }: { r: number; color: string; 
   )
 }
 
->>>>>>> a83047d (Your commit message)
 // ── Waveform bars ─────────────────────────────────────────────────────────────
 const BH = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8, 0.6, 0.72, 0.5, 0.88]
 function Waveform({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
