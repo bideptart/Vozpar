@@ -15,7 +15,7 @@ export const metadata: Metadata = pageSeo({
 
 export default function FaqPage() {
   return (
-    <>
+    <main className="min-h-dvh bg-black text-foreground">
       <SiteHeader />
       <BreadcrumbJsonLd
         items={[
@@ -26,6 +26,6 @@ export default function FaqPage() {
       <FaqJsonLd items={FLAT_FAQ} />
       <FaqClient />
       <SiteFooter />
-    </>
+    </main>
   )
 }

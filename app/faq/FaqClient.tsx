@@ -52,7 +52,7 @@ export default function FaqClient() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10 bg-black">
+      <section className="relative overflow-hidden border-b border-white/10">
         <FloatingAccents />
         <ParticleField />
         <FloatingIconBadges />
@@ -137,7 +137,7 @@ export default function FaqClient() {
         </div>
       </section>
 
-      <div ref={contentRef} className="bg-black mx-auto w-full max-w-5xl px-4 pt-10 pb-16 md:px-6 md:pt-14 md:pb-24 scroll-mt-20">
+      <div ref={contentRef} className="mx-auto w-full max-w-5xl px-4 pt-10 pb-16 md:px-6 md:pt-14 md:pb-24 scroll-mt-20">
         {filteredGroups.map((group) => (
           <section key={group.id} id={group.id} className="scroll-mt-24 border-b border-white/[0.07] py-10 first:pt-0 last:border-b-0">
             <ScrollReveal>
@@ -180,7 +180,7 @@ export default function FaqClient() {
       </div>
 
       {/* Still have a question section */}
-      <section className="bg-black mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
         <ScrollReveal>
           <div className="relative overflow-hidden rounded-3xl border border-white/[0.07] bg-[#0b0b0e] p-8 md:p-12 shadow-xl">
             {/* Background glow */}
