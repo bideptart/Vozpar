@@ -10,61 +10,61 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { animate } from "motion/react"
 
 // ── Rotating headline words ───────────────────────────────────────────────────
-const WORDS = ["Books Appointments", "Qualifies Leads", "Handles Support", "Drives Revenue", "Works 24/7"] as const
+const WORDS = ["Books Appointments", "Closes More Deals", "Handles Support", "Converts Callers", "Never Sleeps"] as const
 
 // ── 3D Scene cards data ───────────────────────────────────────────────────────
 const SCENES = [
   {
     icon: Calendar,
-    tag: "Booking",
-    title: "Fills Every Slot",
+    tag: "Appointment Booking",
+    title: "Zero Empty Slots",
     metric: "94%",
-    metricLabel: "booking rate",
-    fact: "Checks calendar, confirms slot, sends SMS — zero staff needed.",
+    metricLabel: "show-up rate",
+    fact: "Confirms slots, sends reminders & reschedules on its own — your calendar stays full.",
     color: "#2d98f1",
     bg: "from-[#0a1628] to-[#060d1f]",
     particleColor: "#2d98f1",
   },
   {
     icon: Headphones,
-    tag: "Support",
-    title: "Resolves Instantly",
-    metric: "87%",
-    metricLabel: "first-call resolution",
-    fact: "Answers from your knowledge base. Escalates only when truly needed.",
+    tag: "24/7 Customer Support",
+    title: "Instant Resolution",
+    metric: "89%",
+    metricLabel: "issues resolved on first call",
+    fact: "Pulls answers from your docs and CRM. Escalates only the 11% that truly need a human.",
     color: "#6366f1",
     bg: "from-[#0d0a28] to-[#07051a]",
     particleColor: "#6366f1",
   },
   {
     icon: TrendingUp,
-    tag: "Leads",
-    title: "Qualifies & Routes",
-    metric: "3×",
-    metricLabel: "qualified lead lift",
-    fact: "Scores inbound leads and sends hot prospects straight to your team.",
+    tag: "Lead Qualification",
+    title: "Hot Leads Only",
+    metric: "3.2×",
+    metricLabel: "more qualified pipeline",
+    fact: "Scores every inbound caller and routes only the ready-to-buy prospects to your closers.",
     color: "#0ea5e9",
     bg: "from-[#061520] to-[#030d18]",
     particleColor: "#0ea5e9",
   },
   {
     icon: PhoneOutgoing,
-    tag: "Outbound",
-    title: "Follows Up at Scale",
-    metric: "41%",
+    tag: "Outbound Follow-Up",
+    title: "Re-Engage at Scale",
+    metric: "43%",
     metricLabel: "re-engagement rate",
-    fact: "Calls dormant leads and confirms appointments automatically.",
+    fact: "Reaches cold leads, re-qualifies them, and books demos — while your team focuses on closing.",
     color: "#8b5cf6",
     bg: "from-[#100a28] to-[#07051a]",
     particleColor: "#8b5cf6",
   },
   {
     icon: Moon,
-    tag: "After-Hours",
-    title: "Never Misses a Call",
+    tag: "After-Hours Coverage",
+    title: "Always On, Always Ready",
     metric: "100%",
-    metricLabel: "after-hours capture",
-    fact: "Every caller is greeted and helped — even at 3 AM.",
+    metricLabel: "calls answered, 24 / 7 / 365",
+    fact: "No voicemail. No missed revenue. Every caller is handled — even at 3 AM on a holiday.",
     color: "#10b981",
     bg: "from-[#061a14] to-[#031009]",
     particleColor: "#10b981",
@@ -85,104 +85,27 @@ function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; 
   return <>{val}{suffix}</>
 }
 
-// ── Floating Particles ────────────────────────────────────────────────────────
-function Particle({ color, reduced }: { color: string; reduced: boolean }) {
-  const count = 12
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
-      {Array.from({ length: count }).map((_, i) => {
-        const angle = (i / count) * Math.PI * 2
-        const r = 95 + (i % 3) * 28
-        const x = 50 + Math.cos(angle) * (r / 2.2)
-        const y = 50 + Math.sin(angle) * (r / 2.8)
-        const size = 2 + (i % 3)
-        const delay = i * 0.22
-        return (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              left: `${x}%`,
-              top: `${y}%`,
-              width: size,
-              height: size,
-              background: color,
-              boxShadow: `0 0 ${size * 4}px ${color}`,
-            }}
-            animate={reduced ? undefined : {
-              opacity: [0.15, 0.9, 0.15],
-              scale: [0.8, 1.6, 0.8],
-              y: [0, -8, 0, 8, 0],
-            }}
-            transition={{
-              duration: 3.5 + (i % 3) * 0.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay,
-            }}
-          />
-        )
-      })}
-    </div>
-  )
-}
-
-// ── Orbiting Ring ─────────────────────────────────────────────────────────────
-function OrbitRing({ r, color, duration, reduced }: { r: number; color: string; duration: number; reduced: boolean }) {
-  return (
-    <motion.div
-      className="pointer-events-none absolute inset-0 flex items-center justify-center"
-      aria-hidden
-      animate={reduced ? undefined : { rotate: 360 }}
-      transition={{ duration, repeat: Infinity, ease: "linear" }}
-    >
-      <div
-        className="rounded-full border"
-        style={{
-          width: r * 2,
-          height: r * 2,
-          borderColor: `${color}25`,
-          borderStyle: "dashed",
-          borderWidth: 1,
-        }}
-      />
-      {/* Dot on the ring */}
-      <motion.div
-        className="absolute rounded-full"
-        style={{
-          width: 6,
-          height: 6,
-          background: color,
-          boxShadow: `0 0 12px ${color}`,
-          top: `calc(50% - ${r}px - 3px)`,
-          left: "calc(50% - 3px)",
-        }}
-      />
-    </motion.div>
-  )
-}
-
 // ── Waveform bars ─────────────────────────────────────────────────────────────
 const BH = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8, 0.6, 0.72, 0.5, 0.88]
-function Waveform({ color, reduced }: { color: string; reduced: boolean }) {
+function Waveform({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
   return (
-    <div className="flex items-center gap-[2.5px]" aria-hidden>
+    <div className="flex items-center gap-[3px]" aria-hidden>
       {BH.map((h, i) => (
-        <motion.span key={i} className="block w-[2px] rounded-full" style={{ background: color }}
-          animate={reduced
-            ? { height: h * 8, opacity: 0.4 }
-            : { height: [h * 6, h * 24, h * 10, h * 22, h * 6], opacity: [0.6, 1, 0.7, 0.95, 0.6] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.065 }} />
+        <motion.span key={i} className="block w-[2.5px] rounded-full" style={{ background: color }}
+          animate={!reduced && active
+            ? { height: [h * 6, h * 22, h * 10, h * 20, h * 6], opacity: 0.85 }
+            : { height: h * 8, opacity: 0.3 }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.07 }} />
       ))}
     </div>
   )
 }
 
-// ── 3D Floating Scene ─────────────────────────────────────────────────────────
+// ── 3D Carousel (all cards visible in 3D spread) ──────────────────────────────
 function Scene3D({ reduced }: { reduced: boolean }) {
   const [active, setActive] = useState(0)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const n = SCENES.length
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const start = () => {
     if (timerRef.current) clearInterval(timerRef.current)
@@ -195,154 +118,158 @@ function Scene3D({ reduced }: { reduced: boolean }) {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [reduced])
 
-  const scene = SCENES[active]
-  const Icon = scene.icon
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)")
+    setIsMobile(mq.matches)
+    const h = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", h)
+    return () => mq.removeEventListener("change", h)
+  }, [])
+
+  const getStyle = (i: number) => {
+    const diff = ((i - active + n) % n)
+    const angle = diff === 0 ? 0 : diff <= Math.floor(n / 2) ? diff : diff - n
+
+    if (isMobile) {
+      return {
+        x: 0, z: angle === 0 ? 0 : -300,
+        rotateY: 0,
+        scale: angle === 0 ? 1 : 0.85,
+        opacity: angle === 0 ? 1 : 0,
+        zIndex: angle === 0 ? 50 : 10,
+      }
+    }
+
+    const xMap:  Record<number, number> = { 0: 0, 1: 195, 2: 300, [-1]: -195, [-2]: -300 }
+    const zMap:  Record<number, number> = { 0: 0, 1: -90, 2: -200, [-1]: -90, [-2]: -200 }
+    const ryMap: Record<number, number> = { 0: 0, 1: -22, 2: -38, [-1]: 22, [-2]: 38 }
+    const scMap: Record<number, number> = { 0: 1, 1: 0.78, 2: 0.60, [-1]: 0.78, [-2]: 0.60 }
+    const opMap: Record<number, number> = { 0: 1, 1: 0.55, 2: 0.28, [-1]: 0.55, [-2]: 0.28 }
+    const zIdx:  Record<number, number> = { 0: 50, 1: 40, 2: 30, [-1]: 40, [-2]: 30 }
+
+    const clamp = (v: number) => Math.max(-2, Math.min(2, v)) as -2 | -1 | 0 | 1 | 2
+    const k = clamp(angle)
+
+    return {
+      x: xMap[k] ?? 0, z: zMap[k] ?? -200,
+      rotateY: ryMap[k] ?? 0, scale: scMap[k] ?? 0.5,
+      opacity: opMap[k] ?? 0, zIndex: zIdx[k] ?? 10,
+    }
+  }
 
   return (
-    <div className="relative flex h-[480px] w-full items-center justify-center" style={{ perspective: "900px" }}>
-
-      {/* Ambient background glow — changes with scene */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 rounded-3xl"
-        animate={{ background: `radial-gradient(ellipse 70% 70% at 50% 50%, ${scene.color}22 0%, transparent 65%)` }}
-        transition={{ duration: 0.8 }}
-        aria-hidden
+    <div
+      className="relative flex w-full items-center justify-center"
+      style={{
+        height: isMobile ? 420 : 460,
+        perspective: "1100px",
+        perspectiveOrigin: "50% 45%",
+      }}
+    >
+      {/* Ambient glow that changes with active card */}
+      <motion.div aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-3xl blur-[80px]"
+        animate={{ background: `radial-gradient(ellipse at 50% 60%, ${SCENES[active].color}30, transparent 65%)` }}
+        transition={{ duration: 0.7 }}
       />
 
-      {/* Outer orbit rings */}
-      <OrbitRing r={160} color={scene.color} duration={18} reduced={reduced} />
-      <OrbitRing r={120} color={scene.color} duration={12} reduced={reduced} />
+      {/* All cards rendered simultaneously in 3D space */}
+      {SCENES.map((card, i) => {
+        const Icon = card.icon
+        const s = getStyle(i)
+        const isFront = i === active
 
-      {/* Floating particles */}
-      <AnimatePresence mode="wait">
-        <motion.div key={`particles-${active}`} className="absolute inset-0"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}>
-          <Particle color={scene.color} reduced={reduced} />
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Central 3D card with tilt float */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, scale: 0.72, rotateX: 25, rotateY: -20, y: 40 }}
-          animate={{ opacity: 1, scale: 1, rotateX: 0, rotateY: 0, y: 0 }}
-          exit={{ opacity: 0, scale: 0.72, rotateX: -25, rotateY: 20, y: -40 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          style={{ transformStyle: "preserve-3d" }}
-          className="relative z-20 w-[300px]"
-        >
-          {/* 3D depth shadow layer */}
-          <motion.div
-            className="pointer-events-none absolute inset-0 rounded-3xl"
-            style={{
-              transform: "translateZ(-20px) translateY(18px) scale(0.92)",
-              background: `${scene.color}18`,
-              filter: "blur(20px)",
-              borderRadius: 24,
-            }}
-            animate={reduced ? undefined : { opacity: [0.5, 0.85, 0.5] }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-            aria-hidden
-          />
-
-          {/* Floating animation */}
-          <motion.div
-            animate={reduced ? undefined : { y: [0, -12, 0, 12, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        return (
+          <motion.div key={i}
+            className="absolute cursor-pointer"
+            style={{ transformStyle: "preserve-3d", zIndex: s.zIndex }}
+            animate={{ x: s.x, z: s.z, rotateY: s.rotateY, scale: s.scale, opacity: s.opacity }}
+            transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 150, damping: 28, mass: 1, restDelta: 0.01 }}
+            onClick={() => { setActive(i); start() }}
           >
             <div
-              className="relative overflow-hidden rounded-3xl border"
+              className="relative w-[260px] overflow-hidden rounded-2xl border sm:w-[280px]"
               style={{
-                background: `linear-gradient(145deg, #0c1020 0%, #07090f 60%, #0a0d18 100%)`,
-                borderColor: `${scene.color}40`,
-                boxShadow: `
-                  0 0 0 1px ${scene.color}20,
-                  0 24px 80px -12px ${scene.color}35,
-                  0 0 80px -20px ${scene.color}25,
-                  inset 0 1px 0 rgba(255,255,255,0.06)
-                `,
+                background: "linear-gradient(145deg, #0a0d1a 0%, #060810 60%, #080b14 100%)",
+                borderColor: isFront ? `${card.color}45` : "rgba(255,255,255,0.07)",
+                boxShadow: isFront
+                  ? `0 0 0 1px ${card.color}25, 0 32px 80px -20px ${card.color}35, 0 0 60px -10px ${card.color}20`
+                  : "0 8px 32px rgba(0,0,0,0.6)",
               }}
             >
               {/* Top colour bar */}
               <div className="h-[2px] w-full"
-                style={{ background: `linear-gradient(90deg, transparent, ${scene.color}, transparent)` }} />
+                style={{ background: `linear-gradient(90deg, transparent, ${card.color}, transparent)` }} />
 
-              {/* Shine sweep */}
-              {!reduced && (
+              {/* Ambient inner glow */}
+              <div className="pointer-events-none absolute inset-0"
+                style={{ background: `radial-gradient(ellipse 70% 50% at 50% -10%, ${card.color}16, transparent 65%)` }}
+                aria-hidden />
+
+              {/* Shine sweep on active */}
+              {isFront && !reduced && (
                 <motion.div aria-hidden
                   className="pointer-events-none absolute inset-y-0 w-1/2 -skew-x-12"
-                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.055), transparent)" }}
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)" }}
+                  initial={{ left: "-60%" }}
                   animate={{ left: ["-60%", "160%"] }}
-                  transition={{ duration: 2.6, repeat: Infinity, repeatDelay: 1.4, ease: "easeInOut" }}
+                  transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.8, ease: "easeInOut" }}
                 />
               )}
 
-              {/* Inner ambient glow */}
-              <div className="pointer-events-none absolute inset-0"
-                style={{ background: `radial-gradient(ellipse 80% 50% at 50% -10%, ${scene.color}12, transparent 65%)` }}
-                aria-hidden />
-
-              <div className="p-7">
+              <div className="p-6">
                 {/* Tag + live dot */}
                 <div className="flex items-center justify-between">
-                  <span className="rounded-full border px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em]"
-                    style={{ borderColor: `${scene.color}35`, color: scene.color, background: `${scene.color}0e` }}>
-                    {scene.tag}
+                  <span className="rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em]"
+                    style={{ borderColor: `${card.color}30`, color: card.color, background: `${card.color}0e` }}>
+                    {card.tag}
                   </span>
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                  </span>
+                  {isFront && (
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                  )}
                 </div>
 
-                {/* Icon orb */}
-                <div className="mt-6 flex items-center gap-3">
-                  <motion.div
-                    className="flex h-14 w-14 items-center justify-center rounded-2xl border"
-                    style={{ borderColor: `${scene.color}30`, background: `${scene.color}18`, color: scene.color, boxShadow: `0 0 24px ${scene.color}22` }}
-                    animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Icon className="h-6 w-6" />
-                  </motion.div>
-                  <div>
-                    <p className="font-heading text-2xl font-bold" style={{ color: scene.color }}>
-                      {scene.metric}
-                    </p>
-                    <p className="text-[10px] text-white/30">{scene.metricLabel}</p>
-                  </div>
+                {/* Icon */}
+                <div className="mt-5 flex h-12 w-12 items-center justify-center rounded-2xl border"
+                  style={{ borderColor: `${card.color}28`, background: `${card.color}14`, color: card.color }}>
+                  <Icon className="h-5 w-5" />
                 </div>
 
                 {/* Title */}
-                <h3 className="mt-5 font-heading text-xl font-semibold tracking-tight text-white">
-                  {scene.title}
+                <h3 className="mt-4 font-heading text-xl font-semibold tracking-tight text-white">
+                  {card.title}
                 </h3>
 
                 {/* Fact */}
-                <p className="mt-2 text-[13px] leading-relaxed text-white/40">{scene.fact}</p>
+                <p className="mt-2 text-[13px] leading-relaxed text-white/40">{card.fact}</p>
 
                 {/* Waveform */}
                 <div className="mt-5">
-                  <Waveform color={scene.color} reduced={reduced} />
+                  <Waveform color={card.color} active={isFront} reduced={reduced} />
                 </div>
 
-                {/* Bottom bar */}
-                <div className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-4">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/20">
-                    vozpar · live
-                  </span>
-                  <CheckCircle className="h-4 w-4" style={{ color: `${scene.color}70` }} />
+                {/* Metric */}
+                <div className="mt-4 flex items-end justify-between border-t border-white/[0.06] pt-4">
+                  <div>
+                    <p className="font-heading text-3xl font-bold" style={{ color: card.color }}>
+                      {card.metric}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-white/30">{card.metricLabel}</p>
+                  </div>
+                  <CheckCircle className="mb-1 h-5 w-5" style={{ color: `${card.color}60` }} />
                 </div>
               </div>
             </div>
           </motion.div>
-        </motion.div>
-      </AnimatePresence>
+        )
+      })}
 
       {/* Dot indicators */}
-      <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute -bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
         {SCENES.map((s, i) => (
           <button key={i} onClick={() => { setActive(i); start() }}
             aria-label={`Scene ${i + 1}`}
@@ -374,9 +301,9 @@ export function Hero() {
   }, [reduced])
 
   const STATS = [
-    { pre: "<", val: 300, suf: "ms",  lab: "Latency"   },
-    { pre: "",  val: 99,  suf: ".9%", lab: "Uptime"    },
-    { pre: "",  val: 30,  suf: "+",   lab: "Languages" },
+    { pre: "<", val: 300, suf: "ms",  lab: "Response time" },
+    { pre: "",  val: 99,  suf: ".9%", lab: "Uptime SLA"    },
+    { pre: "",  val: 40,  suf: "+",   lab: "Languages"     },
   ]
 
   return (
@@ -405,7 +332,7 @@ export function Hero() {
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </span>
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#2d98f1]">
-                AI Voice Platform · Native Audio
+                Vozpar AI · Now Live · Sub-300ms
               </span>
             </div>
           </motion.div>
@@ -414,7 +341,7 @@ export function Hero() {
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="mt-7 font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3.2rem] lg:text-[3.6rem]">
-            AI Voice Agent That
+            Your AI Phone Agent
             <br />
             {/* Rotating word */}
             <span className="relative inline-block h-[1.12em] overflow-hidden align-bottom">
@@ -431,16 +358,16 @@ export function Hero() {
               </AnimatePresence>
             </span>
             <br />
-            <span className="text-white/55">For Your Business</span>
+            <span className="text-white/55">Around the Clock.</span>
           </motion.h1>
 
           {/* Description */}
           <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="mt-6 max-w-lg text-base leading-relaxed text-white/45 sm:text-[1.05rem]">
-            Vozpar connects to your existing phone numbers and handles real
-            conversations — with sub-300ms latency, no transcription pipeline,
-            and full data ownership on your own infrastructure.
+            Plug Vozpar into your existing number today. It answers every call,
+            books appointments, qualifies leads, and resolves support — sounding
+            completely human, responding in under 300ms, running on your own infrastructure.
           </motion.p>
 
           {/* CTAs */}
@@ -449,13 +376,13 @@ export function Hero() {
             className="mt-8 flex flex-1 flex-wrap items-center gap-3">
             <Link href="/get-started"
               className="group inline-flex flex-1 min-w-[140px] h-12 items-center justify-center gap-2 rounded-full bg-[#046bd2] px-7 text-sm font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_44px_rgba(4,107,210,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
-              Get Started Free
+              Deploy Your Agent Free
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <Link href="/features"
               className="inline-flex flex-1 min-w-[140px] h-12 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-7 text-sm font-medium text-white/65 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
               <PhoneCall className="h-4 w-4" />
-              See How It Works
+              Hear It In Action
             </Link>
           </motion.div>
 
@@ -464,10 +391,10 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.52 }}
             className="mt-7 flex flex-wrap gap-x-5 gap-y-2">
             {[
-              { icon: Shield,      text: "Self-hosted"       },
-              { icon: Globe2,      text: "Bring your number" },
-              { icon: Zap,         text: "No setup fees"     },
-              { icon: CheckCircle, text: "No contracts"      },
+              { icon: Shield,      text: "Your data, your server" },
+              { icon: Globe2,      text: "Works with any carrier"  },
+              { icon: Zap,         text: "Live in under an hour"   },
+              { icon: CheckCircle, text: "No long-term contract"   },
             ].map(({ icon: Icon, text }) => (
               <span key={text} className="flex items-center gap-1.5 text-xs text-white/28">
                 <Icon className="h-3.5 w-3.5 text-[#046bd2]" />

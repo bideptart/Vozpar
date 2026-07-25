@@ -5,9 +5,7 @@ import { Benefits } from "@/components/sections/benefits"
 import { ProductStory } from "@/components/sections/product-story"
 import { HowItWorks } from "@/components/sections/how-it-works"
 import { UseCases } from "@/components/sections/use-cases"
-import { Integrations } from "@/components/sections/integrations"
-import { Carrier } from "@/components/sections/carrier"
-import { SelfHosted } from "@/components/sections/self-hosted"
+import { PlatformCore } from "@/components/sections/platform-core"
 import { Testimonials } from "@/components/sections/testimonials"
 import { PricingFeature } from "@/components/sections/pricing-feature"
 import { FAQ } from "@/components/sections/faq"
@@ -30,9 +28,7 @@ export default function HomePage() {
         <ProductStory />
         <HowItWorks />
         <UseCases />
-        <Integrations />
-        <Carrier />
-        <SelfHosted />
+        <PlatformCore />
         <Testimonials />
         <PricingFeature />
         <FAQ />

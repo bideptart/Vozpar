@@ -1,104 +1,251 @@
 "use client"
 
-import { Wand2, BookOpen, Plug, Rocket } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { useState } from "react"
+import { Wand2, BookOpen, Plug, Rocket, Sparkles, CheckCircle2, ArrowRight, ShieldCheck, Zap } from "lucide-react"
+import { motion, useReducedMotion, AnimatePresence } from "motion/react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 const STEPS = [
   {
-    n: "01", icon: Wand2, tint: "#2d98f1",
-    title: "Define your agent",
-    body: "Choose a voice persona, write your system prompt in plain English, and set conversation guardrails. No code, no ML expertise needed.",
+    n: "01",
+    tag: "Customization",
+    icon: Wand2,
+    tint: "#2d98f1",
+    badge: "40+ HD Voices",
+    title: "Configure Voice & Persona",
+    body: "Pick from 40+ natural human-like voices, customize accents, select emotional tone, and define conversation guardrails in simple text.",
+    preview: {
+      type: "voice",
+      detail: "Selected: AI Sarah (US English · Professional)",
+    },
   },
   {
-    n: "02", icon: BookOpen, tint: "#046bd2",
-    title: "Connect your knowledge",
-    body: "Upload FAQs, product docs, or pricing sheets. The agent answers directly from your source of truth — not hallucinated guesses.",
+    n: "02",
+    tag: "Knowledge Base",
+    icon: BookOpen,
+    tint: "#6366f1",
+    badge: "Instant Data Sync",
+    title: "Feed Business Knowledge",
+    body: "Upload your FAQs, website URLs, PDF docs, or product catalogs. Your agent learns your business instantly and answers with zero hallucination.",
+    preview: {
+      type: "knowledge",
+      detail: "3 Docs & FAQs Synced (100% Verified)",
+    },
   },
   {
-    n: "03", icon: Plug, tint: "#2d98f1",
-    title: "Add tools and numbers",
-    body: "Connect your calendar, CRM, and existing carrier number. The agent checks availability, books, and updates records in real time — mid-call.",
+    n: "03",
+    tag: "Integrations",
+    icon: Plug,
+    tint: "#0ea5e9",
+    badge: "Sub-300ms Actions",
+    title: "Connect Phone & Tools",
+    body: "Connect your existing carrier or assign a new local/toll-free number. Link Google Calendar, CRM, and SMS tools to take real-time action mid-call.",
+    preview: {
+      type: "tools",
+      detail: "Twilio + Google Calendar + HubSpot Connected",
+    },
   },
   {
-    n: "04", icon: Rocket, tint: "#046bd2",
-    title: "Launch and improve",
-    body: "Go live in minutes. Monitor every call, review outcomes, and refine the agent from a single control panel — no redeployment needed.",
+    n: "04",
+    tag: "Deployment",
+    icon: Rocket,
+    tint: "#10b981",
+    badge: "24/7 Live Auto-Scale",
+    title: "Go Live & Auto-Scale",
+    body: "Turn on live phone call handling. Track real-time call transcripts, sentiment analytics, and lead conversions live on your dashboard.",
+    preview: {
+      type: "live",
+      detail: "Live Agent Ready · 0 Missed Calls",
+    },
   },
 ]
 
 export function HowItWorks() {
   const reduced = useReducedMotion()
+  const [activeStep, setActiveStep] = useState(0)
 
   return (
-    <section id="how-it-works" className="relative overflow-hidden border-t border-white/[0.06]">
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[400px]"
-        style={{ background: "radial-gradient(40% 50% at 20% 0%, rgba(4,107,210,0.07), transparent 70%)" }} />
+    <section id="how-it-works" className="relative overflow-hidden border-t border-white/[0.06] bg-black">
+      {/* Background radial atmosphere */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
+        style={{
+          background:
+            "radial-gradient(50% 50% at 50% 0%, rgba(4,107,210,0.12) 0%, rgba(4,107,210,0.02) 60%, transparent 80%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 right-0 h-[400px] w-[500px] -translate-y-10 translate-x-10 rounded-full blur-[140px]"
+        style={{ background: "rgba(99,102,241,0.06)" }}
+      />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28">
-
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:py-32">
         {/* Header */}
-        <ScrollReveal className="mx-auto mb-20 max-w-2xl text-center">
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.22em] text-[#2d98f1]">How it works</p>
-          <h2 className="font-heading text-4xl font-medium leading-tight tracking-tight text-white md:text-5xl">
-            Getting Started is Simpler
-            <br className="hidden sm:block" />{" "}
-            <span className="text-white/55">Than You Think</span>
+        <ScrollReveal className="mx-auto mb-16 max-w-3xl text-center md:mb-20">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1]">
+            <Sparkles className="h-3 w-3 text-[#2d98f1]" />
+            Simplified 4-Step Process
+          </div>
+          <h2 className="font-heading text-3xl font-medium leading-[1.1] tracking-[-0.03em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
+            Launch Your AI Phone Agent
+            <br />
+            <span className="bg-gradient-to-r from-[#2d98f1] via-[#60b8ff] to-[#6366f1] bg-clip-text text-transparent">
+              In 4 Easy Steps
+            </span>
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-white/40">
-            From setup to your first live call in under a day. No infrastructure to provision.
+          <p className="mt-5 text-base leading-relaxed text-white/45 sm:text-lg md:text-xl">
+            From setup to your first live inbound or outbound call in minutes — no coding, no complex setups, no AI expertise required.
           </p>
         </ScrollReveal>
 
-        {/* Desktop: timeline */}
+        {/* Interactive Desktop Timeline */}
         <div className="hidden lg:block">
-          {/* Progress line */}
-          <div className="relative mx-8 mb-10 h-px">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#046bd2]/40 to-transparent" />
-            {/* Nodes */}
-            <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-between px-[10%]">
-              {STEPS.map((s, i) => (
-                <motion.div key={s.n}
-                  initial={reduced ? undefined : { scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.4, delay: i * 0.1 }}
-                  className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border border-[#046bd2]/40 bg-black"
-                  style={{ boxShadow: `0 0 20px ${s.tint}20` }}
-                >
-                  {!reduced && (
-                    <motion.div className="absolute h-full w-full rounded-full border border-[#046bd2]/20"
-                      animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0, 0.4] }}
-                      transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4 }}
-                    />
-                  )}
-                  <span className="font-mono text-xs font-bold" style={{ color: s.tint }}>{s.n}</span>
-                </motion.div>
-              ))}
+          {/* Progress bar line */}
+          <div className="relative mx-12 mb-14 h-1 rounded-full bg-white/[0.08]">
+            <motion.div
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#2d98f1] via-[#6366f1] to-[#10b981]"
+              initial={{ width: "25%" }}
+              animate={{ width: `${(activeStep + 1) * 25}%` }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            />
+            {/* Animated step nodes on the bar */}
+            <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-between px-[6%]">
+              {STEPS.map((s, i) => {
+                const isActive = i <= activeStep
+                const isCurrent = i === activeStep
+
+                return (
+                  <button
+                    key={s.n}
+                    onClick={() => setActiveStep(i)}
+                    className="group relative focus:outline-none"
+                    aria-label={`Jump to step ${s.n}: ${s.title}`}
+                  >
+                    <motion.div
+                      className={`relative z-10 flex h-11 w-11 items-center justify-center rounded-full border text-xs font-mono font-bold transition-all duration-300 ${
+                        isCurrent
+                          ? "scale-110 border-transparent text-white shadow-lg"
+                          : isActive
+                          ? "border-[#046bd2]/60 bg-black text-[#2d98f1]"
+                          : "border-white/10 bg-[#08090e] text-white/30 hover:border-white/30 hover:text-white/60"
+                      }`}
+                      style={{
+                        background: isCurrent ? s.tint : undefined,
+                        boxShadow: isCurrent ? `0 0 24px ${s.tint}70` : undefined,
+                      }}
+                    >
+                      {s.n}
+                    </motion.div>
+                    {/* Ring ping on current */}
+                    {isCurrent && !reduced && (
+                      <motion.div
+                        className="absolute inset-0 rounded-full border border-[#2d98f1]"
+                        animate={{ scale: [1, 1.6, 1], opacity: [0.6, 0, 0.6] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                    )}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
-          <StaggerGroup className="grid grid-cols-4 gap-4">
-            {STEPS.map(s => {
+          {/* Cards Grid */}
+          <StaggerGroup className="grid grid-cols-4 gap-5">
+            {STEPS.map((s, i) => {
               const Icon = s.icon
+              const isSelected = i === activeStep
+
               return (
                 <StaggerItem key={s.n}>
                   <motion.div
-                    whileHover={reduced ? undefined : { y: -4 }}
-                    transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                    className="group relative h-full overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] p-6 hover:border-[#046bd2]/30 transition-colors duration-300"
+                    onClick={() => setActiveStep(i)}
+                    whileHover={reduced ? undefined : { y: -6 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                    className={`group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border p-6 transition-all duration-300 ${
+                      isSelected
+                        ? "border-[#2d98f1]/60 bg-[#0b0e18] shadow-[0_0_40px_-10px_rgba(4,107,210,0.35)]"
+                        : "border-white/[0.08] bg-[#08090e] hover:border-white/20 hover:bg-[#0a0c14]"
+                    }`}
                   >
-                    <div className="absolute inset-x-0 top-0 h-px"
-                      style={{ background: `linear-gradient(to right, transparent, ${s.tint}55, transparent)` }} />
-                    <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                      style={{ background: `radial-gradient(55% 50% at 50% 0%, ${s.tint}07, transparent)` }} />
+                    {/* Top gradient highlight */}
+                    <div
+                      className="absolute inset-x-0 top-0 h-[2px] transition-opacity duration-300"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${s.tint}, transparent)`,
+                        opacity: isSelected ? 1 : 0.4,
+                      }}
+                    />
 
-                    <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl border"
-                      style={{ borderColor: `${s.tint}22`, background: `${s.tint}10`, color: s.tint }}>
-                      <Icon className="h-5 w-5" />
+                    {/* Subtle ambient hover fill */}
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      style={{
+                        background: `radial-gradient(circle at 50% 0%, ${s.tint}12 0%, transparent 70%)`,
+                      }}
+                    />
+
+                    <div>
+                      {/* Step Tag + Badge */}
+                      <div className="flex items-center justify-between">
+                        <span
+                          className="font-mono text-[10px] uppercase tracking-[0.2em]"
+                          style={{ color: s.tint }}
+                        >
+                          Step {s.n}
+                        </span>
+                        <span
+                          className="rounded-full border px-2 py-0.5 font-mono text-[9px] font-medium"
+                          style={{
+                            borderColor: `${s.tint}35`,
+                            color: s.tint,
+                            background: `${s.tint}12`,
+                          }}
+                        >
+                          {s.badge}
+                        </span>
+                      </div>
+
+                      {/* Icon */}
+                      <div
+                        className="mt-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:scale-105"
+                        style={{
+                          borderColor: `${s.tint}30`,
+                          background: `${s.tint}15`,
+                          color: s.tint,
+                          boxShadow: isSelected ? `0 0 20px ${s.tint}30` : undefined,
+                        }}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="mt-4 font-heading text-lg font-semibold tracking-tight text-white">
+                        {s.title}
+                      </h3>
+
+                      {/* Body */}
+                      <p className="mt-2 text-xs leading-relaxed text-white/45 group-hover:text-white/60">
+                        {s.body}
+                      </p>
                     </div>
-                    <h3 className="font-heading text-base font-medium tracking-tight text-white">{s.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/40">{s.body}</p>
+
+                    {/* Preview Box */}
+                    <div
+                      className="mt-6 rounded-xl border border-white/[0.06] bg-black/40 p-3"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="h-2 w-2 shrink-0 rounded-full"
+                          style={{ background: s.tint }}
+                        />
+                        <p className="truncate font-mono text-[10px] text-white/50">
+                          {s.preview.detail}
+                        </p>
+                      </div>
+                    </div>
                   </motion.div>
                 </StaggerItem>
               )
@@ -106,35 +253,99 @@ export function HowItWorks() {
           </StaggerGroup>
         </div>
 
-        {/* Mobile: stacked */}
-        <div className="flex flex-col gap-4 lg:hidden">
+        {/* Mobile & Tablet view */}
+        <div className="flex flex-col gap-5 lg:hidden">
           {STEPS.map((s, i) => {
             const Icon = s.icon
             return (
-              <ScrollReveal key={s.n} delay={i * 0.07}>
-                <div className="flex gap-4">
-                  <div className="flex flex-col items-center">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#046bd2]/40 bg-black font-mono text-xs font-bold"
-                      style={{ color: s.tint }}>
-                      {s.n}
+              <ScrollReveal key={s.n} delay={i * 0.08}>
+                <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#08090e] p-6 transition-all hover:border-[#046bd2]/40">
+                  <div
+                    className="absolute inset-x-0 top-0 h-[2px]"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${s.tint}, transparent)`,
+                    }}
+                  />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border font-mono text-sm font-bold"
+                        style={{
+                          borderColor: `${s.tint}35`,
+                          background: `${s.tint}12`,
+                          color: s.tint,
+                        }}
+                      >
+                        {s.n}
+                      </div>
+                      <div>
+                        <span
+                          className="font-mono text-[9px] uppercase tracking-[0.18em]"
+                          style={{ color: s.tint }}
+                        >
+                          {s.tag}
+                        </span>
+                        <h3 className="font-heading text-base font-semibold text-white">
+                          {s.title}
+                        </h3>
+                      </div>
                     </div>
-                    {i < STEPS.length - 1 && (
-                      <div className="mt-1 w-px flex-1 bg-gradient-to-b from-[#046bd2]/30 to-transparent" />
-                    )}
+                    <span
+                      className="rounded-full border px-2 py-0.5 font-mono text-[9px]"
+                      style={{
+                        borderColor: `${s.tint}30`,
+                        color: s.tint,
+                        background: `${s.tint}10`,
+                      }}
+                    >
+                      {s.badge}
+                    </span>
                   </div>
-                  <div className="mb-3 flex-1 rounded-2xl border border-white/[0.07] bg-[#08090e] p-5">
-                    <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl border"
-                      style={{ borderColor: `${s.tint}22`, background: `${s.tint}10`, color: s.tint }}>
-                      <Icon className="h-4 w-4" />
+
+                  <p className="mt-3 text-xs leading-relaxed text-white/45">
+                    {s.body}
+                  </p>
+
+                  <div className="mt-4 rounded-xl border border-white/[0.06] bg-black/40 p-2.5">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ background: s.tint }}
+                      />
+                      <p className="truncate font-mono text-[10px] text-white/50">
+                        {s.preview.detail}
+                      </p>
                     </div>
-                    <h3 className="font-heading text-base font-medium text-white">{s.title}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-white/40">{s.body}</p>
                   </div>
                 </div>
               </ScrollReveal>
             )
           })}
         </div>
+
+        {/* Bottom Callout Banner */}
+        <ScrollReveal className="mt-14 md:mt-20">
+          <div className="relative overflow-hidden rounded-3xl border border-[#046bd2]/30 bg-gradient-to-r from-[#046bd2]/10 via-[#046bd2]/[0.04] to-transparent p-6 sm:p-8 md:p-10">
+            <div className="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
+              <div>
+                <div className="inline-flex items-center gap-2 font-mono text-xs text-[#2d98f1]">
+                  <Zap className="h-4 w-4" />
+                  Ready to deploy in under 15 minutes?
+                </div>
+                <h3 className="mt-2 font-heading text-xl font-medium tracking-tight text-white sm:text-2xl md:text-3xl">
+                  Try Vozpar for free today — no credit card needed.
+                </h3>
+              </div>
+              <a
+                href="/get-started"
+                className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-[#046bd2] px-6 py-3 text-sm font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all hover:bg-[#0579e8] hover:shadow-[0_0_40px_rgba(4,107,210,0.65)]"
+              >
+                Build Your Agent Now
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </a>
+            </div>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   )
