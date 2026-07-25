@@ -613,6 +613,223 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+
+  {
+    slug: "ai-voice-agent-for-dental-clinics",
+    cover: "/blog/ai-voice-agent-for-dental-clinics/cover.png",
+    title: "AI voice agent for dental & medical clinics: 0 missed calls & 40% fewer no-shows",
+    excerpt:
+      "Dental front desks miss over 30% of incoming patient calls during peak hours. Discover how AI voice agents automate scheduling, triage emergencies, and eliminate no-shows 24/7.",
+    category: "Healthcare",
+    date: "2026-07-20",
+    readingMinutes: 8,
+    author: "The Vozpar Team",
+    content: [
+      { type: "h2", text: "Introduction" },
+      { type: "image", src: "/blog/ai-voice-agent-for-dental-clinics/cover.png", alt: "AI Voice Agent for Dental & Medical Clinics Workflow" },
+      {
+        type: "p",
+        text: "In dental and medical practices, the front desk is simultaneously checking in patients, processing insurance, taking payments, and answering ringing phones. When morning rushes hit, incoming calls go straight to voicemail. Studies show that over 65% of patients seeking a new dentist will hang up and call another practice if they hit a voicemail box. An AI voice agent acts as an automated, 24/7 clinical receptionist that answers every call on the first ring, books appointments directly into your EHR/PMS system, and confirms patient visits.",
+      },
+      { type: "h2", text: "The true cost of missed patient calls" },
+      {
+        type: "table",
+        head: ["Metric", "Traditional Front Desk", "Vozpar AI Receptionist"],
+        rows: [
+          ["Answer rate", "65% - 75% during peak hours", "100% on 1st ring, 24/7/365"],
+          ["Appointment no-shows", "15% - 25% average", "Reduced by 40% with automated calls"],
+          ["After-hours inquiries", "Voicemail (80% drop-off)", "Instant booking & emergency triage"],
+          ["Average handling cost", "$4.50 - $7.00 per call", "$0.10 - $0.15 per minute"],
+        ],
+      },
+      {
+        type: "h2",
+        text: "Key features of a medical AI voice receptionist",
+      },
+      {
+        type: "cards",
+        items: [
+          { title: "Smart PMS Integration", body: "Direct bidirectional sync with Dentrix, OpenDental, and Eaglesoft for live calendar booking." },
+          { title: "After-Hours Emergency Triage", body: "Identifies urgent cases (severe pain, swelling, trauma) and warm-transfers to on-call doctors instantly." },
+          { title: "Pre-Op & Recall Reminders", body: "Automates outbound confirmation calls and pre-procedure fasting instructions." },
+          { title: "Multilingual Support", body: "Seamlessly switches between English, Spanish, and French to serve diverse patient demographics." },
+        ],
+      },
+      { type: "h2", text: "HIPAA & Patient Privacy Compliance" },
+      {
+        type: "p",
+        text: "Healthcare voice AI must adhere to strict security boundaries. Vozpar encrypts audio in transit via TLS 1.3 and at rest with AES-256. No Protected Health Information (PHI) is retained in public training sets, and standard Business Associate Agreements (BAA) ensure full compliance for private practices and enterprise MSOs.",
+      },
+      { type: "h2", text: "Frequently asked questions" },
+      {
+        type: "faq",
+        items: [
+          { q: "Can the AI agent integrate with Dentrix or OpenDental?", a: "Yes. Vozpar connects via secure APIs to check real-time chair availability, book new appointments, and update patient chart notes without manual data entry." },
+          { q: "How does the AI handle patient emergencies?", a: "If a caller mentions severe pain, bleeding, or urgent trauma, the AI immediately initiates an emergency protocol and warm-transfers the call to the doctor on call." },
+          { q: "Is the voice AI HIPAA compliant?", a: "Yes. Vozpar executes Business Associate Agreements (BAAs), uses end-to-end encryption for all call streams, and redacts sensitive PII automatically." },
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: "sub-300ms-voice-ai-latency-guide",
+    cover: "/blog/speech-to-speech-vs-cascaded-voice-ai/latency.png",
+    title: "Why sub-300ms latency is mandatory for conversational AI voice agents",
+    excerpt:
+      "Human conversation relies on a 200ms turn-taking baseline. Learn how streaming WebRTC, neural audio engines, and full-duplex barge-in eliminate robotic delays.",
+    category: "Engineering",
+    date: "2026-07-24",
+    readingMinutes: 9,
+    author: "The Vozpar Team",
+    content: [
+      { type: "h2", text: "Introduction" },
+      {
+        type: "p",
+        text: "In human speech dynamics, turn-taking happens in approximately 200 milliseconds. When an AI voice agent takes 1,000ms or more to respond, the human brain instantly registers the delay as an uncomfortable pause, leading callers to talk over the agent or doubt its comprehension. Achieving sub-300ms end-to-end latency is the single most critical engineering benchmark for realistic voice AI.",
+      },
+      { type: "h2", text: "The anatomy of latency: Where milliseconds vanish" },
+      {
+        type: "table",
+        head: ["Pipeline Stage", "Legacy HTTP Stack", "Vozpar Audio-Native Engine"],
+        rows: [
+          ["Audio Transport", "REST HTTP Post (150ms)", "WebRTC / SIP UDP Streaming (20ms)"],
+          ["Speech Recognition (STT)", "Whisper Batch (350ms)", "Streaming Neural ASR (60ms)"],
+          ["Reasoning & Synthesis", "Sequential LLM -> TTS (500ms)", "Speech-to-Speech Native Transformer (110ms)"],
+          ["Total Response Time", "1,000ms - 1,400ms", "190ms - 240ms"],
+        ],
+      },
+      { type: "h2", text: "Full-Duplex & Natural Interruption (Barge-In)" },
+      {
+        type: "p",
+        text: "Real conversations are fluid. Callers frequently cut in with 'Wait, actually...' or 'Hold on'. Legacy systems require completing the entire spoken output before listening again. Vozpar's full-duplex acoustic pipeline detects user voice activity within 30ms and immediately halts speech generation, allowing the agent to yield naturally.",
+      },
+      { type: "h2", text: "Frequently asked questions" },
+      {
+        type: "faq",
+        items: [
+          { q: "What is full-duplex barge-in?", a: "Full-duplex barge-in allows callers to interrupt the AI agent mid-sentence. The AI immediately stops speaking and listens, mimicking natural human conversation." },
+          { q: "How does Vozpar achieve sub-300ms response times?", a: "By using ultra-low latency WebRTC streaming and direct speech-to-speech models, bypassing sequential text conversions." },
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: "ai-voice-agent-for-financial-services",
+    cover: "/blog/tcpa-compliance-ai-outbound-calling/cover.png",
+    title: "AI voice agents for financial services: 24/7 lead intake & SOC-2 compliance",
+    excerpt:
+      "Mortgage brokers, wealth managers, and insurance agencies handle massive call volumes. See how AI voice agents qualify leads, collect loan details, and enforce strict financial compliance.",
+    category: "Finance",
+    date: "2026-07-25",
+    readingMinutes: 9,
+    author: "The Vozpar Team",
+    content: [
+      { type: "h2", text: "Introduction" },
+      {
+        type: "p",
+        text: "In financial services—whether mortgage origination, wealth management, or insurance brokerage—speed to lead dictates customer acquisition cost. When a prospective borrower submits an inquiry for a mortgage rate quote, calling them back within 30 seconds yields an 8x higher conversion rate than calling back in 15 minutes. Vozpar AI voice agents handle instant inbound and outbound intake, gather preliminary financial parameters, and warm-transfer qualified clients to certified advisors.",
+      },
+      { type: "h2", text: "Key Workflows for Financial Voice AI" },
+      {
+        type: "cards",
+        items: [
+          { title: "Mortgage Pre-Qualification", body: "Gathers loan amount, credit tier, property value, and income status before assigning to a loan officer." },
+          { title: "Policy & Claims Intake", body: "Captures first-notice-of-loss details 24/7, generating structured incident reports automatically." },
+          { title: "Wealth Consultation Scheduling", body: "Qualifies net worth thresholds and books appointments directly onto advisor calendars." },
+          { title: "Automated Payment Reminders", body: "Conducts compliant outbound reminders for overdue premium payments or loan installments." },
+        ],
+      },
+      { type: "h2", text: "Security, Encryption & Financial Compliance" },
+      {
+        type: "p",
+        text: "Financial deployments require bank-grade security protocols. Vozpar operates with SOC-2 Type II audit alignment, zero data retention for training, automated PII (Personally Identifiable Information) masking on transcripts, and TLS 1.3 encrypted voice streams.",
+      },
+      { type: "h2", text: "Frequently asked questions" },
+      {
+        type: "faq",
+        items: [
+          { q: "Is caller data encrypted?", a: "Yes. All voice streams use TLS 1.3 and media payloads are encrypted with AES-256 at rest." },
+          { q: "Can the AI route high-net-worth leads to senior advisors?", a: "Yes. Conditional logic evaluates caller criteria in real time and transfers VIP leads to dedicated phone lines." },
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: "ai-voice-agent-for-home-services-contractors",
+    cover: "/blog/ai-receptionist-for-small-business/cover.png",
+    title: "AI voice agent for HVAC, plumbing & electrical: Never miss an emergency job",
+    excerpt:
+      "When a homeowner's furnace breaks at 10 PM, they call until someone picks up. Discover how AI voice agents dispatch emergency crews and capture high-margin jobs 24/7.",
+    category: "Home Services",
+    date: "2026-07-25",
+    readingMinutes: 8,
+    author: "The Vozpar Team",
+    content: [
+      { type: "h2", text: "Introduction" },
+      {
+        type: "p",
+        text: "For HVAC contractors, plumbers, roofers, and electricians, missed calls are lost revenue. Homeowners facing a burst pipe or broken air conditioner in the middle of summer will not leave a voicemail; they dial the next contractor on Google. A Vozpar AI voice agent acts as an emergency dispatcher that answers on the first ring, collects job location and service type, and routes emergency calls directly to on-call technicians.",
+      },
+      { type: "h2", text: "Comparing Dispatch Options" },
+      {
+        type: "table",
+        head: ["Metric", "Traditional Answering Service", "Vozpar AI Voice Dispatch"],
+        rows: [
+          ["Cost per month", "$800 - $2,500/mo + per call fees", "$0.10 - $0.15 / min (Usage based)"],
+          ["Errors & missed details", "Common (misspelled addresses)", "0 Errors (Structured CRM logging)"],
+          ["Dispatch Speed", "5 - 15 minutes manual relay", "Instant SMS & call dispatch"],
+          ["Capacity", "1 call at a time per agent", "Unlimited concurrent calls"],
+        ],
+      },
+      { type: "h2", text: "Frequently asked questions" },
+      {
+        type: "faq",
+        items: [
+          { q: "Can the AI integrate with ServiceTitan or Housecall Pro?", a: "Yes. Vozpar posts job addresses, customer notes, and booked times directly to ServiceTitan, Housecall Pro, and Jobber." },
+          { q: "How does emergency dispatch work?", a: "If a caller reports an urgent issue (water leak, gas smell, no heat), the AI triggers an immediate SMS alert and phone call to your technician." },
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: "voice-ai-crm-integration-playbook",
+    cover: "/blog/ai-voice-agent-pricing-per-minute/cover.png",
+    title: "Integrating AI voice agents with Salesforce, HubSpot, and GoHighLevel",
+    excerpt:
+      "Learn how real-time webhooks, custom function calling, and automated transcript parsing push call data directly into your CRM within milliseconds.",
+    category: "Integrations",
+    date: "2026-07-25",
+    readingMinutes: 10,
+    author: "The Vozpar Team",
+    content: [
+      { type: "h2", text: "Introduction" },
+      {
+        type: "p",
+        text: "An AI voice agent is only as powerful as the ecosystem it connects to. When an agent finishes a call, valuable customer data—intent, sentiment, qualified answers, and requested follow-ups—must flow seamlessly into your primary CRM. This technical playbook outlines how to connect Vozpar's voice engine to Salesforce, HubSpot, and GoHighLevel using webhooks and OpenAPI tool schemas.",
+      },
+      { type: "h2", text: "The Architectural Flow" },
+      {
+        type: "cards",
+        items: [
+          { title: "1. Real-Time Function Calling", body: "During the call, the AI executes tool calls to lookup customer account data or check calendar slots." },
+          { title: "2. Post-Call Webhook Dispatch", body: "Upon call completion, a JSON payload containing audio recording URLs, sentiment score, and full transcript is sent." },
+          { title: "3. Automated CRM Mapping", body: "Field mapping automatically creates leads, updates deals, and assigns follow-up tasks to human sales reps." },
+        ],
+      },
+      { type: "h2", text: "Frequently asked questions" },
+      {
+        type: "faq",
+        items: [
+          { q: "Can the voice agent query my CRM during a live call?", a: "Yes. Using OpenAPI function definitions, the agent fetches customer balance, account status, or appointment history in under 150ms." },
+          { q: "Which CRMs are supported out of the box?", a: "Salesforce, HubSpot, GoHighLevel, Zoho, Pipedrive, and custom REST API endpoints." },
+        ],
+      },
+    ],
+  },
 ]
 
 export function getPost(slug: string): BlogPost | undefined {

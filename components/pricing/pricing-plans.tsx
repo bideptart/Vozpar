@@ -259,7 +259,7 @@ export function PricingPlans() {
   return (
     <div suppressHydrationWarning>
       {/* Billing cycle toggle */}
-      <div className="mb-5 flex justify-center">
+      <div className="mb-5 flex flex-col items-center justify-center">
         <div className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/[0.04] p-1.5 text-sm backdrop-blur-xl shadow-lg">
           <button
             type="button"
@@ -290,6 +290,17 @@ export function PricingPlans() {
             </span>
           </button>
         </div>
+
+        {cycle === "yearly" && (
+          <motion.p
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="mt-3 text-center font-sans text-sm font-semibold text-sky-400"
+          >
+            Switching to yearly saves you $223 on Growth.
+          </motion.p>
+        )}
       </div>
 
       {/* Per-second billing callout */}
