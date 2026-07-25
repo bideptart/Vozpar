@@ -10,6 +10,47 @@ import { cn } from "@/lib/utils"
 
 const PORTAL_BASE = "https://voice.9278.ai"
 
+function TypewriterPrice({ value, suffix }: { value: string; suffix: string }) {
+  const [displayText, setDisplayText] = useState(value)
+  const [isTyping, setIsTyping] = useState(false)
+
+  const startTypewriter = (targetVal?: string) => {
+    const textToType = targetVal ?? value
+    setIsTyping(true)
+    setDisplayText("")
+    let i = 0
+    const timer = setInterval(() => {
+      i++
+      setDisplayText(textToType.slice(0, i))
+      if (i >= textToType.length) {
+        clearInterval(timer)
+        setIsTyping(false)
+      }
+    }, 70)
+  }
+
+  useEffect(() => {
+    startTypewriter(value)
+  }, [value])
+
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation()
+        startTypewriter()
+      }}
+      className="inline-flex items-baseline gap-1 cursor-pointer select-none group/price hover:opacity-90"
+      title="Click to replay typewriter effect"
+    >
+      <span className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-white transition-colors group-hover/price:text-sky-300">
+        {displayText}
+        {isTyping && <span className="animate-pulse text-sky-400 font-normal ml-0.5">|</span>}
+      </span>
+      <span className="font-sans text-xs text-slate-400">{suffix}</span>
+    </div>
+  )
+}
+
 type Plan = {
   id: string
   label: string
@@ -280,10 +321,12 @@ export function PricingPlans() {
 
               <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="flex flex-1 flex-col justify-between pt-1">
                 <div>
-                  {/* Price Block */}
-                  <div style={{ transform: "translateZ(40px)" }} className="flex items-baseline gap-1">
-                    <span className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-white">{usd(price)}</span>
-                    <span className="font-sans text-xs text-slate-400">/{cycle === "yearly" ? "yr" : "mo"}</span>
+                  {/* Price Block with Typewriter Effect */}
+                  <div style={{ transform: "translateZ(40px)" }}>
+                    <TypewriterPrice
+                      value={usd(price)}
+                      suffix={`/${cycle === "yearly" ? "yr" : "mo"}`}
+                    />
                   </div>
 
                   {/* Yearly savings tag / Spacer */}
