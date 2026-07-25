@@ -42,19 +42,13 @@ export default function FeaturesPage() {
       <main className="flex-1">
         {/* Hero → stats band */}
         <Features />
-        {/* Show it working before describing it: a replayable inbound call */}
-        <FeatureCallDemo />
         {/* Interactive explorer for all 12 capabilities */}
         <FeatureShowcase />
         {/* Makes the headline latency claim something you can feel, not just read */}
         <FeatureLatencyLab />
-        {/* The console around the capabilities above: five stages from first
-            agent to running the desk (build, train, test, operate, account).
-            Deliberately different content from FeatureShowcase's 12 technical
-            capabilities — this is workflow, not tech. */}
+        {/* Five stages from first agent to running the desk */}
         <FeatureJourney />
-        {/* The emotional version of the comparison — same job, two paths, side by side.
-            Deliberately sits directly above the table: race first, spreadsheet second. */}
+        {/* Same call, two paths */}
         <FeatureIvrRace />
         {/* Conversion panel */}
         <FeatureCta />

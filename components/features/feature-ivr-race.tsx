@@ -6,19 +6,6 @@ import { Check, Hourglass, PhoneOff, RotateCcw, Sparkles } from "lucide-react"
 import { motion, useInView, useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
-/**
- * FeatureIvrRace
- * The same job — "I chipped a tooth, can you fit me in today?" — run down two
- * paths side by side, one step at a time.
- *
- * The honest problem with racing these in realtime is that the IVR path takes
- * four and a half minutes and nobody watches that. So the replay advances one
- * *step* per beat on both sides, and the running clock on each column carries
- * the real durations. The AI column finishes four steps in, then sits there
- * resolved while the legacy column is still reading out its main menu — which
- * is the whole point of the section, made visible rather than asserted.
- */
-
 type Step = { label: string; secs: number }
 
 const IVR: Step[] = [
@@ -39,17 +26,15 @@ const AGENT: Step[] = [
   { label: "Books it, texts the confirmation", secs: 8 },
 ]
 
-/** Running totals, precomputed at module load — deterministic on both runtimes. */
 function cumulative(steps: Step[]) {
   let run = 0
   return steps.map((s) => (run += s.secs))
 }
 const IVR_CUM = cumulative(IVR)
 const AGENT_CUM = cumulative(AGENT)
-const IVR_TOTAL = IVR_CUM[IVR_CUM.length - 1] // 265s
-const AGENT_TOTAL = AGENT_CUM[AGENT_CUM.length - 1] // 22s
+const IVR_TOTAL = IVR_CUM[IVR_CUM.length - 1]
+const AGENT_TOTAL = AGENT_CUM[AGENT_CUM.length - 1]
 
-/** Wall-clock seconds each step gets on screen. */
 const BEAT = 1.05
 const RUN = IVR.length * BEAT + 1.2
 
@@ -60,7 +45,6 @@ function mmss(total: number) {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`
 }
 
-/** Smoothly interpolated clock for a column at wall time `t`. */
 function clockAt(t: number, cum: number[]) {
   const i = Math.floor(t / BEAT)
   if (i >= cum.length) return cum[cum.length - 1]
@@ -100,7 +84,6 @@ export function FeatureIvrRace() {
     }
   }, [running])
 
-  // Fires once, the first time the section is properly on screen.
   useEffect(() => {
     if (reduced || started.current || !inView) return
     started.current = true
@@ -124,8 +107,6 @@ export function FeatureIvrRace() {
       className="features-hero-dark relative overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      {/* Ambient glow removed — flat black canvas per the /features theme. */}
-
       <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:py-16">
         <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <span className="ai-pill-blue">
@@ -139,33 +120,6 @@ export function FeatureIvrRace() {
             One request — &ldquo;I chipped a tooth, can you fit me in today?&rdquo; — down a phone menu and down an
             agent. Replayed a step at a time; the clocks are the real durations.
           </p>
-        </ScrollReveal>
-
-        {/* Race track — total durations at true proportion. The agent's sliver
-            next to the IVR's full bar does more work than any sentence. */}
-        <ScrollReveal className="mb-5 md:mb-6">
-          <div className="rounded-2xl border border-border bg-card/30 p-4 shadow-lg shadow-black/20 sm:p-5">
-            <TrackBar
-              label="Legacy IVR"
-              value={ivrClock}
-              max={IVR_TOTAL}
-              tint="var(--features-amber)"
-              reduced={reduced}
-            />
-            <div className="mt-3">
-              <TrackBar
-                label="Vozpar agent"
-                value={agentClock}
-                max={IVR_TOTAL}
-                tint="var(--features-green)"
-                reduced={reduced}
-                glow
-              />
-            </div>
-            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/60">
-              Bars share one scale — {mmss(IVR_TOTAL)} across
-            </p>
-          </div>
         </ScrollReveal>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
@@ -199,9 +153,9 @@ export function FeatureIvrRace() {
         </div>
 
         {/* Payoff */}
-        <ScrollReveal className="mt-5 md:mt-6">
-          <div className="flex flex-col items-center gap-4 rounded-2xl border border-border bg-card/30 px-5 py-5 text-center shadow-lg shadow-black/20 sm:px-8">
-            <div className="grid w-full max-w-2xl grid-cols-1 divide-y divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <ScrollReveal className="mt-4 sm:mt-5">
+          <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card/30 p-4 shadow-lg shadow-black/20 sm:p-5">
+            <div className="grid w-full grid-cols-1 divide-y divide-border/60 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
               <Payoff
                 value={done ? `${Math.round(IVR_TOTAL / AGENT_TOTAL)}×` : "—"}
                 label="Longer on the legacy path"
@@ -219,72 +173,26 @@ export function FeatureIvrRace() {
               />
             </div>
 
-            <p className="max-w-xl text-[15px] font-light leading-relaxed text-muted-foreground">
-              Most callers don&apos;t wait it out. Every extra minute in the queue is a booking that quietly becomes a
-              hang-up.
-            </p>
+            <div className="flex flex-col items-center justify-between gap-3 border-t border-border/60 pt-3 sm:flex-row sm:gap-4">
+              <p className="text-center text-xs font-light text-muted-foreground sm:text-left">
+                Most callers don&apos;t wait it out. Every extra minute in the queue is a booking that quietly becomes a hang-up.
+              </p>
 
-            {!reduced && (
-              <button
-                type="button"
-                onClick={replay}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 text-xs font-medium text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Replay
-              </button>
-            )}
+              {!reduced && (
+                <button
+                  type="button"
+                  onClick={replay}
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border/80 px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-white/40 hover:text-foreground hover:bg-white/[0.04]"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                  Replay
+                </button>
+              )}
+            </div>
           </div>
         </ScrollReveal>
       </div>
     </section>
-  )
-}
-
-/* ---------------------------------------------------------------------- */
-
-function TrackBar({
-  label,
-  value,
-  max,
-  tint,
-  reduced,
-  glow,
-}: {
-  label: string
-  value: number
-  max: number
-  tint: string
-  reduced: boolean | null
-  glow?: boolean
-}) {
-  const pct = Math.min(100, (value / max) * 100)
-  return (
-    <div>
-      <div className="mb-2 flex items-baseline justify-between gap-3">
-        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">{label}</span>
-        <span className="font-heading text-sm font-medium tabular-nums" style={{ color: tint }}>
-          {mmss(value)}
-        </span>
-      </div>
-      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
-        <div
-          className="h-full rounded-full transition-[width] duration-100 ease-linear"
-          style={{
-            width: `${pct}%`,
-            background: `linear-gradient(90deg, color-mix(in srgb, ${tint} 55%, transparent), ${tint})`,
-            boxShadow: glow ? `0 0 16px ${tint}` : undefined,
-          }}
-        />
-        {/* Leading edge marker so a 22-second sliver is still legible */}
-        {!reduced && pct > 0 && (
-          <span
-            className="absolute top-0 h-full w-[2px] rounded-full"
-            style={{ left: `calc(${pct}% - 1px)`, background: tint, boxShadow: `0 0 10px ${tint}` }}
-          />
-        )}
-      </div>
-    </div>
   )
 }
 
@@ -318,14 +226,6 @@ function Column({
   const activeIndex = reduced ? steps.length : Math.floor(t / BEAT)
   const listRef = useRef<HTMLOListElement | null>(null)
 
-  // Follows the active row down the list as the replay advances — like a
-  // chat log auto-scrolling as new lines land, not a "keep it centered"
-  // camera. Only ever scrolls forward (never back up), and only once the
-  // active row would actually run past the bottom edge of the capped box —
-  // so the first few steps sit still (they already fit) and the list starts
-  // visibly moving once there's more content than room. Scrolls the list's
-  // own scrollTop directly (not scrollIntoView) so it never reaches out to
-  // the page's scroll position — only this box moves.
   useEffect(() => {
     const container = listRef.current
     const activeEl = container?.children[activeIndex] as HTMLElement | undefined
@@ -346,9 +246,6 @@ function Column({
           : undefined,
       }}
     >
-      {/* Winner's halo. Animated as an overlay's opacity rather than as a
-          boxShadow keyframe: the tints are CSS custom properties, and you
-          can't append an alpha channel to `var(--x)` by string concatenation. */}
       {highlight && !reduced && complete && (
         <motion.span
           aria-hidden
@@ -377,24 +274,12 @@ function Column({
         </span>
       </div>
 
-      {/* Steps show at every width. They were desktop-only for a while to keep
-          the mobile section short, but the lists are the actual content — the
-          words a caller sits through — so hiding them left the phone version
-          saying "8 steps" without showing any. Tighter spacing on mobile keeps
-          the height in check instead.
-          Capped height + internal scroll (rather than letting 8 rows push the
-          card past the fold): every step stays in the DOM and readable, it
-          just scrolls in its own box instead of stretching the section. */}
       <ol
         ref={listRef}
         className="relative mt-4 max-h-[240px] space-y-1.5 overflow-y-auto pr-1 [scrollbar-width:none] sm:space-y-2 md:max-h-[280px] [&::-webkit-scrollbar]:hidden"
       >
         {steps.map((step, i) => {
           const state = i < activeIndex ? "done" : i === activeIndex ? "active" : "pending"
-          // Reached = the conversation has arrived at this line. The row's box
-          // is always present (reserving its height, so nothing reflows), but
-          // its content only drops in once reached — an empty slot waiting,
-          // then filling, like a live transcript populating.
           const reached = reduced || i <= activeIndex
           return (
             <li
@@ -413,7 +298,6 @@ function Column({
                       : "transparent",
               }}
             >
-              {/* Beat fill on the active row — the visible tick of the clock */}
               {state === "active" && !reduced && (
                 <motion.span
                   aria-hidden
@@ -425,9 +309,6 @@ function Column({
                 />
               )}
 
-              {/* Number / check. Pending is a faint hollow dot; the moment the
-                  row is reached it springs to the numbered state, and a
-                  completed step flips to a filled check. */}
               <motion.span
                 className="relative flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[9px] font-medium tabular-nums"
                 initial={false}
@@ -442,9 +323,6 @@ function Column({
                 {state === "done" ? <Check className="h-3 w-3" aria-hidden /> : reached ? i + 1 : ""}
               </motion.span>
 
-              {/* Content drops in on reveal. `y` from −10 with a spring gives
-                  the "dropped into place" feel; pending rows hold an empty
-                  slot at low opacity so the list reads as upcoming turns. */}
               <motion.span
                 className="relative min-w-0 flex-1 text-[13px] leading-snug text-muted-foreground"
                 initial={false}
@@ -467,7 +345,6 @@ function Column({
         })}
       </ol>
 
-      {/* Verdict — lands the moment the column finishes */}
       <motion.div
         initial={false}
         animate={{ opacity: complete ? 1 : 0, y: complete ? 0 : 8 }}
@@ -486,27 +363,15 @@ function Column({
         <span className="text-sm font-medium text-foreground">{verdict.text}</span>
       </motion.div>
 
-      {/* Total cumulative seconds, for anyone checking the arithmetic */}
       <p className="relative mt-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/50">
         {steps.length} steps · {mmss(cum[cum.length - 1])} total
       </p>
 
-      {/* Standing-by filler. Only the winning column, only once it's done — it
-          fills the space the shorter column leaves against the taller one, and
-          fills it with the actual point of the section: the agent has finished
-          and is sitting idle while the IVR is still grinding. */}
       {highlight && <StandingBy tint={tint} active={complete} reduced={reduced} />}
     </div>
   )
 }
 
-/**
- * Idle "line free" state that fills the winner column's slack space.
- *
- * A radar at rest: a resolved core, sonar rings pushing out from it, and a
- * conic sweep rotating behind — the agent has finished and is listening, while
- * the IVR column beside it is still grinding through its menu tree.
- */
 function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; reduced: boolean | null }) {
   return (
     <motion.div
@@ -520,7 +385,6 @@ function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; 
       animate={{ opacity: active ? 1 : 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Faint concentric range rings, static — the radar's grid */}
       <span
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full"
@@ -530,7 +394,6 @@ function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; 
       />
 
       <div className="relative flex h-14 w-14 items-center justify-center">
-        {/* Rotating conic sweep — the radar hand */}
         {!reduced && active && (
           <motion.span
             className="absolute inset-0 rounded-full"
@@ -544,7 +407,6 @@ function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; 
           />
         )}
 
-        {/* Orbiting blip — a contact circling the resolved core */}
         {!reduced && active && (
           <motion.span
             className="absolute inset-0"
@@ -558,7 +420,6 @@ function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; 
           </motion.span>
         )}
 
-        {/* Resolved core */}
         <motion.span
           className="relative flex h-9 w-9 items-center justify-center rounded-full border"
           style={{
@@ -573,11 +434,6 @@ function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; 
         </motion.span>
       </div>
 
-      {/* Listening waveform — replaces the old expanding sonar rings. Rings
-          read as "searching"; bars read as "hearing", which is closer to what
-          standing-by actually means here, and it echoes the same audio-bar
-          motif the call-demo waveform above already uses instead of a second
-          circular idiom on the same page. */}
       {!reduced && active && (
         <div className="flex h-4 items-center justify-center gap-[3px]" aria-hidden>
           {[0, 1, 2, 3, 4].map((i) => (
@@ -593,13 +449,6 @@ function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; 
         </div>
       )}
 
-      {/* Brand nameplate — the radar has resolved to Vozpar, said plainly
-          instead of just implied by the column header above it. Set as
-          animated type, not the static logo mark: each letter blurs up into
-          place a beat after the core settles (the radar "identifying" the
-          contact), then the whole word breathes with a slow glow and a
-          shine sweeps across it once — so it stays visibly alive rather than
-          just appearing once and sitting still. */}
       <div className="relative overflow-hidden">
         <motion.p
           className="relative flex font-heading text-[13px] font-medium uppercase tracking-[0.28em]"
@@ -630,8 +479,6 @@ function StandingBy({ tint, active, reduced }: { tint: string; active: boolean; 
             </motion.span>
           ))}
         </motion.p>
-        {/* One shine pass across the settled word, timed to land just after
-            the last letter locks in. */}
         {!reduced && active && (
           <motion.span
             aria-hidden

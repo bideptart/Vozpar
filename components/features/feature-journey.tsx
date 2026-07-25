@@ -21,23 +21,10 @@ import {
   Fingerprint,
   ChevronDown,
 } from "lucide-react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
-/**
- * FeatureJourney
- * Not another list of what the product can do — FeatureShowcase already owns
- * that. This is the lifecycle of actually running it: the five stages a team
- * moves through from "we just signed up" to "we trust this thing enough to
- * stop watching it every day". Content is deliberately different from the 12
- * technical capabilities above (latency, telephony, tools, etc.) — this is
- * the console and workflow around them.
- *
- * Left rail is a numbered stepper, not a tab bar — the five stages are
- * sequential, not four unordered categories, so the UI says so.
- */
-
-type StageKey = "build" | "train" | "test" | "operate" | "account"
+type StageKey = "build-setup" | "train-configure" | "test-go-live" | "operate-monitor" | "account-overview"
 
 type Item = { icon: ElementType; title: string; blurb: string; detail: string }
 
@@ -51,136 +38,136 @@ type Stage = {
 
 const STAGES: Stage[] = [
   {
-    key: "build",
+    key: "build-setup",
     label: "Build & Setup",
     description: "Spin up agents and give each one a voice and a personality.",
     accent: "var(--features-blue)",
     items: [
       {
         icon: Users,
-        title: "Multi-agent management",
+        title: "Multi-Agent Management",
         blurb: "Create and manage as many AI agents as you need from a single account.",
         detail: "One dashboard, one login, one bill — whether you're running one number or fifty.",
       },
       {
         icon: AudioLines,
-        title: "Voice selection",
-        blurb: "Choose from a library of named voices, each with a personality and a preview clip.",
+        title: "Voice Selection",
+        blurb: "Choose from ten named voices, each with a personality description and a preview clip.",
         detail: "Preview any voice against your own script before it ever answers a real call.",
       },
       {
         icon: SlidersHorizontal,
-        title: "Call behavior controls",
+        title: "Call Behavior Controls",
         blurb: "Set how your agent greets callers, handles interruptions, and hands off conversations.",
         detail: "Greeting, tone, barge-in sensitivity, and handoff rules — tuned per agent, not global.",
       },
     ],
   },
   {
-    key: "train",
+    key: "train-configure",
     label: "Train & Configure",
     description: "Teach each agent your business and route calls the way you want.",
     accent: "var(--features-blue-deep)",
     items: [
       {
         icon: BookOpen,
-        title: "Knowledge base (per agent)",
+        title: "Knowledge Base (per agent)",
         blurb: "Give each agent its own set of company facts, FAQs, and policies to draw on.",
         detail: "Paste in docs, pricing, or policies — the agent answers from your source of truth, not a guess.",
       },
       {
         icon: Copy,
-        title: "Reusable knowledge templates",
+        title: "Reusable Knowledge Templates",
         blurb: "Save a knowledge setup once and reuse it across multiple agents or numbers.",
         detail: "Clone a working setup to a new location instead of rebuilding it from scratch.",
       },
       {
         icon: GitBranch,
-        title: "Behavior & routing rules",
+        title: "Behavior & Routing Rules",
         blurb: "Define escalation paths, working hours, and fallback numbers per agent.",
         detail: "After-hours routing, human escalation, and fallback numbers — set once, per agent.",
       },
     ],
   },
   {
-    key: "test",
+    key: "test-go-live",
     label: "Test & Go Live",
     description: "Hear your agent before you ever risk a real caller on it.",
     accent: "var(--features-green)",
     items: [
       {
         icon: FlaskConical,
-        title: "Playground / live testing",
+        title: "Playground / Live Testing",
         blurb: "Test your agent before it ever answers a real caller.",
         detail: "Run through every branch of a script in a sandbox, with instant edits between takes.",
       },
       {
         icon: PhoneCall,
-        title: "Live test call (dial-in)",
+        title: "Live Test Call (dial-in)",
         blurb: "Dial your own number and hear exactly what a caller will.",
         detail: "The real telephony path, the real voice, the real latency — not a browser simulation.",
       },
       {
         icon: LayoutTemplate,
-        title: "Ready-made setup templates",
+        title: "Ready-Made Setup Templates",
         blurb: "Start from an industry-tuned playbook instead of a blank agent.",
         detail: "Real estate, dental, home services and more ship with scripts and routing pre-built.",
       },
     ],
   },
   {
-    key: "operate",
+    key: "operate-monitor",
     label: "Operate & Monitor",
     description: "Watch every call, everything it agreed to, down to the exact word.",
     accent: "var(--features-amber)",
     items: [
       {
         icon: BarChart3,
-        title: "Analytics dashboard",
+        title: "Analytics Dashboard",
         blurb: "Track volume, sentiment, call outcomes, and duration in one place.",
         detail: "The same numbers a call center manager watches, without the call center.",
       },
       {
         icon: CalendarCheck,
-        title: "Booking history",
+        title: "Booking History",
         blurb: "See every appointment your agent has booked, rescheduled, or cancelled.",
         detail: "A running ledger of every slot touched — no separate calendar to reconcile against.",
       },
       {
         icon: FileText,
-        title: "Call transcripts & recordings",
+        title: "Call Transcripts & Recordings",
         blurb: "Every call, searchable, with speaker labels and compliance-ready redaction.",
         detail: "Search a phrase across every call this month instead of listening back one at a time.",
       },
       {
         icon: LifeBuoy,
-        title: "Support ticket explorer",
+        title: "Support Ticket Explorer",
         blurb: "Read what your agent escalated and why, without listening to the call.",
         detail: "Every handoff to a human comes with the context — what was asked, and why it escalated.",
       },
     ],
   },
   {
-    key: "account",
+    key: "account-overview",
     label: "Account & Overview",
     description: "Manage the account, your team, and your agents' identity.",
     accent: "var(--features-blue)",
     items: [
       {
         icon: Settings,
-        title: "Account settings",
+        title: "Account Settings",
         blurb: "Manage billing, teammates, and access at a glance.",
         detail: "Seats, roles, and billing in one screen — no separate admin tool to log into.",
       },
       {
         icon: LayoutDashboard,
-        title: "Dashboard overview",
+        title: "Dashboard Overview",
         blurb: "See how your agents are performing across every number you run.",
         detail: "One glance at every agent's health before you drill into any single one.",
       },
       {
         icon: Fingerprint,
-        title: "Agent identity setup",
+        title: "Agent Identity Setup",
         blurb: "Name your agent, set its persona, and connect its number.",
         detail: "The last step before go-live: a name, a persona, and a phone number, tied together.",
       },
@@ -188,259 +175,264 @@ const STAGES: Stage[] = [
   },
 ]
 
-/** How long each stage sits active before the stepper auto-advances. */
-const AUTO_ADVANCE_MS = 4500
-
 export function FeatureJourney() {
-  const reduced = useReducedMotion()
-  const [activeStage, setActiveStage] = useState<StageKey>("build")
-  const [openItem, setOpenItem] = useState<string | null>(null)
-  const [paused, setPaused] = useState(false)
+  const [activeStage, setActiveStage] = useState<StageKey>("build-setup")
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>({})
+  const isManualScroll = useRef(false)
 
-  const stage = STAGES.find((s) => s.key === activeStage)!
-  const activeIndex = STAGES.findIndex((s) => s.key === activeStage)
-  const stepperRef = useRef<HTMLDivElement | null>(null)
-
-  // Keeps the active chip visible on the phone rail as stages auto-advance.
-  // On desktop the stepper is a vertical, non-scrolling column (overflow
-  // visible), so this is a harmless no-op there — it only matters on the
-  // horizontal snap-scroll rail below lg, where the active chip can otherwise
-  // auto-advance itself right off the edge of the screen with nothing
-  // telling you which stage you're even on anymore.
   useEffect(() => {
-    const container = stepperRef.current
-    const activeEl = container?.children[activeIndex] as HTMLElement | undefined
-    if (!container || !activeEl) return
-    const target = activeEl.offsetLeft - container.clientWidth / 2 + activeEl.clientWidth / 2
-    container.scrollTo({ left: Math.max(0, target), behavior: reduced ? "auto" : "smooth" })
-  }, [activeIndex, reduced])
+    const handleScroll = () => {
+      if (isManualScroll.current) return
 
-  // Auto-advance through the stages on a timer — this is a tour, not just a
-  // menu. Paused on hover/focus so it doesn't yank the content away from
-  // someone mid-read, and restarts its full duration on every stage change
-  // (auto or manual) rather than ticking on a fixed wall-clock cadence.
-  useEffect(() => {
-    if (paused || reduced) return
-    const id = setTimeout(() => {
-      setActiveStage(STAGES[(activeIndex + 1) % STAGES.length].key)
-      setOpenItem(null)
-    }, AUTO_ADVANCE_MS)
-    return () => clearTimeout(id)
-  }, [activeIndex, paused, reduced])
+      const triggerPoint = window.innerHeight * 0.35
 
-  const selectStage = (key: StageKey) => {
+      for (let i = 0; i < STAGES.length; i++) {
+        const stage = STAGES[i]
+        const el = document.getElementById(stage.key)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= triggerPoint && rect.bottom > triggerPoint) {
+            setActiveStage(stage.key)
+            return
+          }
+        }
+      }
+
+      const firstEl = document.getElementById(STAGES[0].key)
+      if (firstEl && firstEl.getBoundingClientRect().top > triggerPoint) {
+        setActiveStage(STAGES[0].key)
+        return
+      }
+
+      const lastEl = document.getElementById(STAGES[STAGES.length - 1].key)
+      if (lastEl && lastEl.getBoundingClientRect().bottom <= window.innerHeight + 100) {
+        setActiveStage(STAGES[STAGES.length - 1].key)
+        return
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("resize", handleScroll, { passive: true })
+    handleScroll()
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleScroll)
+    }
+  }, [])
+
+  const scrollToStage = (key: StageKey) => {
     setActiveStage(key)
-    setOpenItem(null)
+    isManualScroll.current = true
+
+    const el = document.getElementById(key)
+    if (el) {
+      const yOffset = -96
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
+      window.scrollTo({ top: y, behavior: "smooth" })
+
+      setTimeout(() => {
+        isManualScroll.current = false
+      }, 750)
+    }
+  }
+
+  const toggleItem = (title: string) => {
+    setOpenItems((prev) => ({ ...prev, [title]: !prev[title] }))
   }
 
   return (
     <section
-      className="features-hero-dark relative overflow-hidden border-t border-border"
+      className="features-hero-dark relative border-t border-border/50"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 md:py-16">
-        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
+      <div className="relative mx-auto w-full max-w-6xl px-6 py-12 md:px-8 md:py-16">
+        <ScrollReveal className="mx-auto max-w-3xl text-center">
           <span className="ai-pill-blue">
-            <span className="h-1 w-1 rounded-full bg-current" />
-            From signup to trusted
+            <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" aria-hidden="true" />
+            What&apos;s Included
           </span>
-          <h2 className="mt-5 text-balance font-heading text-2xl font-medium leading-[1.05] tracking-[-0.03em] text-foreground sm:text-3xl md:text-4xl">
-            Five stages from first agent to running the desk.
+          <h2 className="mt-3 text-balance font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl md:whitespace-nowrap">
+            Built for India&apos;s front desk, not just another voice AI.
           </h2>
-          <p className="mt-4 text-pretty text-[15px] font-light leading-relaxed text-muted-foreground">
-            Not another list of capabilities — this is the console around them: how you build an agent, teach it,
-            test it, and keep watching it once it&apos;s live.
+          <p className="mx-auto mt-3 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground font-light">
+            From setup to billing, every feature here is designed around how Indian businesses actually operate — TRAI-compliant, GST-ready, and priced the way you pay.
           </p>
         </ScrollReveal>
 
-        <ScrollReveal>
-          <div
-            className="grid grid-cols-1 gap-6 lg:grid-cols-[17rem_1fr] lg:gap-8"
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
-            onFocus={() => setPaused(true)}
-            onBlur={(e) => {
-              // Only resume once focus has actually left the whole grid, not
-              // just moved from one stepper button to the next inside it.
-              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false)
-            }}
-          >
-            {/* ---------- STEPPER ---------- */}
-            <div className="relative">
-              <div
-                ref={stepperRef}
-                className="-mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:snap-none lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden"
+        <div className="sticky top-16 z-30 -mx-6 mt-8 flex gap-2 overflow-x-auto border-b border-border/40 bg-background/90 px-6 py-2.5 backdrop-blur-md lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {STAGES.map((s, i) => {
+            const isActive = s.key === activeStage
+            return (
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => scrollToStage(s.key)}
+                className={`flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
+                  isActive
+                    ? "border-primary bg-primary/15 text-primary font-bold shadow-sm"
+                    : "border-border/60 bg-card/40 text-muted-foreground"
+                }`}
               >
-                {STAGES.map((s, i) => {
-                  const isActive = s.key === activeStage
-                  const isLast = i === STAGES.length - 1
-                  return (
+                <span
+                  className="flex size-5 items-center justify-center rounded-full text-[10px] font-bold transition-all"
+                  style={
+                    isActive
+                      ? { background: s.accent, color: "var(--background)" }
+                      : { background: "var(--muted)", color: "var(--muted-foreground)" }
+                  }
+                >
+                  {i + 1}
+                </span>
+                <span>{s.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="mx-auto mt-12 grid max-w-5xl gap-10 lg:grid-cols-[290px_1fr] lg:gap-14">
+          <nav aria-label="Feature groups" className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
+            <div className="space-y-1.5">
+              <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground font-mono">
+                Explore
+              </p>
+              {STAGES.map((s, i) => {
+                const isActive = s.key === activeStage
+                return (
+                  <div
+                    key={s.key}
+                    className={`rounded-2xl transition-all duration-300 ${
+                      isActive
+                        ? "bg-primary/[0.12] border border-primary/30 shadow-lg shadow-black/40"
+                        : "border border-transparent hover:bg-white/[0.04]"
+                    }`}
+                  >
                     <button
-                      key={s.key}
                       type="button"
-                      // "step", not "true" — these are a numbered sequence, and
-                      // aria-current has a dedicated token for exactly that
-                      // case. Without this a screen-reader user tabbing
-                      // through the five buttons has no way to tell which
-                      // stage is actually showing on the right.
-                      aria-current={isActive ? "step" : undefined}
-                      onClick={() => selectStage(s.key)}
-                      // Hover previews the stage, same as FeatureShowcase's
-                      // list above — guarded to mouse so a touch scroll
-                      // through the phone rail doesn't flip stages as a
-                      // finger drags past them.
-                      onPointerEnter={(e) => {
-                        if (e.pointerType === "mouse") selectStage(s.key)
-                      }}
-                      onFocus={() => selectStage(s.key)}
-                      className="group relative flex shrink-0 snap-start items-start gap-3 overflow-hidden rounded-xl border px-3 py-3 text-left transition-[border-color,translate] duration-300 hover:translate-x-0.5 lg:w-full lg:shrink lg:pb-6 lg:pt-3"
-                      style={{
-                        borderColor: isActive ? "color-mix(in srgb, var(--features-blue) 30%, transparent)" : "transparent",
-                      }}
+                      onClick={() => scrollToStage(s.key)}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`flex w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-left text-base font-semibold transition-colors ${
+                        isActive
+                          ? "text-primary font-bold"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
                     >
-                      {/* Connecting line behind the numbers, desktop only */}
-                      {!isLast && (
-                        <span
-                          aria-hidden
-                          className="absolute left-[27px] top-11 hidden h-full w-px lg:block"
-                          style={{ background: "var(--border)" }}
-                        />
-                      )}
-                      {/* Auto-advance progress — resets and fills over
-                          AUTO_ADVANCE_MS every time this becomes the active
-                          stage, frozen mid-fill while paused (hover/focus
-                          anywhere in the section). Reduced-motion users never
-                          see it start, since the effect above never advances
-                          for them either. */}
-                      {isActive && !reduced && (
-                        <span
-                          aria-hidden
-                          className="absolute inset-x-0 bottom-0 h-[2px] overflow-hidden rounded-full bg-white/5 lg:left-3 lg:right-3 lg:bottom-1"
-                        >
-                          <span
-                            key={s.key}
-                            className="journey-progress-fill block h-full rounded-full"
-                            style={{
-                              background: s.accent,
-                              animationDuration: `${AUTO_ADVANCE_MS}ms`,
-                              animationPlayState: paused ? "paused" : "running",
-                            }}
-                          />
-                        </span>
-                      )}
                       <span
-                        className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-medium tabular-nums transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105"
-                        style={{
-                          background: isActive ? s.accent : "transparent",
-                          borderColor: isActive ? s.accent : "var(--border)",
-                          color: isActive ? "var(--background)" : "var(--muted-foreground)",
-                        }}
+                        className={`flex size-8 shrink-0 items-center justify-center rounded-lg border text-sm font-bold transition-all duration-300 ${
+                          isActive
+                            ? "border-primary bg-primary text-white shadow-md scale-105"
+                            : "border-border text-muted-foreground"
+                        }`}
+                        style={
+                          isActive
+                            ? {
+                                background: s.accent,
+                                borderColor: s.accent,
+                                color: "var(--background)",
+                              }
+                            : undefined
+                        }
                       >
                         {i + 1}
                       </span>
-                      <span className="min-w-0 max-w-[11rem] lg:max-w-none">
-                        <span
-                          className={`block font-heading text-sm font-medium tracking-[-0.01em] transition-colors duration-300 ${
-                            isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
-                          }`}
-                        >
-                          {s.label}
-                        </span>
-                        <span className="mt-1 hidden text-xs font-light leading-relaxed text-muted-foreground lg:block">
-                          {isActive ? s.description : ""}
-                        </span>
-                      </span>
+                      <span className="font-heading">{s.label}</span>
                     </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* ---------- ACCORDION ---------- */}
-            <div>
-              <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-border pb-2.5">
-                <span className="font-heading text-base font-medium tracking-[-0.015em] text-foreground">
-                  {stage.label}
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/60">
-                  {stage.items.length} {stage.items.length === 1 ? "feature" : "features"}
-                </span>
-              </div>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={stage.key}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6, transition: { duration: 0.12 } }}
-                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex flex-col gap-2"
-                >
-                  {stage.items.map((item) => {
-                    const Icon = item.icon
-                    const isOpen = openItem === item.title
-                    return (
-                      <div
-                        key={item.title}
-                        className="group/item overflow-hidden rounded-xl border border-border bg-card/30 transition-[border-color,translate] duration-300 hover:-translate-y-0.5 hover:border-white/20"
+                    {isActive && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
                       >
+                        <p className="px-3.5 pb-3.5 pl-[52px] text-sm leading-relaxed text-muted-foreground/90 font-light">
+                          {s.description}
+                        </p>
+                      </motion.div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </nav>
+
+          <div className="space-y-12">
+            {STAGES.map((s) => (
+              <section key={s.key} id={s.key} className="scroll-mt-24">
+                <div className="flex items-baseline justify-between gap-4">
+                  <h3 className="text-lg font-bold tracking-tight text-foreground sm:text-xl font-heading">
+                    {s.label}
+                  </h3>
+                  <span className="shrink-0 text-xs font-medium text-muted-foreground font-mono">
+                    {s.items.length} features
+                  </span>
+                </div>
+                <p className="mt-1 text-sm text-muted-foreground font-light">
+                  {s.description}
+                </p>
+
+                <div className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border/80 bg-card/40 backdrop-blur-md shadow-lg shadow-black/20">
+                  {s.items.map((item) => {
+                    const Icon = item.icon
+                    const isOpen = !!openItems[item.title]
+                    return (
+                      <div key={item.title} className="transition-colors">
                         <button
                           type="button"
-                          onClick={() => setOpenItem(isOpen ? null : item.title)}
+                          onClick={() => toggleItem(item.title)}
                           aria-expanded={isOpen}
-                          className="flex w-full items-start gap-3 px-3.5 py-3 text-left"
+                          className="flex w-full items-start gap-3.5 p-4 text-left transition-colors hover:bg-white/[0.03]"
                         >
                           <span
-                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-transform duration-300 group-hover/item:scale-105"
+                            className="flex size-9 shrink-0 items-center justify-center rounded-lg border transition-transform duration-300"
                             style={{
-                              background: `color-mix(in srgb, ${stage.accent} 14%, transparent)`,
-                              borderColor: `color-mix(in srgb, ${stage.accent} 32%, transparent)`,
-                              color: stage.accent,
+                              background: `color-mix(in srgb, ${s.accent} 12%, transparent)`,
+                              borderColor: `color-mix(in srgb, ${s.accent} 28%, transparent)`,
+                              color: s.accent,
                             }}
                           >
-                            <Icon className="h-4 w-4" aria-hidden />
+                            <Icon className="size-4" aria-hidden="true" />
                           </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-medium leading-snug text-foreground">
-                              {item.title}
-                            </span>
-                            <span className="mt-0.5 block text-xs font-light leading-snug text-muted-foreground">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <h4 className="text-sm font-semibold text-foreground font-heading">
+                                {item.title}
+                              </h4>
+                              <ChevronDown
+                                className={`size-4 shrink-0 text-muted-foreground transition-transform duration-300 ${
+                                  isOpen ? "rotate-180 text-foreground" : ""
+                                }`}
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground font-light">
                               {item.blurb}
-                            </span>
-                          </span>
-                          <ChevronDown
-                            className={`mt-1 h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-transform duration-300 ${
-                              isOpen ? "rotate-180" : ""
-                            }`}
-                            aria-hidden
-                          />
+                            </p>
+                            <AnimatePresence initial={false}>
+                              {isOpen && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                                  className="overflow-hidden"
+                                >
+                                  <p className="mt-2.5 pt-2.5 border-t border-border/40 text-xs leading-relaxed text-muted-foreground/90 font-light">
+                                    {item.detail}
+                                  </p>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
                         </button>
-                        <AnimatePresence initial={false}>
-                          {isOpen && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                              className="overflow-hidden"
-                            >
-                              <p
-                                className="border-t px-3.5 py-3 pl-[3.25rem] text-xs font-light leading-relaxed text-muted-foreground"
-                                style={{ borderColor: "var(--border)" }}
-                              >
-                                {item.detail}
-                              </p>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
                       </div>
                     )
                   })}
-                </motion.div>
-              </AnimatePresence>
-            </div>
+                </div>
+              </section>
+            ))}
           </div>
-        </ScrollReveal>
+        </div>
       </div>
     </section>
   )

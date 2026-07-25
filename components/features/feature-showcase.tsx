@@ -4,15 +4,9 @@ import { useEffect, useRef, useState } from "react"
 import type { ComponentType, ElementType } from "react"
 import {
   AudioLines,
-  Hand,
-  PhoneCall,
   Languages,
-  Wrench,
   Repeat,
-  ShieldCheck,
   Activity,
-  Webhook,
-  Mic,
   CalendarClock,
   Network,
   Check,
@@ -22,20 +16,8 @@ import {
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
-/**
- * FeatureShowcase
- * An explorer instead of a wall of cards: a scannable index on the left,
- * one large animated detail panel on the right.
- *
- * Twelve equal cards made the page enormous and gave every capability the
- * same weight, so nothing stood out. Here only one feature is expanded at a
- * time — the section stays a fixed height no matter how many features exist,
- * and each one gets room for a real explanation plus its own visual.
- */
-
 type Category = "Voice" | "Telephony" | "Integrations" | "Operations"
 
-/** Every feature gets its own motif — see the motif components below. */
 type MotifKey =
   | "latency"
   | "turntaking"
@@ -61,18 +43,11 @@ type Feature = {
   points: string[]
 }
 
-/**
- * One accent per category, so colour carries meaning instead of just cycling.
- * All four come from the brand reference's chart palette — the set that doc
- * designates for distinguishing series. Crimson is deliberately left out: the
- * brand assigns it to errors/destructive actions, so using it for a feature
- * category would read as a warning.
- */
 const CATEGORY_ACCENT: Record<Category, string> = {
-  Voice: "var(--features-blue)", // #2F8FE0 bright blue
-  Telephony: "var(--features-blue-deep)", // #1E6FD6 swoosh blue
-  Integrations: "var(--features-green)", // #1F9D55 growth green
-  Operations: "var(--features-amber)", // #F2A71B amber
+  Voice: "var(--features-blue)",
+  Telephony: "var(--features-blue-deep)",
+  Integrations: "var(--features-green)",
+  Operations: "var(--features-amber)",
 }
 
 const FEATURES: Feature[] = [
@@ -122,14 +97,14 @@ const FEATURES: Feature[] = [
   },
   {
     icon: Activity,
-    title: "Transcript, analytics & recording",
+    title: "Live transcripts & recordings",
     tag: "Operations",
     motif: "transcript",
-    blurb: "Real-time transcripts, sentiment analytics, and PII redaction out of the box.",
+    blurb: "Searchable, speaker-labeled, and compliance-ready.",
     detail:
-      "Every call is streamed to text with speaker labels, sentiment detection, and conversion tracking — with automatic PII/PCI redaction before encrypted storage and customizable retention windows.",
-    stat: { value: "100%", label: "Transcribed & secured" },
-    points: ["Speaker-labelled transcripts", "Automatic PII redaction", "Sentiment & intent analytics"],
+      "Every call streamed to text with speaker labels, sentiment, and automated recording with PII redaction — search phrases across calls and review audio and transcripts from one place.",
+    stat: { value: "100%", label: "Transcribed & recorded" },
+    points: ["Speaker-labelled transcripts", "Automatic PII redaction", "Searchable audio & text"],
   },
   {
     icon: Network,
@@ -144,27 +119,11 @@ const FEATURES: Feature[] = [
   },
 ]
 
-/* ---------------------------------------------------------------------- */
-/* Motifs — one bespoke animation per feature, rendered in the detail panel.
-   Every value here is a static literal (never Math.random / Date), because
-   these end up in inline styles that must match between the server render
-   and hydration.                                                          */
-/* ---------------------------------------------------------------------- */
-
 type MotifProps = { accent: string; reduced: boolean | null }
 
-/**
- * `w-full` is load-bearing. The motif container in the panel is a flex box
- * (it needs `flex-1` to absorb the slack when the panel stretches to the
- * list's height), which makes this shell a flex item — and a flex item with
- * no width shrinks to its content. Every motif that spans the panel then
- * collapsed: the transfer motif's two avatars ended up touching in the middle
- * with the connecting line squeezed out of existence.
- */
 const shell = "relative flex h-24 w-full items-center justify-center"
 const loop = Number.POSITIVE_INFINITY
 
-/** 1. Latency — a pulse racing across a timing track against tick marks. */
 function LatencyMotif({ accent, reduced }: MotifProps) {
   return (
     <div className={shell}>
@@ -192,7 +151,6 @@ function LatencyMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 2. Turn-taking — caller and agent waveforms trading the floor. */
 function TurnTakingMotif({ accent, reduced }: MotifProps) {
   const rows = [
     { label: "Caller", delay: 0 },
@@ -225,7 +183,6 @@ function TurnTakingMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 3. Noise removal — jagged input on the left, clean output on the right. */
 function NoiseMotif({ accent, reduced }: MotifProps) {
   const noisy = [0.9, 0.3, 1, 0.45, 0.75, 0.2, 0.95, 0.35]
   const clean = [0.5, 0.65, 0.6, 0.7, 0.62, 0.68, 0.55, 0.64]
@@ -263,14 +220,11 @@ function NoiseMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 4. Multilingual — greetings cycling through languages. */
 const GREETINGS = [
-  { text: "Hello", code: "en-US" },
-  { text: "Hola", code: "es-ES" },
-  { text: "Bonjour", code: "fr-FR" },
-  { text: "नमस्ते", code: "hi-IN" },
-  { text: "こんにちは", code: "ja-JP" },
-  { text: "Hallo", code: "de-DE" },
+  { text: "Hello", code: "en-US · American English" },
+  { text: "Hello", code: "en-GB · British English" },
+  { text: "Hello", code: "en-IN · Indian English" },
+  { text: "Hello", code: "en-AU · Australian English" },
 ]
 
 function LanguagesMotif({ accent, reduced }: MotifProps) {
@@ -304,18 +258,6 @@ function LanguagesMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/**
- * 5. Carrier — DIDs on the left, your trunk on the right, the tower routing
- * between them.
- *
- * The earlier version was a lone pulsing dot centred in a very wide box, which
- * read as empty rather than minimal and said nothing about what the feature
- * does. This one puts the actual claim on screen: numbers in many countries,
- * on the carrier you already have.
- *
- * The country-code column and the trunk label drop out below sm — at 320px the
- * five-part row would collapse into slivers, and the tower alone still reads.
- */
 function CarrierMotif({ accent, reduced }: MotifProps) {
   const codes = ["+1", "+44", "+91"]
   const mix = (pct: number) => `color-mix(in srgb, ${accent} ${pct}%, transparent)`
@@ -323,7 +265,6 @@ function CarrierMotif({ accent, reduced }: MotifProps) {
   return (
     <div className={shell}>
       <div className="flex w-full max-w-sm items-center justify-center gap-2 px-2 sm:gap-3">
-        {/* Local numbers */}
         <div className="hidden shrink-0 flex-col gap-1 sm:flex">
           {codes.map((c, i) => (
             <motion.span
@@ -340,7 +281,6 @@ function CarrierMotif({ accent, reduced }: MotifProps) {
 
         <Hop accent={accent} reduced={reduced} delays={[0, 0.9]} />
 
-        {/* Tower + expanding arcs */}
         <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
           {[0, 1, 2].map((i) => (
             <motion.span
@@ -362,7 +302,6 @@ function CarrierMotif({ accent, reduced }: MotifProps) {
 
         <Hop accent={accent} reduced={reduced} delays={[0.45, 1.35]} />
 
-        {/* Your existing trunk */}
         <div className="hidden shrink-0 flex-col items-center gap-1 sm:flex">
           <span
             className="rounded-md border px-1.5 py-0.5 font-mono text-[9px] leading-none"
@@ -379,7 +318,6 @@ function CarrierMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** A hairline with packets running along it. Shared by the carrier motif. */
 function Hop({ accent, reduced, delays }: MotifProps & { delays: number[] }) {
   return (
     <div className="relative h-px min-w-6 flex-1" style={{ background: `color-mix(in srgb, ${accent} 25%, transparent)` }}>
@@ -397,7 +335,6 @@ function Hop({ accent, reduced, delays }: MotifProps & { delays: number[] }) {
   )
 }
 
-/** 6. Transfer — context handed from one party to the next. */
 function TransferMotif({ accent, reduced }: MotifProps) {
   return (
     <div className={shell}>
@@ -430,7 +367,6 @@ function TransferMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 7. Tools — a hub firing requests out to four services and back. */
 function ToolsMotif({ accent, reduced }: MotifProps) {
   const satellites = [
     { left: "12%", top: "18%" },
@@ -467,7 +403,6 @@ function ToolsMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 8. Calendar — an open slot getting booked. */
 function CalendarMotif({ accent, reduced }: MotifProps) {
   const booked = 7
   return (
@@ -494,7 +429,6 @@ function CalendarMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 9. Webhooks — event packets streaming down a lane. */
 function WebhooksMotif({ accent, reduced }: MotifProps) {
   return (
     <div className={shell}>
@@ -514,7 +448,6 @@ function WebhooksMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 10. Transcript — lines of speech landing as they're spoken. */
 function TranscriptMotif({ accent, reduced }: MotifProps) {
   const lines = [
     { w: "72%", mine: false },
@@ -556,7 +489,6 @@ function TranscriptMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 11. Redaction — sensitive digits masking themselves out. */
 function RedactionMotif({ accent, reduced }: MotifProps) {
   return (
     <div className={shell}>
@@ -592,7 +524,6 @@ function RedactionMotif({ accent, reduced }: MotifProps) {
   )
 }
 
-/** 12. Concurrency — a grid of calls lighting up all at once. */
 function ConcurrencyMotif({ accent, reduced }: MotifProps) {
   return (
     <div className={shell}>
@@ -608,7 +539,6 @@ function ConcurrencyMotif({ accent, reduced }: MotifProps) {
               duration: 2.4,
               repeat: loop,
               ease: "easeInOut",
-              // row + column offset gives a diagonal sweep across the grid
               delay: ((i % 10) + Math.floor(i / 10)) * 0.09,
             }}
           />
@@ -640,23 +570,9 @@ export function FeatureShowcase() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [paused, setPaused] = useState(false)
 
-  /**
-   * Roving arrow-key navigation.
-   *
-   * The tablist runs horizontally on phones and vertically from lg, so all
-   * four arrows are handled rather than picking an orientation — the same
-   * reason `aria-orientation` was dropped: it can't be statically correct for
-   * both. Focus moves with the selection, which is what makes the automatic
-   * activation pattern usable: without it, arrowing changed the panel while
-   * focus sat on whichever tab was tabbed to.
-   */
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const railRef = useRef<HTMLDivElement | null>(null)
 
-  // Same fix as the FeatureJourney stepper below: keeps the active chip
-  // visible on the phone rail whenever the selection changes — hover, click,
-  // or arrow keys — instead of leaving it to whoever's driving the selection
-  // to also happen to be looking at the right part of the scrolled-off rail.
   useEffect(() => {
     const container = railRef.current
     const activeEl = tabRefs.current[activeIndex]
@@ -665,11 +581,6 @@ export function FeatureShowcase() {
     container.scrollTo({ left: Math.max(0, target), behavior: reduced ? "auto" : "smooth" })
   }, [activeIndex, reduced])
 
-  // Auto-advance through the twelve capabilities, same pattern as
-  // FeatureJourney's stepper: pauses on hover/focus so a reader who's
-  // actually looking at one doesn't have it swapped out from under them,
-  // and skips entirely under reduced motion (paired with the fact that the
-  // scroll effect above also drops to an instant jump in that case).
   useEffect(() => {
     if (paused || reduced) return
     const id = setTimeout(() => {
@@ -717,17 +628,12 @@ export function FeatureShowcase() {
       className="features-hero-dark relative overflow-hidden border-t border-border"
       style={{ background: "var(--features-hero-bg)" }}
     >
-      {/* Ambient glow removed — flat black canvas per the /features theme. */}
-
       <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:py-16">
-        {/* Centred to match every other section header on the page — this was
-            the only one still left-aligned. */}
         <ScrollReveal className="mx-auto max-w-2xl text-center">
           <span className="ai-pill-blue">
             <span className="h-1 w-1 rounded-full bg-current" />
             The toolkit
           </span>
-          {/* H2 — Archivo 500, −1.4px tracking */}
           <h2 className="mt-5 text-balance font-heading text-2xl font-medium leading-[1.05] tracking-[-0.03em] text-foreground sm:text-3xl md:text-4xl">
             Essential building blocks, one platform.
           </h2>
@@ -737,44 +643,20 @@ export function FeatureShowcase() {
           </p>
         </ScrollReveal>
 
-        {/* `items-stretch` is the default, but stated explicitly because the
-            two columns matching height is the whole point of this row: the
-            list sets it and the panel fills it. */}
         <div
           className="mt-10 grid grid-cols-1 items-stretch gap-4 lg:mt-14 lg:grid-cols-12 lg:gap-6"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
           onBlur={(e) => {
-            // Only resume once focus actually leaves the whole explorer —
-            // without the `contains` check, tabbing between chips blurs one
-            // and refocuses the next on the very next tick, which would flash
-            // the auto-advance back on between them.
             if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false)
           }}
         >
-          {/* INDEX — horizontal snap rail on phones, vertical list from lg.
-              Three things here are load-bearing:
-              · `layoutScroll` — the active background is a `layoutId` element,
-                and inside a scrollable ancestor motion measures against the
-                viewport unless told to account for scroll offset, so the
-                highlight jumped to the wrong chip once the rail was scrolled.
-              · `scroll-pl-*` — the snapport is the scrollport minus scroll
-                padding, which defaults to 0. Without it the only valid snap
-                position for chip 1 is scrollLeft:16 (it sits behind `px-4`), so
-                mandatory snapping shunts it flush to the screen edge and out of
-                line with the heading above.
-              · scrollbar hidden — `overflow-x-auto` holds until lg, so between
-                768 and 1023px Windows and Linux draw a bar under the rail. */}
           <motion.div
             ref={railRef}
             layoutScroll
             role="tablist"
             aria-label="Platform features"
-            // Right-edge fade on the phone rail so it's obvious the chips run
-            // off-screen and can be scrolled. It's a mask that softens the last
-            // ~2rem to transparent; switched off at lg where the list is a
-            // vertical column with nothing hidden.
             className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
@@ -789,56 +671,23 @@ export function FeatureShowcase() {
                   }}
                   role="tab"
                   aria-selected={isActive}
-                  // Roving tabindex: one stop for the whole list, then arrows.
-                  // Twelve individually tabbable tabs meant a keyboard user had
-                  // to press Tab twelve times to get past this section.
                   tabIndex={isActive ? 0 : -1}
                   onKeyDown={(e) => onTabKeyDown(e, i)}
                   onClick={() => setActiveIndex(i)}
-                  // Hover opens the panel — no click needed. Guarded to mouse:
-                  // on a touch device `pointerenter` fires on tap alongside
-                  // click, and a finger dragged down the list while scrolling
-                  // would otherwise flip panels the whole way.
                   onPointerEnter={(e) => {
                     if (e.pointerType === "mouse") setActiveIndex(i)
                   }}
-                  // Keyboard gets the same behaviour: focus selects, so arrowing
-                  // through the list reveals each panel in turn. Paired with the
-                  // roving tabindex and the arrow handler above, this is the
-                  // full ARIA "automatic activation" tabs pattern.
                   onFocus={() => setActiveIndex(i)}
-                  // Desktop rows are ~56px: py-2 around a 15px title and a 12px
-                  // blurb. The column is ~390px wide and the titles are short,
-                  // so at 13px the row read as mostly empty space — the type
-                  // sizes are set against the box, not shrunk to fit a height
-                  // target.
-                  //
-                  // Phone chips cap at 13rem. Uncapped, the longest title ran
-                  // ~305px against ~304px of visible track — exactly one chip
-                  // on screen at 320px. The cap buys a chip and a half, not
-                  // two; two full chips would need a ~9rem cap, which leaves
-                  // 70px of title and clips almost every one of them.
                   className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border border-border bg-card/30 px-3 py-2 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:border-0 lg:bg-transparent lg:py-1 lg:hover:translate-x-1"
                 >
-                  {/* Sliding active background — one element that animates
-                      between rows rather than 12 cross-fading backgrounds. */}
                   {isActive && (
                     <motion.span
                       layoutId="showcase-active"
-                      // -inset-px, not inset-0: `inset-0` resolves to the
-                      // padding box, i.e. inside the chip's own 1px border on
-                      // mobile, stacking two borders with mismatched corner
-                      // radii. This sits on top of it instead.
                       className="absolute -inset-px rounded-xl border border-border bg-card lg:inset-0"
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
 
-                  {/* Auto-advance progress — same element as FeatureJourney's
-                      stepper: fills over AUTO_ADVANCE_MS while this chip is
-                      active, freezes mid-fill on hover/focus pause, and never
-                      renders for reduced-motion users since it never advances
-                      for them either. */}
                   {isActive && !reduced && (
                     <span
                       aria-hidden
@@ -856,9 +705,6 @@ export function FeatureShowcase() {
                     </span>
                   )}
 
-                  {/* Edge marker. Half-height on hover, full when selected, so
-                      the row still acknowledges the cursor in the instant
-                      before the active background slides across. */}
                   <span
                     aria-hidden
                     className={`absolute -left-1 top-1/2 hidden h-5 w-[2px] -translate-y-1/2 rounded-full transition-[scale,opacity] duration-300 lg:block ${
@@ -868,10 +714,6 @@ export function FeatureShowcase() {
                   />
 
                   <span
-                    // Back to 32px on desktop now the row carries two lines:
-                    // the text block is ~34px tall, so it drives the row height
-                    // and a 28px tile just looked undersized next to it. Costs
-                    // nothing in height.
                     className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105 lg:h-7 lg:w-7"
                     style={{
                       background: isActive
@@ -887,38 +729,17 @@ export function FeatureShowcase() {
                   </span>
                   <span className="relative min-w-0 flex-1">
                     <span
-                      // Two lines on the rail, one in the list. With the blurb
-                      // hidden on phones the title is the only label a chip
-                      // has, and at the 13rem cap seven of the twelve would
-                      // otherwise clip mid-word ("Recording, redactio…").
-                      // Both states are line-clamp so there's no display/
-                      // white-space conflict to resolve between breakpoints.
                       className={`text-sm font-medium leading-snug transition-colors line-clamp-2 lg:line-clamp-1 lg:text-sm ${
                         isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
                       {f.title}
                     </span>
-                    {/* Desktop list only. On the phone rail a second line would
-                        widen every chip and cut how many fit on screen, which is
-                        already the rail's weak point. In the vertical list it
-                        costs nothing horizontally.
-
-                        Shown on every row, never only the selected one:
-                        revealing it just for the active row would change that
-                        row's height and shove everything below it down by ~16px
-                        mid-hover, handing the cursor a different item than the
-                        one it was pointing at. */}
                     <span className="hidden truncate text-[11px] font-light leading-snug text-muted-foreground/70 lg:block">
                       {f.blurb}
                     </span>
                   </span>
 
-                  {/* Category tag, desktop only. The rows are ~390px wide and
-                      the titles are short, so most of that width was empty —
-                      this fills it with the one piece of information the row
-                      was missing, and colour-codes the list into its four
-                      groups at a glance. */}
                   <span
                     className="relative ml-auto hidden shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] transition-opacity duration-300 lg:inline-block"
                     style={{
@@ -935,11 +756,6 @@ export function FeatureShowcase() {
             })}
           </motion.div>
 
-          {/* Swipe hint — phone/tablet only, where the index is a horizontal
-              rail. Spells out that the twelve capabilities scroll, with a
-              nudging arrow, since the edge fade alone reads as decoration to
-              some. Hidden from lg up, where the list is a full vertical column
-              with nothing off-screen. */}
           <div className="mt-3 flex items-center justify-center gap-2 lg:hidden">
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/60">
               Swipe · all {FEATURES.length} capabilities
@@ -955,16 +771,8 @@ export function FeatureShowcase() {
             </motion.span>
           </div>
 
-          {/* DETAIL PANEL.
-              `lg:h-full` on both wrappers is what keeps the two columns the
-              same height. Twelve rows at ~56px run ~690px while the panel's own
-              content only needs ~490px, so the list used to hang three rows
-              past the bottom of the box. Grid items already stretch; the panel
-              just wasn't passing that height down to the card, so the card sat
-              at content height inside a full-height cell. */}
           <div className="lg:col-span-7 lg:h-full">
             <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/30 shadow-xl shadow-black/30 backdrop-blur-md">
-              {/* Panel chrome */}
               <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   capability · {String(activeIndex + 1).padStart(2, "0")}/{String(FEATURES.length).padStart(2, "0")}
@@ -981,12 +789,6 @@ export function FeatureShowcase() {
                 </span>
               </div>
 
-              {/* `mode="wait"` stays — the panel is in normal flow, so letting
-                  two versions overlap would jump the section's height. But the
-                  exit is deliberately much faster than the entrance now that
-                  hovering swaps panels: at a symmetric 0.28s each, sweeping the
-                  cursor down twelve rows queues 0.56s per swap and the panel
-                  visibly trails the pointer. Fast out, unhurried in. */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active.title}
@@ -997,24 +799,10 @@ export function FeatureShowcase() {
                   className="flex flex-1 flex-col p-3.5 sm:p-4"
                   role="tabpanel"
                 >
-                  {/* Motif. Takes the slack when the panel is stretched to the
-                      list's height — better the illustration breathes than the
-                      copy floats away from its heading. Capped so it can't
-                      balloon the section: on a shorter list it just centers
-                      in the available space instead of filling it.
-                      Gradient fill removed — at up to 140px tall and full
-                      width this was a permanent (not hover-gated) tinted
-                      panel, which read as a navy/blue box rather than the
-                      flat black canvas the rest of the page keeps. The motif
-                      itself still carries every bit of colour. */}
                   <div className="flex flex-1 max-h-[140px] items-center justify-center rounded-xl border border-border px-4 py-2.5">
                     <ActiveMotif accent={accent} reduced={reduced} />
                   </div>
 
-                  {/* Stacks on phones. Sitting the copy beside a 44px icon in
-                      a 246px panel leaves it ~186px — about twenty-five
-                      characters a line, so the detail paragraph ran ten
-                      lines. */}
                   <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                     <span
                       className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
@@ -1027,7 +815,6 @@ export function FeatureShowcase() {
                       <ActiveIcon className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <div className="min-w-0">
-                      {/* H4 / card title — Archivo 500, −0.48px tracking */}
                       <h3 className="font-heading text-lg font-medium leading-[1.2] tracking-[-0.02em] text-foreground sm:text-xl">
                         {active.title}
                       </h3>
@@ -1038,7 +825,6 @@ export function FeatureShowcase() {
                   </div>
 
                   <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-5">
-                    {/* Headline stat */}
                     <div className="sm:col-span-2">
                       <p className="font-heading text-2xl font-medium tracking-[-0.025em] text-foreground sm:text-3xl">
                         {active.stat.value}
@@ -1047,7 +833,6 @@ export function FeatureShowcase() {
                         {active.stat.label}
                       </p>
                     </div>
-                    {/* Supporting points — Inter 400, 14px */}
                     <ul className="space-y-1.5 sm:col-span-3">
                       {active.points.map((p) => (
                         <li key={p} className="flex items-start gap-2.5 text-sm leading-[1.4] text-muted-foreground">
