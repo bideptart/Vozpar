@@ -771,11 +771,7 @@ export function FeatureShowcase() {
             layoutScroll
             role="tablist"
             aria-label="Platform features"
-            // Right-edge fade on the phone rail so it's obvious the chips run
-            // off-screen and can be scrolled. It's a mask that softens the last
-            // ~2rem to transparent; switched off at lg where the list is a
-            // vertical column with nothing hidden.
-            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
+            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:h-full lg:snap-none lg:scroll-pl-0 lg:flex-col lg:justify-between lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
               const isActive = i === activeIndex

@@ -657,7 +657,7 @@ export function FeatureShowcase() {
             layoutScroll
             role="tablist"
             aria-label="Platform features"
-            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
+            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:h-full lg:snap-none lg:scroll-pl-0 lg:flex-col lg:justify-between lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
               const isActive = i === activeIndex
@@ -678,7 +678,7 @@ export function FeatureShowcase() {
                     if (e.pointerType === "mouse") setActiveIndex(i)
                   }}
                   onFocus={() => setActiveIndex(i)}
-                  className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border border-border bg-card/30 px-3 py-2 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:border-0 lg:bg-transparent lg:py-1 lg:hover:translate-x-1"
+                  className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border border-border bg-card/30 px-3 py-2 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:border-0 lg:bg-transparent lg:py-2.5 lg:hover:translate-x-1"
                 >
                   {isActive && (
                     <motion.span
