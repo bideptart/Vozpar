@@ -1,34 +1,34 @@
 "use client"
 
 import Link from "next/link"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef } from "react"
 import { Search, ArrowRight, CreditCard, Phone, Headset, Shield, Users, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { FAQ_GROUPS } from "@/lib/faq"
 import { RelatedLinks } from "@/components/seo/related-links"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
 
 const getCategoryIcon = (id: string) => {
   switch (id) {
-    case "billing":
-      return <CreditCard className="h-8 w-8" />
-    case "phone-numbers":
-      return <Phone className="h-8 w-8" />
-    case "agents":
-      return <Headset className="h-8 w-8" />
-    case "compliance":
-      return <Shield className="h-8 w-8" />
-    case "account":
-      return <Users className="h-8 w-8" />
-    default:
-      return null
+    case "billing":       return <CreditCard className="h-4 w-4" />
+    case "phone-numbers": return <Phone className="h-4 w-4" />
+    case "agents":        return <Headset className="h-4 w-4" />
+    case "compliance":    return <Shield className="h-4 w-4" />
+    case "account":       return <Users className="h-4 w-4" />
+    default:              return null
   }
 }
 
 export default function FaqClient() {
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   const filteredGroups = useMemo(() => {
     let groups = FAQ_GROUPS
@@ -41,7 +41,7 @@ export default function FaqClient() {
       const query = searchQuery.toLowerCase()
       groups = groups.map(group => ({
         ...group,
-        items: group.items.filter(item => 
+        items: group.items.filter(item =>
           item.q.toLowerCase().includes(query) || item.a.toLowerCase().includes(query)
         )
       })).filter(group => group.items.length > 0)
@@ -50,37 +50,37 @@ export default function FaqClient() {
     return groups
   }, [searchQuery, activeCategory])
 
-  // Duplicate categories for infinite scroll
-  const categoriesForScroll = [...FAQ_GROUPS, ...FAQ_GROUPS]
-
   return (
     <>
-      <section className="relative overflow-hidden border-b border-border/50">
+      <section className="relative overflow-hidden border-b border-white/10 bg-black">
+        <FloatingAccents />
+        <ParticleField />
+        <FloatingIconBadges />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.10),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
         />
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
         />
-        <div className="relative mx-auto w-full max-w-6xl px-4 py-20 md:px-6 md:py-28">
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-28 md:px-6 md:py-44">
           <ScrollReveal className="text-center">
             <span className="ai-pill-magenta">
               <span className="h-1 w-1 rounded-full bg-accent" />
               FAQ
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl">
+            <h1 className="mt-8 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl lg:text-7xl">
               Everything you <span className="text-primary">wanted to know.</span>
             </h1>
-            <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg max-w-3xl mx-auto">
+            <p className="mt-6 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg max-w-2xl mx-auto">
               Pricing, credit expiry, phone numbers, compliance, and account access — all in one place. Still stuck?
               The team replies within an hour during business days.
             </p>
           </ScrollReveal>
 
           {/* Search Bar */}
-          <ScrollReveal className="mt-10">
+          <ScrollReveal className="mt-36 md:mt-44">
             <div className="relative mx-auto max-w-xl group">
               <div className="absolute -inset-1.5 rounded-full bg-primary/20 blur opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative flex items-center">
@@ -94,8 +94,8 @@ export default function FaqClient() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-12 pr-32 py-4 text-base rounded-full border-2 border-primary/30 bg-card focus:outline-none focus:border-primary/50 transition-all duration-300"
                 />
-                <button 
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
+                <button
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
                 >
                   Search <ArrowRight className="h-4 w-4" />
                 </button>
@@ -103,68 +103,71 @@ export default function FaqClient() {
             </div>
           </ScrollReveal>
 
-          {/* Category Cards - Infinite Scroll */}
-          <ScrollReveal className="mt-10">
-            <div className="overflow-hidden">
-              <div className="flex gap-4 marquee">
-                {categoriesForScroll.map((g, idx) => (
-                  <button
-                    key={`${g.id}-${idx}`}
-                    onClick={() => { 
-                      if (activeCategory === g.id) {
-                        setActiveCategory(null)
-                      } else {
-                        setActiveCategory(g.id)
-                      }
-                      setSearchQuery("")
-                    }}
-                    className={`flex-shrink-0 flex flex-col items-center gap-3 p-6 rounded-xl border-2 min-w-[180px] transition-all duration-300 duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 ${
-                      activeCategory === g.id
-                        ? "border-primary bg-primary/10 text-primary shadow-lg shadow-primary/20 scale-105 scale-105"
-                        : "border-border/50 bg-card/50 text-muted-foreground hover:border-primary/50 hover:text-foreground hover:scale-105 hover:shadow-lg hover:shadow-primary/20"
-                    }`}
-                  >
-                    <div className="text-primary">
-                      {getCategoryIcon(g.id)}
-                    </div>
-                    <span className="text-center font-medium">
-                      {g.title}
-                    </span>
-                  </button>
-                ))}
-              </div>
+          {/* Category tabs — slim flat pills like 9278.ai reference */}
+          <ScrollReveal className="mt-8">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {FAQ_GROUPS.map((g) => (
+                <button
+                  key={g.id}
+                  onClick={() => {
+                    if (activeCategory === g.id) {
+                      setActiveCategory(null)
+                    } else {
+                      setActiveCategory(g.id)
+                      setTimeout(() => {
+                        contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                      }, 50)
+                    }
+                    setSearchQuery("")
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    activeCategory === g.id
+                      ? "bg-primary text-white shadow-md shadow-primary/30 border border-primary"
+                      : "border border-white/15 text-slate-400 hover:border-primary/40 hover:text-white hover:bg-primary/10"
+                  }`}
+                >
+                  <span className={activeCategory === g.id ? "text-white" : "text-primary"}>
+                    {getCategoryIcon(g.id)}
+                  </span>
+                  {g.title}
+                </button>
+              ))}
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-5xl px-4 py-16 md:px-6 md:py-24">
+      <div ref={contentRef} className="bg-black mx-auto w-full max-w-5xl px-4 pt-10 pb-16 md:px-6 md:pt-14 md:pb-24 scroll-mt-20">
         {filteredGroups.map((group) => (
-          <section key={group.id} id={group.id} className="scroll-mt-24 border-b border-border/50 py-10 first:pt-0 last:border-b-0">
+          <section key={group.id} id={group.id} className="scroll-mt-24 border-b border-white/[0.07] py-10 first:pt-0 last:border-b-0">
             <ScrollReveal>
-              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{group.title}</h2>
+              <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">{group.title}</h2>
             </ScrollReveal>
 
-            <ScrollReveal className="mt-6 space-y-4">
+            <ScrollReveal className="mt-6 space-y-3">
               {group.items.map((item, i) => (
-                <div key={i} className="group">
+                <div key={i} className="group/faq">
                   <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem 
-                      value={`${group.id}-${i}`} 
-                      className="border-0 rounded-2xl bg-card/50 px-6 py-4 data-[state=open]:bg-card data-[state=open]:shadow-lg transition-all duration-300 duration-300 hover:shadow-md hover:shadow-primary/10 hover:border-primary/30 hover:border-2"
+                    <AccordionItem
+                      value={`${group.id}-${i}`}
+                      className="border-0 rounded-2xl bg-[#0b0b0e] border border-white/[0.07] px-6 py-1
+                        transition-all duration-300 ease-out
+                        hover:border-primary/30 hover:bg-[#0f0f14] hover:shadow-[0_0_0_1px_rgba(4,107,210,0.15),0_8px_32px_-8px_rgba(4,107,210,0.20)]
+                        data-[state=open]:bg-[#0f0f14] data-[state=open]:border-primary/40
+                        data-[state=open]:shadow-[0_0_0_1px_rgba(4,107,210,0.25),0_12px_40px_-8px_rgba(4,107,210,0.18)]"
                     >
-                      <AccordionTrigger className="text-left text-base font-medium hover:no-underline group-hover:no-underline">
-                        <div className="flex items-center gap-3">
-                          <span className="text-foreground">{item.q}</span>
+                      <AccordionTrigger className="text-left text-base font-medium hover:no-underline text-white py-5 group-hover/faq:text-primary/90 transition-colors duration-300 [&>svg]:text-slate-500 [&>svg]:group-hover/faq:text-primary [&>svg]:transition-colors [&>svg]:duration-300">
+                        <div className="flex items-center gap-3 pr-4">
+                          <span>{item.q}</span>
                           {item.popular && (
-                            <span className="flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium">
+                            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium border border-primary/20">
                               <Zap className="h-3 w-3 fill-current" />
                               Popular
                             </span>
                           )}
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent className="text-pretty leading-relaxed text-muted-foreground pt-2">
+                      <AccordionContent className="text-pretty leading-relaxed text-slate-400 pt-0 pb-5 text-[15px]">
                         {item.a}
                       </AccordionContent>
                     </AccordionItem>
@@ -177,13 +180,13 @@ export default function FaqClient() {
       </div>
 
       {/* Still have a question section */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
+      <section className="bg-black mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
         <ScrollReveal>
-          <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-primary/5 p-8 md:p-12 shadow-xl">
+          <div className="relative overflow-hidden rounded-3xl border border-white/[0.07] bg-[#0b0b0e] p-8 md:p-12 shadow-xl">
             {/* Background glow */}
-            <div className="absolute -inset-4 bg-primary/10 blur-2xl opacity-50" />
-            <div className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
-            <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
+            <div className="absolute -inset-4 bg-primary/10 blur-2xl opacity-40" />
+            <div className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-primary/15 blur-3xl" />
+            <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-primary/15 blur-3xl" />
             
             <div className="relative z-10">
               <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
