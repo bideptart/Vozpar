@@ -33,7 +33,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Qualifies every buyer and seller lead around the clock, books showings straight onto your calendar, and follows up the instant a listing gets a hit.",
     pitch:
-      "Most leads go cold in the first five minutes — on hold, or leaving a voicemail nobody returns. 9278.ai answers instantly, qualifies buyers and sellers with the same discipline as your best agent, and books the showing directly on your calendar, so every conversation you join starts with context instead of a cold callback.",
+      "Most leads go cold in the first five minutes — on hold, or leaving a voicemail nobody returns. Vozpar answers instantly, qualifies buyers and sellers with the same discipline as your best agent, and books the showing directly on your calendar, so every conversation you join starts with context instead of a cold callback.",
     jobs: [
       "Answers Zillow, Redfin, and website leads in under three seconds",
       "Qualifies budget, timeline, financing, and motivation before you pick up",
@@ -54,7 +54,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Confirms appointments, fills last-minute cancellations, and answers insurance and treatment questions — without pulling the front desk off the patient in the chair.",
     pitch:
-      "Front desks miss a fifth to nearly half of inbound calls during lunch and after hours. 9278.ai picks up every one: confirms cleanings, refills cancellations from your waitlist, answers insurance questions with precision, and routes only the genuine emergencies to your team.",
+      "Front desks miss a fifth to nearly half of inbound calls during lunch and after hours. Vozpar picks up every one: confirms cleanings, refills cancellations from your waitlist, answers insurance questions with precision, and routes only the genuine emergencies to your team.",
     jobs: [
       "Confirms and reschedules cleanings, hygiene, and ortho visits",
       "Fills last-minute openings straight from your cancellation list",
@@ -75,7 +75,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Handles patient intake, prescription refills, and reminder calls with a calm, HIPAA-aware bedside tone your patients won't distinguish from a person.",
     pitch:
-      "Health systems are buried in repetitive phone work. 9278.ai automates intake, refill requests, post-visit follow-ups, and benefits questions with a warm, unhurried bedside tone that elderly and ESL patients genuinely respond to.",
+      "Health systems are buried in repetitive phone work. Vozpar automates intake, refill requests, post-visit follow-ups, and benefits questions with a warm, unhurried bedside tone that elderly and ESL patients genuinely respond to.",
     jobs: [
       "Captures new-patient intake and demographic details",
       "Routes prescription refill requests to the pharmacy",
@@ -96,7 +96,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Captures every after-hours service request, dispatches the right technician, and makes sure a slow callback never costs you the job again.",
     pitch:
-      "HVAC, plumbing, electrical, and roofing contractors live and die by callback speed. 9278.ai answers every after-hours and weekend call, captures the job details, prices emergencies correctly, and books the right technician straight onto your dispatch board.",
+      "HVAC, plumbing, electrical, and roofing contractors live and die by callback speed. Vozpar answers every after-hours and weekend call, captures the job details, prices emergencies correctly, and books the right technician straight onto your dispatch board.",
     jobs: [
       "Handles after-hours emergency intake — no AC, no heat, water leak",
       "Triages same-day versus scheduled work",
@@ -117,7 +117,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Takes reservations, confirms large parties, and answers hours and menu questions fluently — in any accent your guests speak.",
     pitch:
-      "Phones during dinner rush are a tax on your host stand. 9278.ai handles reservations, confirms large parties, answers hours and menu questions, and routes catering inquiries — so your hosts can stay focused on the room, not the receiver.",
+      "Phones during dinner rush are a tax on your host stand. Vozpar handles reservations, confirms large parties, answers hours and menu questions, and routes catering inquiries — so your hosts can stay focused on the room, not the receiver.",
     jobs: [
       "Books and modifies reservations on OpenTable and Resy",
       "Qualifies large-party and private-event requests",
@@ -138,7 +138,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Books service, follows up on every test drive, and keeps the BDC lines open around the clock, across every rooftop you run.",
     pitch:
-      "Dealerships still lose deals overnight. 9278.ai handles service scheduling, test-drive follow-ups, parts inquiries, and trade-in questions — for a single rooftop or a multi-state dealer group, on one platform.",
+      "Dealerships still lose deals overnight. Vozpar handles service scheduling, test-drive follow-ups, parts inquiries, and trade-in questions — for a single rooftop or a multi-state dealer group, on one platform.",
     jobs: [
       "Books service appointments by VIN and mileage",
       "Follows up on test drives with credit pre-qualification",
@@ -159,7 +159,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Screens new clients, qualifies cases by jurisdiction and statute of limitations, and books consults — without a paralegal chained to the phone.",
     pitch:
-      "Personal-injury, immigration, and family-law firms live or die on lead intake. 9278.ai screens every inbound call against your conflict and qualification rules, captures the facts your attorneys actually need, and books a paid consult before the lead shops your competitor.",
+      "Personal-injury, immigration, and family-law firms live or die on lead intake. Vozpar screens every inbound call against your conflict and qualification rules, captures the facts your attorneys actually need, and books a paid consult before the lead shops your competitor.",
     jobs: [
       "Routes by practice area and runs conflict checks",
       "Screens statute-of-limitations and jurisdiction fit",
@@ -180,7 +180,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Runs admissions intake, financial-aid follow-ups, and student-success calls — without burning out your enrollment counselors.",
     pitch:
-      "Higher-ed and trade schools field hundreds of inquiries a day. 9278.ai handles first-touch outreach, chases financial-aid documents, and runs re-enrollment campaigns, so your counselors only talk to leads who are genuinely ready.",
+      "Higher-ed and trade schools field hundreds of inquiries a day. Vozpar handles first-touch outreach, chases financial-aid documents, and runs re-enrollment campaigns, so your counselors only talk to leads who are genuinely ready.",
     jobs: [
       "Follows up on inquiry forms within 60 seconds",
       "Checks application status and chases missing documents",
@@ -201,7 +201,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Handles order status, returns, and sizing questions 24/7 in any language, in a tone that matches your brand.",
     pitch:
-      "DTC brands hit support volume spikes the moment a campaign takes off. 9278.ai absorbs the surge — order status, returns, sizing, and post-purchase upsells — and escalates only the genuinely upset customers to a human.",
+      "DTC brands hit support volume spikes the moment a campaign takes off. Vozpar absorbs the surge — order status, returns, sizing, and post-purchase upsells — and escalates only the genuinely upset customers to a human.",
     jobs: [
       "Provides order status and tracking updates",
       "Handles returns, exchanges, and warranty intake",
@@ -222,7 +222,7 @@ export const INDUSTRIES: Industry[] = [
     short:
       "Books classes, recovers no-shows, and sells memberships for studios and gyms — without a front-desk human on every call.",
     pitch:
-      "Boutique gyms, yoga studios, and PT clinics fill classes by phone and text. 9278.ai books classes, recovers no-shows within minutes, sells memberships, and re-engages lapsed members, at a fraction of the cost of an answering service.",
+      "Boutique gyms, yoga studios, and PT clinics fill classes by phone and text. Vozpar books classes, recovers no-shows within minutes, sells memberships, and re-engages lapsed members, at a fraction of the cost of an answering service.",
     jobs: [
       "Books classes and trainers on Mindbody, Mariana Tek, and ClubReady",
       "Handles membership freeze, cancel, and upgrade requests",

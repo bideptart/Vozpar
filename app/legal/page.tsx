@@ -10,7 +10,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 export const metadata: Metadata = pageSeo({
   title: "Legal & Compliance Center",
   description:
-    "All 9278.ai legal and compliance documents in one place — terms, privacy, acceptable use, AI-voice disclosure, recording, cookies, DPA, sub-processors, billing, SLA, E911, and accessibility.",
+    "All Vozpar legal and compliance documents in one place — terms, privacy, acceptable use, AI-voice disclosure, recording, cookies, DPA, sub-processors, billing, SLA, E911, and accessibility.",
   path: "/legal",
 })
 
@@ -20,7 +20,7 @@ const GROUPS: { heading: string; docs: Doc[] }[] = [
   {
     heading: "Core agreements",
     docs: [
-      { title: "Terms of Service", href: "/terms", description: "The Master Services Agreement governing your use of 9278.ai." },
+      { title: "Terms of Service", href: "/terms", description: "The Master Services Agreement governing your use of Vozpar." },
       { title: "Privacy Policy", href: "/privacy", description: "How we collect, use, safeguard, and share information." },
       { title: "Acceptable Use Policy", href: "/acceptable-use", description: "Lawful-use rules — calling, texting, AI voice, and prohibited conduct." },
       { title: "AI Voice Disclosure & Responsible-AI", href: "/ai-disclosure", description: "Disclosing AI to callers, no deepfakes, and responsible AI use." },
@@ -78,7 +78,7 @@ export default function LegalCenterPage() {
               Compliance <span className="text-primary">Center.</span>
             </h1>
             <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              9278.ai is operated by Ace Peak Invest Pte Ltd (Singapore) for the USA, EU, UK, and Latin America. Every
+              Vozpar is operated by Ace Peak Invest Pte Ltd (Singapore) for the USA, EU, UK, and Latin America. Every
               policy that governs the platform is here.
             </p>
           </ScrollReveal>
@@ -116,8 +116,8 @@ export default function LegalCenterPage() {
 
         <ScrollReveal className="mt-14 rounded-2xl border border-border/60 bg-card/30 px-6 py-8 text-sm text-muted-foreground md:px-8">
           <p>
-            Questions about any policy? Contact <a className="text-primary hover:underline" href="mailto:legal@9278.ai">legal@9278.ai</a>{" "}
-            (legal), <a className="text-primary hover:underline" href="mailto:privacy@9278.ai">privacy@9278.ai</a>{" "}
+            Questions about any policy? Contact <a className="text-primary hover:underline" href="mailto:legal@Vozpar">legal@Vozpar</a>{" "}
+            (legal), <a className="text-primary hover:underline" href="mailto:privacy@Vozpar">privacy@Vozpar</a>{" "}
             (privacy/DPO), or <Link className="text-primary hover:underline" href="/contact">our contact page</Link>. Operator:
             Ace Peak Invest Pte Ltd, 1 Scotts Road #24-10 Shaw Centre, Singapore 228208.
           </p>

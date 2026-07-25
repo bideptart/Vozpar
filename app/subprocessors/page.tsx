@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Sub-Processor List",
   description:
-    "The third-party sub-processors 9278.ai engages to help provide the Services — infrastructure, communications/voice, AI (LLM/ASR/TTS), and payments/analytics/support — with safeguards.",
+    "The third-party sub-processors Vozpar engages to help provide the Services — infrastructure, communications/voice, AI (LLM/ASR/TTS), and payments/analytics/support — with safeguards.",
   path: "/subprocessors",
 })
 
@@ -14,10 +14,10 @@ export default function SubProcessorsPage() {
   return (
     <LegalPage title="Sub-Processor" accent="List." name="Sub-Processor List" path="/subprocessors">
       <p>
-        A sub-processor is a third party 9278.ai engages to process personal data to help provide the Services, per the{" "}
+        A sub-processor is a third party Vozpar engages to process personal data to help provide the Services, per the{" "}
         <Link href="/privacy">Privacy Policy</Link> and <Link href="/dpa">DPA</Link>. We impose data-protection terms on
         each and require appropriate safeguards (EU SCCs / UK IDTA where relevant). Business customers can subscribe to
-        change notifications at <a href="mailto:privacy@9278.ai">privacy@9278.ai</a>; we give at least 14 days&apos;
+        change notifications at <a href="mailto:privacy@Vozpar">privacy@Vozpar</a>; we give at least 14 days&apos;
         notice before adding a new sub-processor that processes Customer Personal Data.
       </p>
 
@@ -37,7 +37,7 @@ export default function SubProcessorsPage() {
       <ul>
         <li>
           <strong>Your connected carrier(s) / SIP provider(s)</strong> — call origination/termination and DID
-          provisioning. 9278.ai connects to the carrier account you bring; those numbers and charges remain with your
+          provisioning. Vozpar connects to the carrier account you bring; those numbers and charges remain with your
           carrier under its terms.
         </li>
         <li>
@@ -74,16 +74,16 @@ export default function SubProcessorsPage() {
         </li>
       </ul>
       <p>
-        App stores (Apple, Google) act as independent controllers for their own platform processing and are not 9278.ai
+        App stores (Apple, Google) act as independent controllers for their own platform processing and are not Vozpar
         sub-processors.
       </p>
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Privacy:</strong> <a href="mailto:privacy@9278.ai">privacy@9278.ai</a></li>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
+        <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

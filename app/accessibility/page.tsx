@@ -5,7 +5,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Accessibility Statement",
   description:
-    "9278.ai's commitment to accessible websites, dashboard, and apps — aligning with WCAG 2.1 AA, ADA / Section 508, the European Accessibility Act / EN 301 549, and the UK Equality Act.",
+    "Vozpar's commitment to accessible websites, dashboard, and apps — aligning with WCAG 2.1 AA, ADA / Section 508, the European Accessibility Act / EN 301 549, and the UK Equality Act.",
   path: "/accessibility",
 })
 
@@ -13,7 +13,7 @@ export default function AccessibilityPage() {
   return (
     <LegalPage title="Accessibility" accent="Statement." name="Accessibility Statement" path="/accessibility">
       <p>
-        9278.ai wants its websites, dashboard, and applications to be usable by everyone, including people who use
+        Vozpar wants its websites, dashboard, and applications to be usable by everyone, including people who use
         assistive technology.
       </p>
 
@@ -46,16 +46,16 @@ export default function AccessibilityPage() {
       <h2>3. Get Help or Report a Barrier</h2>
       <p>
         If you cannot access part of the Services or need information in another format, contact{" "}
-        <a href="mailto:accessibility@9278.ai">accessibility@9278.ai</a>. We will acknowledge within 5 business days and
+        <a href="mailto:accessibility@Vozpar">accessibility@Vozpar</a>. We will acknowledge within 5 business days and
         aim to resolve within 20 business days.
       </p>
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Accessibility:</strong> <a href="mailto:accessibility@9278.ai">accessibility@9278.ai</a></li>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
+        <li><strong>Accessibility:</strong> <a href="mailto:accessibility@Vozpar">accessibility@Vozpar</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

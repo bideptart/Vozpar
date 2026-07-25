@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Acceptable Use Policy",
   description:
-    "The rules for using 9278.ai AI voice agents lawfully — calling and texting compliance (TCPA, CAN-SPAM, 10DLC, STIR/SHAKEN, ePrivacy), AI-voice disclosure, recording consent, and prohibited conduct.",
+    "The rules for using Vozpar AI voice agents lawfully — calling and texting compliance (TCPA, CAN-SPAM, 10DLC, STIR/SHAKEN, ePrivacy), AI-voice disclosure, recording consent, and prohibited conduct.",
   path: "/acceptable-use",
 })
 
@@ -99,27 +99,27 @@ export default function AcceptableUsePage() {
       <h2>6. Service Integrity and Fraud</h2>
       <p>
         Do not resell except as your plan permits; place artificial, fraudulent, or traffic-pumping traffic; share one
-        account to evade limits; or degrade the Services for others. 9278.ai runs fraud and toll-fraud monitoring and may
+        account to evade limits; or degrade the Services for others. Vozpar runs fraud and toll-fraud monitoring and may
         block suspicious traffic.
       </p>
 
       <h2>7. Enforcement</h2>
       <p>
-        Report abuse to <a href="mailto:abuse@9278.ai">abuse@9278.ai</a>. 9278.ai may investigate, suspend or terminate
+        Report abuse to <a href="mailto:abuse@Vozpar">abuse@Vozpar</a>. Vozpar may investigate, suspend or terminate
         accounts, block traffic, remove content, and cooperate with carriers, regulators, and law enforcement; for fraud,
         illegal traffic, or safety risks it may act immediately. To appeal, email{" "}
-        <a href="mailto:legal@9278.ai">legal@9278.ai</a> with &ldquo;Account Appeal&rdquo;. We may update this AUP on at
+        <a href="mailto:legal@Vozpar">legal@Vozpar</a> with &ldquo;Account Appeal&rdquo;. We may update this AUP on at
         least 30 days&apos; notice for material changes.
       </p>
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Legal:</strong> <a href="mailto:legal@9278.ai">legal@9278.ai</a></li>
-        <li><strong>Privacy:</strong> <a href="mailto:privacy@9278.ai">privacy@9278.ai</a></li>
-        <li><strong>Abuse:</strong> <a href="mailto:abuse@9278.ai">abuse@9278.ai</a></li>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
+        <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
+        <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
+        <li><strong>Abuse:</strong> <a href="mailto:abuse@Vozpar">abuse@Vozpar</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

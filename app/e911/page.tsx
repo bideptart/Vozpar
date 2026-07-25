@@ -5,7 +5,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Emergency Calling (E911) Notice",
   description:
-    "Important safety notice: 9278.ai is an interconnected internet-voice service and is not a replacement for traditional phone service. Emergency calling may be limited or unavailable — always keep an alternative.",
+    "Important safety notice: Vozpar is an interconnected internet-voice service and is not a replacement for traditional phone service. Emergency calling may be limited or unavailable — always keep an alternative.",
   path: "/e911",
 })
 
@@ -22,7 +22,7 @@ export default function E911Page() {
       <h2>1. How Emergency Calling May Differ</h2>
       <ul>
         <li>
-          9278.ai may not be able to connect a call to emergency services (911 in the US, 112 in the EU/UK, and local
+          Vozpar may not be able to connect a call to emergency services (911 in the US, 112 in the EU/UK, and local
           equivalents), and may not transmit your location or call-back number.
         </li>
         <li>
@@ -46,18 +46,18 @@ export default function E911Page() {
 
       <h2>3. Acknowledgment</h2>
       <p>
-        As required by the FCC for interconnected voice in the US, 9278.ai provides this advisory and obtains an
+        As required by the FCC for interconnected voice in the US, Vozpar provides this advisory and obtains an
         affirmative acknowledgment of these 911 limitations at activation. Equivalent obligations apply in other markets.
         Emergency-calling capability varies by country and number type; contact{" "}
-        <a href="mailto:support@9278.ai">support@9278.ai</a> for the position in a specific country.
+        <a href="mailto:support@Vozpar">support@Vozpar</a> for the position in a specific country.
       </p>
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
-        <li><strong>Legal:</strong> <a href="mailto:legal@9278.ai">legal@9278.ai</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
+        <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

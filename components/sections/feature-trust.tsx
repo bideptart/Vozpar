@@ -243,7 +243,7 @@ export function FeatureTrust() {
         </div>
 
         {/* Entity strip. Routed to /contact rather than the support mailbox:
-            that address is on the 9278.ai domain, and this page is branded
+            that address is on the Vozpar domain, and this page is branded
             Vozpar — printing the other name here is the kind of mismatch a
             procurement reader notices in a section about trust. The contact
             page reaches the same team without asserting a second identity. */}

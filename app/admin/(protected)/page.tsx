@@ -14,7 +14,7 @@ export default async function AdminOverviewPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Real-time revenue, MRR and account health for 9278.ai.
+          Real-time revenue, MRR and account health for Vozpar.
         </p>
       </div>
 

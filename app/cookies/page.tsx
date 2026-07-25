@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Cookie Policy",
   description:
-    "How 9278.ai uses cookies and similar technologies (localStorage/sessionStorage) across its website and dashboard, the categories used, and how to manage your choices — including GPC and US opt-out.",
+    "How Vozpar uses cookies and similar technologies (localStorage/sessionStorage) across its website and dashboard, the categories used, and how to manage your choices — including GPC and US opt-out.",
   path: "/cookies",
 })
 
@@ -14,7 +14,7 @@ export default function CookiePolicyPage() {
   return (
     <LegalPage title="Cookie" accent="Policy." name="Cookie Policy" path="/cookies">
       <p>
-        This Cookie Policy explains how 9278.ai uses cookies and similar technologies (including localStorage and
+        This Cookie Policy explains how Vozpar uses cookies and similar technologies (including localStorage and
         sessionStorage) on its websites and dashboard. It supports our <Link href="/privacy">Privacy Policy</Link>.
       </p>
 
@@ -52,9 +52,9 @@ export default function CookiePolicyPage() {
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Privacy:</strong> <a href="mailto:privacy@9278.ai">privacy@9278.ai</a></li>
+        <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

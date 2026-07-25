@@ -9,7 +9,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       <div className="grid min-h-dvh grid-cols-1 lg:grid-cols-[260px_1fr]">
         <aside className="hidden border-r border-border/60 bg-card/40 lg:flex lg:flex-col">
           <div className="flex h-16 items-center border-b border-border/60 px-6">
-            <Link href="/admin" aria-label="9278.ai super-admin home">
+            <Link href="/admin" aria-label="Vozpar super-admin home">
               <Logo height={28} />
             </Link>
           </div>

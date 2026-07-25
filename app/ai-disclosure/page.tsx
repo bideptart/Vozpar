@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "AI Voice Disclosure & Responsible-AI Policy",
   description:
-    "How 9278.ai handles AI-voice disclosure, no impersonation or deepfakes, AI-voice telemarketing consent, human escalation, accuracy limits, and responsible use — reflecting the EU AI Act, FCC, and FTC.",
+    "How Vozpar handles AI-voice disclosure, no impersonation or deepfakes, AI-voice telemarketing consent, human escalation, accuracy limits, and responsible use — reflecting the EU AI Act, FCC, and FTC.",
   path: "/ai-disclosure",
 })
 
@@ -16,7 +16,7 @@ export default function AiDisclosurePage() {
       <p>
         This Policy supplements the <Link href="/terms">Terms</Link>,{" "}
         <Link href="/acceptable-use">AUP</Link>, <Link href="/privacy">Privacy Policy</Link>, and{" "}
-        <Link href="/dpa">DPA</Link> and applies to every AI voice agent built on 9278.ai. It reflects the EU AI Act, the
+        <Link href="/dpa">DPA</Link> and applies to every AI voice agent built on Vozpar. It reflects the EU AI Act, the
         US FCC&apos;s 2024 AI-voice ruling, the FTC&apos;s prohibition on deceptive AI voice, and comparable Latin
         American consumer-protection expectations.
       </p>
@@ -63,7 +63,7 @@ export default function AiDisclosurePage() {
       <p>
         Calls handled by your AI agent involve collecting personal data and (where enabled) recording. You must obtain
         the consents and give the notices required by GDPR/UK GDPR, US state law, the LGPD or other LATAM laws, and the{" "}
-        <Link href="/recording-notice">Recording &amp; Monitoring Notice</Link>. 9278.ai does not use your call content
+        <Link href="/recording-notice">Recording &amp; Monitoring Notice</Link>. Vozpar does not use your call content
         to train generative models without your documented consent.
       </p>
 
@@ -75,11 +75,11 @@ export default function AiDisclosurePage() {
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Legal:</strong> <a href="mailto:legal@9278.ai">legal@9278.ai</a></li>
-        <li><strong>Privacy:</strong> <a href="mailto:privacy@9278.ai">privacy@9278.ai</a></li>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
+        <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
+        <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

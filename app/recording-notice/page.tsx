@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Call & Interaction Recording and Monitoring Notice",
   description:
-    "9278.ai's recording, live-monitoring, transcription, and call-forwarding features and the consent obligations that apply — US one/all-party states, EU/UK GDPR, and Latin American laws.",
+    "Vozpar's recording, live-monitoring, transcription, and call-forwarding features and the consent obligations that apply — US one/all-party states, EU/UK GDPR, and Latin American laws.",
   path: "/recording-notice",
 })
 
@@ -17,7 +17,7 @@ export default function RecordingNoticePage() {
         This Notice explains the recording and monitoring features of the Services and the consent obligations that
         apply when you use them. It supports the <Link href="/terms">MSA</Link>,{" "}
         <Link href="/privacy">Privacy Policy</Link>, <Link href="/acceptable-use">AUP</Link>, and{" "}
-        <Link href="/dpa">DPA</Link>. When you use these features you are the controller and 9278.ai is your processor;
+        <Link href="/dpa">DPA</Link>. When you use these features you are the controller and Vozpar is your processor;
         the legal duty to record and monitor lawfully is yours.
       </p>
 
@@ -42,7 +42,7 @@ export default function RecordingNoticePage() {
       <h2>2. Consent — It Varies by Location</h2>
       <p>
         A recording of an identifiable person is personal data. Laws differ and a call can connect people in different
-        places. The safe rule 9278.ai recommends is to treat every interaction as requiring all-party consent: announce
+        places. The safe rule Vozpar recommends is to treat every interaction as requiring all-party consent: announce
         recording/monitoring and AI handling at the start and proceed only if participants agree.
       </p>
       <ul>
@@ -65,14 +65,14 @@ export default function RecordingNoticePage() {
       <p>
         Listening to, recording, or monitoring agents is employee monitoring. You must inform agents in advance, have a
         lawful basis (and, in the EU/UK, often complete a balancing test or DPIA), and follow local employment rules.
-        9278.ai provides configurable announcements and recording controls; using them does not transfer the legal duty
+        Vozpar provides configurable announcements and recording controls; using them does not transfer the legal duty
         to you-as-employer.
       </p>
 
       <h2>4. How Recordings Are Handled</h2>
       <p>
-        9278.ai stores and processes recordings and transcripts on your behalf to provide the feature and secure the
-        Services; 9278.ai does not sell them. Retention settings let you keep recordings no longer than necessary. On
+        Vozpar stores and processes recordings and transcripts on your behalf to provide the feature and secure the
+        Services; Vozpar does not sell them. Retention settings let you keep recordings no longer than necessary. On
         account closure, recordings remain available for export for a defined window, then are deleted, unless legal
         retention applies.
       </p>
@@ -87,11 +87,11 @@ export default function RecordingNoticePage() {
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Privacy:</strong> <a href="mailto:privacy@9278.ai">privacy@9278.ai</a></li>
-        <li><strong>Legal:</strong> <a href="mailto:legal@9278.ai">legal@9278.ai</a></li>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
+        <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
+        <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

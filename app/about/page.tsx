@@ -12,7 +12,7 @@ import { RelatedLinks } from "@/components/seo/related-links"
 export const metadata: Metadata = pageSeo({
   title: "About",
   description:
-    "9278.ai builds AI voice agents that actually sound human — carrier-grade, self-hosted, and sub-second. Operated by Ace Peak Invest Pte Ltd across the USA, Europe, UK, and Latin America.",
+    "Vozpar builds AI voice agents that actually sound human — carrier-grade, self-hosted, and sub-second. Operated by Ace Peak Invest Pte Ltd across the USA, Europe, UK, and Latin America.",
   path: "/about",
 })
 
@@ -76,13 +76,13 @@ export default function AboutPage() {
           <ScrollReveal>
             <span className="ai-pill-magenta">
               <span className="h-1 w-1 rounded-full bg-accent" />
-              About 9278.ai
+              About Vozpar
             </span>
             <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
               Voice AI that <span className="text-primary">actually sounds human.</span>
             </h1>
             <p className="mt-6 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              9278.ai helps businesses build, launch, and scale AI voice agents that answer and place real phone calls —
+              Vozpar helps businesses build, launch, and scale AI voice agents that answer and place real phone calls —
               with native audio, sub-second latency, and the carrier you already trust.
             </p>
           </ScrollReveal>
@@ -101,7 +101,7 @@ export default function AboutPage() {
             didn&rsquo;t help: they were slow, robotic, and obviously machines.
           </p>
           <p>
-            We started 9278.ai to change that. Our platform runs an audio-native conversational engine that listens,
+            We started Vozpar to change that. Our platform runs an audio-native conversational engine that listens,
             interrupts, and responds in real time — so a caller feels heard, not processed. It plugs into your existing
             carrier and knowledge base, and you run it from a control panel you host yourself.
           </p>
@@ -129,7 +129,7 @@ export default function AboutPage() {
         <ScrollReveal className="mb-10 max-w-2xl">
           <h2 className="text-balance text-3xl font-serif font-normal tracking-tight md:text-4xl">What we believe</h2>
           <p className="mt-3 text-pretty text-muted-foreground">
-            The principles behind every agent you build on 9278.ai.
+            The principles behind every agent you build on Vozpar.
           </p>
         </ScrollReveal>
         <div className="grid gap-5 md:grid-cols-2">
@@ -161,7 +161,7 @@ export default function AboutPage() {
               Carrier-grade, globally.
             </h2>
             <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-              9278.ai is operated by <strong className="text-foreground">Ace Peak Invest Pte Ltd</strong>, a company
+              Vozpar is operated by <strong className="text-foreground">Ace Peak Invest Pte Ltd</strong>, a company
               registered in Singapore, with voice infrastructure spanning the USA, Europe, the UK, and Latin America. We
               run on real telecom rails — not a demo — with the licensing and robocall-mitigation that carrier-grade
               calling requires.
@@ -188,7 +188,7 @@ export default function AboutPage() {
                 <Link href="/contact" className="text-primary hover:underline">
                   contact the team
                 </Link>{" "}
-                or email support@9278.ai.
+                or email support@Vozpar.
               </p>
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function AboutPage() {
       </section>
 
       <RelatedLinks
-        heading="Explore 9278.ai"
+        heading="Explore Vozpar"
         description="Features, pricing, and the fastest way to get started."
         links={[
           {

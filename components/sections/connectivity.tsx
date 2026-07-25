@@ -10,7 +10,7 @@ const items = [
     icon: PhoneForwarded,
     title: "Bring your own number",
     description:
-      "Already have a carrier account? Connect it and your existing numbers route through 9278.ai instantly — no porting, no downtime.",
+      "Already have a carrier account? Connect it and your existing numbers route through Vozpar instantly — no porting, no downtime.",
   },
   {
     icon: Globe2,
@@ -199,7 +199,7 @@ function NetworkDashboard() {
               <span className="ml-2 align-middle text-xs font-medium text-primary">▲ 18.2%</span>
             </p>
           </div>
-          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-primary">9278.ai</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-primary">Vozpar</span>
         </div>
 
         {/* Area chart — grows a little to absorb the small height difference

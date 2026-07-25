@@ -20,7 +20,7 @@ export function OrganizationJsonLd() {
         name: SITE.name,
         url: SITE.url,
         logo: absoluteUrl("/logo.png"),
-        sameAs: ["https://voice.9278.ai/"],
+        sameAs: ["https://voice.Vozpar/"],
       }}
     />
   )

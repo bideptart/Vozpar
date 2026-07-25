@@ -12,7 +12,7 @@ import { RelatedLinks } from "@/components/seo/related-links"
 export const metadata: Metadata = pageSeo({
   title: "Contact",
   description:
-    "Talk to the 9278.ai team about pricing, live demos, partnerships, or help with your AI voice agents. Email support, sales, or call our demo agent live.",
+    "Talk to the Vozpar team about pricing, live demos, partnerships, or help with your AI voice agents. Email support, sales, or call our demo agent live.",
   path: "/contact",
 })
 
@@ -21,20 +21,20 @@ const CHANNELS = [
     icon: Mail,
     title: "Email support",
     description: "For billing, technical issues, and general questions. We respond within one business day.",
-    actionLabel: "support@9278.ai",
-    href: "mailto:support@9278.ai",
+    actionLabel: "support@Vozpar",
+    href: "mailto:support@Vozpar",
   },
   {
     icon: MessageSquare,
     title: "Sales & partnerships",
     description: "Custom plans, reseller partnerships, or enterprise onboarding for high call volumes.",
-    actionLabel: "sales@9278.ai",
-    href: "mailto:sales@9278.ai",
+    actionLabel: "sales@Vozpar",
+    href: "mailto:sales@Vozpar",
   },
   {
     icon: Phone,
     title: "Talk to an agent",
-    description: "The fastest way to hear 9278.ai in action — call our demo agent and test the experience live.",
+    description: "The fastest way to hear Vozpar in action — call our demo agent and test the experience live.",
     actionLabel: "Try a live demo",
     href: "/get-started",
   },
@@ -73,7 +73,7 @@ export default function ContactPage() {
             </h1>
             <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
               Whether you have a question about pricing, want to see a live demo, or need help with your AI voice
-              agents — the 9278.ai team is here.
+              agents — the Vozpar team is here.
             </p>
             <p className="mt-6 inline-flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="h-4 w-4 text-primary" aria-hidden />

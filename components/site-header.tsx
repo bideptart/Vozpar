@@ -61,7 +61,7 @@ export function SiteHeader() {
           {/* Right actions */}
           <div className="flex items-center gap-2">
             <a
-              href="https://voice.9278.ai/" target="_blank" rel="noopener noreferrer"
+              href="https://voice.Vozpar/" target="_blank" rel="noopener noreferrer"
               className="hidden h-9 items-center rounded-full px-4 text-sm text-white/50 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:inline-flex"
             >
               Sign in
@@ -141,7 +141,7 @@ export function SiteHeader() {
                 </ul>
 
                 <div className="mt-4 flex flex-col gap-2 border-t border-white/[0.07] pt-4">
-                  <a href="https://voice.9278.ai/" target="_blank" rel="noopener noreferrer"
+                  <a href="https://voice.Vozpar/" target="_blank" rel="noopener noreferrer"
                     className="flex h-11 items-center justify-center rounded-xl border border-white/10 text-sm text-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
                     Sign in
                   </a>

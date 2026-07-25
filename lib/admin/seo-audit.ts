@@ -41,7 +41,7 @@ export function getRegistry(): SeoEntry[] {
     title: `${i.name} AI voice agents`,
     description:
       i.pitch ??
-      `${i.name} teams use 9278.ai to handle inbound calls, qualify leads, and book appointments around the clock.`,
+      `${i.name} teams use Vozpar to handle inbound calls, qualify leads, and book appointments around the clock.`,
     canonical: absoluteUrl(`/industries/${i.slug}`),
     indexable: true,
     group: "Industry",
@@ -78,7 +78,7 @@ export function getRegistry(): SeoEntry[] {
       path: "/faq",
       title: "Frequently asked questions",
       description:
-        "Answers on pricing, voice credit expiry, phone numbers, AI agents, compliance, and account access at 9278.ai.",
+        "Answers on pricing, voice credit expiry, phone numbers, AI agents, compliance, and account access at Vozpar.",
       canonical: absoluteUrl("/faq"),
       indexable: true,
       group: "Marketing",
@@ -98,7 +98,7 @@ export function getRegistry(): SeoEntry[] {
     {
       path: "/get-started/thanks",
       title: "Payment received",
-      description: "Thanks — we’ve activated your 9278.ai voice credit and are provisioning your agent now.",
+      description: "Thanks — we’ve activated your Vozpar voice credit and are provisioning your agent now.",
       canonical: absoluteUrl("/get-started/thanks"),
       indexable: false,
       group: "Funnel",

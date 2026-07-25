@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Billing, Refund & Cancellation Policy",
   description:
-    "9278.ai billing terms: charges and usage fees, payment terms, automatic renewal and click-to-cancel, EU/UK cooling-off, cancellation, refunds, prepaid credit expiry, and chargebacks.",
+    "Vozpar billing terms: charges and usage fees, payment terms, automatic renewal and click-to-cancel, EU/UK cooling-off, cancellation, refunds, prepaid credit expiry, and chargebacks.",
   path: "/refund-policy",
 })
 
@@ -26,8 +26,8 @@ export default function RefundPolicyPage() {
 
       <h2>2. Payment Terms</h2>
       <p>
-        9278.ai operates primarily on a prepaid voice-credit model; subscription fees, where applicable, are billed in
-        advance via the payment method on file. You authorise 9278.ai and its payment processor to charge for all amounts
+        Vozpar operates primarily on a prepaid voice-credit model; subscription fees, where applicable, are billed in
+        advance via the payment method on file. You authorise Vozpar and its payment processor to charge for all amounts
         due. Failed or late payments may incur interest where permitted and may lead to suspension after notice.
       </p>
 
@@ -49,7 +49,7 @@ export default function RefundPolicyPage() {
       <h2>5. Cancellation</h2>
       <p>
         You may cancel future renewals at any time in account settings or by emailing{" "}
-        <a href="mailto:support@9278.ai">support@9278.ai</a>. Cancellation stops future renewals; the Services continue
+        <a href="mailto:support@Vozpar">support@Vozpar</a>. Cancellation stops future renewals; the Services continue
         until the end of the current paid term. Provisioned numbers are released per carrier rules. Number and data
         handling on exit follow the MSA, <Link href="/dpa">DPA</Link>, and <Link href="/privacy">Privacy Policy</Link>.
       </p>
@@ -65,17 +65,17 @@ export default function RefundPolicyPage() {
 
       <h2>7. Disputed Charges and Chargebacks</h2>
       <p>
-        Contact <a href="mailto:support@9278.ai">support@9278.ai</a> before disputing a charge with your bank; most
+        Contact <a href="mailto:support@Vozpar">support@Vozpar</a> before disputing a charge with your bank; most
         issues resolve within one business day. Accounts with chargebacks may be suspended pending investigation.
         Statutory consumer rights, where they apply, are not affected.
       </p>
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
-        <li><strong>Legal:</strong> <a href="mailto:legal@9278.ai">legal@9278.ai</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
+        <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

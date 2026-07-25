@@ -1,12 +1,12 @@
 "use client"
 
-// Get-started signup widget for www.9278.ai — same design as 9278.io's
+// Get-started signup widget for www.Vozpar — same design as vozpar.io's
 // /get-started (billing toggle + 3 plan cards + account form + order-summary
-// sidebar), but wired to the voice.9278.ai portal with Stripe (USD).
+// sidebar), but wired to the voice.Vozpar portal with Stripe (USD).
 //
-// Flow: fetch live plans from voice.9278.ai → collect account + agent details
+// Flow: fetch live plans from voice.Vozpar → collect account + agent details
 // → POST to /api/stripe/checkout-session/signup → redirect to Stripe Checkout.
-// After payment Stripe returns the customer to voice.9278.ai/signup/success,
+// After payment Stripe returns the customer to voice.Vozpar/signup/success,
 // where the portal finalizes the account and signs them in. The phone number
 // is auto-assigned server-side at checkout (no picker UI here). Agent language
 // defaults to English (en-US) — no language selector.
@@ -26,8 +26,8 @@ import { Separator } from "@/components/ui/separator"
 import { Check, Loader2, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-const PORTAL_BASE = "https://voice.9278.ai"
-const RESELLER_PORTAL = "9278.ai"
+const PORTAL_BASE = "https://voice.Vozpar"
+const RESELLER_PORTAL = "Vozpar"
 const DEFAULT_LANGUAGE = "en-US"   // English by default — no in-form selector
 
 type Plan = {

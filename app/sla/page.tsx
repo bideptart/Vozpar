@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Service Level Agreement (SLA)",
   description:
-    "9278.ai's Service Level Agreement: monthly uptime commitment, support response targets, exclusions, and service credits for paid subscriptions in good standing.",
+    "Vozpar's Service Level Agreement: monthly uptime commitment, support response targets, exclusions, and service credits for paid subscriptions in good standing.",
   path: "/sla",
 })
 
@@ -20,7 +20,7 @@ export default function SlaPage() {
 
       <h2>1. Availability Commitment</h2>
       <p>
-        9278.ai will use commercially reasonable efforts to make the core platform available at least{" "}
+        Vozpar will use commercially reasonable efforts to make the core platform available at least{" "}
         <strong>99.9%</strong> of the time each calendar month (&ldquo;Monthly Uptime&rdquo;), measured as (total minutes
         − Downtime minutes) ÷ total minutes. &ldquo;Downtime&rdquo; means sustained unavailability of core call-handling
         confirmed by our monitoring, excluding the Section 3 items.
@@ -39,7 +39,7 @@ export default function SlaPage() {
         </li>
       </ul>
       <p>
-        Support channels: email <a href="mailto:support@9278.ai">support@9278.ai</a> and the in-dashboard help, with
+        Support channels: email <a href="mailto:support@Vozpar">support@Vozpar</a> and the in-dashboard help, with
         critical (P1) support available 24×7.
       </p>
 
@@ -64,16 +64,16 @@ export default function SlaPage() {
       </ul>
       <p>
         Service credits are the Customer&apos;s sole and exclusive remedy for availability shortfalls. To claim, email{" "}
-        <a href="mailto:support@9278.ai">support@9278.ai</a> within 30 days of the affected month. Credits apply to
+        <a href="mailto:support@Vozpar">support@Vozpar</a> within 30 days of the affected month. Credits apply to
         future invoices and are not refunded in cash.
       </p>
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Support:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a></li>
-        <li><strong>Legal:</strong> <a href="mailto:legal@9278.ai">legal@9278.ai</a></li>
+        <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
+        <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

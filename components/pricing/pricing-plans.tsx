@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
-const PORTAL_BASE = "https://voice.9278.ai"
+const PORTAL_BASE = "https://voice.Vozpar"
 
 function FastAnimatedPrice({ price, suffix }: { price: number; suffix: string }) {
   const [displayPrice, setDisplayPrice] = useState(price)

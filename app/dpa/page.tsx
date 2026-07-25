@@ -6,7 +6,7 @@ import { pageSeo } from "@/lib/seo"
 export const metadata: Metadata = pageSeo({
   title: "Data Processing Agreement",
   description:
-    "9278.ai's Data Processing Agreement (DPA): controller/processor roles, processor obligations, sub-processors, EU SCCs and UK IDTA international transfers, CCPA service-provider and LGPD operador terms, and Art. 32 security measures.",
+    "Vozpar's Data Processing Agreement (DPA): controller/processor roles, processor obligations, sub-processors, EU SCCs and UK IDTA international transfers, CCPA service-provider and LGPD operador terms, and Art. 32 security measures.",
   path: "/dpa",
 })
 
@@ -15,18 +15,18 @@ export default function DpaPage() {
     <LegalPage title="Data Processing" accent="Agreement." name="Data Processing Agreement" path="/dpa">
       <p>
         This Data Processing Agreement (&ldquo;DPA&rdquo;) forms part of the{" "}
-        <Link href="/terms">Master Services Agreement</Link> between Ace Peak Invest Pte Ltd operating 9278.ai
+        <Link href="/terms">Master Services Agreement</Link> between Ace Peak Invest Pte Ltd operating Vozpar
         (&ldquo;Processor&rdquo;, &ldquo;we&rdquo;) and the business customer (&ldquo;Controller&rdquo;,
-        &ldquo;Customer&rdquo;). It applies where 9278.ai processes Customer Personal Data on the Customer&apos;s behalf —
-        in practice, the personal data of the Customer&apos;s callers handled by the AI agent. For 9278.ai&apos;s own
+        &ldquo;Customer&rdquo;). It applies where Vozpar processes Customer Personal Data on the Customer&apos;s behalf —
+        in practice, the personal data of the Customer&apos;s callers handled by the AI agent. For Vozpar&apos;s own
         controller processing, see the <Link href="/privacy">Privacy Policy</Link>.
       </p>
 
       <h2>1. Roles and Instructions</h2>
       <p>
-        The Customer is the controller and 9278.ai the processor of Customer Personal Data. 9278.ai processes only on the
+        The Customer is the controller and Vozpar the processor of Customer Personal Data. Vozpar processes only on the
         Customer&apos;s documented instructions (the MSA, this DPA, and the Customer&apos;s configuration and use of the
-        Services), unless required otherwise by law (in which case 9278.ai informs the Customer where lawful).
+        Services), unless required otherwise by law (in which case Vozpar informs the Customer where lawful).
       </p>
 
       <h2>2. Subject-Matter, Duration and Details (Annex I)</h2>
@@ -77,8 +77,8 @@ export default function DpaPage() {
 
       <h2>5. Sub-Processors</h2>
       <p>
-        The Customer authorises 9278.ai to engage the sub-processors in the{" "}
-        <Link href="/subprocessors">Sub-Processor List</Link> (hosting, AI/ASR/TTS, payments, communications). 9278.ai
+        The Customer authorises Vozpar to engage the sub-processors in the{" "}
+        <Link href="/subprocessors">Sub-Processor List</Link> (hosting, AI/ASR/TTS, payments, communications). Vozpar
         imposes equivalent terms, remains responsible for them, gives at least 14 days&apos; notice of changes, and allows
         objection on reasonable data-protection grounds.
       </p>
@@ -87,23 +87,23 @@ export default function DpaPage() {
       <p>
         For transfers of Customer Personal Data from the EEA/UK to a country without an adequacy decision, the EU SCCs
         (Decision 2021/914), Module Two (Controller-to-Processor), and the UK IDTA/Addendum apply, completed with the
-        Annex I details. 9278.ai, in Singapore, also complies with the PDPA Transfer Limitation Obligation. Transfer
+        Annex I details. Vozpar, in Singapore, also complies with the PDPA Transfer Limitation Obligation. Transfer
         impact assessments are conducted for third-country sub-processors.
       </p>
 
       <h2>7. Jurisdiction-Specific Terms</h2>
       <ul>
         <li>
-          <strong>United States — CCPA/CPRA:</strong> 9278.ai is a &ldquo;service provider&rdquo;, not a &ldquo;third
+          <strong>United States — CCPA/CPRA:</strong> Vozpar is a &ldquo;service provider&rdquo;, not a &ldquo;third
           party&rdquo;; it will not sell/share Customer Personal Data or use it outside the direct business relationship,
           and binds sub-processors equivalently.
         </li>
         <li>
-          <strong>Brazil — LGPD:</strong> 9278.ai acts as operator (operador); transfers and security follow the LGPD;
+          <strong>Brazil — LGPD:</strong> Vozpar acts as operator (operador); transfers and security follow the LGPD;
           assists with ANPD requests.
         </li>
         <li>
-          <strong>Other Latin American countries:</strong> 9278.ai applies equivalent processor obligations under
+          <strong>Other Latin American countries:</strong> Vozpar applies equivalent processor obligations under
           applicable national data-protection law.
         </li>
       </ul>
@@ -140,16 +140,16 @@ export default function DpaPage() {
       <p>
         This DPA supplements the MSA and prevails on data-processing matters. Governed by the laws of Singapore, except
         that EU SCC disputes are governed as the SCCs specify. Business customers needing a signed DPA may contact{" "}
-        <a href="mailto:legal@9278.ai">legal@9278.ai</a>.
+        <a href="mailto:legal@Vozpar">legal@Vozpar</a>.
       </p>
 
       <h2>Contact</h2>
       <ul>
-        <li><strong>Legal:</strong> <a href="mailto:legal@9278.ai">legal@9278.ai</a></li>
-        <li><strong>Privacy:</strong> <a href="mailto:privacy@9278.ai">privacy@9278.ai</a></li>
-        <li><strong>DPO:</strong> <a href="mailto:dpo@9278.ai">dpo@9278.ai</a></li>
+        <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
+        <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
+        <li><strong>DPO:</strong> <a href="mailto:dpo@Vozpar">dpo@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (9278.ai), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

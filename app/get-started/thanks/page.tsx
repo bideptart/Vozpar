@@ -10,7 +10,7 @@ import { pageSeo } from "@/lib/seo"
 
 export const metadata: Metadata = pageSeo({
   title: "Payment received",
-  description: "Thanks — we’ve activated your 9278.ai voice credit and are provisioning your agent now.",
+  description: "Thanks — we’ve activated your Vozpar voice credit and are provisioning your agent now.",
   path: "/get-started/thanks",
   noindex: true,
 })
@@ -53,7 +53,7 @@ export default async function ThanksPage({
           {paid
             ? `Thanks${customerEmail ? `, ${customerEmail}` : ""}. We've activated your ${plan ? `${plan.name} ` : ""}credit${
                 amountPaid ? ` ($${amountPaid.toFixed(2)} charged)` : ""
-              } and are provisioning your agent now. Check your inbox for dashboard access at voice.9278.ai.`
+              } and are provisioning your agent now. Check your inbox for dashboard access at voice.Vozpar.`
             : `We've received your details${plan ? ` for the ${plan.name} plan ($${plan.amount} credit)` : ""}. Our team will email you in the next few minutes with onboarding next steps.`}
         </p>
 
@@ -73,7 +73,7 @@ export default async function ThanksPage({
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-            <a href="https://voice.9278.ai/" target="_blank" rel="noopener noreferrer">
+            <a href="https://voice.Vozpar/" target="_blank" rel="noopener noreferrer">
               Open dashboard
             </a>
           </Button>

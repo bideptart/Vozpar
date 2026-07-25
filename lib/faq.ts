@@ -27,11 +27,11 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Do I need a carrier account?",
-        a: "Yes. 9278.ai connects to the carrier you already use to handle inbound and outbound voice. We don't sell phone numbers or compete with your provider — your numbers, billing, and porting stay exactly where they are.",
+        a: "Yes. Vozpar connects to the carrier you already use to handle inbound and outbound voice. We don't sell phone numbers or compete with your provider — your numbers, billing, and porting stay exactly where they are.",
       },
       {
         q: "Can I bring my existing phone numbers?",
-        a: "Yes. Connect your existing carrier account in two clicks and your current numbers route through 9278.ai instantly. No porting, no downtime, no number changes.",
+        a: "Yes. Connect your existing carrier account in two clicks and your current numbers route through Vozpar instantly. No porting, no downtime, no number changes.",
       },
       {
         q: "Are there any hidden fees?",
@@ -44,7 +44,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "Is the platform self-hosted?",
-        a: "Yes. 9278.ai ships as a self-hosted control panel — your data, your stack, your infrastructure. Audio, transcripts, and metadata stay inside your environment. There is no shared multi-tenant database holding your call recordings.",
+        a: "Yes. Vozpar ships as a self-hosted control panel — your data, your stack, your infrastructure. Audio, transcripts, and metadata stay inside your environment. There is no shared multi-tenant database holding your call recordings.",
       },
       {
         q: "What languages are supported?",
@@ -62,7 +62,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Which carrier accounts do you support?",
-        a: "Any major SIP-capable carrier. If your provider supports standard SIP trunking and outbound webhook routing, you can connect it to 9278.ai in two clicks.",
+        a: "Any major SIP-capable carrier. If your provider supports standard SIP trunking and outbound webhook routing, you can connect it to Vozpar in two clicks.",
       },
       {
         q: "Which countries can you route calls in?",
@@ -128,7 +128,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Where do I sign in?",
-        a: "Your dashboard lives at voice.9278.ai. You can review usage, top up credit, manage phone numbers, edit agent prompts, and download transcripts.",
+        a: "Your dashboard lives at voice.Vozpar. You can review usage, top up credit, manage phone numbers, edit agent prompts, and download transcripts.",
       },
       {
         q: "How fast can I be live?",

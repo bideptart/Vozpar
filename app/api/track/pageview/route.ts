@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     h.get("cf-connecting-ip") ||
     "0.0.0.0"
   const day = new Date().toISOString().slice(0, 10)
-  const salt = process.env.ANALYTICS_SALT ?? "9278-default-salt"
+  const salt = process.env.ANALYTICS_SALT ?? "vozpar-default-salt"
   const visitor_id = createHash("sha256").update(`${ip}|${ua ?? ""}|${day}|${salt}`).digest("hex").slice(0, 32)
 
   // Country: Vercel injects x-vercel-ip-country, Cloudflare injects cf-ipcountry.

@@ -9,7 +9,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 export const metadata: Metadata = pageSeo({
   title: "Terms of Service",
   description:
-    "The Terms of Service governing your use of the 9278.ai AI voice agent platform, operated by Ace Peak Invest Pte Ltd.",
+    "The Terms of Service governing your use of the Vozpar AI voice agent platform, operated by Ace Peak Invest Pte Ltd.",
   path: "/terms",
 })
 
@@ -52,7 +52,7 @@ export default function TermsOfServicePage() {
       {/* Body */}
       <article className="legal mx-auto w-full max-w-3xl px-4 py-10 md:px-6 md:py-12">
         <p>
-          These Terms of Service (&ldquo;Agreement&rdquo;) govern your access to and use of the 9278.ai platform
+          These Terms of Service (&ldquo;Agreement&rdquo;) govern your access to and use of the Vozpar platform
           operated by Ace Peak Invest Pte Ltd. Please read them carefully before using the Services.
         </p>
 
@@ -60,14 +60,14 @@ export default function TermsOfServicePage() {
         <h3>1.1 Acceptance</h3>
         <p>
           By using the services of Ace Peak Invest Pte Ltd (&ldquo;Services&rdquo;), accessing our customer dashboard
-          and self-hosted control panel (voice.9278.ai), using our APIs, browsing our website (www.9278.ai), or clicking
+          and self-hosted control panel (voice.Vozpar), using our APIs, browsing our website (www.Vozpar), or clicking
           &ldquo;agree,&rdquo; &ldquo;get started,&rdquo; or a similar button during signup, you acknowledge that you
           have read, understood, and agree to be bound by these Terms of Service (&ldquo;Agreement&rdquo;). Your use of
           the Services is expressly conditioned upon your acceptance of all terms and conditions contained herein.
         </p>
         <h3>1.2 Modification</h3>
         <p>
-          Ace Peak Invest Pte Ltd (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our,&rdquo; or &ldquo;9278.ai&rdquo;)
+          Ace Peak Invest Pte Ltd (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our,&rdquo; or &ldquo;Vozpar&rdquo;)
           reserves the right to modify this Agreement at any time, at our sole discretion.
         </p>
         <h3>1.3 Notification of Changes</h3>
@@ -91,7 +91,7 @@ export default function TermsOfServicePage() {
         <h2 id="description">2. Description of Services</h2>
         <h3>2.1 General</h3>
         <p>
-          9278.ai provides software that lets businesses build, launch, and scale AI voice agents capable of handling
+          Vozpar provides software that lets businesses build, launch, and scale AI voice agents capable of handling
           inbound and outbound phone calls. The platform runs an audio-native conversational engine, supports real
           interruptions and multilingual conversations, and can answer from a knowledge base you connect.
         </p>
@@ -102,7 +102,7 @@ export default function TermsOfServicePage() {
         </p>
         <h3>2.3 Service Nature</h3>
         <p>
-          9278.ai is a software and connectivity platform. We do not sell phone numbers. Phone numbers, SIP trunks, and
+          Vozpar is a software and connectivity platform. We do not sell phone numbers. Phone numbers, SIP trunks, and
           call termination are provided by the carrier account you connect to the Services, and remain billed by, and
           subject to the terms of, that carrier.
         </p>
@@ -213,7 +213,7 @@ export default function TermsOfServicePage() {
           to your plan tier (currently from $0.15/min on Starter, $0.12/min on Growth, and $0.10/min on Scale). Top-up
           amounts (currently $20, $50, or $100) determine your tier and the number of concurrent AI agents available
           (currently up to 1, 2, or 3 respectively). Current pricing is published at{" "}
-          <Link href="/pricing">www.9278.ai/pricing</Link> and forms part of this Agreement.
+          <Link href="/pricing">www.Vozpar/pricing</Link> and forms part of this Agreement.
         </p>
         <h3>5.2 Payment Methods</h3>
         <p>
@@ -230,7 +230,7 @@ export default function TermsOfServicePage() {
         <h3>5.4 Pricing Changes</h3>
         <p>
           We may change pricing, tiers, or credit terms at our discretion. Changes apply to future purchases and will be
-          reflected at <Link href="/pricing">www.9278.ai/pricing</Link>. Credit already purchased is governed by the
+          reflected at <Link href="/pricing">www.Vozpar/pricing</Link>. Credit already purchased is governed by the
           terms in effect at the time of purchase.
         </p>
         <h3>5.5 Usage Billing</h3>
@@ -269,7 +269,7 @@ export default function TermsOfServicePage() {
         <h3>5.12 Refund Policy</h3>
         <p>
           Except where required by applicable law, voice credit and fees are non-refundable. Specific refund
-          eligibility, if any, is described at <Link href="/pricing">www.9278.ai/pricing</Link> or our{" "}
+          eligibility, if any, is described at <Link href="/pricing">www.Vozpar/pricing</Link> or our{" "}
           <Link href="/faq">FAQ</Link>.
         </p>
 
@@ -306,7 +306,7 @@ export default function TermsOfServicePage() {
         </p>
         <h3>6.6 Reporting Violations</h3>
         <p>
-          You may report suspected misuse or abuse of the Services to <a href="mailto:support@9278.ai">support@9278.ai</a>.
+          You may report suspected misuse or abuse of the Services to <a href="mailto:support@Vozpar">support@Vozpar</a>.
         </p>
         <h3>6.7 Acceptable Use Policy</h3>
         <p>We may publish and update an Acceptable Use Policy, which forms part of this Agreement when published.</p>
@@ -389,7 +389,7 @@ export default function TermsOfServicePage() {
         <h3>9.1 Ownership</h3>
         <p>
           We and our licensors own all rights, title, and interest in the Services, software, platform, and related
-          intellectual property (&ldquo;9278.ai Properties&rdquo;), excluding your content.
+          intellectual property (&ldquo;Vozpar Properties&rdquo;), excluding your content.
         </p>
         <h3>9.2 License to You</h3>
         <p>
@@ -491,7 +491,7 @@ export default function TermsOfServicePage() {
         <h2 id="indemnification">13. Indemnification</h2>
         <h3>13.1 Indemnity Obligation</h3>
         <p>
-          You agree to indemnify, defend, and hold harmless 9278.ai (Ace Peak Invest Pte Ltd), its affiliates, and their
+          You agree to indemnify, defend, and hold harmless Vozpar (Ace Peak Invest Pte Ltd), its affiliates, and their
           officers, directors, employees, and agents from and against any claims, damages, liabilities, losses, and
           expenses (including reasonable legal fees) arising out of or related to: your use of the Services; your
           content, agents, prompts, or knowledge sources; your calls, recordings, or messaging; your violation of this
@@ -503,7 +503,7 @@ export default function TermsOfServicePage() {
         <h3>14.1 Informal Resolution</h3>
         <p>
           Before initiating formal proceedings, you agree to first contact us at{" "}
-          <a href="mailto:support@9278.ai">support@9278.ai</a> and attempt to resolve the dispute informally.
+          <a href="mailto:support@Vozpar">support@Vozpar</a> and attempt to resolve the dispute informally.
         </p>
         <h3>14.2 Binding Arbitration</h3>
         <p>
@@ -599,10 +599,10 @@ export default function TermsOfServicePage() {
             <strong>Address:</strong> 1 Scotts Road #24-10 Shaw Centre, Singapore 228208, Singapore
           </li>
           <li>
-            <strong>Support Email:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a>
+            <strong>Support Email:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a>
           </li>
           <li>
-            <strong>Sales &amp; Partnerships:</strong> <a href="mailto:sales@9278.ai">sales@9278.ai</a>
+            <strong>Sales &amp; Partnerships:</strong> <a href="mailto:sales@Vozpar">sales@Vozpar</a>
           </li>
           <li>
             <strong>Voice:</strong> <a href="tel:+13474744009">+1 347-474-4009</a>

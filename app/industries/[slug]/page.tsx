@@ -187,7 +187,7 @@ export default async function IndustryPage({
       <section className="mx-auto w-full max-w-5xl px-4 py-16 md:px-6 md:py-20">
         <ScrollReveal>
           <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">
-            How {industry.name.toLowerCase()} teams roll out 9278.ai
+            How {industry.name.toLowerCase()} teams roll out Vozpar
           </h2>
           <div className="mt-6 grid gap-4 text-sm leading-relaxed text-muted-foreground md:grid-cols-2 md:text-base">
             <p className="text-pretty">

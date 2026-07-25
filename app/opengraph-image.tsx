@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
-export const alt = "9278.ai — Answer every call with AI voice agents that sound human"
+export const alt = "Vozpar — Answer every call with AI voice agents that sound human"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -39,7 +39,7 @@ export default function OG() {
         >
           9
         </div>
-        <div style={{ fontSize: 36, fontWeight: 700, letterSpacing: -1 }}>9278.ai</div>
+        <div style={{ fontSize: 36, fontWeight: 700, letterSpacing: -1 }}>Vozpar</div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -53,7 +53,7 @@ export default function OG() {
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", gap: 12, color: "#94a3b8", fontSize: 22 }}>
-          <span>9278.ai</span>
+          <span>Vozpar</span>
           <span>·</span>
           <span>Real-time voice AI for sales, support & operations</span>
         </div>

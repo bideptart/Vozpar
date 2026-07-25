@@ -21,7 +21,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const post = getPost(slug)
-  if (!post) return pageSeo({ title: "Blog", description: "9278.ai blog.", path: "/blog" })
+  if (!post) return pageSeo({ title: "Blog", description: "Vozpar blog.", path: "/blog" })
   return pageSeo({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}` })
 }
 

@@ -11,7 +11,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 export const metadata: Metadata = pageSeo({
   title: "Blog",
   description:
-    "Notes on building AI voice agents that sound human — product, engineering, platform, and compliance insights from the 9278.ai team.",
+    "Notes on building AI voice agents that sound human — product, engineering, platform, and compliance insights from the Vozpar team.",
   path: "/blog",
 })
 

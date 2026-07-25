@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     "voice bot",
     "SIP voice AI",
     "AI call center",
-    "9278.ai",
+    "Vozpar",
   ],
   authors: [{ name: SITE.name, url: SITE.url }],
   creator: SITE.name,

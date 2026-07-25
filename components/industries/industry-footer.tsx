@@ -138,7 +138,7 @@ export function IndustryFooter() {
           <Link
             href="/"
             className="relative inline-flex items-center transition-transform duration-300 hover:scale-[1.03]"
-            aria-label="9278.ai home"
+            aria-label="Vozpar home"
           >
             <Logo height={68} />
           </Link>
@@ -151,7 +151,7 @@ export function IndustryFooter() {
           </p>
           <Magnetic>
             <a
-              href="https://voice.9278.ai/"
+              href="https://voice.Vozpar/"
               target="_blank"
               rel="noopener noreferrer"
               className={`group relative mt-8 inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-primary to-accent px-7 py-3.5 text-white shadow-[0_8px_24px_-8px_var(--primary)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-10px_var(--primary)] ${bodyType.button}`}
@@ -205,7 +205,7 @@ export function IndustryFooter() {
           y={8}
           className={`mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-3 px-4 py-6 text-muted-foreground md:flex-row md:items-center md:px-6 ${bodyType.smallPrint}`}
         >
-          <p style={{ fontSize: "13px" }}>© {new Date().getFullYear()} 9278.ai. All rights reserved.</p>
+          <p style={{ fontSize: "13px" }}>© {new Date().getFullYear()} Vozpar. All rights reserved.</p>
           <p className="inline-flex items-center gap-2" style={{ fontSize: "13px" }}>
             <PulsingDot className="h-1 w-1 rounded-full bg-primary" />
             Made for human conversations.

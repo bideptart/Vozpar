@@ -45,7 +45,7 @@ export function ContactForm() {
         </span>
         <h3 className="mt-5 text-xl font-serif font-normal tracking-tight">Message sent.</h3>
         <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
-          Thanks for reaching out — the 9278.ai team will reply by email, usually within one business day.
+          Thanks for reaching out — the Vozpar team will reply by email, usually within one business day.
         </p>
         <Button variant="outline" className="mt-6 rounded-full" onClick={() => setStatus("idle")}>
           Send another message

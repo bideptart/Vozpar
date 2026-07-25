@@ -9,7 +9,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 export const metadata: Metadata = pageSeo({
   title: "Privacy Policy",
   description:
-    "How Ace Peak Invest Pte Ltd (9278.ai) collects, uses, safeguards, and discloses information arising from your use of the 9278.ai AI voice agent platform.",
+    "How Ace Peak Invest Pte Ltd (Vozpar) collects, uses, safeguards, and discloses information arising from your use of the Vozpar AI voice agent platform.",
   path: "/privacy",
 })
 
@@ -52,17 +52,17 @@ export default function PrivacyPolicyPage() {
       {/* Body */}
       <article className="legal mx-auto w-full max-w-3xl px-4 py-10 md:px-6 md:py-12">
         <p>
-          Welcome to 9278.ai. This Privacy Policy explains how Ace Peak Invest Pte Ltd (&ldquo;us,&rdquo;
-          &ldquo;we,&rdquo; &ldquo;our,&rdquo; &ldquo;9278.ai&rdquo;), a company registered in Singapore that operates
-          the 9278.ai platform, collects, uses, safeguards, and discloses information arising from your use of our
-          services. This includes our website (www.9278.ai), our customer dashboard and self-hosted control panel
-          (voice.9278.ai), our APIs, and our AI voice agent, telephony, and related products and services
+          Welcome to Vozpar. This Privacy Policy explains how Ace Peak Invest Pte Ltd (&ldquo;us,&rdquo;
+          &ldquo;we,&rdquo; &ldquo;our,&rdquo; &ldquo;Vozpar&rdquo;), a company registered in Singapore that operates
+          the Vozpar platform, collects, uses, safeguards, and discloses information arising from your use of our
+          services. This includes our website (www.Vozpar), our customer dashboard and self-hosted control panel
+          (voice.Vozpar), our APIs, and our AI voice agent, telephony, and related products and services
           (collectively, the &ldquo;Services&rdquo;).
         </p>
 
         <h2 id="introduction">1. Introduction and Scope</h2>
         <p>
-          9278.ai provides software that lets businesses build, launch, and scale AI voice agents that handle inbound
+          Vozpar provides software that lets businesses build, launch, and scale AI voice agents that handle inbound
           and outbound phone calls. Our platform connects to the carrier account you already use, runs an audio-native
           conversational engine, and can answer questions from your own knowledge base.
         </p>
@@ -74,7 +74,7 @@ export default function PrivacyPolicyPage() {
         </p>
         <p>
           If you have additional questions or require more information about this Privacy Policy, please contact us at{" "}
-          <a href="mailto:support@9278.ai">support@9278.ai</a>.
+          <a href="mailto:support@Vozpar">support@Vozpar</a>.
         </p>
 
         <h2 id="information-we-collect">2. Information We Collect</h2>
@@ -158,7 +158,7 @@ export default function PrivacyPolicyPage() {
             handled by your AI voice agent may be processed as audio and/or transcribed in real time so the agent can
             understand and respond. Where you enable call recording, transcription, or conversation logging, we store
             the resulting audio, transcripts, and derived data (such as sentiment and intent signals) and make them
-            available to you and to authorized 9278.ai support personnel through a secured portion of the platform. For
+            available to you and to authorized Vozpar support personnel through a secured portion of the platform. For
             diagnosing call-quality issues, we may temporarily process or record call audio for troubleshooting, which
             is deleted after the troubleshooting period.
           </li>
@@ -208,7 +208,7 @@ export default function PrivacyPolicyPage() {
           where applicable.
         </p>
         <p>
-          In these cases, 9278.ai generally acts as a processor or service provider, processing call audio,
+          In these cases, Vozpar generally acts as a processor or service provider, processing call audio,
           transcripts, and related data on the customer&apos;s behalf and under their instructions. We do not use this
           caller data for our own independent purposes except as necessary to provide, secure, and maintain the
           Services, or as required by law.
@@ -351,7 +351,7 @@ export default function PrivacyPolicyPage() {
             Exercise, establish, or defend our legal rights, or protect against fraud, misuse, and unlawful acts.
           </li>
           <li>
-            Protect your vital interests, or the vital interests, rights, property, or safety of 9278.ai, our users,
+            Protect your vital interests, or the vital interests, rights, property, or safety of Vozpar, our users,
             callers, or the general public.
           </li>
         </ul>
@@ -380,7 +380,7 @@ export default function PrivacyPolicyPage() {
         <p>
           We implement appropriate technical and organizational security measures, including encryption in transit
           (such as Secure Socket Layer (SSL)/TLS) and access controls, to protect your personal information from
-          unauthorized access, use, disclosure, alteration, or destruction. Because the 9278.ai control panel is
+          unauthorized access, use, disclosure, alteration, or destruction. Because the Vozpar control panel is
           self-hosted, you also play an important role in securing the environment, credentials, and integrations under
           your control.
         </p>
@@ -512,7 +512,7 @@ export default function PrivacyPolicyPage() {
         <h2 id="third-party-links">10. Third-Party Links and Services</h2>
         <p>
           Our Services may contain links to, or integrations with, third-party websites or services not owned or
-          controlled by 9278.ai. These third parties have their own privacy policies, and we are not responsible for
+          controlled by Vozpar. These third parties have their own privacy policies, and we are not responsible for
           their practices or content. Review their privacy policies before sharing personal information. Interactions
           through integrated third-party platforms (e.g., carriers, CRMs, calendars, or support tools) are subject to
           their privacy policies.
@@ -521,7 +521,7 @@ export default function PrivacyPolicyPage() {
         <h2 id="changes">11. Changes to This Privacy Policy</h2>
         <p>
           We may update this Privacy Policy to reflect changes in our practices or for legal, operational, or regulatory
-          reasons. Updates are effective immediately upon posting on our Services (e.g., www.9278.ai). We will notify
+          reasons. Updates are effective immediately upon posting on our Services (e.g., www.Vozpar). We will notify
           you of significant changes via the Service, website, or email (if available). Continued use after changes
           implies acceptance, except for new processing that requires consent.
         </p>
@@ -530,13 +530,13 @@ export default function PrivacyPolicyPage() {
         <p>Our official communication channels include:</p>
         <ul>
           <li>
-            <strong>Email:</strong> Using official 9278.ai domains (e.g., support@9278.ai and sales@9278.ai).
+            <strong>Email:</strong> Using official Vozpar domains (e.g., support@Vozpar and sales@Vozpar).
           </li>
           <li>
-            <strong>Website:</strong> www.9278.ai.
+            <strong>Website:</strong> www.Vozpar.
           </li>
           <li>
-            <strong>Customer Dashboard:</strong> voice.9278.ai.
+            <strong>Customer Dashboard:</strong> voice.Vozpar.
           </li>
         </ul>
         <p>
@@ -555,10 +555,10 @@ export default function PrivacyPolicyPage() {
             <strong>Address:</strong> 1 Scotts Road #24-10 Shaw Centre, Singapore 228208, Singapore
           </li>
           <li>
-            <strong>Support Email:</strong> <a href="mailto:support@9278.ai">support@9278.ai</a>
+            <strong>Support Email:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a>
           </li>
           <li>
-            <strong>Sales &amp; Partnerships:</strong> <a href="mailto:sales@9278.ai">sales@9278.ai</a>
+            <strong>Sales &amp; Partnerships:</strong> <a href="mailto:sales@Vozpar">sales@Vozpar</a>
           </li>
           <li>
             <strong>Voice:</strong> <a href="tel:+13474744009">+1 347-474-4009</a>
@@ -567,8 +567,8 @@ export default function PrivacyPolicyPage() {
 
         <h2 id="consent">14. Consent</h2>
         <p>
-          By using our website (www.9278.ai) and Services, you consent to this Privacy Policy and agree to its terms. If
-          you do not agree, please <Link href="/contact">contact us</Link> or discontinue use of the 9278.ai platform.
+          By using our website (www.Vozpar) and Services, you consent to this Privacy Policy and agree to its terms. If
+          you do not agree, please <Link href="/contact">contact us</Link> or discontinue use of the Vozpar platform.
         </p>
       </article>
 

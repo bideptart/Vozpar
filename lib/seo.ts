@@ -7,12 +7,12 @@ import type { Metadata } from "next"
  * Hostinger, and localhost without per-page edits.
  */
 export const SITE = {
-  name: "9278.ai",
-  domain: "9278.ai",
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://9278.ai",
+  name: "Vozpar",
+  domain: "vozpar.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vozpar.vercel.app",
   description:
     "Build, launch, and scale AI voice agents that actually sound human. Carrier-grade phone numbers, sub-second latency, transparent per-minute pricing.",
-  twitter: "@9278ai",
+  twitter: "@vozpar_ai",
   locale: "en_US",
 } as const
 

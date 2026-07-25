@@ -1,5 +1,5 @@
 /**
- * File-based blog content for 9278.ai.
+ * File-based blog content for Vozpar.
  * Add a new entry to BLOG_POSTS to publish a post — the index and [slug]
  * pages render from this single source. Content is a list of typed blocks.
  */
@@ -39,7 +39,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Architecture",
     date: "2026-06-16",
     readingMinutes: 10,
-    author: "The 9278.ai Team",
+    author: "The Vozpar Team",
     featured: true,
     content: [
             { type: "h2", text: "Introduction" },
@@ -73,7 +73,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: "p",
-        text: "There is a second benefit beyond speed. When audio is flattened to plain text, tone, pauses, and emotion fall out. An audio-native model keeps them, so it can hear the caller's intonation and shape its own reply with matching warmth and timing. This is the design 9278.ai runs on: a single audio-native engine instead of a brittle transcribe-then-speak relay, which is what lets callers hear pauses and emotion that feel right.",
+        text: "There is a second benefit beyond speed. When audio is flattened to plain text, tone, pauses, and emotion fall out. An audio-native model keeps them, so it can hear the caller's intonation and shape its own reply with matching warmth and timing. This is the design Vozpar runs on: a single audio-native engine instead of a brittle transcribe-then-speak relay, which is what lets callers hear pauses and emotion that feel right.",
       },
       {
         type: "p",
@@ -155,7 +155,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Pricing",
     date: "2026-06-16",
     readingMinutes: 9,
-    author: "The 9278.ai Team",
+    author: "The Vozpar Team",
     content: [
             { type: "h2", text: "Introduction" },
       {
@@ -179,7 +179,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: "p",
-        text: "A useful anchor: 9278.ai lists three usage tiers at $0.15, $0.12, and $0.10 per minute, with the rate dropping as your volume rises. That sits firmly in the self-serve band, which is where most teams should start before paying for managed layers they may not need yet.",
+        text: "A useful anchor: Vozpar lists three usage tiers at $0.15, $0.12, and $0.10 per minute, with the rate dropping as your volume rises. That sits firmly in the self-serve band, which is where most teams should start before paying for managed layers they may not need yet.",
       },
       {
         type: "p",
@@ -202,7 +202,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: "p",
-        text: "One design choice removes several of these layers. An audio-native engine that goes voice to voice skips the separate speech-to-text and text-to-speech meters, because there is no transcription or synthesis stage to bill. That is why 9278.ai folds the voice model into a single per-minute figure. Telephony stays its own clear line: route through the carrier you already use, or provision an optional number from the platform, with US numbers from $2 a month and other regions from $5. Either way the phone line shows up as a visible item rather than a markup buried inside the voice rate.",
+        text: "One design choice removes several of these layers. An audio-native engine that goes voice to voice skips the separate speech-to-text and text-to-speech meters, because there is no transcription or synthesis stage to bill. That is why Vozpar folds the voice model into a single per-minute figure. Telephony stays its own clear line: route through the carrier you already use, or provision an optional number from the platform, with US numbers from $2 a month and other regions from $5. Either way the phone line shows up as a visible item rather than a markup buried inside the voice rate.",
       },
       {
         type: "p",
@@ -217,7 +217,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { type: "h3", text: "Prepaid credit" },
       {
         type: "p",
-        text: "You top up a balance and draw it down per minute. It caps your exposure and suits teams testing a use case. Watch the expiry window: some credit expires fast. As a reference point, 9278.ai uses $20, $50, or $100 top-ups with credit valid for 60 days.",
+        text: "You top up a balance and draw it down per minute. It caps your exposure and suits teams testing a use case. Watch the expiry window: some credit expires fast. As a reference point, Vozpar uses $20, $50, or $100 top-ups with credit valid for 60 days.",
       },
       { type: "h3", text: "Pure usage" },
       {
@@ -263,7 +263,7 @@ export const BLOG_POSTS: BlogPost[] = [
           { q: "How much does an AI voice agent cost per minute?", a: "Published AI voice agent pricing runs from about $0.05 to $1.50 per minute in 2026. Entry self-serve platforms sit at $0.05 to $0.12, business tiers land near $0.50 to $1, and enterprise voice with managed support and SLAs can pass $2 per minute." },
           { q: "Why is my AI voice agent bill higher than the advertised rate?", a: "Many platforms advertise only the orchestration rate. Your real bill can add speech-to-text, the language model, text-to-speech, telephony, and platform fees. Stacked together these can double or triple the headline number, so read the full rate card first." },
           { q: "What is included in a transparent per-minute price?", a: "A transparent price folds the voice model, reasoning, and platform into one figure. Telephony is often separate because carriers bill it directly. Ask whether speech-to-text, text-to-speech, and concurrency are inside the quoted rate or added on top." },
-          { q: "Do AI voice agent minutes or credits expire?", a: "It depends on the provider. Some prepaid credit sets an expiry window. On 9278.ai, voice credit stays valid for 60 days from purchase, and top-ups start at $20 with no contract, so you commit only to what you expect to use." },
+          { q: "Do AI voice agent minutes or credits expire?", a: "It depends on the provider. Some prepaid credit sets an expiry window. On Vozpar, voice credit stays valid for 60 days from purchase, and top-ups start at $20 with no contract, so you commit only to what you expect to use." },
           { q: "How do I estimate my monthly AI voice agent cost?", a: "Multiply expected call minutes by the all-in per-minute rate, then add carrier telephony and any platform fee. For 5,000 minutes at $0.12 all-in plus telephony, budget the voice line near $600 and confirm the carrier charge as a separate line." },
         ],
       },
@@ -279,7 +279,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Real Estate",
     date: "2026-06-16",
     readingMinutes: 9,
-    author: "The 9278.ai Team",
+    author: "The Vozpar Team",
     content: [
             { type: "h2", text: "Introduction" },
       {
@@ -355,7 +355,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: "p",
-        text: "Because 9278.ai connects to the carrier you already use, your numbers and billing can stay where they are, or you can provision a dedicated number from the platform if you prefer. Pre-tuned real estate playbooks give you a running start, with scripts already shaped around qualifying buyers, booking showings, and following up. You scale from one line to a full team without per-seat math, and the agent updates your CRM and calendar as it works.",
+        text: "Because Vozpar connects to the carrier you already use, your numbers and billing can stay where they are, or you can provision a dedicated number from the platform if you prefer. Pre-tuned real estate playbooks give you a running start, with scripts already shaped around qualifying buyers, booking showings, and following up. You scale from one line to a full team without per-seat math, and the agent updates your CRM and calendar as it works.",
       },
       {
         type: "p",
@@ -389,7 +389,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Guide",
     date: "2026-06-16",
     readingMinutes: 8,
-    author: "The 9278.ai Team",
+    author: "The Vozpar Team",
     content: [
             { type: "h2", text: "Introduction" },
       {
@@ -445,7 +445,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
             {
         type: "p",
-        text: "First you design the agent: choose a voice, describe its job in plain English, and set guardrails. Then you connect your knowledge so it answers from your real hours, services, and policies rather than a generic script. Finally you route your phone number through the platform and go live. Because 9278.ai connects to the carrier you already use, your numbers and billing can stay exactly where they are with no porting and no downtime, or you can provision a dedicated number from the platform if you would rather.",
+        text: "First you design the agent: choose a voice, describe its job in plain English, and set guardrails. Then you connect your knowledge so it answers from your real hours, services, and policies rather than a generic script. Finally you route your phone number through the platform and go live. Because Vozpar connects to the carrier you already use, your numbers and billing can stay exactly where they are with no porting and no downtime, or you can provision a dedicated number from the platform if you would rather.",
       },
       {
         type: "p",
@@ -504,7 +504,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Compliance",
     date: "2026-06-16",
     readingMinutes: 10,
-    author: "The 9278.ai Team",
+    author: "The Vozpar Team",
     content: [
             { type: "h2", text: "Introduction" },
       {
@@ -575,7 +575,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: "p",
-        text: "This is where platform features earn their keep. Live transcripts with intent and event capture, configurable PII redaction, encrypted storage, and SOC 2-aligned infrastructure give you the audit trail and data controls that compliance reviews ask for. 9278.ai builds those controls in, which makes documenting consent, disclosures, and opt-outs far less manual. The tooling does not replace counsel, but it makes a defensible program practical to run.",
+        text: "This is where platform features earn their keep. Live transcripts with intent and event capture, configurable PII redaction, encrypted storage, and SOC 2-aligned infrastructure give you the audit trail and data controls that compliance reviews ask for. Vozpar builds those controls in, which makes documenting consent, disclosures, and opt-outs far less manual. The tooling does not replace counsel, but it makes a defensible program practical to run.",
       },
       {
         type: "p",

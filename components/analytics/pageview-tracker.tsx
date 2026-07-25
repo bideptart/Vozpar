@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 
-const SESSION_KEY = "_9278_session"
+const SESSION_KEY = "_vozpar_session"
 
 // crypto.randomUUID() only exists in secure contexts (HTTPS or localhost).
 // Loading the site over plain HTTP via a LAN IP (e.g. http://192.168.x.x)
