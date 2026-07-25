@@ -10,42 +10,51 @@ import { cn } from "@/lib/utils"
 
 const PORTAL_BASE = "https://voice.9278.ai"
 
-function TypewriterPrice({ value, suffix }: { value: string; suffix: string }) {
-  const [displayText, setDisplayText] = useState(value)
-  const [isTyping, setIsTyping] = useState(false)
-
-  const startTypewriter = (targetVal?: string) => {
-    const textToType = targetVal ?? value
-    setIsTyping(true)
-    setDisplayText("")
-    let i = 0
-    const timer = setInterval(() => {
-      i++
-      setDisplayText(textToType.slice(0, i))
-      if (i >= textToType.length) {
-        clearInterval(timer)
-        setIsTyping(false)
-      }
-    }, 70)
-  }
+function FastAnimatedPrice({ price, suffix }: { price: number; suffix: string }) {
+  const [displayPrice, setDisplayPrice] = useState(price)
+  const prevPriceRef = useRef(price)
 
   useEffect(() => {
-    startTypewriter(value)
-  }, [value])
+    const fromVal = prevPriceRef.current
+    const toVal = price
+    prevPriceRef.current = price
+
+    if (fromVal === toVal) {
+      setDisplayPrice(toVal)
+      return
+    }
+
+    const duration = 250 // Fast 250ms animation
+    const startTime = performance.now()
+
+    const step = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const easeProgress = 1 - Math.pow(1 - progress, 3)
+      const current = Math.round(fromVal + (toVal - fromVal) * easeProgress)
+      setDisplayPrice(current)
+
+      if (progress < 1) {
+        requestAnimationFrame(step)
+      } else {
+        setDisplayPrice(toVal)
+      }
+    }
+
+    requestAnimationFrame(step)
+  }, [price])
 
   return (
-    <div
-      onClick={(e) => {
-        e.stopPropagation()
-        startTypewriter()
-      }}
-      className="inline-flex items-baseline gap-1 cursor-pointer select-none group/price hover:opacity-90"
-      title="Click to replay typewriter effect"
-    >
-      <span className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-white transition-colors group-hover/price:text-sky-300">
-        {displayText}
-        {isTyping && <span className="animate-pulse text-sky-400 font-normal ml-0.5">|</span>}
-      </span>
+    <div className="inline-flex items-baseline gap-1 select-none">
+      <motion.span
+        key={price}
+        initial={{ y: -6, opacity: 0.4, filter: "blur(3px)" }}
+        animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        className="font-sans text-3xl sm:text-4xl font-extrabold tracking-tight text-white"
+      >
+        ${displayPrice.toLocaleString("en-US")}
+      </motion.span>
       <span className="font-sans text-xs text-slate-400">{suffix}</span>
     </div>
   )
@@ -321,10 +330,10 @@ export function PricingPlans() {
 
               <div style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }} className="flex flex-1 flex-col justify-between pt-1">
                 <div>
-                  {/* Price Block with Typewriter Effect */}
+                  {/* Fast Animated Price Block */}
                   <div style={{ transform: "translateZ(40px)" }}>
-                    <TypewriterPrice
-                      value={usd(price)}
+                    <FastAnimatedPrice
+                      price={price}
                       suffix={`/${cycle === "yearly" ? "yr" : "mo"}`}
                     />
                   </div>
