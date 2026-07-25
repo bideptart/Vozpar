@@ -179,14 +179,14 @@ export function IndustryCTA() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.5, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap md:flex-col md:items-stretch"
+                  className="flex w-full flex-row gap-3 sm:w-auto"
                 >
-                  <Magnetic className="w-full sm:w-auto md:w-full">
-                    <div className="group/btn relative w-full overflow-hidden rounded-md">
+                  <Magnetic>
+                    <div className="group/btn relative overflow-hidden rounded-md">
                       <Button
                         asChild
                         size="lg"
-                        className={`relative w-full bg-gradient-to-r from-primary to-accent text-white shadow-[0_8px_24px_-8px_var(--primary)] transition-shadow duration-300 hover:shadow-[0_12px_32px_-10px_var(--primary)] ${bodyType.button}`}
+                        className={`relative bg-gradient-to-r from-primary to-accent text-white shadow-[0_8px_24px_-8px_var(--primary)] transition-shadow duration-300 hover:shadow-[0_12px_32px_-10px_var(--primary)] ${bodyType.button}`}
                       >
                         <Link href="/get-started">
                           Get started <ArrowRight className="ml-1 size-4" aria-hidden />
@@ -200,8 +200,8 @@ export function IndustryCTA() {
                       />
                     </div>
                   </Magnetic>
-                  <Magnetic className="w-full sm:w-auto md:w-full">
-                    <Button asChild size="lg" variant="outline" className={`w-full ${bodyType.button}`}>
+                  <Magnetic>
+                    <Button asChild size="lg" variant="outline" className={bodyType.button}>
                       <Link href="/pricing">View pricing</Link>
                     </Button>
                   </Magnetic>

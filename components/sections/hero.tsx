@@ -85,6 +85,86 @@ function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; 
   return <>{val}{suffix}</>
 }
 
+<<<<<<< HEAD
+=======
+// ── Floating Particles ────────────────────────────────────────────────────────
+function Particle({ color, reduced }: { color: string; reduced: boolean }) {
+  const count = 12
+  return (
+    <div className="pointer-events-none absolute inset-0" aria-hidden>
+      {Array.from({ length: count }).map((_, i) => {
+        const angle = (i / count) * Math.PI * 2
+        const r = 95 + (i % 3) * 28
+        const x = parseFloat((50 + Math.cos(angle) * (r / 2.2)).toFixed(4))
+        const y = parseFloat((50 + Math.sin(angle) * (r / 2.8)).toFixed(4))
+        const size = 2 + (i % 3)
+        const delay = i * 0.22
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              left: `${x}%`,
+              top: `${y}%`,
+              width: size,
+              height: size,
+              background: color,
+              boxShadow: `0 0 ${size * 4}px ${color}`,
+            }}
+            animate={reduced ? undefined : {
+              opacity: [0.15, 0.9, 0.15],
+              scale: [0.8, 1.6, 0.8],
+              y: [0, -8, 0, 8, 0],
+            }}
+            transition={{
+              duration: 3.5 + (i % 3) * 0.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay,
+            }}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Orbiting Ring ─────────────────────────────────────────────────────────────
+function OrbitRing({ r, color, duration, reduced }: { r: number; color: string; duration: number; reduced: boolean }) {
+  return (
+    <motion.div
+      className="pointer-events-none absolute inset-0 flex items-center justify-center"
+      aria-hidden
+      animate={reduced ? undefined : { rotate: 360 }}
+      transition={{ duration, repeat: Infinity, ease: "linear" }}
+    >
+      <div
+        className="rounded-full border"
+        style={{
+          width: r * 2,
+          height: r * 2,
+          borderColor: `${color}25`,
+          borderStyle: "dashed",
+          borderWidth: 1,
+        }}
+      />
+      {/* Dot on the ring */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 6,
+          height: 6,
+          background: color,
+          boxShadow: `0 0 12px ${color}`,
+          top: `calc(50% - ${r}px - 3px)`,
+          left: "calc(50% - 3px)",
+        }}
+      />
+    </motion.div>
+  )
+}
+
+>>>>>>> a83047d (Your commit message)
 // ── Waveform bars ─────────────────────────────────────────────────────────────
 const BH = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8, 0.6, 0.72, 0.5, 0.88]
 function Waveform({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {

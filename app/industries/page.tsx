@@ -4,7 +4,6 @@ import { headingType, bodyType, monoStyle } from "@/lib/industries-typography"
 import { SiteHeader } from "@/components/site-header"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { IndustryShowcase } from "@/components/industries/industry-showcase"
-import { Industries } from "@/components/sections/industries"
 import {
   FloatingAccents,
   ParticleField,
@@ -65,8 +64,6 @@ export default function IndustriesPage() {
           <StatStrip />
         </div>
       </section>
-
-      <Industries showHeader={false} />
 
       <IndustryShowcase />
 
