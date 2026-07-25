@@ -13,9 +13,18 @@ function WaveViz({ reduced }: { reduced: boolean }) {
       {bars.map((f, i) => (
         <motion.span key={i}
           className="block w-[3px] rounded-full"
-          style={{ background: `linear-gradient(to top, rgba(4,107,210,0.4), #2d98f1)` }}
-          animate={reduced ? { height: f * 28 } : { height: [f * 10, f * 32, f * 16, f * 28, f * 10] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: i * 0.09 }}
+          style={{ background: `linear-gradient(to top, rgba(4,107,210,0.45), #2d98f1, rgba(45,152,241,0.6))` }}
+          animate={reduced ? { height: f * 28 } : {
+            height: [f * 12, f * 34, f * 18, f * 30, f * 14, f * 32, f * 12],
+            opacity: [0.65, 1, 0.7, 0.95, 0.6, 1, 0.65],
+          }}
+          transition={{
+            duration: 2.4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.11,
+            times: [0, 0.18, 0.36, 0.54, 0.72, 0.9, 1],
+          }}
         />
       ))}
     </div>
@@ -25,21 +34,39 @@ function WaveViz({ reduced }: { reduced: boolean }) {
 function InterruptViz({ reduced }: { reduced: boolean }) {
   return (
     <div className="flex h-14 flex-col justify-center gap-2.5 px-1" aria-hidden>
+      {/* User speaking */}
       <motion.div className="flex items-center gap-2"
-        animate={reduced ? undefined : { opacity: [1, 0.18, 1] }}
-        transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut", times: [0, 0.45, 1] }}
+        animate={reduced ? undefined : {
+          opacity: [1, 1, 0.25, 1, 1],
+          scaleX: [1, 1, 0.96, 1, 1],
+        }}
+        transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", times: [0, 0.35, 0.42, 0.5, 1] }}
       >
-        <span className="h-2 w-2 shrink-0 rounded-full bg-white/20" />
-        <span className="h-1.5 flex-1 rounded-full bg-white/12" />
-        <span className="h-1.5 w-1/3 rounded-full bg-white/8" />
+        <span className="h-2 w-2 shrink-0 rounded-full bg-[#2d98f1]/30" />
+        <span className="h-1.5 flex-1 rounded-full bg-gradient-to-r from-[#2d98f1]/12 via-[#2d98f1]/20 to-[#2d98f1]/8" />
+        <span className="h-1.5 w-1/3 rounded-full bg-gradient-to-r from-[#2d98f1]/10 to-transparent" />
       </motion.div>
+      {/* Agent interrupting (amber) */}
       <div className="flex items-center justify-end gap-2">
-        <motion.span className="h-1.5 rounded-full bg-amber-400/50"
-          style={{ transformOrigin: "right" }}
-          animate={reduced ? { width: 72 } : { width: [0, 72] }}
-          transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2.6, ease: "easeOut" }}
+        <motion.span className="h-1.5 rounded-full"
+          style={{
+            transformOrigin: "right",
+            background: "linear-gradient(to right, transparent, #f59e0b, #fbbf24)",
+          }}
+          animate={reduced ? { width: 72 } : {
+            width: [0, 0, 0, 72, 72, 0],
+            opacity: [0, 0, 0.4, 1, 1, 0.1],
+          }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: "easeOut", times: [0, 0.3, 0.4, 0.55, 0.8, 1] }}
         />
-        <span className="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
+        <motion.span className="h-2 w-2 shrink-0 rounded-full"
+          style={{ background: "#f59e0b", boxShadow: "0 0 8px rgba(245,158,11,0.4)" }}
+          animate={reduced ? undefined : {
+            scale: [1, 1, 1, 1.4, 1],
+            opacity: [0.5, 0.5, 0.5, 1, 0.6],
+          }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: "easeOut" }}
+        />
       </div>
     </div>
   )
@@ -51,9 +78,21 @@ function ScaleViz({ reduced }: { reduced: boolean }) {
     <div className="flex h-14 items-end gap-1.5 px-1" aria-hidden>
       {cols.map((h, i) => (
         <motion.span key={i} className="w-3.5 rounded-t"
-          style={{ background: `linear-gradient(to top, rgba(4,107,210,0.35), #2d98f1)` }}
-          animate={reduced ? { height: h * 0.5 } : { height: [h * 0.28, h * 0.5] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: i * 0.12, repeatType: "reverse" }}
+          style={{
+            background: `linear-gradient(to top, rgba(4,107,210,0.4), #2d98f1, rgba(45,152,241,0.8))`,
+            boxShadow: "0 0 8px rgba(45,152,241,0.2)",
+          }}
+          animate={reduced ? { height: h * 0.5 } : {
+            height: [h * 0.2, h * 0.58, h * 0.3, h * 0.62, h * 0.22],
+            y: [0, -2, 0, -1, 0],
+          }}
+          transition={{
+            duration: 2.2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.1,
+            repeatType: "mirror",
+          }}
         />
       ))}
     </div>
@@ -106,23 +145,54 @@ function BentoCard({
 }) {
   return (
     <motion.div
-      whileHover={reduced ? undefined : { y: -3 }}
-      transition={{ type: "spring", stiffness: 340, damping: 28 }}
-      className={`group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] p-7 transition-colors duration-300 hover:border-[#046bd2]/30 ${className}`}
+      initial={reduced ? undefined : { opacity: 0, y: 18, filter: "blur(6px)" }}
+      whileInView={reduced ? undefined : { opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-80px" }}
+      whileHover={reduced ? undefined : { y: -6, scale: 1.008 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 22,
+        mass: 0.9,
+      }}
+      className={`group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] p-6 md:p-7 transition-all duration-300 hover:border-[#046bd2]/40 hover:shadow-[0_0_40px_-12px_rgba(4,107,210,0.25)] ${className}`}
     >
-      {/* Top accent */}
+      {/* Top accent bar */}
       <div className="absolute inset-x-0 top-0 h-px"
         style={{ background: `linear-gradient(to right, transparent, ${tint}55, transparent)` }} />
-      {/* Hover glow */}
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: `radial-gradient(60% 50% at 50% 0%, ${tint}08, transparent)` }} />
 
-      {/* Icon */}
-      <div className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl border"
+      {/* Hover inner glow */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0"
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        style={{
+          background: `radial-gradient(ellipse 80% 60% at 50% -10%, ${tint}18 0%, transparent 70%)`,
+        }}
+      />
+
+      {/* Shine sweep on hover */}
+      {!reduced && (
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 w-1/3 -skew-x-12 opacity-0 group-hover:opacity-100"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)" }}
+          initial={{ left: "-40%" }}
+          whileHover={{ left: ["-40%", "140%"] }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+        />
+      )}
+
+      {/* Icon container */}
+      <motion.div
+        className="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-xl border"
+        whileHover={{ scale: 1.1, rotate: -4 }}
+        transition={{ type: "spring", stiffness: 380, damping: 20 }}
         style={{ borderColor: `${tint}22`, background: `${tint}10`, color: tint }}
       >
         <Icon className="h-5 w-5" />
-      </div>
+      </motion.div>
 
       {/* Mini viz */}
       {viz && (
@@ -133,8 +203,8 @@ function BentoCard({
         </div>
       )}
 
-      <h3 className="font-heading text-[1.05rem] font-medium tracking-tight text-white">{title}</h3>
-      <p className="mt-2.5 text-sm leading-relaxed text-white/40">{body}</p>
+      <h3 className="font-heading text-[1.05rem] font-medium tracking-tight text-white transition-colors duration-300 group-hover:text-white">{title}</h3>
+      <p className="mt-2.5 text-sm leading-relaxed text-white/40 transition-colors duration-300 group-hover:text-white/55">{body}</p>
     </motion.div>
   )
 }
@@ -143,23 +213,36 @@ export function Benefits() {
   const reduced = useReducedMotion()
   return (
     <section className="relative overflow-hidden border-t border-white/[0.06]">
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[400px]"
-        style={{ background: "radial-gradient(50% 50% at 50% 0%, rgba(4,107,210,0.07), transparent 70%)" }} />
+      {/* Top radial glow */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
+        style={{ background: "radial-gradient(60% 70% at 50% 0%, rgba(4,107,210,0.12) 0%, rgba(4,107,210,0.04) 40%, transparent 75%)" }} />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-28">
-        <ScrollReveal className="mx-auto mb-16 max-w-2xl text-center">
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.22em] text-[#2d98f1]">Why Vozpar</p>
-          <h2 className="font-heading text-4xl font-medium leading-tight tracking-tight text-white md:text-5xl">
+      {/* Subtle dot grid background */}
+      {!reduced && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+          }}
+        />
+      )}
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:py-20">
+        <ScrollReveal className="mx-auto mb-8 md:mb-10 max-w-2xl text-center">
+          <p className="mb-3 md:mb-4 font-mono text-[10px] sm:text-xs uppercase tracking-[0.22em] text-[#2d98f1]">Why Vozpar</p>
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-medium leading-tight tracking-tight text-white lg:text-5xl">
             Built for real calls,
             <br className="hidden sm:block" />{" "}
             <span className="text-white/60">not demo videos.</span>
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-white/40">
+          <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg leading-relaxed text-white/40">
             Every design choice optimises for the moment a real caller hears a real response.
           </p>
         </ScrollReveal>
 
-        <StaggerGroup className="grid gap-3 lg:grid-cols-12">
+        <StaggerGroup className="grid gap-3 sm:gap-4 md:gap-5 lg:grid-cols-12">
           {MAIN.map(c => (
             <StaggerItem key={c.title} className={c.span}>
               <BentoCard icon={c.icon} title={c.title} body={c.body}
@@ -168,7 +251,7 @@ export function Benefits() {
           ))}
         </StaggerGroup>
 
-        <StaggerGroup className="mt-3 grid gap-3 sm:grid-cols-3">
+        <StaggerGroup className="mt-3 sm:mt-4 md:mt-5 grid gap-3 sm:gap-4 md:gap-5 sm:grid-cols-2 md:grid-cols-3">
           {SECONDARY.map(c => (
             <StaggerItem key={c.title}>
               <BentoCard icon={c.icon} title={c.title} body={c.body}

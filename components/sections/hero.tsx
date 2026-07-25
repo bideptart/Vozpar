@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import {
   ArrowRight, PhoneCall, CheckCircle, Zap, Shield,
-  Globe2, Calendar, Headphones, TrendingUp, PhoneOutgoing, Moon,
+  Globe2, Calendar, Headphones, TrendingUp, PhoneOutgoing, Moon, Mic,
 } from "lucide-react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { animate } from "motion/react"
@@ -12,8 +12,8 @@ import { animate } from "motion/react"
 // ── Rotating headline words ───────────────────────────────────────────────────
 const WORDS = ["Books Appointments", "Qualifies Leads", "Handles Support", "Drives Revenue", "Works 24/7"] as const
 
-// ── 3D Carousel cards data ────────────────────────────────────────────────────
-const CARDS = [
+// ── 3D Scene cards data ───────────────────────────────────────────────────────
+const SCENES = [
   {
     icon: Calendar,
     tag: "Booking",
@@ -22,7 +22,8 @@ const CARDS = [
     metricLabel: "booking rate",
     fact: "Checks calendar, confirms slot, sends SMS — zero staff needed.",
     color: "#2d98f1",
-    accent: "#1a7fc4",
+    bg: "from-[#0a1628] to-[#060d1f]",
+    particleColor: "#2d98f1",
   },
   {
     icon: Headphones,
@@ -32,7 +33,8 @@ const CARDS = [
     metricLabel: "first-call resolution",
     fact: "Answers from your knowledge base. Escalates only when truly needed.",
     color: "#6366f1",
-    accent: "#4f46e5",
+    bg: "from-[#0d0a28] to-[#07051a]",
+    particleColor: "#6366f1",
   },
   {
     icon: TrendingUp,
@@ -42,7 +44,8 @@ const CARDS = [
     metricLabel: "qualified lead lift",
     fact: "Scores inbound leads and sends hot prospects straight to your team.",
     color: "#0ea5e9",
-    accent: "#0284c7",
+    bg: "from-[#061520] to-[#030d18]",
+    particleColor: "#0ea5e9",
   },
   {
     icon: PhoneOutgoing,
@@ -52,7 +55,8 @@ const CARDS = [
     metricLabel: "re-engagement rate",
     fact: "Calls dormant leads and confirms appointments automatically.",
     color: "#8b5cf6",
-    accent: "#7c3aed",
+    bg: "from-[#100a28] to-[#07051a]",
+    particleColor: "#8b5cf6",
   },
   {
     icon: Moon,
@@ -62,11 +66,12 @@ const CARDS = [
     metricLabel: "after-hours capture",
     fact: "Every caller is greeted and helped — even at 3 AM.",
     color: "#10b981",
-    accent: "#059669",
+    bg: "from-[#061a14] to-[#031009]",
+    particleColor: "#10b981",
   },
 ] as const
 
-const INTERVAL = 3200
+const INTERVAL = 3400
 
 // ── Animated counter ──────────────────────────────────────────────────────────
 function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; delay?: number }) {
@@ -80,27 +85,104 @@ function Counter({ to, suffix = "", delay = 0 }: { to: number; suffix?: string; 
   return <>{val}{suffix}</>
 }
 
-// ── Waveform ──────────────────────────────────────────────────────────────────
-const BH = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8, 0.6]
-function Waveform({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+// ── Floating Particles ────────────────────────────────────────────────────────
+function Particle({ color, reduced }: { color: string; reduced: boolean }) {
+  const count = 12
   return (
-    <div className="flex items-center gap-[3px]" aria-hidden>
+    <div className="pointer-events-none absolute inset-0" aria-hidden>
+      {Array.from({ length: count }).map((_, i) => {
+        const angle = (i / count) * Math.PI * 2
+        const r = 95 + (i % 3) * 28
+        const x = 50 + Math.cos(angle) * (r / 2.2)
+        const y = 50 + Math.sin(angle) * (r / 2.8)
+        const size = 2 + (i % 3)
+        const delay = i * 0.22
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              left: `${x}%`,
+              top: `${y}%`,
+              width: size,
+              height: size,
+              background: color,
+              boxShadow: `0 0 ${size * 4}px ${color}`,
+            }}
+            animate={reduced ? undefined : {
+              opacity: [0.15, 0.9, 0.15],
+              scale: [0.8, 1.6, 0.8],
+              y: [0, -8, 0, 8, 0],
+            }}
+            transition={{
+              duration: 3.5 + (i % 3) * 0.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay,
+            }}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Orbiting Ring ─────────────────────────────────────────────────────────────
+function OrbitRing({ r, color, duration, reduced }: { r: number; color: string; duration: number; reduced: boolean }) {
+  return (
+    <motion.div
+      className="pointer-events-none absolute inset-0 flex items-center justify-center"
+      aria-hidden
+      animate={reduced ? undefined : { rotate: 360 }}
+      transition={{ duration, repeat: Infinity, ease: "linear" }}
+    >
+      <div
+        className="rounded-full border"
+        style={{
+          width: r * 2,
+          height: r * 2,
+          borderColor: `${color}25`,
+          borderStyle: "dashed",
+          borderWidth: 1,
+        }}
+      />
+      {/* Dot on the ring */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 6,
+          height: 6,
+          background: color,
+          boxShadow: `0 0 12px ${color}`,
+          top: `calc(50% - ${r}px - 3px)`,
+          left: "calc(50% - 3px)",
+        }}
+      />
+    </motion.div>
+  )
+}
+
+// ── Waveform bars ─────────────────────────────────────────────────────────────
+const BH = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8, 0.6, 0.72, 0.5, 0.88]
+function Waveform({ color, reduced }: { color: string; reduced: boolean }) {
+  return (
+    <div className="flex items-center gap-[2.5px]" aria-hidden>
       {BH.map((h, i) => (
-        <motion.span key={i} className="block w-[2.5px] rounded-full" style={{ background: color }}
-          animate={!reduced && active
-            ? { height: [h * 6, h * 22, h * 10, h * 20, h * 6], opacity: 0.85 }
-            : { height: h * 8, opacity: 0.3 }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.07 }} />
+        <motion.span key={i} className="block w-[2px] rounded-full" style={{ background: color }}
+          animate={reduced
+            ? { height: h * 8, opacity: 0.4 }
+            : { height: [h * 6, h * 24, h * 10, h * 22, h * 6], opacity: [0.6, 1, 0.7, 0.95, 0.6] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.065 }} />
       ))}
     </div>
   )
 }
 
-// ── 3D CAROUSEL ───────────────────────────────────────────────────────────────
-function Carousel3D({ reduced }: { reduced: boolean }) {
+// ── 3D Floating Scene ─────────────────────────────────────────────────────────
+function Scene3D({ reduced }: { reduced: boolean }) {
   const [active, setActive] = useState(0)
-  const n = CARDS.length
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const n = SCENES.length
 
   const start = () => {
     if (timerRef.current) clearInterval(timerRef.current)
@@ -113,168 +195,159 @@ function Carousel3D({ reduced }: { reduced: boolean }) {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [reduced])
 
-  // isMobile: on small screens only show front card (no 3D spread)
-  const [isMobile, setIsMobile] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)")
-    setIsMobile(mq.matches)
-    const h = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener("change", h)
-    return () => mq.removeEventListener("change", h)
-  }, [])
-
-  // Position each card in 3D space
-  const getStyle = (i: number) => {
-    const diff = ((i - active + n) % n)
-    const angle = diff === 0 ? 0 : diff <= Math.floor(n / 2) ? diff : diff - n
-
-    if (isMobile) {
-      // On mobile: stack cards, only front visible
-      return {
-        x: 0, z: angle === 0 ? 0 : -300,
-        rotateY: 0,
-        scale: angle === 0 ? 1 : 0.85,
-        opacity: angle === 0 ? 1 : 0,
-        zIndex: angle === 0 ? 50 : 10,
-      }
-    }
-
-    const xMap:  Record<number, number> = { 0: 0, 1: 200, 2: 310, [-1]: -200, [-2]: -310 }
-    const zMap:  Record<number, number> = { 0: 0, 1: -80, 2: -180, [-1]: -80, [-2]: -180 }
-    const ryMap: Record<number, number> = { 0: 0, 1: -22, 2: -38, [-1]: 22, [-2]: 38 }
-    const scMap: Record<number, number> = { 0: 1, 1: 0.80, 2: 0.62, [-1]: 0.80, [-2]: 0.62 }
-    const opMap: Record<number, number> = { 0: 1, 1: 0.60, 2: 0.30, [-1]: 0.60, [-2]: 0.30 }
-    const zIdx:  Record<number, number> = { 0: 50, 1: 40, 2: 30, [-1]: 40, [-2]: 30 }
-
-    const clamp = (v: number) => Math.max(-2, Math.min(2, v)) as -2 | -1 | 0 | 1 | 2
-    const k = clamp(angle)
-
-    return {
-      x: xMap[k] ?? 0, z: zMap[k] ?? -200,
-      rotateY: ryMap[k] ?? 0, scale: scMap[k] ?? 0.5,
-      opacity: opMap[k] ?? 0, zIndex: zIdx[k] ?? 10,
-    }
-  }
+  const scene = SCENES[active]
+  const Icon = scene.icon
 
   return (
-    <div
-      className="relative flex w-full items-center justify-center"
-      style={{
-        height: isMobile ? 420 : 460,
-        perspective: "1100px",
-        perspectiveOrigin: "50% 45%",
-      }}
-    >
+    <div className="relative flex h-[480px] w-full items-center justify-center" style={{ perspective: "900px" }}>
 
-      {/* Ambient glow that changes with active card */}
-      <motion.div aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-3xl blur-[80px]"
-        animate={{ background: `radial-gradient(ellipse at 50% 60%, ${CARDS[active].color}30, transparent 65%)` }}
-        transition={{ duration: 0.7 }}
+      {/* Ambient background glow — changes with scene */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-3xl"
+        animate={{ background: `radial-gradient(ellipse 70% 70% at 50% 50%, ${scene.color}22 0%, transparent 65%)` }}
+        transition={{ duration: 0.8 }}
+        aria-hidden
       />
 
-      {/* Cards */}
-      {CARDS.map((card, i) => {
-        const Icon = card.icon
-        const s = getStyle(i)
-        const isFront = i === active
+      {/* Outer orbit rings */}
+      <OrbitRing r={160} color={scene.color} duration={18} reduced={reduced} />
+      <OrbitRing r={120} color={scene.color} duration={12} reduced={reduced} />
 
-        return (
-          <motion.div key={i}
-            className="absolute cursor-pointer"
-            style={{ transformStyle: "preserve-3d", zIndex: s.zIndex }}
-            animate={{ x: s.x, z: s.z, rotateY: s.rotateY, scale: s.scale, opacity: s.opacity }}
-            transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 150, damping: 28, mass: 1, restDelta: 0.01 }}
-            onClick={() => { setActive(i); start() }}
+      {/* Floating particles */}
+      <AnimatePresence mode="wait">
+        <motion.div key={`particles-${active}`} className="absolute inset-0"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}>
+          <Particle color={scene.color} reduced={reduced} />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Central 3D card with tilt float */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, scale: 0.72, rotateX: 25, rotateY: -20, y: 40 }}
+          animate={{ opacity: 1, scale: 1, rotateX: 0, rotateY: 0, y: 0 }}
+          exit={{ opacity: 0, scale: 0.72, rotateX: -25, rotateY: 20, y: -40 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformStyle: "preserve-3d" }}
+          className="relative z-20 w-[300px]"
+        >
+          {/* 3D depth shadow layer */}
+          <motion.div
+            className="pointer-events-none absolute inset-0 rounded-3xl"
+            style={{
+              transform: "translateZ(-20px) translateY(18px) scale(0.92)",
+              background: `${scene.color}18`,
+              filter: "blur(20px)",
+              borderRadius: 24,
+            }}
+            animate={reduced ? undefined : { opacity: [0.5, 0.85, 0.5] }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+            aria-hidden
+          />
+
+          {/* Floating animation */}
+          <motion.div
+            animate={reduced ? undefined : { y: [0, -12, 0, 12, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
-            {/* Card shell — 280px wide */}
             <div
-              className="relative w-[260px] overflow-hidden rounded-2xl border sm:w-[280px]"
+              className="relative overflow-hidden rounded-3xl border"
               style={{
-                background: "linear-gradient(145deg, #0a0d1a 0%, #060810 60%, #080b14 100%)",
-                borderColor: isFront ? `${card.color}45` : "rgba(255,255,255,0.07)",
-                boxShadow: isFront
-                  ? `0 0 0 1px ${card.color}25, 0 32px 80px -20px ${card.color}35, 0 0 60px -10px ${card.color}20`
-                  : "0 8px 32px rgba(0,0,0,0.6)",
+                background: `linear-gradient(145deg, #0c1020 0%, #07090f 60%, #0a0d18 100%)`,
+                borderColor: `${scene.color}40`,
+                boxShadow: `
+                  0 0 0 1px ${scene.color}20,
+                  0 24px 80px -12px ${scene.color}35,
+                  0 0 80px -20px ${scene.color}25,
+                  inset 0 1px 0 rgba(255,255,255,0.06)
+                `,
               }}
             >
               {/* Top colour bar */}
               <div className="h-[2px] w-full"
-                style={{ background: `linear-gradient(90deg, transparent, ${card.color}, transparent)` }} />
+                style={{ background: `linear-gradient(90deg, transparent, ${scene.color}, transparent)` }} />
 
-              {/* Ambient inner glow */}
-              <div className="pointer-events-none absolute inset-0"
-                style={{ background: `radial-gradient(ellipse 70% 50% at 50% -10%, ${card.color}16, transparent 65%)` }}
-                aria-hidden />
-
-              {/* Shine sweep on active */}
-              {isFront && !reduced && (
+              {/* Shine sweep */}
+              {!reduced && (
                 <motion.div aria-hidden
                   className="pointer-events-none absolute inset-y-0 w-1/2 -skew-x-12"
-                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)" }}
-                  initial={{ left: "-60%" }}
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.055), transparent)" }}
                   animate={{ left: ["-60%", "160%"] }}
-                  transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.8, ease: "easeInOut" }}
+                  transition={{ duration: 2.6, repeat: Infinity, repeatDelay: 1.4, ease: "easeInOut" }}
                 />
               )}
 
-              <div className="p-6">
+              {/* Inner ambient glow */}
+              <div className="pointer-events-none absolute inset-0"
+                style={{ background: `radial-gradient(ellipse 80% 50% at 50% -10%, ${scene.color}12, transparent 65%)` }}
+                aria-hidden />
+
+              <div className="p-7">
                 {/* Tag + live dot */}
                 <div className="flex items-center justify-between">
-                  <span className="rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em]"
-                    style={{ borderColor: `${card.color}30`, color: card.color, background: `${card.color}0e` }}>
-                    {card.tag}
+                  <span className="rounded-full border px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em]"
+                    style={{ borderColor: `${scene.color}35`, color: scene.color, background: `${scene.color}0e` }}>
+                    {scene.tag}
                   </span>
-                  {isFront && (
-                    <span className="relative flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                    </span>
-                  )}
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                  </span>
                 </div>
 
-                {/* Icon */}
-                <div className="mt-5 flex h-12 w-12 items-center justify-center rounded-2xl border"
-                  style={{ borderColor: `${card.color}28`, background: `${card.color}14`, color: card.color }}>
-                  <Icon className="h-5 w-5" />
+                {/* Icon orb */}
+                <div className="mt-6 flex items-center gap-3">
+                  <motion.div
+                    className="flex h-14 w-14 items-center justify-center rounded-2xl border"
+                    style={{ borderColor: `${scene.color}30`, background: `${scene.color}18`, color: scene.color, boxShadow: `0 0 24px ${scene.color}22` }}
+                    animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </motion.div>
+                  <div>
+                    <p className="font-heading text-2xl font-bold" style={{ color: scene.color }}>
+                      {scene.metric}
+                    </p>
+                    <p className="text-[10px] text-white/30">{scene.metricLabel}</p>
+                  </div>
                 </div>
 
                 {/* Title */}
-                <h3 className="mt-4 font-heading text-xl font-semibold tracking-tight text-white">
-                  {card.title}
+                <h3 className="mt-5 font-heading text-xl font-semibold tracking-tight text-white">
+                  {scene.title}
                 </h3>
 
                 {/* Fact */}
-                <p className="mt-2 text-[13px] leading-relaxed text-white/40">{card.fact}</p>
+                <p className="mt-2 text-[13px] leading-relaxed text-white/40">{scene.fact}</p>
 
                 {/* Waveform */}
                 <div className="mt-5">
-                  <Waveform color={card.color} active={isFront} reduced={reduced} />
+                  <Waveform color={scene.color} reduced={reduced} />
                 </div>
 
-                {/* Metric */}
-                <div className="mt-4 flex items-end justify-between border-t border-white/[0.06] pt-4">
-                  <div>
-                    <p className="font-heading text-3xl font-bold" style={{ color: card.color }}>
-                      {card.metric}
-                    </p>
-                    <p className="mt-0.5 text-[10px] text-white/30">{card.metricLabel}</p>
-                  </div>
-                  <CheckCircle className="mb-1 h-5 w-5" style={{ color: `${card.color}60` }} />
+                {/* Bottom bar */}
+                <div className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-4">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/20">
+                    vozpar · live
+                  </span>
+                  <CheckCircle className="h-4 w-4" style={{ color: `${scene.color}70` }} />
                 </div>
               </div>
             </div>
           </motion.div>
-        )
-      })}
+        </motion.div>
+      </AnimatePresence>
 
       {/* Dot indicators */}
-      <div className="absolute -bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
-        {CARDS.map((card, i) => (
+      <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-2">
+        {SCENES.map((s, i) => (
           <button key={i} onClick={() => { setActive(i); start() }}
-            aria-label={`Card ${i + 1}`}
+            aria-label={`Scene ${i + 1}`}
             className="relative overflow-hidden rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]"
-            style={{ width: i === active ? 28 : 7, height: 7, background: i === active ? CARDS[active].color : "rgba(255,255,255,0.2)" }}
+            style={{ width: i === active ? 28 : 7, height: 7, background: i === active ? SCENES[active].color : "rgba(255,255,255,0.2)" }}
           >
             {i === active && !reduced && (
               <motion.span key={active}
@@ -343,7 +416,7 @@ export function Hero() {
             className="mt-7 font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3.2rem] lg:text-[3.6rem]">
             AI Voice Agent That
             <br />
-            {/* Rotating word — slides up like a ticker */}
+            {/* Rotating word */}
             <span className="relative inline-block h-[1.12em] overflow-hidden align-bottom">
               <AnimatePresence mode="wait">
                 <motion.span key={wordIdx}
@@ -413,7 +486,6 @@ export function Hero() {
             <div className="grid grid-cols-3 gap-4 sm:gap-6">
               {STATS.map((s, i) => (
                 <div key={s.lab} className="flex flex-col">
-                  {/* Number */}
                   <p className="font-heading text-2xl font-bold tabular-nums text-white sm:text-3xl lg:text-4xl">
                     <span className="text-[#2d98f1]">{s.pre}</span>
                     <span className="text-white">
@@ -421,9 +493,7 @@ export function Hero() {
                     </span>
                     <span className="text-[#2d98f1]">{s.suf}</span>
                   </p>
-                  {/* Divider */}
                   <span className="mt-2 block h-[2px] w-8 rounded-full bg-[#046bd2]/60" />
-                  {/* Label */}
                   <p className="mt-2 text-xs font-medium uppercase tracking-[0.14em] text-white/40 sm:text-[11px]">
                     {s.lab}
                   </p>
@@ -433,11 +503,11 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* ─── RIGHT: 3D carousel ──────────────────────────────────────── */}
+        {/* ─── RIGHT: 3D scene ───────────────────────────────────────── */}
         <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.75, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="relative flex items-center justify-center pb-8">
-          <Carousel3D reduced={Boolean(reduced)} />
+          <Scene3D reduced={Boolean(reduced)} />
         </motion.div>
       </div>
 
