@@ -1,5 +1,6 @@
 "use client"
 
+import type React from "react"
 import Link from "next/link"
 import { useState, useMemo, useRef } from "react"
 import { Search, ArrowRight, CreditCard, Phone, Headset, Shield, Users, Zap } from "lucide-react"
@@ -13,6 +14,7 @@ import { RelatedLinks } from "@/components/seo/related-links"
 import {
   FloatingAccents,
   ParticleField,
+  AmbientWaveform,
   FloatingIconBadges,
 } from "@/components/industries/industries-fx"
 
@@ -25,6 +27,20 @@ const getCategoryIcon = (id: string) => {
     case "account":       return <Users className="h-4 w-4" />
     default:              return null
   }
+}
+
+/**
+ * One tint per category, matching the tinted-pill treatment the homepage
+ * UseCases / PlatformCore tab rails already use: the pill picks up its own
+ * colour on hover and holds it while active, instead of every pill sharing
+ * the single blue --primary.
+ */
+const CATEGORY_TINT: Record<string, string> = {
+  billing:         "#2d98f1", // blue
+  "phone-numbers": "#10b981", // green
+  agents:          "#ef4444", // red
+  compliance:      "#f59e0b", // orange
+  account:         "#a855f7", // purple
 }
 
 export default function FaqClient() {
@@ -54,18 +70,15 @@ export default function FaqClient() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10 bg-black">
+      {/* Matches the Industries page hero: flat bg-black with only the
+          FX layers on top. The blue radial wash and the bg-grid overlay
+          that used to sit here were what kept this reading navy rather
+          than black. */}
+      <section className="relative overflow-hidden border-b border-border/50 bg-black">
         <FloatingAccents />
         <ParticleField />
+        <AmbientWaveform />
         <FloatingIconBadges />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
-        />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-28 md:px-6 md:py-44">
           <ScrollReveal className="text-center">
             <span className="ai-pill-magenta">
@@ -108,32 +121,50 @@ export default function FaqClient() {
           {/* Category tabs — slim flat pills like 9278.ai reference */}
           <ScrollReveal className="mt-8">
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {FAQ_GROUPS.map((g) => (
-                <button
-                  key={g.id}
-                  onClick={() => {
-                    if (activeCategory === g.id) {
-                      setActiveCategory(null)
-                    } else {
-                      setActiveCategory(g.id)
-                      setTimeout(() => {
-                        contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-                      }, 50)
+              {FAQ_GROUPS.map((g) => {
+                const tint = CATEGORY_TINT[g.id] ?? "#2d98f1"
+                const isActive = activeCategory === g.id
+                return (
+                  <button
+                    key={g.id}
+                    onClick={() => {
+                      if (activeCategory === g.id) {
+                        setActiveCategory(null)
+                      } else {
+                        setActiveCategory(g.id)
+                        setTimeout(() => {
+                          contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                        }, 50)
+                      }
+                      setSearchQuery("")
+                    }}
+                    /* Colours live in CSS custom properties so hover and
+                       active share one source of truth — Tailwind arbitrary
+                       values read them, no per-state inline style needed. */
+                    style={
+                      {
+                        "--tint": tint,
+                        "--tint-bg": `${tint}22`,
+                        "--tint-border": `${tint}60`,
+                        "--tint-glow": `${tint}40`,
+                      } as React.CSSProperties
                     }
-                    setSearchQuery("")
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    activeCategory === g.id
-                      ? "bg-primary text-white shadow-md shadow-primary/30 border border-primary"
-                      : "border border-white/15 text-slate-400 hover:border-primary/40 hover:text-white hover:bg-primary/10"
-                  }`}
-                >
-                  <span className={activeCategory === g.id ? "text-white" : "text-primary"}>
-                    {getCategoryIcon(g.id)}
-                  </span>
-                  {g.title}
-                </button>
-              ))}
+                    className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                      isActive
+                        ? "border-[var(--tint-border)] bg-[var(--tint-bg)] text-white shadow-[0_0_20px_var(--tint-glow)]"
+                        : "border-white/15 text-slate-400 hover:border-[var(--tint-border)] hover:bg-[var(--tint-bg)] hover:text-white hover:shadow-[0_0_20px_var(--tint-glow)]"
+                    }`}
+                  >
+                    <span
+                      className={`transition-colors duration-300 ${isActive ? "" : "text-slate-500 group-hover:text-[var(--tint)]"}`}
+                      style={isActive ? { color: tint } : undefined}
+                    >
+                      {getCategoryIcon(g.id)}
+                    </span>
+                    {g.title}
+                  </button>
+                )
+              })}
             </div>
           </ScrollReveal>
         </div>
