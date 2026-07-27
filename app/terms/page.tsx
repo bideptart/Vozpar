@@ -9,7 +9,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 export const metadata: Metadata = pageSeo({
   title: "Terms of Service",
   description:
-    "The Terms of Service governing your use of the Vozpar AI voice agent platform, operated by Ace Peak Invest Pte Ltd.",
+    "The Terms of Service governing your use of the Vozpar AI voice agent platform, operated by Vozpar.",
   path: "/terms",
 })
 
@@ -26,26 +26,11 @@ export default function TermsOfServicePage() {
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border/50">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
-        />
-        <div className="relative mx-auto w-full max-w-4xl px-4 py-12 text-center md:px-6 md:py-16">
-          <ScrollReveal>
-            <span className="ai-pill-magenta">
-              <span className="h-1 w-1 rounded-full bg-accent" />
-              Legal
-            </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl">
-              Terms of <span className="text-primary">Service.</span>
-            </h1>
-            <p className="mt-5 text-sm text-muted-foreground">Last updated on 24 June 2026</p>
-          </ScrollReveal>
+      <section className="border-b border-border/50 bg-muted/20 py-12 md:py-16">
+        <div className="mx-auto w-full max-w-4xl px-4 md:px-6">
+          <span className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">Legal</span>
+          <h1 className="mt-2 font-serif text-3xl font-normal tracking-tight md:text-5xl">Terms of Service</h1>
+          <p className="mt-3 text-sm text-muted-foreground">Last updated: February 2026 · Version 2.1</p>
         </div>
       </section>
 
@@ -53,13 +38,13 @@ export default function TermsOfServicePage() {
       <article className="legal mx-auto w-full max-w-3xl px-4 py-10 md:px-6 md:py-12">
         <p>
           These Terms of Service (&ldquo;Agreement&rdquo;) govern your access to and use of the Vozpar platform
-          operated by Ace Peak Invest Pte Ltd. Please read them carefully before using the Services.
+          operated by Vozpar. Please read them carefully before using the Services.
         </p>
 
         <h2 id="acceptance">1. Acceptance and Modification of Terms</h2>
         <h3>1.1 Acceptance</h3>
         <p>
-          By using the services of Ace Peak Invest Pte Ltd (&ldquo;Services&rdquo;), accessing our customer dashboard
+          By using the services of Vozpar (&ldquo;Services&rdquo;), accessing our customer dashboard
           and self-hosted control panel (voice.Vozpar), using our APIs, browsing our website (www.Vozpar), or clicking
           &ldquo;agree,&rdquo; &ldquo;get started,&rdquo; or a similar button during signup, you acknowledge that you
           have read, understood, and agree to be bound by these Terms of Service (&ldquo;Agreement&rdquo;). Your use of
@@ -67,7 +52,7 @@ export default function TermsOfServicePage() {
         </p>
         <h3>1.2 Modification</h3>
         <p>
-          Ace Peak Invest Pte Ltd (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our,&rdquo; or &ldquo;Vozpar&rdquo;)
+          Vozpar (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our,&rdquo; or &ldquo;Vozpar&rdquo;)
           reserves the right to modify this Agreement at any time, at our sole discretion.
         </p>
         <h3>1.3 Notification of Changes</h3>
@@ -491,7 +476,7 @@ export default function TermsOfServicePage() {
         <h2 id="indemnification">13. Indemnification</h2>
         <h3>13.1 Indemnity Obligation</h3>
         <p>
-          You agree to indemnify, defend, and hold harmless Vozpar (Ace Peak Invest Pte Ltd), its affiliates, and their
+          You agree to indemnify, defend, and hold harmless Vozpar, its affiliates, and their
           officers, directors, employees, and agents from and against any claims, damages, liabilities, losses, and
           expenses (including reasonable legal fees) arising out of or related to: your use of the Services; your
           content, agents, prompts, or knowledge sources; your calls, recordings, or messaging; your violation of this
@@ -593,7 +578,7 @@ export default function TermsOfServicePage() {
         <p>For questions about this Agreement, contact:</p>
         <ul>
           <li>
-            <strong>Company Name:</strong> Ace Peak Invest Pte Ltd
+            <strong>Company Name:</strong> Vozpar
           </li>
           <li>
             <strong>Address:</strong> 1 Scotts Road #24-10 Shaw Centre, Singapore 228208, Singapore

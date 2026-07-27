@@ -15,7 +15,7 @@ export default function DpaPage() {
     <LegalPage title="Data Processing" accent="Agreement." name="Data Processing Agreement" path="/dpa">
       <p>
         This Data Processing Agreement (&ldquo;DPA&rdquo;) forms part of the{" "}
-        <Link href="/terms">Master Services Agreement</Link> between Ace Peak Invest Pte Ltd operating Vozpar
+        <Link href="/terms">Master Services Agreement</Link> between Vozpar
         (&ldquo;Processor&rdquo;, &ldquo;we&rdquo;) and the business customer (&ldquo;Controller&rdquo;,
         &ldquo;Customer&rdquo;). It applies where Vozpar processes Customer Personal Data on the Customer&apos;s behalf —
         in practice, the personal data of the Customer&apos;s callers handled by the AI agent. For Vozpar&apos;s own
@@ -149,7 +149,7 @@ export default function DpaPage() {
         <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
         <li><strong>DPO:</strong> <a href="mailto:dpo@Vozpar">dpo@Vozpar</a></li>
       </ul>
-      <p>Ace Peak Invest Pte Ltd (Vozpar), 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Vozpar, 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
     </LegalPage>
   )
 }

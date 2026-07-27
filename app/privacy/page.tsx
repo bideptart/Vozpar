@@ -9,7 +9,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 export const metadata: Metadata = pageSeo({
   title: "Privacy Policy",
   description:
-    "How Ace Peak Invest Pte Ltd (Vozpar) collects, uses, safeguards, and discloses information arising from your use of the Vozpar AI voice agent platform.",
+    "How Vozpar collects, uses, safeguards, and discloses information arising from your use of the Vozpar AI voice agent platform.",
   path: "/privacy",
 })
 
@@ -52,8 +52,8 @@ export default function PrivacyPolicyPage() {
       {/* Body */}
       <article className="legal mx-auto w-full max-w-3xl px-4 py-10 md:px-6 md:py-12">
         <p>
-          Welcome to Vozpar. This Privacy Policy explains how Ace Peak Invest Pte Ltd (&ldquo;us,&rdquo;
-          &ldquo;we,&rdquo; &ldquo;our,&rdquo; &ldquo;Vozpar&rdquo;), a company registered in Singapore that operates
+          Welcome to Vozpar. This Privacy Policy explains how Vozpar (&ldquo;us,&rdquo;
+          &ldquo;we,&rdquo; &ldquo;our,&rdquo; &ldquo;Vozpar&rdquo;), which operates
           the Vozpar platform, collects, uses, safeguards, and discloses information arising from your use of our
           services. This includes our website (www.Vozpar), our customer dashboard and self-hosted control panel
           (voice.Vozpar), our APIs, and our AI voice agent, telephony, and related products and services
@@ -549,7 +549,7 @@ export default function PrivacyPolicyPage() {
         <p>For questions, concerns, or to exercise your rights, contact us at:</p>
         <ul>
           <li>
-            <strong>Company Name:</strong> Ace Peak Invest Pte Ltd
+            <strong>Company Name:</strong> Vozpar
           </li>
           <li>
             <strong>Address:</strong> 1 Scotts Road #24-10 Shaw Centre, Singapore 228208, Singapore

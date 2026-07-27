@@ -12,7 +12,7 @@ import { RelatedLinks } from "@/components/seo/related-links"
 export const metadata: Metadata = pageSeo({
   title: "About",
   description:
-    "Vozpar builds AI voice agents that actually sound human — carrier-grade, self-hosted, and sub-second. Operated by Ace Peak Invest Pte Ltd across the USA, Europe, UK, and Latin America.",
+    "Vozpar builds AI voice agents that actually sound human — carrier-grade, self-hosted, and sub-second. Operated by Vozpar across the USA, Europe, UK, and Latin America.",
   path: "/about",
 })
 
@@ -161,8 +161,7 @@ export default function AboutPage() {
               Carrier-grade, globally.
             </h2>
             <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-              Vozpar is operated by <strong className="text-foreground">Ace Peak Invest Pte Ltd</strong>, a company
-              registered in Singapore, with voice infrastructure spanning the USA, Europe, the UK, and Latin America. We
+              Vozpar is operated by <strong className="text-foreground">Vozpar</strong>, with voice infrastructure spanning the USA, Europe, the UK, and Latin America. We
               run on real telecom rails — not a demo — with the licensing and robocall-mitigation that carrier-grade
               calling requires.
             </p>
