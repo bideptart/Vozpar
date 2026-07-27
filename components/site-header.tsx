@@ -132,18 +132,39 @@ export function SiteHeader() {
                 Sign in
               </a>
 
-            {/* Full pill on sm and up. Below that the label wraps into two
-                lines and breaks the bar (the mobile drawer already repeats
-                this CTA full-width at the bottom), so a compact icon-only
-                version stands in its place instead. */}
+            {/* Full pill on sm and up, compact icon-only below that (the
+                mobile drawer already repeats this CTA full-width).
+                "Start free" replaces "Build your agent": it names the offer
+                rather than the task, it's a claim the site already backs
+                (60-day voice credit, no card), and being ~half the width it
+                no longer crowds the bar on small laptops. */}
             <Link
-              href="/get-started"
-              className="group/btn relative hidden h-9 items-center gap-1.5 overflow-hidden rounded-full bg-[#046bd2] whitespace-nowrap px-5 text-sm font-semibold text-white shadow-[0_0_16px_rgba(4,107,210,0.4)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_24px_rgba(4,107,210,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:inline-flex"
+              href="/contact"
+              className="group/btn relative hidden h-9 items-center gap-2 overflow-hidden rounded-full whitespace-nowrap pl-3.5 pr-4 text-sm font-semibold text-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:inline-flex"
+              style={{
+                background: "linear-gradient(135deg, #0a4fa0 0%, #046bd2 45%, #2d98f1 100%)",
+                boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.22), 0 0 18px -2px rgba(4,107,210,0.55)",
+              }}
             >
+              {/* Live-status dot — echoes the "NOW LIVE" chip in the hero. */}
+              <span className="relative z-10 flex h-1.5 w-1.5 shrink-0">
+                {!reduced && (
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75" />
+                )}
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
+              </span>
+
               <span className="relative z-10 inline-flex items-center gap-1.5">
-                Build your agent
+                Start free
                 <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
               </span>
+
+              {/* Brightens on hover without a colour jump. */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-white opacity-0 transition-opacity duration-300 group-hover/btn:opacity-[0.12]"
+              />
+
               {!reduced && (
                 <motion.span
                   aria-hidden
@@ -155,9 +176,13 @@ export function SiteHeader() {
             </Link>
 
             <Link
-              href="/get-started"
-              aria-label="Build your agent"
-              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#046bd2] text-white shadow-[0_0_16px_rgba(4,107,210,0.4)] transition-all duration-200 hover:bg-[#0579e8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:hidden"
+              href="/contact"
+              aria-label="Start free"
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:hidden"
+              style={{
+                background: "linear-gradient(135deg, #0a4fa0 0%, #046bd2 45%, #2d98f1 100%)",
+                boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.22), 0 0 16px -2px rgba(4,107,210,0.5)",
+              }}
             >
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -233,9 +258,16 @@ export function SiteHeader() {
                     className="flex h-11 items-center justify-center rounded-xl border border-white/10 text-sm text-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
                     Sign in
                   </a>
-                  <Link href="/get-started" onClick={() => setOpen(false)}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#046bd2] text-sm font-semibold text-white shadow-[0_0_16px_rgba(4,107,210,0.35)] hover:bg-[#0579e8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
-                    Build your agent
+                  <Link href="/contact" onClick={() => setOpen(false)}
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]"
+                    style={{
+                      background: "linear-gradient(135deg, #0a4fa0 0%, #046bd2 45%, #2d98f1 100%)",
+                      boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.22), 0 0 16px -2px rgba(4,107,210,0.45)",
+                    }}>
+                    <span className="relative flex h-1.5 w-1.5 shrink-0">
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                    </span>
+                    Start free
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
