@@ -20,6 +20,7 @@ export default function HomePage() {
         path="/"
         serviceType="AI voice agent platform"
       />
+      {/* ScrollProgressBar now mounts once in app/layout.tsx for every route. */}
       <SiteHeader />
       <main className="flex-1">
         <Hero />

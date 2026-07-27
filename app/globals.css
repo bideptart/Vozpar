@@ -482,6 +482,21 @@
   animation-delay: var(--viz-ring-delay, 0s);
 }
 
+/* Voice-frequency dot ripple — a row of dots bobbing vertically with a
+   per-dot phase offset, reading as a travelling wave crest. Deliberately a
+   different silhouette (discrete dots, vertical bounce) from every bar-based
+   visualisation on the page — nothing else uses translateY for its primary
+   motion. Paired amplitude/opacity swing so livelier dots also read louder. */
+@keyframes viz-dotwave {
+  0%, 100% { transform: translateY(0); opacity: var(--viz-dotwave-op-min, 0.45); }
+  50%      { transform: translateY(var(--viz-dotwave-y, -9px)); opacity: var(--viz-dotwave-op-max, 1); }
+}
+.viz-dotwave {
+  animation: viz-dotwave var(--viz-dotwave-duration, 1.6s) ease-in-out infinite;
+  animation-delay: var(--viz-dotwave-delay, 0s);
+  will-change: transform, opacity;
+}
+
 /* Status LED blink. */
 @keyframes viz-blink {
   0%, 100% { opacity: 0.22; }
@@ -562,7 +577,8 @@
   .viz-ring,
   .viz-blink,
   .viz-scan,
-  .viz-peak {
+  .viz-peak,
+  .viz-dotwave {
     animation: none !important;
   }
 
@@ -578,6 +594,7 @@
     opacity: 0.8 !important;
     transform: translateY(calc(var(--viz-peak-height, 40px) * -1)) !important;
   }
+  .viz-dotwave { opacity: 0.75 !important; transform: none !important; }
 
   /* Particles and circuit pulses resolve to opacity 0 at the 0% keyframe, so
      without this they would vanish entirely rather than settling into a

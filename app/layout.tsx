@@ -5,7 +5,7 @@ import { Suspense } from "react"
 import { SITE } from "@/lib/seo"
 import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/seo/jsonld"
 import { PageviewTracker } from "@/components/analytics/pageview-tracker"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ScrollProgressBar } from "@/components/animation/scroll-progress-bar"
 
 // Vozpar typography (per the brand reference doc):
 //   Archivo 500 — all headings, always with negative tracking
@@ -110,17 +110,26 @@ export default function RootLayout({
       >
         <OrganizationJsonLd />
         <WebsiteJsonLd />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <Suspense fallback={null}>
-            <PageviewTracker />
-          </Suspense>
-          {children}
-        </ThemeProvider>
+        {/* Mounted once here so every route gets it — was previously added
+            page-by-page (Home imported it directly, Industries used its own
+            older version). See components/animation/scroll-progress-bar.tsx
+            for what it does; components/industries/scroll-progress.tsx is
+            the old per-page version this supersedes. */}
+        <ScrollProgressBar />
+        {/* next-themes' ThemeProvider used to wrap everything here. Removed:
+            there's no theme toggle wired into the UI (theme-toggle.tsx is
+            unused), no Toaster is mounted to consume it, and it defaulted to
+            "light" anyway — which never applied the .dark class the CSS is
+            built around, so it was doing nothing visually. It's also a
+            known source of "state update on a component that hasn't mounted
+            yet" dev warnings in React 18/19 strict mode, which is exactly
+            what showed up in the console. If theming is wired up again
+            later, re-add <ThemeProvider> from @/components/theme-provider
+            here. */}
+        <Suspense fallback={null}>
+          <PageviewTracker />
+        </Suspense>
+        {children}
       </body>
     </html>
   )

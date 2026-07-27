@@ -14,7 +14,6 @@ import {
 import { IndustryMarquee } from "@/components/industries/industry-marquee"
 import { StatStrip } from "@/components/industries/stat-strip"
 import { IndustryCTA } from "@/components/industries/industry-cta"
-import { ScrollProgressBar } from "@/components/industries/scroll-progress"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 import { RelatedGuides } from "@/components/industries/related-guides"
@@ -30,7 +29,8 @@ export const metadata: Metadata = pageSeo({
 export default function IndustriesPage() {
   return (
     <main className={`min-h-dvh bg-black text-foreground ${industriesBody.className}`}>
-      <ScrollProgressBar />
+      {/* ScrollProgressBar (the improved version) now mounts once in
+          app/layout.tsx for every route — no longer rendered per-page here. */}
       <SiteHeader />
 
       <BreadcrumbJsonLd

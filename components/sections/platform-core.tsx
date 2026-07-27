@@ -7,6 +7,7 @@ import {
 } from "lucide-react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
+import { ArchitectureViz, type ArchKind } from "@/components/sections/platform-core-visuals"
 
 const ARCHITECTURE_TABS = [
   {
@@ -27,6 +28,7 @@ const ARCHITECTURE_TABS = [
       { label: "CRM", icon: Database },
       { label: "Knowledge Base", icon: FileText },
     ],
+    viz: "hub" as ArchKind,
     metrics: [
       { label: "Sync latency", value: "<200ms" },
       { label: "Systems linked", value: "4 active" },
@@ -50,6 +52,7 @@ const ARCHITECTURE_TABS = [
       { label: "Telnyx", icon: Radio },
       { label: "SIP Trunk", icon: Waypoints },
     ],
+    viz: "relay" as ArchKind,
     metrics: [
       { label: "Audio latency", value: "<300ms" },
       { label: "Uptime SLA", value: "99.99%" },
@@ -73,6 +76,7 @@ const ARCHITECTURE_TABS = [
       { label: "Encrypted Store", icon: Lock },
       { label: "Access Control", icon: KeyRound },
     ],
+    viz: "vault" as ArchKind,
     metrics: [
       { label: "External data", value: "0 bytes" },
       { label: "Compliance", value: "SOC2 · HIPAA" },
@@ -81,112 +85,8 @@ const ARCHITECTURE_TABS = [
 ] as const
 
 type TabId = (typeof ARCHITECTURE_TABS)[number]["id"]
-type Tab = (typeof ARCHITECTURE_TABS)[number]
 
 const TAB_INTERVAL = 5000
-
-// Shared coordinate space for the hub-and-node diagram — HTML nodes and the SVG
-// connection lines both derive their positions from these same numbers so they
-// never drift out of alignment.
-const CANVAS = { w: 400, h: 230 }
-const HUB_POS = { x: 200, y: 118 }
-const NODE_POS = [
-  { x: 62, y: 40 },
-  { x: 338, y: 40 },
-  { x: 200, y: 202 },
-] as const
-
-const pct = (v: number, total: number) => `${(v / total) * 100}%`
-
-// ── Live architecture visualization — glassmorphic hub with floating, connected
-//    service nodes. Content (nodes/tint/icon) is driven entirely by the active tab. ──
-function ArchitectureVisual({ current, reduced }: { current: Tab; reduced: boolean }) {
-  const Icon = current.icon
-
-  return (
-    <div className="relative h-[220px] w-full overflow-hidden sm:h-[240px]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[50%] h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-colors duration-500"
-        style={{ background: current.tint, opacity: 0.16 }}
-      />
-
-      <svg
-        className="absolute inset-0 h-full w-full"
-        viewBox={`0 0 ${CANVAS.w} ${CANVAS.h}`}
-        preserveAspectRatio="none"
-        aria-hidden
-      >
-        {NODE_POS.map((n, i) => (
-          <g key={i}>
-            <line x1={HUB_POS.x} y1={HUB_POS.y} x2={n.x} y2={n.y} stroke="white" strokeOpacity={0.07} strokeWidth={1.5} />
-            {!reduced && (
-              <motion.line
-                x1={HUB_POS.x} y1={HUB_POS.y} x2={n.x} y2={n.y}
-                stroke={current.tint} strokeWidth={1.5} strokeDasharray="5 9" strokeLinecap="round"
-                animate={{ strokeDashoffset: [0, -28] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: i * 0.15 }}
-              />
-            )}
-          </g>
-        ))}
-      </svg>
-
-      {/* Hub */}
-      <motion.div
-        className="absolute flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-2xl border backdrop-blur-md"
-        style={{
-          left: pct(HUB_POS.x, CANVAS.w),
-          top: pct(HUB_POS.y, CANVAS.h),
-          borderColor: `${current.tint}55`,
-          background: `linear-gradient(155deg, ${current.tint}30, rgba(8,10,20,0.65))`,
-          boxShadow: `0 0 30px -6px ${current.tint}80`,
-        }}
-        animate={reduced ? undefined : { scale: [1, 1.05, 1] }}
-        transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <Icon className="h-5 w-5" style={{ color: current.tint }} />
-        <span className="absolute -bottom-2 flex items-center gap-1 rounded-full bg-emerald-500 px-1.5 py-[1px] font-mono text-[7px] font-bold uppercase text-black">
-          Live
-        </span>
-      </motion.div>
-
-      {/* Satellite nodes — each carries its own icon so every tab's diagram reads as a
-          distinct system map, not the same three dots relabeled. */}
-      {NODE_POS.map((pos, i) => {
-        const node = current.nodes[i]
-        const NodeIcon = node.icon
-        return (
-          <motion.div
-            key={`${current.id}-${node.label}`}
-            className="absolute w-[112px] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/[0.05] px-2.5 py-2 text-left backdrop-blur-md transition-transform duration-300 hover:scale-[1.06] hover:border-white/25 sm:w-[130px]"
-            style={{ left: pct(pos.x, CANVAS.w), top: pct(pos.y, CANVAS.h) }}
-            initial={reduced ? undefined : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.1 + i * 0.08 }}
-          >
-            <div className="flex items-center gap-1.5">
-              <span
-                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border"
-                style={{ borderColor: `${current.tint}35`, background: `${current.tint}18`, color: current.tint }}
-              >
-                <NodeIcon className="h-3 w-3" />
-              </span>
-              <span className="truncate font-mono text-[9px] font-medium text-white/75">{node.label}</span>
-              <span className="relative ml-auto flex h-1.5 w-1.5 shrink-0">
-                <span
-                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                  style={{ background: current.tint }}
-                />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: current.tint }} />
-              </span>
-            </div>
-          </motion.div>
-        )
-      })}
-    </div>
-  )
-}
 
 export function PlatformCore() {
   const reduced = useReducedMotion()
@@ -217,27 +117,27 @@ export function PlatformCore() {
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-18 lg:py-20">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         {/* Header */}
-        <ScrollReveal className="mx-auto mb-8 max-w-3xl text-center">
+        <ScrollReveal className="mx-auto mb-6 max-w-3xl text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1]">
             <Sparkles className="h-3 w-3 text-[#2d98f1]" />
             Enterprise Infrastructure
           </div>
-          <h2 className="font-heading text-2xl font-medium leading-[1.12] tracking-[-0.03em] text-white sm:text-3xl md:text-4xl lg:text-5xl">
+          <h2 className="font-heading text-2xl font-medium leading-[1.12] tracking-[-0.03em] text-white sm:text-3xl lg:text-4xl">
             Built for Zero Downtime &{" "}
             <span className="bg-gradient-to-r from-[#2d98f1] via-[#60b8ff] to-[#10b981] bg-clip-text text-transparent">
               Total Data Privacy
             </span>
           </h2>
-          <p className="mt-3 text-sm text-white/45 sm:text-base">
+          <p className="mt-2.5 text-sm text-white/45">
             Everything you need in one architecture — real-time tool execution, carrier independence, and 100% self-hosted data ownership.
           </p>
         </ScrollReveal>
 
         {/* Tab Switcher Pills */}
         <div
-          className="mb-6 flex flex-wrap justify-center gap-2"
+          className="mb-5 flex flex-wrap justify-center gap-2"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -354,9 +254,9 @@ export function PlatformCore() {
               {/* Right Column: Live Architecture Visualization */}
               <div className="lg:col-span-5">
                 <div
-                  className="relative overflow-hidden rounded-2xl border backdrop-blur-xl"
+                  className="relative overflow-hidden rounded-2xl border"
                   style={{
-                    background: "linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(6,8,16,0.7) 60%)",
+                    background: "linear-gradient(145deg, rgba(255,255,255,0.05) 0%, #000000 60%)",
                     borderColor: `${current.tint}35`,
                     boxShadow: `0 20px 50px -12px ${current.tint}25`,
                   }}
@@ -372,7 +272,13 @@ export function PlatformCore() {
                     </span>
                   </div>
 
-                  <ArchitectureVisual current={current} reduced={Boolean(reduced)} />
+                  <ArchitectureViz
+                    kind={current.viz}
+                    icon={current.icon}
+                    tint={current.tint}
+                    nodes={current.nodes}
+                    reduced={Boolean(reduced)}
+                  />
 
                   <div className="grid grid-cols-2 divide-x divide-white/[0.06] border-t border-white/[0.08]">
                     {current.metrics.map(m => (
