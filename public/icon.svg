@@ -28,9 +28,6 @@
     </linearGradient>
   </defs>
 
-  <!-- Dark rounded tile, matching the app icon artwork. -->
-  <rect width="512" height="512" rx="114" fill="url(#vzTile)" />
-
   <!-- Ascending bars. Widened to 52px with 16px gaps: at a 16px favicon each
        bar lands on roughly a whole pixel, so they stay three distinct marks
        instead of blurring into one block. Brighter top stops for the same
