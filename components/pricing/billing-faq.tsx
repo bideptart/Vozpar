@@ -49,28 +49,32 @@ const LOGO_COLOR_STYLES = [
     hoverBorder: "hover:border-sky-400/90 hover:shadow-[0_0_25px_rgba(56,189,248,0.35)] hover:bg-sky-950/20",
     openBorder: "data-[state=open]:border-sky-400 data-[state=open]:bg-sky-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(56,189,248,0.4)]",
     accent: "from-sky-400 to-blue-600",
-    textHover: "group-hover/item:text-sky-300",
+    textHover: "group-hover/item:text-sky-300 data-[state=open]:text-sky-400",
+    svgHover: "[&>svg]:text-slate-400 [&>svg]:group-hover/item:text-sky-400 [&>svg]:data-[state=open]:text-sky-400",
   },
   {
     // 2. Logo Emerald Green
     hoverBorder: "hover:border-emerald-400/90 hover:shadow-[0_0_25px_rgba(52,211,153,0.35)] hover:bg-emerald-950/20",
     openBorder: "data-[state=open]:border-emerald-400 data-[state=open]:bg-emerald-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(52,211,153,0.4)]",
     accent: "from-emerald-400 to-teal-600",
-    textHover: "group-hover/item:text-emerald-300",
+    textHover: "group-hover/item:text-emerald-300 data-[state=open]:text-emerald-400",
+    svgHover: "[&>svg]:text-slate-400 [&>svg]:group-hover/item:text-emerald-400 [&>svg]:data-[state=open]:text-emerald-400",
   },
   {
     // 3. Logo Red
     hoverBorder: "hover:border-red-500/90 hover:shadow-[0_0_25px_rgba(239,68,68,0.35)] hover:bg-red-950/20",
     openBorder: "data-[state=open]:border-red-500 data-[state=open]:bg-red-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(239,68,68,0.4)]",
     accent: "from-red-400 to-rose-600",
-    textHover: "group-hover/item:text-red-400",
+    textHover: "group-hover/item:text-red-300 data-[state=open]:text-red-400",
+    svgHover: "[&>svg]:text-slate-400 [&>svg]:group-hover/item:text-red-400 [&>svg]:data-[state=open]:text-red-400",
   },
   {
     // 4. Logo Yellow / Gold
     hoverBorder: "hover:border-amber-400/90 hover:shadow-[0_0_25px_rgba(245,158,11,0.35)] hover:bg-amber-950/20",
     openBorder: "data-[state=open]:border-amber-400 data-[state=open]:bg-amber-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(245,158,11,0.4)]",
     accent: "from-amber-400 to-yellow-500",
-    textHover: "group-hover/item:text-amber-300",
+    textHover: "group-hover/item:text-amber-300 data-[state=open]:text-amber-400",
+    svgHover: "[&>svg]:text-slate-400 [&>svg]:group-hover/item:text-amber-400 [&>svg]:data-[state=open]:text-amber-400",
   },
 ]
 
@@ -116,7 +120,7 @@ export function BillingFAQ() {
                   aria-hidden="true"
                   suppressHydrationWarning
                 />
-                <AccordionTrigger className={`text-left font-sans text-base font-semibold text-slate-100 hover:no-underline transition-colors py-5 ${theme.textHover}`}>
+                <AccordionTrigger className={`text-left font-sans text-base font-semibold text-slate-100 hover:no-underline transition-colors py-5 ${theme.textHover} ${theme.svgHover}`}>
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="font-sans text-sm leading-relaxed text-slate-300/90 pb-5">
