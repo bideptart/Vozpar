@@ -53,7 +53,7 @@ export type FeatureLink = {
  * a single blue repeated three times made the row read as one block of
  * identical things rather than three separate places to go.
  */
-const LINK_TINTS = ["var(--features-blue)", "var(--features-green)", "var(--features-amber)"]
+const LINK_TINTS = ["#3b82f6", "#10b981", "#ff7a00"]
 
 /* ---------------------------------------------------------------------- */
 
@@ -302,11 +302,11 @@ export function FeatureRelated({
               <SpotlightPanel
                 glow={tint}
                 size={340}
-                // `translate`, not `transform`: Tailwind v4 compiles
-                // -translate-y-* to the standalone `translate` property, so a
-                // transition list naming `transform` never covers it and the
-                // lift snaps instead of easing.
-                className="h-full overflow-hidden rounded-2xl border border-border bg-card/30 backdrop-blur-sm transition-[translate,border-color] duration-300 hover:-translate-y-1.5 hover:border-white/25"
+                className="h-full overflow-hidden rounded-2xl border bg-card/30 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5"
+                style={{
+                  borderColor: `color-mix(in srgb, ${tint} 38%, transparent)`,
+                  boxShadow: `0 0 24px -6px color-mix(in srgb, ${tint} 20%, transparent)`,
+                }}
               >
                 {/* Top hairline that fills in from the left on hover */}
                 <span

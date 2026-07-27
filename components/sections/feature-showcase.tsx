@@ -59,20 +59,14 @@ type Feature = {
   detail: string
   stat: { value: string; label: string }
   points: string[]
+  accentColor: string
 }
 
-/**
- * One accent per category, so colour carries meaning instead of just cycling.
- * All four come from the brand reference's chart palette — the set that doc
- * designates for distinguishing series. Crimson is deliberately left out: the
- * brand assigns it to errors/destructive actions, so using it for a feature
- * category would read as a warning.
- */
 const CATEGORY_ACCENT: Record<Category, string> = {
-  Voice: "var(--features-blue)", // #2F8FE0 bright blue
-  Telephony: "var(--features-blue-deep)", // #1E6FD6 swoosh blue
-  Integrations: "var(--features-green)", // #1F9D55 growth green
-  Operations: "var(--features-amber)", // #F2A71B amber
+  Voice: "#3b82f6",
+  Telephony: "#ff7a00",
+  Integrations: "#ff7a00",
+  Operations: "#10b981",
 }
 
 const FEATURES: Feature[] = [
@@ -86,6 +80,7 @@ const FEATURES: Feature[] = [
       "Real-time WebRTC audio over a globally distributed media network. Audio goes in and comes back out natively — there's no text bottleneck in the middle adding a beat of silence before every reply.",
     stat: { value: "<300ms", label: "Round-trip response" },
     points: ["Edge media routing", "Native audio in, native audio out", "No text round-trip"],
+    accentColor: "#3b82f6", // 1. Blue
   },
   {
     icon: Languages,
@@ -97,6 +92,7 @@ const FEATURES: Feature[] = [
       "Auto-detect the caller's language on the first utterance and switch mid-call when they do. Pick a voice per agent, per region, or per campaign.",
     stat: { value: "30+", label: "Languages supported" },
     points: ["Auto language detection", "Mid-call switching", "Per-agent voice selection"],
+    accentColor: "#3b82f6", // 2. Blue
   },
   {
     icon: Repeat,
@@ -108,6 +104,7 @@ const FEATURES: Feature[] = [
       "Hand off to a human or swap between specialist agents mid-call, passing the full conversation context along. The person picking up already knows who's on the line and why.",
     stat: { value: "0", label: "Context lost on transfer" },
     points: ["Warm transfer to humans", "Agent-to-agent swaps", "Full context handoff"],
+    accentColor: "#ff7a00", // 3. Orange
   },
   {
     icon: CalendarClock,
@@ -119,6 +116,7 @@ const FEATURES: Feature[] = [
       "Native Google, Outlook, and Calendly integrations with real availability checks — so the slot the agent offers is a slot that's genuinely open.",
     stat: { value: "Live", label: "Availability checks" },
     points: ["Google and Outlook", "Calendly support", "Reschedule and cancel flows"],
+    accentColor: "#ff7a00", // 4. Orange
   },
   {
     icon: Activity,
@@ -130,6 +128,7 @@ const FEATURES: Feature[] = [
       "Every call is streamed to text with speaker labels, sentiment detection, and conversion tracking — with automatic PII/PCI redaction before encrypted storage and customizable retention windows.",
     stat: { value: "100%", label: "Transcribed & secured" },
     points: ["Speaker-labelled transcripts", "Automatic PII redaction", "Sentiment & intent analytics"],
+    accentColor: "#10b981", // 5. Green
   },
   {
     icon: Network,
@@ -141,6 +140,7 @@ const FEATURES: Feature[] = [
       "Burst capacity is built in. A campaign that goes from twenty calls an hour to two thousand doesn't need a capacity ticket, a new licence tier, or a bigger fleet.",
     stat: { value: "Unlimited", label: "Parallel calls" },
     points: ["Automatic burst scaling", "No per-port licensing", "No fleet sizing"],
+    accentColor: "#ef4444", // 6. Red
   },
 ]
 
@@ -771,7 +771,7 @@ export function FeatureShowcase() {
             layoutScroll
             role="tablist"
             aria-label="Platform features"
-            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:h-full lg:snap-none lg:scroll-pl-0 lg:flex-col lg:justify-between lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
+            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:justify-between lg:gap-2 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] lg:sticky lg:top-24 lg:self-start [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
               const isActive = i === activeIndex
@@ -807,34 +807,28 @@ export function FeatureShowcase() {
                   // blurb. The column is ~390px wide and the titles are short,
                   // so at 13px the row read as mostly empty space — the type
                   // sizes are set against the box, not shrunk to fit a height
-                  // target.
-                  //
-                  // Phone chips cap at 13rem. Uncapped, the longest title ran
-                  // ~305px against ~304px of visible track — exactly one chip
-                  // on screen at 320px. The cap buys a chip and a half, not
-                  // two; two full chips would need a ~9rem cap, which leaves
-                  // 70px of title and clips almost every one of them.
-                  className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border border-border bg-card/30 px-3 py-2 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:border-0 lg:bg-transparent lg:py-1 lg:hover:translate-x-1"
+                  className={`group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition-colors duration-200 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:py-2.5 ${
+                    isActive
+                      ? "border-border bg-card/60"
+                      : "border-border/50 bg-card/20 hover:bg-card/40"
+                  }`}
+                  style={{
+                    borderColor: isActive ? `color-mix(in srgb, ${itemAccent} 50%, transparent)` : undefined,
+                    boxShadow: isActive ? `0 0 20px -3px color-mix(in srgb, ${itemAccent} 25%, transparent)` : undefined,
+                  }}
                 >
-                  {/* Sliding active background — one element that animates
-                      between rows rather than 12 cross-fading backgrounds. */}
                   {isActive && (
                     <motion.span
                       layoutId="showcase-active"
-                      // -inset-px, not inset-0: `inset-0` resolves to the
-                      // padding box, i.e. inside the chip's own 1px border on
-                      // mobile, stacking two borders with mismatched corner
-                      // radii. This sits on top of it instead.
-                      className="absolute -inset-px rounded-xl border border-border bg-card lg:inset-0"
+                      className="absolute -inset-px rounded-xl border bg-card lg:inset-0"
+                      style={{
+                        borderColor: `color-mix(in srgb, ${itemAccent} 60%, transparent)`,
+                        boxShadow: `0 0 24px -4px color-mix(in srgb, ${itemAccent} 30%, transparent)`,
+                      }}
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
 
-                  {/* Auto-advance progress — same element as FeatureJourney's
-                      stepper: fills over AUTO_ADVANCE_MS while this chip is
-                      active, freezes mid-fill on hover/focus pause, and never
-                      renders for reduced-motion users since it never advances
-                      for them either. */}
                   {isActive && !reduced && (
                     <span
                       aria-hidden
@@ -845,6 +839,7 @@ export function FeatureShowcase() {
                         className="journey-progress-fill block h-full rounded-full"
                         style={{
                           background: itemAccent,
+                          boxShadow: `0 0 8px ${itemAccent}`,
                           animationDuration: `${AUTO_ADVANCE_MS}ms`,
                           animationPlayState: paused ? "paused" : "running",
                         }}
@@ -852,76 +847,56 @@ export function FeatureShowcase() {
                     </span>
                   )}
 
-                  {/* Edge marker. Half-height on hover, full when selected, so
-                      the row still acknowledges the cursor in the instant
-                      before the active background slides across. */}
                   <span
                     aria-hidden
                     className={`absolute -left-1 top-1/2 hidden h-5 w-[2px] -translate-y-1/2 rounded-full transition-[scale,opacity] duration-300 lg:block ${
                       isActive ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 group-hover:scale-y-50 group-hover:opacity-60"
                     }`}
-                    style={{ background: itemAccent }}
+                    style={{
+                      background: itemAccent,
+                      boxShadow: `0 0 8px ${itemAccent}`,
+                    }}
                   />
 
                   <span
-                    // Back to 32px on desktop now the row carries two lines:
-                    // the text block is ~34px tall, so it drives the row height
-                    // and a 28px tile just looked undersized next to it. Costs
-                    // nothing in height.
-                    className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105 lg:h-7 lg:w-7"
+                    className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-300 group-hover:scale-105 lg:h-7 lg:w-7"
                     style={{
                       background: isActive
-                        ? `color-mix(in srgb, ${itemAccent} 20%, transparent)`
-                        : "var(--card)",
+                        ? `color-mix(in srgb, ${itemAccent} 24%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 10%, transparent)`,
                       borderColor: isActive
-                        ? `color-mix(in srgb, ${itemAccent} 45%, transparent)`
-                        : "var(--border)",
-                      color: isActive ? itemAccent : "var(--muted-foreground)",
+                        ? `color-mix(in srgb, ${itemAccent} 60%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 22%, transparent)`,
+                      color: isActive ? itemAccent : `color-mix(in srgb, ${itemAccent} 80%, white)`,
+                      boxShadow: isActive ? `0 0 12px color-mix(in srgb, ${itemAccent} 35%, transparent)` : undefined,
                     }}
                   >
                     <Icon className="h-4 w-4 lg:h-3.5 lg:w-3.5" aria-hidden="true" />
                   </span>
                   <span className="relative min-w-0 flex-1">
                     <span
-                      // Two lines on the rail, one in the list. With the blurb
-                      // hidden on phones the title is the only label a chip
-                      // has, and at the 13rem cap seven of the twelve would
-                      // otherwise clip mid-word ("Recording, redactio…").
-                      // Both states are line-clamp so there's no display/
-                      // white-space conflict to resolve between breakpoints.
                       className={`text-sm font-medium leading-snug transition-colors line-clamp-2 lg:line-clamp-1 lg:text-sm ${
                         isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
                       {f.title}
                     </span>
-                    {/* Desktop list only. On the phone rail a second line would
-                        widen every chip and cut how many fit on screen, which is
-                        already the rail's weak point. In the vertical list it
-                        costs nothing horizontally.
-
-                        Shown on every row, never only the selected one:
-                        revealing it just for the active row would change that
-                        row's height and shove everything below it down by ~16px
-                        mid-hover, handing the cursor a different item than the
-                        one it was pointing at. */}
                     <span className="hidden truncate text-[11px] font-light leading-snug text-muted-foreground/70 lg:block">
                       {f.blurb}
                     </span>
                   </span>
 
-                  {/* Category tag, desktop only. The rows are ~390px wide and
-                      the titles are short, so most of that width was empty —
-                      this fills it with the one piece of information the row
-                      was missing, and colour-codes the list into its four
-                      groups at a glance. */}
                   <span
-                    className="relative ml-auto hidden shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] transition-opacity duration-300 lg:inline-block"
+                    className="relative ml-auto hidden shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] transition-all duration-300 lg:inline-block"
                     style={{
                       color: itemAccent,
-                      borderColor: `color-mix(in srgb, ${itemAccent} 30%, transparent)`,
-                      background: `color-mix(in srgb, ${itemAccent} 10%, transparent)`,
-                      opacity: isActive ? 1 : 0.55,
+                      borderColor: isActive
+                        ? `color-mix(in srgb, ${itemAccent} 50%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 25%, transparent)`,
+                      background: isActive
+                        ? `color-mix(in srgb, ${itemAccent} 18%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 8%, transparent)`,
+                      opacity: isActive ? 1 : 0.7,
                     }}
                   >
                     {f.tag}
@@ -931,11 +906,6 @@ export function FeatureShowcase() {
             })}
           </motion.div>
 
-          {/* Swipe hint — phone/tablet only, where the index is a horizontal
-              rail. Spells out that the twelve capabilities scroll, with a
-              nudging arrow, since the edge fade alone reads as decoration to
-              some. Hidden from lg up, where the list is a full vertical column
-              with nothing off-screen. */}
           <div className="mt-3 flex items-center justify-center gap-2 lg:hidden">
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/60">
               Swipe · all {FEATURES.length} capabilities
@@ -943,7 +913,7 @@ export function FeatureShowcase() {
             <motion.span
               aria-hidden
               className="inline-flex"
-              style={{ color: "var(--features-blue)" }}
+              style={{ color: accent }}
               animate={reduced ? undefined : { x: [0, 5, 0] }}
               transition={{ duration: 1.4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
             >
@@ -951,38 +921,38 @@ export function FeatureShowcase() {
             </motion.span>
           </div>
 
-          {/* DETAIL PANEL.
-              `lg:h-full` on both wrappers is what keeps the two columns the
-              same height. Twelve rows at ~56px run ~690px while the panel's own
-              content only needs ~490px, so the list used to hang three rows
-              past the bottom of the box. Grid items already stretch; the panel
-              just wasn't passing that height down to the card, so the card sat
-              at content height inside a full-height cell. */}
-          <div className="lg:col-span-7 lg:h-full">
-            <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/30 shadow-xl shadow-black/30 backdrop-blur-md">
-              {/* Panel chrome */}
-              <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+          <div className="lg:col-span-7 lg:h-full lg:sticky lg:top-24 lg:self-start">
+            <div
+              className="relative flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-500 bg-card/30 shadow-2xl backdrop-blur-md"
+              style={{
+                borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
+                boxShadow: `0 0 35px -5px color-mix(in srgb, ${accent} 22%, transparent), 0 20px 25px -5px rgba(0,0,0,0.5)`,
+                background: `radial-gradient(circle at 70% 20%, color-mix(in srgb, ${accent} 12%, transparent) 0%, transparent 70%), var(--card)`,
+              }}
+            >
+              <div
+                className="flex items-center justify-between border-b px-4 py-2.5 transition-colors duration-500"
+                style={{ borderColor: `color-mix(in srgb, ${accent} 25%, transparent)` }}
+              >
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   capability · {String(activeIndex + 1).padStart(2, "0")}/{String(FEATURES.length).padStart(2, "0")}
                 </span>
                 <span
-                  className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider"
+                  className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider transition-all duration-500"
                   style={{
                     color: accent,
-                    background: `color-mix(in srgb, ${accent} 14%, transparent)`,
+                    background: `color-mix(in srgb, ${accent} 16%, transparent)`,
+                    borderColor: `color-mix(in srgb, ${accent} 35%, transparent)`,
                   }}
                 >
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
+                  <span
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
+                  />
                   {active.tag}
                 </span>
               </div>
 
-              {/* `mode="wait"` stays — the panel is in normal flow, so letting
-                  two versions overlap would jump the section's height. But the
-                  exit is deliberately much faster than the entrance now that
-                  hovering swaps panels: at a symmetric 0.28s each, sweeping the
-                  cursor down twelve rows queues 0.56s per swap and the panel
-                  visibly trails the pointer. Fast out, unhurried in. */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active.title}
@@ -993,37 +963,29 @@ export function FeatureShowcase() {
                   className="flex flex-1 flex-col p-3.5 sm:p-4"
                   role="tabpanel"
                 >
-                  {/* Motif. Takes the slack when the panel is stretched to the
-                      list's height — better the illustration breathes than the
-                      copy floats away from its heading. Capped so it can't
-                      balloon the section: on a shorter list it just centers
-                      in the available space instead of filling it.
-                      Gradient fill removed — at up to 140px tall and full
-                      width this was a permanent (not hover-gated) tinted
-                      panel, which read as a navy/blue box rather than the
-                      flat black canvas the rest of the page keeps. The motif
-                      itself still carries every bit of colour. */}
-                  <div className="flex flex-1 max-h-[140px] items-center justify-center rounded-xl border border-border px-4 py-2.5">
+                  <div
+                    className="flex flex-1 max-h-[140px] items-center justify-center rounded-xl border px-4 py-2.5 transition-all duration-500"
+                    style={{
+                      borderColor: `color-mix(in srgb, ${accent} 25%, transparent)`,
+                      background: `radial-gradient(circle at center, color-mix(in srgb, ${accent} 8%, transparent) 0%, transparent 100%)`,
+                    }}
+                  >
                     <ActiveMotif accent={accent} reduced={reduced} />
                   </div>
 
-                  {/* Stacks on phones. Sitting the copy beside a 44px icon in
-                      a 246px panel leaves it ~186px — about twenty-five
-                      characters a line, so the detail paragraph ran ten
-                      lines. */}
                   <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-500"
                       style={{
-                        background: `color-mix(in srgb, ${accent} 18%, transparent)`,
-                        borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
+                        background: `color-mix(in srgb, ${accent} 20%, transparent)`,
+                        borderColor: `color-mix(in srgb, ${accent} 45%, transparent)`,
                         color: accent,
+                        boxShadow: `0 0 16px color-mix(in srgb, ${accent} 30%, transparent)`,
                       }}
                     >
                       <ActiveIcon className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <div className="min-w-0">
-                      {/* H4 / card title — Archivo 500, −0.48px tracking */}
                       <h3 className="font-heading text-lg font-medium leading-[1.2] tracking-[-0.02em] text-foreground sm:text-xl">
                         {active.title}
                       </h3>
@@ -1033,21 +995,32 @@ export function FeatureShowcase() {
                     </div>
                   </div>
 
-                  <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-5">
-                    {/* Headline stat */}
+                  <div
+                    className="mt-3 grid gap-3 border-t pt-3 sm:grid-cols-5 transition-colors duration-500"
+                    style={{ borderColor: `color-mix(in srgb, ${accent} 20%, transparent)` }}
+                  >
                     <div className="sm:col-span-2">
-                      <p className="font-heading text-2xl font-medium tracking-[-0.025em] text-foreground sm:text-3xl">
+                      <p
+                        className="font-heading text-2xl font-medium tracking-[-0.025em] text-foreground sm:text-3xl"
+                        style={{ color: accent }}
+                      >
                         {active.stat.value}
                       </p>
                       <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground/70">
                         {active.stat.label}
                       </p>
                     </div>
-                    {/* Supporting points — Inter 400, 14px */}
                     <ul className="space-y-1.5 sm:col-span-3">
                       {active.points.map((p) => (
                         <li key={p} className="flex items-start gap-2.5 text-sm leading-[1.4] text-muted-foreground">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accent }} aria-hidden="true" />
+                          <Check
+                            className="mt-0.5 h-4 w-4 shrink-0"
+                            style={{
+                              color: accent,
+                              filter: `drop-shadow(0 0 4px ${accent})`,
+                            }}
+                            aria-hidden="true"
+                          />
                           {p}
                         </li>
                       ))}

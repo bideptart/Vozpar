@@ -41,7 +41,7 @@ const STAGES: Stage[] = [
     key: "build-setup",
     label: "Build & Setup",
     description: "Spin up agents and give each one a voice and a personality.",
-    accent: "var(--features-blue)",
+    accent: "#3b82f6", // 1. Blue
     items: [
       {
         icon: Users,
@@ -67,7 +67,7 @@ const STAGES: Stage[] = [
     key: "train-configure",
     label: "Train & Configure",
     description: "Teach each agent your business and route calls the way you want.",
-    accent: "var(--features-blue-deep)",
+    accent: "#10b981", // 2. Green
     items: [
       {
         icon: BookOpen,
@@ -93,7 +93,7 @@ const STAGES: Stage[] = [
     key: "test-go-live",
     label: "Test & Go Live",
     description: "Hear your agent before you ever risk a real caller on it.",
-    accent: "var(--features-green)",
+    accent: "#10b981", // 3. Green
     items: [
       {
         icon: FlaskConical,
@@ -119,7 +119,7 @@ const STAGES: Stage[] = [
     key: "operate-monitor",
     label: "Operate & Monitor",
     description: "Watch every call, everything it agreed to, down to the exact word.",
-    accent: "var(--features-amber)",
+    accent: "#ff7a00", // 4. Orange
     items: [
       {
         icon: BarChart3,
@@ -151,7 +151,7 @@ const STAGES: Stage[] = [
     key: "account-overview",
     label: "Account & Overview",
     description: "Manage the account, your team, and your agents' identity.",
-    accent: "var(--features-blue)",
+    accent: "#ef4444", // 5. Red
     items: [
       {
         icon: Settings,
@@ -269,18 +269,26 @@ export function FeatureJourney() {
                 type="button"
                 onClick={() => scrollToStage(s.key)}
                 className={`flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
-                  isActive
-                    ? "border-primary bg-primary/15 text-primary font-bold shadow-sm"
-                    : "border-border/60 bg-card/40 text-muted-foreground"
+                  isActive ? "shadow-md" : "border-border/60 bg-card/40 text-muted-foreground"
                 }`}
+                style={
+                  isActive
+                    ? {
+                        borderColor: `color-mix(in srgb, ${s.accent} 60%, transparent)`,
+                        background: `color-mix(in srgb, ${s.accent} 20%, transparent)`,
+                        color: s.accent,
+                        boxShadow: `0 0 12px color-mix(in srgb, ${s.accent} 30%, transparent)`,
+                      }
+                    : undefined
+                }
               >
                 <span
                   className="flex size-5 items-center justify-center rounded-full text-[10px] font-bold transition-all"
-                  style={
-                    isActive
-                      ? { background: s.accent, color: "var(--background)" }
-                      : { background: "var(--muted)", color: "var(--muted-foreground)" }
-                  }
+                  style={{
+                    background: s.accent,
+                    color: "#ffffff",
+                    boxShadow: `0 0 6px ${s.accent}`,
+                  }}
                 >
                   {i + 1}
                 </span>
@@ -303,9 +311,18 @@ export function FeatureJourney() {
                     key={s.key}
                     className={`rounded-2xl transition-all duration-300 ${
                       isActive
-                        ? "bg-primary/[0.12] border border-primary/30 shadow-lg shadow-black/40"
+                        ? "border shadow-lg"
                         : "border border-transparent hover:bg-white/[0.04]"
                     }`}
+                    style={
+                      isActive
+                        ? {
+                            background: `color-mix(in srgb, ${s.accent} 16%, transparent)`,
+                            borderColor: `color-mix(in srgb, ${s.accent} 45%, transparent)`,
+                            boxShadow: `0 0 24px -4px color-mix(in srgb, ${s.accent} 28%, transparent)`,
+                          }
+                        : undefined
+                    }
                   >
                     <button
                       type="button"
@@ -313,25 +330,19 @@ export function FeatureJourney() {
                       aria-current={isActive ? "true" : undefined}
                       className={`flex w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-left text-base font-semibold transition-colors ${
                         isActive
-                          ? "text-primary font-bold"
+                          ? "font-bold"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
+                      style={{ color: isActive ? s.accent : undefined }}
                     >
                       <span
-                        className={`flex size-8 shrink-0 items-center justify-center rounded-lg border text-sm font-bold transition-all duration-300 ${
-                          isActive
-                            ? "border-primary bg-primary text-white shadow-md scale-105"
-                            : "border-border text-muted-foreground"
-                        }`}
-                        style={
-                          isActive
-                            ? {
-                                background: s.accent,
-                                borderColor: s.accent,
-                                color: "var(--background)",
-                              }
-                            : undefined
-                        }
+                        className="flex size-8 shrink-0 items-center justify-center rounded-lg border text-sm font-bold transition-all duration-300"
+                        style={{
+                          background: isActive ? s.accent : `color-mix(in srgb, ${s.accent} 10%, transparent)`,
+                          borderColor: isActive ? s.accent : `color-mix(in srgb, ${s.accent} 25%, transparent)`,
+                          color: isActive ? "#ffffff" : `color-mix(in srgb, ${s.accent} 85%, white)`,
+                          boxShadow: isActive ? `0 0 10px ${s.accent}` : undefined,
+                        }}
                       >
                         {i + 1}
                       </span>
@@ -360,7 +371,10 @@ export function FeatureJourney() {
             {STAGES.map((s) => (
               <section key={s.key} id={s.key} className="scroll-mt-24">
                 <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="text-lg font-bold tracking-tight text-foreground sm:text-xl font-heading">
+                  <h3
+                    className="text-lg font-bold tracking-tight sm:text-xl font-heading"
+                    style={{ color: s.accent }}
+                  >
                     {s.label}
                   </h3>
                   <span className="shrink-0 text-xs font-medium text-muted-foreground font-mono">
@@ -371,7 +385,13 @@ export function FeatureJourney() {
                   {s.description}
                 </p>
 
-                <div className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border/80 bg-card/40 backdrop-blur-md shadow-lg shadow-black/20">
+                <div
+                  className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border bg-card/40 backdrop-blur-md shadow-lg transition-all duration-300"
+                  style={{
+                    borderColor: `color-mix(in srgb, ${s.accent} 35%, transparent)`,
+                    boxShadow: `0 0 20px -4px color-mix(in srgb, ${s.accent} 15%, transparent)`,
+                  }}
+                >
                   {s.items.map((item) => {
                     const Icon = item.icon
                     const isOpen = !!openItems[item.title]
@@ -386,9 +406,10 @@ export function FeatureJourney() {
                           <span
                             className="flex size-9 shrink-0 items-center justify-center rounded-lg border transition-transform duration-300"
                             style={{
-                              background: `color-mix(in srgb, ${s.accent} 12%, transparent)`,
-                              borderColor: `color-mix(in srgb, ${s.accent} 28%, transparent)`,
+                              background: `color-mix(in srgb, ${s.accent} 18%, transparent)`,
+                              borderColor: `color-mix(in srgb, ${s.accent} 45%, transparent)`,
                               color: s.accent,
+                              boxShadow: `0 0 10px color-mix(in srgb, ${s.accent} 25%, transparent)`,
                             }}
                           >
                             <Icon className="size-4" aria-hidden="true" />
@@ -402,6 +423,7 @@ export function FeatureJourney() {
                                 className={`size-4 shrink-0 text-muted-foreground transition-transform duration-300 ${
                                   isOpen ? "rotate-180 text-foreground" : ""
                                 }`}
+                                style={{ color: isOpen ? s.accent : undefined }}
                                 aria-hidden="true"
                               />
                             </div>

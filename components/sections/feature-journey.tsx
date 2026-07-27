@@ -54,7 +54,7 @@ const STAGES: Stage[] = [
     key: "build",
     label: "Build & Setup",
     description: "Spin up agents and give each one a voice and a personality.",
-    accent: "var(--features-blue)",
+    accent: "#3b82f6", // 1. Blue
     items: [
       {
         icon: Users,
@@ -80,7 +80,7 @@ const STAGES: Stage[] = [
     key: "train",
     label: "Train & Configure",
     description: "Teach each agent your business and route calls the way you want.",
-    accent: "var(--features-blue-deep)",
+    accent: "#10b981", // 2. Green
     items: [
       {
         icon: BookOpen,
@@ -106,7 +106,7 @@ const STAGES: Stage[] = [
     key: "test",
     label: "Test & Go Live",
     description: "Hear your agent before you ever risk a real caller on it.",
-    accent: "var(--features-green)",
+    accent: "#10b981", // 3. Green
     items: [
       {
         icon: FlaskConical,
@@ -132,7 +132,7 @@ const STAGES: Stage[] = [
     key: "operate",
     label: "Operate & Monitor",
     description: "Watch every call, everything it agreed to, down to the exact word.",
-    accent: "var(--features-amber)",
+    accent: "#ff7a00", // 4. Orange
     items: [
       {
         icon: BarChart3,
@@ -164,7 +164,7 @@ const STAGES: Stage[] = [
     key: "account",
     label: "Account & Overview",
     description: "Manage the account, your team, and your agents' identity.",
-    accent: "var(--features-blue)",
+    accent: "#ef4444", // 5. Red
     items: [
       {
         icon: Settings,
@@ -278,24 +278,17 @@ export function FeatureJourney() {
                     <button
                       key={s.key}
                       type="button"
-                      // "step", not "true" — these are a numbered sequence, and
-                      // aria-current has a dedicated token for exactly that
-                      // case. Without this a screen-reader user tabbing
-                      // through the five buttons has no way to tell which
-                      // stage is actually showing on the right.
                       aria-current={isActive ? "step" : undefined}
                       onClick={() => selectStage(s.key)}
-                      // Hover previews the stage, same as FeatureShowcase's
-                      // list above — guarded to mouse so a touch scroll
-                      // through the phone rail doesn't flip stages as a
-                      // finger drags past them.
                       onPointerEnter={(e) => {
                         if (e.pointerType === "mouse") selectStage(s.key)
                       }}
                       onFocus={() => selectStage(s.key)}
-                      className="group relative flex shrink-0 snap-start items-start gap-3 overflow-hidden rounded-xl border px-3 py-3 text-left transition-[border-color,translate] duration-300 hover:translate-x-0.5 lg:w-full lg:shrink lg:pb-6 lg:pt-3"
+                      className="group relative flex shrink-0 snap-start items-start gap-3 overflow-hidden rounded-xl border px-3 py-3 text-left transition-colors duration-200 lg:w-full lg:shrink lg:pb-6 lg:pt-3"
                       style={{
-                        borderColor: isActive ? "color-mix(in srgb, var(--features-blue) 30%, transparent)" : "transparent",
+                        borderColor: isActive ? `color-mix(in srgb, ${s.accent} 50%, transparent)` : "transparent",
+                        background: isActive ? `color-mix(in srgb, ${s.accent} 12%, transparent)` : undefined,
+                        boxShadow: isActive ? `0 0 20px -3px color-mix(in srgb, ${s.accent} 25%, transparent)` : undefined,
                       }}
                     >
                       {/* Connecting line behind the numbers, desktop only */}
@@ -306,12 +299,6 @@ export function FeatureJourney() {
                           style={{ background: "var(--border)" }}
                         />
                       )}
-                      {/* Auto-advance progress — resets and fills over
-                          AUTO_ADVANCE_MS every time this becomes the active
-                          stage, frozen mid-fill while paused (hover/focus
-                          anywhere in the section). Reduced-motion users never
-                          see it start, since the effect above never advances
-                          for them either. */}
                       {isActive && !reduced && (
                         <span
                           aria-hidden
@@ -322,6 +309,7 @@ export function FeatureJourney() {
                             className="journey-progress-fill block h-full rounded-full"
                             style={{
                               background: s.accent,
+                              boxShadow: `0 0 8px ${s.accent}`,
                               animationDuration: `${AUTO_ADVANCE_MS}ms`,
                               animationPlayState: paused ? "paused" : "running",
                             }}
@@ -329,11 +317,12 @@ export function FeatureJourney() {
                         </span>
                       )}
                       <span
-                        className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-medium tabular-nums transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105"
+                        className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-medium tabular-nums transition-all duration-300 group-hover:scale-105"
                         style={{
-                          background: isActive ? s.accent : "transparent",
-                          borderColor: isActive ? s.accent : "var(--border)",
-                          color: isActive ? "var(--background)" : "var(--muted-foreground)",
+                          background: isActive ? s.accent : `color-mix(in srgb, ${s.accent} 10%, transparent)`,
+                          borderColor: isActive ? s.accent : `color-mix(in srgb, ${s.accent} 25%, transparent)`,
+                          color: isActive ? "#ffffff" : `color-mix(in srgb, ${s.accent} 85%, white)`,
+                          boxShadow: isActive ? `0 0 10px ${s.accent}` : undefined,
                         }}
                       >
                         {i + 1}
@@ -341,8 +330,9 @@ export function FeatureJourney() {
                       <span className="min-w-0 max-w-[11rem] lg:max-w-none">
                         <span
                           className={`block font-heading text-sm font-medium tracking-[-0.01em] transition-colors duration-300 ${
-                            isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                            isActive ? "font-bold" : "text-muted-foreground group-hover:text-foreground"
                           }`}
+                          style={{ color: isActive ? s.accent : undefined }}
                         >
                           {s.label}
                         </span>
@@ -359,7 +349,7 @@ export function FeatureJourney() {
             {/* ---------- ACCORDION ---------- */}
             <div>
               <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-border pb-2.5">
-                <span className="font-heading text-base font-medium tracking-[-0.015em] text-foreground">
+                <span className="font-heading text-base font-medium tracking-[-0.015em]" style={{ color: stage.accent }}>
                   {stage.label}
                 </span>
                 <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/60">
@@ -382,7 +372,11 @@ export function FeatureJourney() {
                     return (
                       <div
                         key={item.title}
-                        className="group/item overflow-hidden rounded-xl border border-border bg-card/30 transition-[border-color,translate] duration-300 hover:-translate-y-0.5 hover:border-white/20"
+                        className="group/item overflow-hidden rounded-xl border bg-card/30 transition-all duration-300 shadow-sm"
+                        style={{
+                          borderColor: `color-mix(in srgb, ${stage.accent} 35%, transparent)`,
+                          boxShadow: `0 0 16px -4px color-mix(in srgb, ${stage.accent} 15%, transparent)`,
+                        }}
                       >
                         <button
                           type="button"
@@ -393,9 +387,10 @@ export function FeatureJourney() {
                           <span
                             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-transform duration-300 group-hover/item:scale-105"
                             style={{
-                              background: `color-mix(in srgb, ${stage.accent} 14%, transparent)`,
-                              borderColor: `color-mix(in srgb, ${stage.accent} 32%, transparent)`,
+                              background: `color-mix(in srgb, ${stage.accent} 18%, transparent)`,
+                              borderColor: `color-mix(in srgb, ${stage.accent} 45%, transparent)`,
                               color: stage.accent,
+                              boxShadow: `0 0 10px color-mix(in srgb, ${stage.accent} 25%, transparent)`,
                             }}
                           >
                             <Icon className="h-4 w-4" aria-hidden />
@@ -412,6 +407,7 @@ export function FeatureJourney() {
                             className={`mt-1 h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-transform duration-300 ${
                               isOpen ? "rotate-180" : ""
                             }`}
+                            style={{ color: isOpen ? stage.accent : undefined }}
                             aria-hidden
                           />
                         </button>

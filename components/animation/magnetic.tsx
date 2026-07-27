@@ -76,11 +76,13 @@ export function Magnetic({
 export function SpotlightPanel({
   children,
   className,
+  style,
   glow = "var(--features-blue)",
   size = 420,
 }: {
   children: React.ReactNode
   className?: string
+  style?: React.CSSProperties
   glow?: string
   size?: number
 }) {
@@ -91,6 +93,7 @@ export function SpotlightPanel({
     <div
       ref={ref}
       className={cn("group/spot relative", className)}
+      style={style}
       onPointerMove={(e) => {
         if (reduced) return
         const el = ref.current

@@ -41,13 +41,14 @@ type Feature = {
   detail: string
   stat: { value: string; label: string }
   points: string[]
+  accentColor: string
 }
 
 const CATEGORY_ACCENT: Record<Category, string> = {
-  Voice: "var(--features-blue)",
-  Telephony: "var(--features-blue-deep)",
-  Integrations: "var(--features-green)",
-  Operations: "var(--features-amber)",
+  Voice: "#3b82f6",
+  Telephony: "#ff7a00",
+  Integrations: "#ff7a00",
+  Operations: "#10b981",
 }
 
 const FEATURES: Feature[] = [
@@ -61,6 +62,7 @@ const FEATURES: Feature[] = [
       "Real-time WebRTC audio over a globally distributed media network. Audio goes in and comes back out natively — there's no text bottleneck in the middle adding a beat of silence before every reply.",
     stat: { value: "<300ms", label: "Round-trip response" },
     points: ["Edge media routing", "Native audio in, native audio out", "No text round-trip"],
+    accentColor: "#3b82f6", // 1. Blue
   },
   {
     icon: Languages,
@@ -72,6 +74,7 @@ const FEATURES: Feature[] = [
       "Auto-detect the caller's language on the first utterance and switch mid-call when they do. Pick a voice per agent, per region, or per campaign.",
     stat: { value: "30+", label: "Languages supported" },
     points: ["Auto language detection", "Mid-call switching", "Per-agent voice selection"],
+    accentColor: "#3b82f6", // 2. Blue
   },
   {
     icon: Repeat,
@@ -83,6 +86,7 @@ const FEATURES: Feature[] = [
       "Hand off to a human or swap between specialist agents mid-call, passing the full conversation context along. The person picking up already knows who's on the line and why.",
     stat: { value: "0", label: "Context lost on transfer" },
     points: ["Warm transfer to humans", "Agent-to-agent swaps", "Full context handoff"],
+    accentColor: "#ff7a00", // 3. Orange
   },
   {
     icon: CalendarClock,
@@ -94,6 +98,7 @@ const FEATURES: Feature[] = [
       "Native Google, Outlook, and Calendly integrations with real availability checks — so the slot the agent offers is a slot that's genuinely open.",
     stat: { value: "Live", label: "Availability checks" },
     points: ["Google and Outlook", "Calendly support", "Reschedule and cancel flows"],
+    accentColor: "#ff7a00", // 4. Orange
   },
   {
     icon: Activity,
@@ -105,6 +110,7 @@ const FEATURES: Feature[] = [
       "Every call streamed to text with speaker labels, sentiment, and automated recording with PII redaction — search phrases across calls and review audio and transcripts from one place.",
     stat: { value: "100%", label: "Transcribed & recorded" },
     points: ["Speaker-labelled transcripts", "Automatic PII redaction", "Searchable audio & text"],
+    accentColor: "#10b981", // 5. Green
   },
   {
     icon: Network,
@@ -116,6 +122,7 @@ const FEATURES: Feature[] = [
       "Burst capacity is built in. A campaign that goes from twenty calls an hour to two thousand doesn't need a capacity ticket, a new licence tier, or a bigger fleet.",
     stat: { value: "Unlimited", label: "Parallel calls" },
     points: ["Automatic burst scaling", "No per-port licensing", "No fleet sizing"],
+    accentColor: "#ef4444", // 6. Red
   },
 ]
 
@@ -618,7 +625,7 @@ export function FeatureShowcase() {
   }
 
   const active = FEATURES[activeIndex]
-  const accent = CATEGORY_ACCENT[active.tag]
+  const accent = active.accentColor
   const ActiveIcon = active.icon
   const ActiveMotif = MOTIFS[active.motif]
 
@@ -644,7 +651,7 @@ export function FeatureShowcase() {
         </ScrollReveal>
 
         <div
-          className="mt-10 grid grid-cols-1 items-stretch gap-4 lg:mt-14 lg:grid-cols-12 lg:gap-6"
+          className="mt-10 grid grid-cols-1 items-start gap-4 lg:mt-14 lg:grid-cols-12 lg:gap-6"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}
@@ -654,15 +661,14 @@ export function FeatureShowcase() {
         >
           <motion.div
             ref={railRef}
-            layoutScroll
             role="tablist"
             aria-label="Platform features"
-            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:h-full lg:snap-none lg:scroll-pl-0 lg:flex-col lg:justify-between lg:gap-0 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] [&::-webkit-scrollbar]:hidden"
+            className="-mx-4 flex snap-x snap-mandatory scroll-pl-4 gap-2 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(90deg,#000_calc(100%-2rem),transparent)] [scrollbar-width:none] sm:-mx-6 sm:scroll-pl-6 sm:px-6 lg:col-span-5 lg:mx-0 lg:snap-none lg:scroll-pl-0 lg:flex-col lg:justify-between lg:gap-2 lg:overflow-visible lg:px-0 lg:pb-0 lg:[mask-image:none] lg:sticky lg:top-24 lg:self-start [&::-webkit-scrollbar]:hidden"
           >
             {FEATURES.map((f, i) => {
               const isActive = i === activeIndex
               const Icon = f.icon
-              const itemAccent = CATEGORY_ACCENT[f.tag]
+              const itemAccent = f.accentColor
               return (
                 <button
                   key={f.title}
@@ -678,12 +684,24 @@ export function FeatureShowcase() {
                     if (e.pointerType === "mouse") setActiveIndex(i)
                   }}
                   onFocus={() => setActiveIndex(i)}
-                  className="group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border border-border bg-card/30 px-3 py-2 text-left transition-[translate,background-color] duration-300 hover:bg-card/40 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:border-0 lg:bg-transparent lg:py-2.5 lg:hover:translate-x-1"
+                  className={`group relative flex max-w-[13rem] shrink-0 snap-start items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition-colors duration-200 lg:max-w-none lg:w-full lg:shrink lg:snap-align-none lg:gap-2 lg:py-2.5 ${
+                    isActive
+                      ? "border-border bg-card/60"
+                      : "border-border/50 bg-card/20 hover:bg-card/40"
+                  }`}
+                  style={{
+                    borderColor: isActive ? `color-mix(in srgb, ${itemAccent} 50%, transparent)` : undefined,
+                    boxShadow: isActive ? `0 0 20px -3px color-mix(in srgb, ${itemAccent} 25%, transparent)` : undefined,
+                  }}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="showcase-active"
-                      className="absolute -inset-px rounded-xl border border-border bg-card lg:inset-0"
+                      className="absolute -inset-px rounded-xl border bg-card lg:inset-0"
+                      style={{
+                        borderColor: `color-mix(in srgb, ${itemAccent} 60%, transparent)`,
+                        boxShadow: `0 0 24px -4px color-mix(in srgb, ${itemAccent} 30%, transparent)`,
+                      }}
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
@@ -698,6 +716,7 @@ export function FeatureShowcase() {
                         className="journey-progress-fill block h-full rounded-full"
                         style={{
                           background: itemAccent,
+                          boxShadow: `0 0 8px ${itemAccent}`,
                           animationDuration: `${AUTO_ADVANCE_MS}ms`,
                           animationPlayState: paused ? "paused" : "running",
                         }}
@@ -710,19 +729,23 @@ export function FeatureShowcase() {
                     className={`absolute -left-1 top-1/2 hidden h-5 w-[2px] -translate-y-1/2 rounded-full transition-[scale,opacity] duration-300 lg:block ${
                       isActive ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 group-hover:scale-y-50 group-hover:opacity-60"
                     }`}
-                    style={{ background: itemAccent }}
+                    style={{
+                      background: itemAccent,
+                      boxShadow: `0 0 8px ${itemAccent}`,
+                    }}
                   />
 
                   <span
-                    className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-[background-color,border-color,color,scale] duration-300 group-hover:scale-105 lg:h-7 lg:w-7"
+                    className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-300 group-hover:scale-105 lg:h-7 lg:w-7"
                     style={{
                       background: isActive
-                        ? `color-mix(in srgb, ${itemAccent} 20%, transparent)`
-                        : "var(--card)",
+                        ? `color-mix(in srgb, ${itemAccent} 24%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 10%, transparent)`,
                       borderColor: isActive
-                        ? `color-mix(in srgb, ${itemAccent} 45%, transparent)`
-                        : "var(--border)",
-                      color: isActive ? itemAccent : "var(--muted-foreground)",
+                        ? `color-mix(in srgb, ${itemAccent} 60%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 22%, transparent)`,
+                      color: isActive ? itemAccent : `color-mix(in srgb, ${itemAccent} 80%, white)`,
+                      boxShadow: isActive ? `0 0 12px color-mix(in srgb, ${itemAccent} 35%, transparent)` : undefined,
                     }}
                   >
                     <Icon className="h-4 w-4 lg:h-3.5 lg:w-3.5" aria-hidden="true" />
@@ -741,12 +764,16 @@ export function FeatureShowcase() {
                   </span>
 
                   <span
-                    className="relative ml-auto hidden shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] transition-opacity duration-300 lg:inline-block"
+                    className="relative ml-auto hidden shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] transition-all duration-300 lg:inline-block"
                     style={{
                       color: itemAccent,
-                      borderColor: `color-mix(in srgb, ${itemAccent} 30%, transparent)`,
-                      background: `color-mix(in srgb, ${itemAccent} 10%, transparent)`,
-                      opacity: isActive ? 1 : 0.55,
+                      borderColor: isActive
+                        ? `color-mix(in srgb, ${itemAccent} 50%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 25%, transparent)`,
+                      background: isActive
+                        ? `color-mix(in srgb, ${itemAccent} 18%, transparent)`
+                        : `color-mix(in srgb, ${itemAccent} 8%, transparent)`,
+                      opacity: isActive ? 1 : 0.7,
                     }}
                   >
                     {f.tag}
@@ -763,7 +790,7 @@ export function FeatureShowcase() {
             <motion.span
               aria-hidden
               className="inline-flex"
-              style={{ color: "var(--features-blue)" }}
+              style={{ color: accent }}
               animate={reduced ? undefined : { x: [0, 5, 0] }}
               transition={{ duration: 1.4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
             >
@@ -771,20 +798,34 @@ export function FeatureShowcase() {
             </motion.span>
           </div>
 
-          <div className="lg:col-span-7 lg:h-full">
-            <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/30 shadow-xl shadow-black/30 backdrop-blur-md">
-              <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+          <div className="lg:col-span-7 lg:h-full lg:sticky lg:top-24 lg:self-start">
+            <div
+              className="relative flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-500 bg-card/30 shadow-2xl backdrop-blur-md"
+              style={{
+                borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
+                boxShadow: `0 0 35px -5px color-mix(in srgb, ${accent} 22%, transparent), 0 20px 25px -5px rgba(0,0,0,0.5)`,
+                background: `radial-gradient(circle at 70% 20%, color-mix(in srgb, ${accent} 12%, transparent) 0%, transparent 70%), var(--card)`,
+              }}
+            >
+              <div
+                className="flex items-center justify-between border-b px-4 py-2.5 transition-colors duration-500"
+                style={{ borderColor: `color-mix(in srgb, ${accent} 25%, transparent)` }}
+              >
                 <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
                   capability · {String(activeIndex + 1).padStart(2, "0")}/{String(FEATURES.length).padStart(2, "0")}
                 </span>
                 <span
-                  className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider"
+                  className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider transition-all duration-500"
                   style={{
                     color: accent,
-                    background: `color-mix(in srgb, ${accent} 14%, transparent)`,
+                    background: `color-mix(in srgb, ${accent} 16%, transparent)`,
+                    borderColor: `color-mix(in srgb, ${accent} 35%, transparent)`,
                   }}
                 >
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
+                  <span
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
+                  />
                   {active.tag}
                 </span>
               </div>
@@ -799,17 +840,24 @@ export function FeatureShowcase() {
                   className="flex flex-1 flex-col p-3.5 sm:p-4"
                   role="tabpanel"
                 >
-                  <div className="flex flex-1 max-h-[140px] items-center justify-center rounded-xl border border-border px-4 py-2.5">
+                  <div
+                    className="flex flex-1 max-h-[140px] items-center justify-center rounded-xl border px-4 py-2.5 transition-all duration-500"
+                    style={{
+                      borderColor: `color-mix(in srgb, ${accent} 25%, transparent)`,
+                      background: `radial-gradient(circle at center, color-mix(in srgb, ${accent} 8%, transparent) 0%, transparent 100%)`,
+                    }}
+                  >
                     <ActiveMotif accent={accent} reduced={reduced} />
                   </div>
 
                   <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-500"
                       style={{
-                        background: `color-mix(in srgb, ${accent} 18%, transparent)`,
-                        borderColor: `color-mix(in srgb, ${accent} 40%, transparent)`,
+                        background: `color-mix(in srgb, ${accent} 20%, transparent)`,
+                        borderColor: `color-mix(in srgb, ${accent} 45%, transparent)`,
                         color: accent,
+                        boxShadow: `0 0 16px color-mix(in srgb, ${accent} 30%, transparent)`,
                       }}
                     >
                       <ActiveIcon className="h-5 w-5" aria-hidden="true" />
@@ -824,9 +872,15 @@ export function FeatureShowcase() {
                     </div>
                   </div>
 
-                  <div className="mt-3 grid gap-3 border-t border-border pt-3 sm:grid-cols-5">
+                  <div
+                    className="mt-3 grid gap-3 border-t pt-3 sm:grid-cols-5 transition-colors duration-500"
+                    style={{ borderColor: `color-mix(in srgb, ${accent} 20%, transparent)` }}
+                  >
                     <div className="sm:col-span-2">
-                      <p className="font-heading text-2xl font-medium tracking-[-0.025em] text-foreground sm:text-3xl">
+                      <p
+                        className="font-heading text-2xl font-medium tracking-[-0.025em] text-foreground sm:text-3xl"
+                        style={{ color: accent }}
+                      >
                         {active.stat.value}
                       </p>
                       <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground/70">
@@ -836,7 +890,14 @@ export function FeatureShowcase() {
                     <ul className="space-y-1.5 sm:col-span-3">
                       {active.points.map((p) => (
                         <li key={p} className="flex items-start gap-2.5 text-sm leading-[1.4] text-muted-foreground">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accent }} aria-hidden="true" />
+                          <Check
+                            className="mt-0.5 h-4 w-4 shrink-0"
+                            style={{
+                              color: accent,
+                              filter: `drop-shadow(0 0 4px ${accent})`,
+                            }}
+                            aria-hidden="true"
+                          />
                           {p}
                         </li>
                       ))}

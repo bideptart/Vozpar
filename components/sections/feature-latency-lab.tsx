@@ -50,31 +50,38 @@ const MARKS = [
   { ms: 1200, label: "1.2s", sub: "stitched stack" },
 ]
 
-type Band = { name: string; tint: string; copy: string }
+type Band = { name: string; tint: string; glow: string; copy: string }
 
 function bandFor(ms: number): Band {
-  if (ms <= 350)
+  if (ms <= 200) {
+    return {
+      name: "Ultra fast",
+      tint: "#3b82f6", // 120-200ms: Blue
+      glow: "rgba(59, 130, 246, 0.4)",
+      copy: "Sub-200ms ultra fast response (120–200ms). Imperceptible latency — response arrives before the caller even registers a beat.",
+    }
+  }
+  if (ms <= 300) {
     return {
       name: "Feels human",
-      tint: "var(--features-green)",
-      copy: "Inside the range of a natural conversational pause. Callers don't register a gap at all — they just talk.",
+      tint: "#10b981", // 200-300ms: Green
+      glow: "rgba(16, 185, 129, 0.4)",
+      copy: "Inside the range of a natural conversational pause (200–300ms). Callers don't register a gap at all — they just talk.",
     }
-  if (ms <= 700)
+  }
+  if (ms <= 1200) {
     return {
-      name: "Slight lag",
-      tint: "var(--features-blue)",
-      copy: "A beat of hesitation before every reply. Nobody complains, but the rhythm is subtly off the whole call.",
+      name: "Noticeable lag",
+      tint: "#ff7a00", // 300-1200ms: Orange
+      glow: "rgba(255, 122, 0, 0.4)",
+      copy: "Noticeable hesitation (300–1200ms). A beat of dead air before every reply — long enough that rhythm is subtly off.",
     }
-  if (ms <= 1400)
-    return {
-      name: "Awkward",
-      tint: "var(--features-amber)",
-      copy: 'Long enough that callers say "hello?" into the silence — then talk over the reply when it finally lands.',
-    }
+  }
   return {
     name: "Falls apart",
-    tint: "var(--destructive)",
-    copy: "Callers assume the line dropped. They repeat themselves, interrupt, or simply hang up and phone a competitor.",
+    tint: "#ef4444", // 1200-3000ms: Red
+    glow: "rgba(239, 68, 68, 0.4)",
+    copy: "Severe delay (1200–3000ms). Callers assume the line dropped, repeat themselves, interrupt, or hang up.",
   }
 }
 
@@ -174,13 +181,13 @@ export function FeatureLatencyLab() {
 
         <ScrollReveal>
           <div
-            className="relative overflow-hidden rounded-2xl border bg-card/30 p-5 shadow-xl shadow-black/30 backdrop-blur-md transition-colors duration-500 sm:p-6 md:p-7"
-            style={{ borderColor: `color-mix(in srgb, ${band.tint} 30%, transparent)` }}
+            className="relative overflow-hidden rounded-2xl border bg-card/30 p-5 shadow-2xl backdrop-blur-md transition-all duration-500 sm:p-6 md:p-7"
+            style={{
+              borderColor: `color-mix(in srgb, ${band.tint} 45%, transparent)`,
+              boxShadow: `0 0 35px -5px color-mix(in srgb, ${band.tint} 22%, transparent), 0 20px 25px -5px rgba(0,0,0,0.5)`,
+              background: `radial-gradient(circle at 70% 30%, color-mix(in srgb, ${band.tint} 12%, transparent) 0%, transparent 70%), var(--card)`,
+            }}
           >
-            {/* Two columns from lg: the readout and the exchange on the left,
-                the control and the evidence on the right. Stacked, this card ran
-                ~600px on desktop and the slider — the one thing you're meant to
-                touch — sat below the fold of its own section. */}
             <div className="grid gap-5 lg:grid-cols-2 lg:gap-8">
             <div className="flex flex-col">
             {/* ---- readout ---- */}
@@ -190,8 +197,11 @@ export function FeatureLatencyLab() {
                   Response latency
                 </p>
                 <p
-                  className="mt-1 font-heading text-4xl font-medium tabular-nums leading-none tracking-[-0.035em] transition-colors duration-300 sm:text-5xl md:text-6xl"
-                  style={{ color: band.tint }}
+                  className="mt-1 font-heading text-4xl font-medium tabular-nums leading-none tracking-[-0.035em] transition-all duration-500 sm:text-5xl md:text-6xl"
+                  style={{
+                    color: band.tint,
+                    textShadow: `0 0 25px color-mix(in srgb, ${band.tint} 40%, transparent)`,
+                  }}
                 >
                   {ms}
                   <span className="ml-1 text-xl font-light text-muted-foreground sm:text-2xl">ms</span>
@@ -202,11 +212,12 @@ export function FeatureLatencyLab() {
                 initial={reduced ? false : { opacity: 0, y: 8, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm font-medium"
+                className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all duration-500"
                 style={{
                   color: band.tint,
-                  borderColor: `color-mix(in srgb, ${band.tint} 40%, transparent)`,
-                  background: `color-mix(in srgb, ${band.tint} 12%, transparent)`,
+                  borderColor: `color-mix(in srgb, ${band.tint} 50%, transparent)`,
+                  background: `color-mix(in srgb, ${band.tint} 16%, transparent)`,
+                  boxShadow: `0 0 14px color-mix(in srgb, ${band.tint} 30%, transparent)`,
                 }}
               >
                 <Gauge className="h-4 w-4" aria-hidden />
@@ -227,7 +238,7 @@ export function FeatureLatencyLab() {
                 </motion.p>
               </div>
 
-              {/* Dead air — the star of the section */}
+              {/* Dead air */}
               <div className="flex h-10 items-center justify-center">
                 <AnimatePresence mode="wait">
                   {stage === "gap" ? (
@@ -237,15 +248,19 @@ export function FeatureLatencyLab() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.94 }}
                       transition={{ duration: 0.18 }}
-                      className="inline-flex items-center gap-2.5 rounded-full border px-4 py-1.5"
+                      className="inline-flex items-center gap-2.5 rounded-full border px-4 py-1.5 transition-all duration-500"
                       style={{
-                        borderColor: `color-mix(in srgb, ${band.tint} 45%, transparent)`,
-                        background: `color-mix(in srgb, ${band.tint} 10%, transparent)`,
+                        borderColor: `color-mix(in srgb, ${band.tint} 50%, transparent)`,
+                        background: `color-mix(in srgb, ${band.tint} 14%, transparent)`,
+                        boxShadow: `0 0 12px color-mix(in srgb, ${band.tint} 25%, transparent)`,
                       }}
                     >
                       <motion.span
                         className="h-1.5 w-1.5 rounded-full"
-                        style={{ background: band.tint }}
+                        style={{
+                          background: band.tint,
+                          boxShadow: `0 0 8px ${band.tint}`,
+                        }}
                         animate={{ opacity: [1, 0.2, 1] }}
                         transition={{ duration: 0.6, repeat: loop, ease: "easeInOut" }}
                       />
@@ -279,10 +294,10 @@ export function FeatureLatencyLab() {
                     y: stage === "agent" ? 0 : 4,
                   }}
                   transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                  className="max-w-[80%] rounded-2xl border px-4 py-2.5 text-[14px] leading-relaxed text-foreground"
+                  className="max-w-[80%] rounded-2xl border px-4 py-2.5 text-[14px] leading-relaxed text-foreground transition-all duration-500"
                   style={{
-                    borderColor: "color-mix(in srgb, var(--features-blue) 32%, transparent)",
-                    background: "color-mix(in srgb, var(--features-blue) 12%, transparent)",
+                    borderColor: `color-mix(in srgb, ${band.tint} 35%, transparent)`,
+                    background: `color-mix(in srgb, ${band.tint} 14%, transparent)`,
                   }}
                 >
                   Thursday at 3pm is open — shall I take it?
@@ -292,11 +307,7 @@ export function FeatureLatencyLab() {
 
             </div>
 
-            {/* RIGHT — the control, and the evidence it produces.
-                `justify-start`, not `justify-between`: which column is taller
-                flips with a single extra line of verdict copy or a bubble that
-                wraps, and `justify-between` would then inject gaps between the
-                slider and its own tick captions. */}
+            {/* RIGHT */}
             <div className="flex flex-col justify-start">
             {/* ---- proportional timeline ---- */}
             <div>
@@ -305,12 +316,12 @@ export function FeatureLatencyLab() {
                 <Segment
                   width={pct(gapS)}
                   label={gapS > 0.55 ? "dead air" : ""}
-                  background={`repeating-linear-gradient(45deg, color-mix(in srgb, ${band.tint} 26%, transparent) 0 6px, transparent 6px 12px)`}
+                  background={`repeating-linear-gradient(45deg, color-mix(in srgb, ${band.tint} 35%, transparent) 0 6px, transparent 6px 12px)`}
                 />
                 <Segment
                   width={pct(AGENT_S)}
                   label="agent"
-                  background="color-mix(in srgb, var(--features-blue) 26%, transparent)"
+                  background={`color-mix(in srgb, ${band.tint} 26%, transparent)`}
                 />
                 <Segment width={pct(REST_S)} label="" background="transparent" />
                 {!reduced && (
@@ -327,7 +338,7 @@ export function FeatureLatencyLab() {
               </div>
               <div className="mt-2 flex justify-between font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/50">
                 <span>one exchange</span>
-                <span className="tabular-nums" style={{ color: band.tint }}>
+                <span className="tabular-nums transition-colors duration-500" style={{ color: band.tint }}>
                   {Math.round((gapS / cycle) * 100)}% of it is silence
                 </span>
               </div>
@@ -335,15 +346,14 @@ export function FeatureLatencyLab() {
 
             {/* ---- slider ---- */}
             <div className="mt-5">
-              {/* h-11, not h-6 — the transparent range input is sized to this
-                  box, so it was a 24px-tall drag target on touch. */}
               <div className="relative h-11">
                 <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full bg-white/[0.08]">
                   <div
-                    className="h-full rounded-full"
+                    className="h-full rounded-full transition-all duration-300"
                     style={{
                       width: `${pos / 10}%`,
-                      background: `linear-gradient(90deg, color-mix(in srgb, ${band.tint} 45%, transparent), ${band.tint})`,
+                      background: `linear-gradient(90deg, color-mix(in srgb, ${band.tint} 50%, transparent), ${band.tint})`,
+                      boxShadow: `0 0 12px color-mix(in srgb, ${band.tint} 40%, transparent)`,
                     }}
                   />
                 </div>
@@ -359,14 +369,13 @@ export function FeatureLatencyLab() {
                 {/* Visible thumb */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/80"
+                  className="pointer-events-none absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/80 transition-all duration-300"
                   style={{
                     left: `${pos / 10}%`,
                     background: band.tint,
-                    boxShadow: `0 0 0 4px color-mix(in srgb, ${band.tint} 22%, transparent), 0 0 18px ${band.tint}`,
+                    boxShadow: `0 0 0 4px color-mix(in srgb, ${band.tint} 30%, transparent), 0 0 20px ${band.tint}`,
                   }}
                 />
-                {/* Real input on top — keyboard, drag and a11y for free */}
                 <input
                   type="range"
                   min={0}
@@ -391,16 +400,6 @@ export function FeatureLatencyLab() {
                     <span className="block font-mono text-[10px] tabular-nums text-muted-foreground/70">
                       {m.label}
                     </span>
-                    {/* The 200ms caption only survives in the middle band.
-                        It and the 300ms mark sit 12.6% apart, so the two
-                        captions need ~78px of room but only get 12.6% of the
-                        track: fine on a full-width card (115px apart), not fine
-                        on a 320px phone (39px) and — since this card went
-                        two-column — not fine at lg either, where the track is
-                        back down to ~436px and they overlap by ~23px.
-                        "Vozpar ceiling" always stays; it's the one annotation
-                        the whole section is built around. The 1.2s mark is far
-                        enough right to never collide. */}
                     <span
                       className={`whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground/45 ${
                         m.ms === 200 ? "hidden sm:block lg:hidden" : "block"
@@ -414,15 +413,7 @@ export function FeatureLatencyLab() {
             </div>
 
             {/* ---- verdict ---- */}
-            {/* border-t only below lg. In two columns it would be a half-width
-                rule terminating in mid-air beside the agent bubble, with
-                nothing anchoring its left end. */}
             <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between lg:mt-5 lg:flex-col lg:items-start lg:border-t-0 lg:pt-0">
-              {/* Reserved height. `mode="wait"` unmounts the old copy before
-                  the new one mounts, and in a half-width column this paragraph
-                  runs four lines — so without a floor the row collapsed to the
-                  button's height and the whole card jumped ~53px on every band
-                  crossing while dragging the slider. */}
               <div className="lg:min-h-[5.5rem]">
               <AnimatePresence mode="wait">
                 <motion.p
@@ -441,7 +432,12 @@ export function FeatureLatencyLab() {
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex min-h-11 shrink-0 items-center gap-2 self-start rounded-full border border-border px-5 text-xs font-medium text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground sm:self-auto"
+                className="inline-flex min-h-11 shrink-0 items-center gap-2 self-start rounded-full border px-5 text-xs font-medium transition-all duration-300 hover:scale-105 sm:self-auto"
+                style={{
+                  borderColor: `color-mix(in srgb, ${band.tint} 45%, transparent)`,
+                  color: band.tint,
+                  background: `color-mix(in srgb, ${band.tint} 10%, transparent)`,
+                }}
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Back to 280ms

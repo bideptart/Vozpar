@@ -200,40 +200,52 @@ export function FeatureIvrRace() {
 
         {/* Payoff */}
         <ScrollReveal className="mt-5 md:mt-6">
-          <div className="flex flex-col items-center gap-4 rounded-2xl border border-border bg-card/30 px-5 py-5 text-center shadow-lg shadow-black/20 sm:px-8">
-            <div className="grid w-full max-w-2xl grid-cols-1 divide-y divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          <div
+            className="flex flex-col rounded-2xl border bg-card/30 p-5 shadow-xl backdrop-blur-md transition-all duration-300 sm:p-6"
+            style={{
+              borderColor: "color-mix(in srgb, #3b82f6 35%, transparent)",
+              boxShadow: "0 0 25px -5px color-mix(in srgb, #3b82f6 15%, transparent)",
+            }}
+          >
+            <div className="flex items-center justify-between gap-4 pb-4 border-b border-border/60">
+              <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground/70">
+                Call Efficiency Impact
+              </span>
+              {!reduced && (
+                <button
+                  type="button"
+                  onClick={replay}
+                  className="inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition-all duration-300 hover:scale-105"
+                  style={{
+                    borderColor: "color-mix(in srgb, #3b82f6 60%, transparent)",
+                    color: "#3b82f6",
+                    background: "color-mix(in srgb, #3b82f6 15%, transparent)",
+                    boxShadow: "0 0 14px color-mix(in srgb, #3b82f6 30%, transparent)",
+                  }}
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  Replay
+                </button>
+              )}
+            </div>
+
+            <div className="grid w-full grid-cols-1 divide-y divide-border/60 pt-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
               <Payoff
                 value={done ? `${Math.round(IVR_TOTAL / AGENT_TOTAL)}×` : "—"}
                 label="Longer on the legacy path"
-                accent="var(--features-amber)"
+                accent="#ff7a00"
               />
               <Payoff
                 value={done ? mmss(IVR_TOTAL - AGENT_TOTAL) : "—"}
                 label="Of the caller's time, saved"
-                accent="var(--features-blue)"
+                accent="#3b82f6"
               />
               <Payoff
                 value={done ? "0" : "—"}
                 label="Times they repeat themselves"
-                accent="var(--features-green)"
+                accent="#10b981"
               />
             </div>
-
-            <p className="max-w-xl text-[15px] font-light leading-relaxed text-muted-foreground">
-              Most callers don&apos;t wait it out. Every extra minute in the queue is a booking that quietly becomes a
-              hang-up.
-            </p>
-
-            {!reduced && (
-              <button
-                type="button"
-                onClick={replay}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 text-xs font-medium text-muted-foreground transition-colors hover:border-white/30 hover:text-foreground"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Replay
-              </button>
-            )}
           </div>
         </ScrollReveal>
       </div>
