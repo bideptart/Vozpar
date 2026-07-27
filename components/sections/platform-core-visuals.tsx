@@ -28,6 +28,13 @@ type Node = { label: string; icon: LucideIcon }
 
 const PANEL = "relative h-[220px] w-full overflow-hidden sm:h-[240px]"
 
+// suppressHydrationWarning on the three PANEL divs below: a browser
+// extension (Bitdefender and similar security extensions do this) injects a
+// `bis_skin_checked` attribute into the DOM before React hydrates, which
+// React then reports as a server/client mismatch — it isn't caused by app
+// code (same root cause diagnosed earlier for the FAQ accordion). Safe to
+// suppress here since these are plain divs we own directly.
+
 /* ── 1 · Real-time Execution — radial hub, 3 systems called simultaneously ── */
 
 const HUB_CANVAS = { w: 400, h: 230 }
@@ -42,7 +49,7 @@ const pct = (v: number, total: number) => `${(v / total) * 100}%`
 
 export function HubExecutionViz({ tint, icon: Icon, nodes, reduced }: { tint: string; icon: LucideIcon; nodes: readonly Node[]; reduced: boolean }) {
   return (
-    <div className={PANEL}>
+    <div className={PANEL} suppressHydrationWarning>
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         style={{ background: tint, opacity: 0.16 }} />
 
@@ -98,7 +105,7 @@ export function HubExecutionViz({ tint, icon: Icon, nodes, reduced }: { tint: st
 export function CarrierRelayViz({ tint, icon: Icon, nodes, reduced }: { tint: string; icon: LucideIcon; nodes: readonly Node[]; reduced: boolean }) {
   const rowY = [22, 50, 78] // % positions for the 3 carrier badges, top to bottom
   return (
-    <div className={PANEL}>
+    <div className={PANEL} suppressHydrationWarning>
       <div aria-hidden className="pointer-events-none absolute left-[18%] top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         style={{ background: tint, opacity: 0.14 }} />
 
@@ -169,7 +176,7 @@ export function SecurityVaultViz({ icon: Icon, tint, nodes, reduced }: { tint: s
     { x: 200, y: 206 },
   ]
   return (
-    <div className={PANEL}>
+    <div className={PANEL} suppressHydrationWarning>
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
         style={{ background: tint, opacity: 0.14 }} />
 
