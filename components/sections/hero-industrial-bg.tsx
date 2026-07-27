@@ -38,7 +38,7 @@ const ICE = "#60b8ff"
 
 const MESH = [
   {
-    color: "rgba(4,107,210,0.18)",
+    color: "rgba(4,107,210,0.05)",
     size: 780,
     left: "58%",
     top: "-22%",
@@ -50,7 +50,7 @@ const MESH = [
     breatheMax: 0.9,
   },
   {
-    color: "rgba(45,152,241,0.12)",
+    color: "rgba(45,152,241,0.035)",
     size: 620,
     left: "-14%",
     top: "6%",
@@ -86,7 +86,7 @@ const MESH = [
     breatheMax: 0.75,
   },
   {
-    color: "rgba(96,184,255,0.12)",
+    color: "rgba(96,184,255,0.03)",
     size: 460,
     left: "34%",
     top: "22%",
@@ -704,8 +704,9 @@ function HeroIndustrialBgImpl() {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 46% 52% at 26% 48%, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 45%, transparent 76%),
-            radial-gradient(ellipse 40% 46% at 76% 50%, rgba(0,0,0,0.55) 0%, transparent 72%)
+            radial-gradient(ellipse 46% 52% at 26% 48%, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.7) 45%, transparent 80%),
+            radial-gradient(ellipse 40% 46% at 76% 50%, rgba(0,0,0,0.7) 0%, transparent 76%),
+            linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.45) 100%)
           `,
         }}
       />

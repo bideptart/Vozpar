@@ -11,7 +11,7 @@ import { ScrollReveal } from "@/components/animation/scroll-reveal"
 const METRICS = [
   { value: "2.4M+", label: "Calls / month",   tint: "#2d98f1", icon: PhoneIncoming },
   { value: "62%",   label: "Ops time saved",  tint: "#10b981", icon: Clock3 },
-  { value: "3.1×",  label: "Lead lift",       tint: "#2d98f1", icon: TrendingUp },
+  { value: "3.1x",  label: "Lead lift",       tint: "#2d98f1", icon: TrendingUp },
 ]
 
 const TESTIMONIALS = [
@@ -75,17 +75,26 @@ const TESTIMONIALS = [
 
 type Testimonial = (typeof TESTIMONIALS)[number]
 
-function TestimonialCard({ t }: { t: Testimonial }) {
+/**
+ * `fluid` switches the card between its two hosts:
+ *   • false (desktop marquee) — fixed 340×230 box. A horizontal marquee
+ *     REQUIRES fixed-width children; percentage widths inside a translating
+ *     flex row collapse to zero. This is the exact desktop card, unchanged.
+ *   • true (mobile/tablet grid) — w-full, height driven by content. No fixed
+ *     px width, nothing to overflow, text wraps and the card grows instead
+ *     of clipping.
+ */
+function TestimonialCard({ t, fluid = false }: { t: Testimonial; fluid?: boolean }) {
   return (
     <figure
-      className="
-        group relative flex h-full w-[300px] shrink-0 flex-col overflow-hidden rounded-2xl
+      className={`
+        group relative flex flex-col overflow-hidden rounded-2xl
         border border-white/[0.08] bg-[#000000] p-5
         transition-[border-color,box-shadow] duration-300 ease-out
         hover:border-[var(--tint-border)]
         hover:shadow-[0_14px_36px_-16px_var(--tint-glow)]
-        sm:w-[340px]
-      "
+        ${fluid ? "h-full w-full min-w-0" : "h-[230px] w-[340px] shrink-0"}
+      `}
       style={{ "--tint-border": `${t.tint}50`, "--tint-glow": `${t.tint}55` } as React.CSSProperties}
     >
       <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
@@ -93,18 +102,23 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 
       <StarRating rating={t.rating} tint={t.tint} />
 
-      <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-white/65">
+      {/* Clamped only in the fixed-height marquee card, where an over-long
+          quote would otherwise be cut mid-line. In the fluid grid the card
+          grows to fit, so the full quote is always readable. */}
+      <blockquote
+        className={`mt-3 flex-1 break-words text-sm leading-relaxed text-white/65 ${fluid ? "" : "line-clamp-4"}`}
+      >
         &ldquo;{t.quote}&rdquo;
       </blockquote>
 
-      <figcaption className="mt-4 flex items-center gap-3 border-t border-white/[0.06] pt-3.5">
+      <figcaption className="mt-4 flex shrink-0 items-center gap-3 border-t border-white/[0.06] pt-3.5">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
           style={{ background: `${t.tint}18`, color: t.tint, outline: `1px solid ${t.tint}30` }}>
           {t.initial}
         </div>
-        <div>
-          <p className="text-sm font-semibold text-white">{t.author}</p>
-          <p className="text-xs text-white/30">{t.company}</p>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-white">{t.author}</p>
+          <p className="truncate text-xs text-white/30">{t.company}</p>
         </div>
       </figcaption>
     </figure>
@@ -151,16 +165,25 @@ export function Testimonials() {
         style={{ background: "radial-gradient(50% 40% at 50% 0%, rgba(4,107,210,0.07), transparent 70%)" }} />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:py-14">
-        <div className="grid gap-8 lg:grid-cols-12 lg:gap-10 lg:items-center">
+        {/* min-w-0 on the grid and on both columns: a grid/flex item defaults
+            to min-width:auto, which lets its content push the track wider
+            than its allotted share — the standard cause of "my grid overflows
+            on mobile but the CSS looks right". This is the structural fix;
+            everything below just sizes within it. */}
+        <div className="grid min-w-0 gap-8 lg:grid-cols-12 lg:items-center lg:gap-10">
 
           {/* LEFT — heading, stats, CTAs. */}
-          <ScrollReveal className="lg:col-span-5">
+          <ScrollReveal className="min-w-0 lg:col-span-5">
             <span className="ai-pill-blue">
               <Sparkles className="h-3 w-3" />
               Customer outcomes
             </span>
 
-            <h2 className="mt-5 font-heading text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl lg:text-[2.25rem]">
+            {/* nowrap only from lg — that's the width it was sized for. Below
+                lg the column is full-bleed and the line wraps naturally
+                instead of forcing the container wider than the viewport,
+                which was one source of the horizontal overflow. */}
+            <h2 className="mt-5 font-heading text-xl font-medium leading-tight tracking-tight text-white sm:text-2xl lg:whitespace-nowrap lg:text-[1.7rem]">
               Loved by teams,{" "}
               <span className="bg-gradient-to-r from-white/85 via-white/55 to-white/85 bg-clip-text text-transparent">
                 trusted by results.
@@ -170,52 +193,91 @@ export function Testimonials() {
               From dental clinics to logistics ops — answering, qualifying, and closing 24/7.
             </p>
 
-            <div className="mt-6 grid grid-cols-3 gap-2.5">
+            {/* grid-cols-3 (Tailwind: repeat(3, minmax(0,1fr))) guarantees
+                three mathematically equal-width, equal-height columns at
+                every viewport — unlike a flex-basis approach, a grid track
+                can never be forced wider by one child's content, which is
+                what was letting a single card dominate the row on some
+                phone widths. Icon/value/label sizes use fluid clamp()
+                arbitrary values instead of stepped breakpoints, so they
+                scale smoothly from 320px up through desktop rather than
+                jumping at fixed widths — same visual result on desktop,
+                nothing jumps or overflows in between. */}
+            <div className="mt-6 grid grid-cols-3 gap-1.5 sm:gap-2.5">
               {METRICS.map(m => {
                 const Icon = m.icon
                 return (
                   <div
                     key={m.label}
-                    className="group relative overflow-hidden rounded-xl border border-white/[0.07] bg-[#000000] px-2.5 py-3.5 text-center transition-transform duration-300 hover:-translate-y-0.5"
+                    className="min-w-0 rounded-xl border border-t-2 border-white/[0.07] bg-[#000000] px-[clamp(0.25rem,1vw,0.375rem)] py-[clamp(0.625rem,1.2vw,0.75rem)] text-center"
+                    style={{ borderTopColor: `${m.tint}40` }}
                   >
-                    <div className="absolute inset-x-0 top-0 h-px transition-opacity duration-300 group-hover:opacity-100"
-                      style={{ background: `linear-gradient(to right, transparent, ${m.tint}50, transparent)` }} />
-                    <div
-                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                      style={{ boxShadow: `inset 0 0 0 1px ${m.tint}45, 0 12px 28px -14px ${m.tint}70` }}
+                    <Icon
+                      className="mx-auto opacity-70"
+                      style={{ color: m.tint, height: "clamp(0.7rem, 2.4vw, 0.875rem)", width: "clamp(0.7rem, 2.4vw, 0.875rem)" }}
+                      aria-hidden
                     />
-                    <Icon className="mx-auto h-3.5 w-3.5 opacity-70" style={{ color: m.tint }} aria-hidden />
-                    <p className="mt-1.5 font-heading text-xl font-medium tracking-tight sm:text-2xl" style={{ color: m.tint }}>
+                    <p
+                      className="mt-1 font-heading font-medium tracking-tight sm:mt-1.5"
+                      style={{ color: m.tint, fontSize: "clamp(0.8rem, 3.6vw, 1.25rem)" }}
+                    >
                       {m.value}
                     </p>
-                    <p className="mt-0.5 text-[11px] leading-tight text-white/40">{m.label}</p>
+                    {/* Wraps instead of truncating — these are short two/
+                        three-word phrases, so a second line reads better on
+                        narrow phones than a clipped ellipsis. */}
+                    <p
+                      className="mt-0.5 break-words leading-tight text-white/40"
+                      style={{ fontSize: "clamp(0.55rem, 2.1vw, 0.6875rem)" }}
+                    >
+                      {m.label}
+                    </p>
                   </div>
                 )
               })}
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            {/* Stacked + full-width on phones, side by side from sm up. */}
+            <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <Link href="/get-started"
-                className="group inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#046bd2] px-6 text-sm font-semibold text-white shadow-[0_0_24px_rgba(4,107,210,0.4)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_36px_rgba(4,107,210,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+                className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#046bd2] px-6 text-sm font-semibold text-white shadow-[0_0_24px_rgba(4,107,210,0.4)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_36px_rgba(4,107,210,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:w-auto">
                 Start Free
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
               <Link href="/contact"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm font-medium text-white/65 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm font-medium text-white/65 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:w-auto">
                 <PhoneCall className="h-3.5 w-3.5" />
                 Talk to Sales
               </Link>
             </div>
           </ScrollReveal>
 
-          {/* RIGHT — same column footprint as before, but now a looping
-              horizontal row instead of a static one so all 7 testimonials
-              surface without the section growing. Bleeds slightly past its
-              own column edges (-mx) so the fade mask has room to work
-              without visibly clipping the first/last card's border. */}
-          <div className="lg:col-span-7">
-            <div className="relative -mx-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)] sm:-mx-6 lg:mx-0">
-              <div className="marquee flex gap-3 px-4 sm:px-6 lg:px-0" style={{ animationDuration: "12s" }}>
+          {/* RIGHT — two distinct implementations rather than one that tries
+              to be both. A horizontal marquee needs fixed-width children, so
+              it can never satisfy "w-full cards, one per row, no overflow" on
+              mobile; forcing it to was the root of the overflow. Below lg it
+              is replaced outright by a plain responsive grid. */}
+          <div className="min-w-0 lg:col-span-7">
+
+            {/* MOBILE + TABLET (<1024px) — static grid, no animation, no
+                fixed widths. 1 column on phones, 2 from sm (=640px) where
+                two cards genuinely fit. Cards are w-full and equal-height
+                per row via items-stretch. */}
+            <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:hidden">
+              {TESTIMONIALS.slice(0, 4).map(t => (
+                <TestimonialCard key={t.author} t={t} fluid />
+              ))}
+            </div>
+
+            {/* DESKTOP (≥1024px) — unchanged looping marquee.
+                contain:paint (on top of overflow-hidden) makes this a hard
+                clipping boundary so the doubled ~3000px animated row can
+                never register against any ancestor's scrollable width. */}
+            <div
+              className="relative hidden overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)] lg:block"
+              style={{ contain: "paint" }}
+            >
+              <div className="marquee flex gap-3" style={{ animationDuration: "34s" }}>
                 {rendered.map((t, i) => (
                   <TestimonialCard key={`${t.author}-${i}`} t={t} />
                 ))}

@@ -187,7 +187,7 @@ export function SiteFooter() {
 
       {/* Bottom bar */}
       <div className="relative border-t border-white/[0.07]">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-3 px-4 py-5 text-xs text-white/25 sm:flex-row sm:items-center sm:px-6">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-3 px-4 py-5 text-center text-xs text-white/25 sm:flex-row sm:items-center sm:px-6 sm:text-left">
           <div className="flex items-center gap-3">
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />

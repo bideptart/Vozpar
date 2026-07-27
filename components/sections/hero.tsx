@@ -279,7 +279,7 @@ function Scene3D({ reduced }: { reduced: boolean }) {
       {/* Ambient glow that changes with active card */}
       <motion.div aria-hidden
         className="pointer-events-none absolute inset-0 rounded-3xl blur-[80px]"
-        animate={{ background: `radial-gradient(ellipse at 50% 60%, ${SCENES[active].color}30, transparent 65%)` }}
+        animate={{ background: `radial-gradient(ellipse at 50% 60%, ${SCENES[active].color}12, transparent 65%)` }}
         transition={{ duration: 0.7 }}
       />
 
