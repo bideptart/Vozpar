@@ -70,8 +70,11 @@ export default function ContactPage() {
           {/* Form */}
           <ScrollReveal className="lg:col-span-7">
             <div className="mb-6">
-              <span className="font-mono text-xs uppercase tracking-widest text-sky-400 font-semibold">DIRECT MESSAGE</span>
-              <h2 className="mt-2 font-heading text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-sky-400 shadow-[0_0_15px_rgba(4,107,210,0.15)]">
+                <span className="h-2 w-2 rounded-full bg-sky-400" />
+                <span>DIRECT MESSAGE</span>
+              </div>
+              <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-white md:text-4xl">
                 Send us a message
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-300">
@@ -85,8 +88,11 @@ export default function ContactPage() {
           {/* Other ways to reach us */}
           <ScrollReveal className="lg:col-span-5">
             <div className="mb-6">
-              <span className="font-mono text-xs uppercase tracking-widest text-blue-400 font-semibold">GET IN TOUCH DIRECTLY</span>
-              <h2 className="mt-2 font-heading text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-sky-400 shadow-[0_0_15px_rgba(4,107,210,0.15)]">
+                <span className="h-2 w-2 rounded-full bg-sky-400" />
+                <span>GET IN TOUCH DIRECTLY</span>
+              </div>
+              <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-white md:text-4xl">
                 Other ways to reach us
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-300">
