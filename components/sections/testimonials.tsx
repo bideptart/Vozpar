@@ -4,14 +4,14 @@
 
 import type React from "react"
 import Link from "next/link"
-import { Star, ArrowRight, PhoneCall } from "lucide-react"
+import { Star, ArrowRight, PhoneCall, Sparkles, PhoneIncoming, Clock3, TrendingUp } from "lucide-react"
 import { useReducedMotion } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 const METRICS = [
-  { value: "2.4M+", label: "Calls / month", tint: "#2d98f1" },
-  { value: "62%",   label: "Ops time saved", tint: "#10b981" },
-  { value: "3.1×",  label: "Lead lift",      tint: "#2d98f1" },
+  { value: "2.4M+", label: "Calls / month",   tint: "#2d98f1", icon: PhoneIncoming },
+  { value: "62%",   label: "Ops time saved",  tint: "#10b981", icon: Clock3 },
+  { value: "3.1×",  label: "Lead lift",       tint: "#2d98f1", icon: TrendingUp },
 ]
 
 const TESTIMONIALS = [
@@ -63,6 +63,14 @@ const TESTIMONIALS = [
     tint: "#ec4899",
     rating: 5.0,
   },
+  {
+    quote: "Our closers only get on the phone once a lead is already qualified and hot. Pipeline quality changed overnight.",
+    author: "Founder",
+    company: "Real Estate Group",
+    initial: "F",
+    tint: "#14b8a6",
+    rating: 4.9,
+  },
 ] as const
 
 type Testimonial = (typeof TESTIMONIALS)[number]
@@ -71,11 +79,12 @@ function TestimonialCard({ t }: { t: Testimonial }) {
   return (
     <figure
       className="
-        group relative flex h-full flex-col overflow-hidden rounded-2xl
-        border border-white/[0.08] bg-[#000000] p-4
+        group relative flex h-full w-[300px] shrink-0 flex-col overflow-hidden rounded-2xl
+        border border-white/[0.08] bg-[#000000] p-5
         transition-[border-color,box-shadow] duration-300 ease-out
         hover:border-[var(--tint-border)]
         hover:shadow-[0_14px_36px_-16px_var(--tint-glow)]
+        sm:w-[340px]
       "
       style={{ "--tint-border": `${t.tint}50`, "--tint-glow": `${t.tint}55` } as React.CSSProperties}
     >
@@ -84,18 +93,18 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 
       <StarRating rating={t.rating} tint={t.tint} />
 
-      <blockquote className="mt-2.5 flex-1 text-[13px] leading-relaxed text-white/65">
+      <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-white/65">
         &ldquo;{t.quote}&rdquo;
       </blockquote>
 
-      <figcaption className="mt-3 flex items-center gap-2.5 border-t border-white/[0.06] pt-3">
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
+      <figcaption className="mt-4 flex items-center gap-3 border-t border-white/[0.06] pt-3.5">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
           style={{ background: `${t.tint}18`, color: t.tint, outline: `1px solid ${t.tint}30` }}>
           {t.initial}
         </div>
         <div>
-          <p className="text-xs font-semibold text-white">{t.author}</p>
-          <p className="text-[10px] text-white/30">{t.company}</p>
+          <p className="text-sm font-semibold text-white">{t.author}</p>
+          <p className="text-xs text-white/30">{t.company}</p>
         </div>
       </figcaption>
     </figure>
@@ -110,13 +119,13 @@ function StarRating({ rating, tint }: { rating: number; tint: string }) {
         {Array.from({ length: 5 }).map((_, i) => (
           <Star
             key={i}
-            className="h-3 w-3"
+            className="h-3.5 w-3.5"
             style={i < full ? { fill: "#fbbf24", color: "#fbbf24" } : { fill: "transparent", color: "rgba(255,255,255,0.18)" }}
             aria-hidden
           />
         ))}
       </div>
-      <span className="font-mono text-[10px] font-semibold" style={{ color: tint }}>
+      <span className="font-mono text-xs font-semibold" style={{ color: tint }}>
         {rating.toFixed(1)}
       </span>
     </div>
@@ -124,75 +133,65 @@ function StarRating({ rating, tint }: { rating: number; tint: string }) {
 }
 
 /**
- * Redesign note (round 3): the spotlight-carousel version read fine but was
- * tall — full-width panel, big padding, a switcher row, then a *separate*
- * closing CTA block stacked below it. On a real desktop viewport that adds
- * up to more vertical space than a testimonials block should cost.
- *
- * This borrows the layout idea from the two-column "stats + CTA on one
- * side, social proof on the other" reference: everything sits in a single
- * row so the section's total height is just whatever the taller column
- * needs — no second CTA block tacked on afterward, no giant scroll-driven
- * stacking effect (that pattern is built to consume viewport height on
- * purpose, which is the opposite of what's needed here).
+ * Cards are bigger now (300/340px vs 240/270px) and there are seven instead
+ * of four, so a static row would either overflow badly or need most of them
+ * hidden. Looping them in place — same left/right split, same column width
+ * as before — keeps the section's footprint exactly where it was while
+ * still surfacing every testimonial. Reuses the .marquee CSS class already
+ * defined for the industries page marquee (globals.css), doubled so the
+ * loop seam is invisible, and pauses on hover so a card can be read.
  */
-// Split into two alternating columns so each loop shows a varied mix rather
-// than "top half" / "bottom half" of the same list.
-const COLUMN_A = TESTIMONIALS.filter((_, i) => i % 2 === 0)
-const COLUMN_B = TESTIMONIALS.filter((_, i) => i % 2 === 1)
-
-function MarqueeColumn({ items, direction, duration }: { items: Testimonial[]; direction: "up" | "down"; duration: number }) {
-  const reduced = useReducedMotion()
-  // Duplicated so the seam lands exactly on -50%/0% — invisible loop point.
-  // Skipped under reduced motion so the column doesn't statically repeat.
-  const rendered = reduced ? items : [...items, ...items]
-
-  return (
-    <div className="relative h-[440px] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]">
-      <div
-        className={direction === "up" ? "testimonial-marquee-up" : "testimonial-marquee-down"}
-        style={{ "--tm-duration": `${duration}s` } as React.CSSProperties}
-      >
-        <div className="flex flex-col gap-3 pb-3">
-          {rendered.map((t, i) => (
-            <TestimonialCard key={`${t.author}-${i}`} t={t} />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export function Testimonials() {
+  const reduced = useReducedMotion()
+  const rendered = reduced ? TESTIMONIALS : [...TESTIMONIALS, ...TESTIMONIALS]
+
   return (
     <section id="testimonials" className="relative overflow-hidden border-t border-white/[0.06] bg-black">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[320px]"
         style={{ background: "radial-gradient(50% 40% at 50% 0%, rgba(4,107,210,0.07), transparent 70%)" }} />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:py-14">
-        <div className="grid gap-8 lg:grid-cols-12 lg:gap-10 lg:items-start">
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-10 lg:items-center">
 
           {/* LEFT — heading, stats, CTAs. */}
           <ScrollReveal className="lg:col-span-5">
-            <p className="mb-3 font-mono text-xs uppercase tracking-[0.22em] text-[#2d98f1]">Customer outcomes</p>
-            <h2 className="font-heading text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl lg:text-[2.25rem]">
-              Loved by teams, <span className="text-white/55">trusted by results.</span>
+            <span className="ai-pill-blue">
+              <Sparkles className="h-3 w-3" />
+              Customer outcomes
+            </span>
+
+            <h2 className="mt-5 font-heading text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl lg:text-[2.25rem]">
+              Loved by teams,{" "}
+              <span className="bg-gradient-to-r from-white/85 via-white/55 to-white/85 bg-clip-text text-transparent">
+                trusted by results.
+              </span>
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-white/40">
               From dental clinics to logistics ops — answering, qualifying, and closing 24/7.
             </p>
 
             <div className="mt-6 grid grid-cols-3 gap-2.5">
-              {METRICS.map(m => (
-                <div key={m.label} className="relative overflow-hidden rounded-xl border border-white/[0.07] bg-[#000000] px-2.5 py-3.5 text-center">
-                  <div className="absolute inset-x-0 top-0 h-px"
-                    style={{ background: `linear-gradient(to right, transparent, ${m.tint}50, transparent)` }} />
-                  <p className="font-heading text-xl font-medium tracking-tight sm:text-2xl" style={{ color: m.tint }}>
-                    {m.value}
-                  </p>
-                  <p className="mt-1 text-[11px] leading-tight text-white/40">{m.label}</p>
-                </div>
-              ))}
+              {METRICS.map(m => {
+                const Icon = m.icon
+                return (
+                  <div
+                    key={m.label}
+                    className="group relative overflow-hidden rounded-xl border border-white/[0.07] bg-[#000000] px-2.5 py-3.5 text-center transition-transform duration-300 hover:-translate-y-0.5"
+                  >
+                    <div className="absolute inset-x-0 top-0 h-px transition-opacity duration-300 group-hover:opacity-100"
+                      style={{ background: `linear-gradient(to right, transparent, ${m.tint}50, transparent)` }} />
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{ boxShadow: `inset 0 0 0 1px ${m.tint}45, 0 12px 28px -14px ${m.tint}70` }}
+                    />
+                    <Icon className="mx-auto h-3.5 w-3.5 opacity-70" style={{ color: m.tint }} aria-hidden />
+                    <p className="mt-1.5 font-heading text-xl font-medium tracking-tight sm:text-2xl" style={{ color: m.tint }}>
+                      {m.value}
+                    </p>
+                    <p className="mt-0.5 text-[11px] leading-tight text-white/40">{m.label}</p>
+                  </div>
+                )
+              })}
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -209,12 +208,19 @@ export function Testimonials() {
             </div>
           </ScrollReveal>
 
-          {/* RIGHT — two vertically-looping columns (one scrolling up, one
-              down, each doubled so the loop seam is invisible), instead of a
-              static grid. Pauses on hover so a card can actually be read. */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-7">
-            <MarqueeColumn items={COLUMN_A} direction="up" duration={30} />
-            <MarqueeColumn items={COLUMN_B} direction="down" duration={34} />
+          {/* RIGHT — same column footprint as before, but now a looping
+              horizontal row instead of a static one so all 7 testimonials
+              surface without the section growing. Bleeds slightly past its
+              own column edges (-mx) so the fade mask has room to work
+              without visibly clipping the first/last card's border. */}
+          <div className="lg:col-span-7">
+            <div className="relative -mx-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)] sm:-mx-6 lg:mx-0">
+              <div className="marquee flex gap-3 px-4 sm:px-6 lg:px-0" style={{ animationDuration: "12s" }}>
+                {rendered.map((t, i) => (
+                  <TestimonialCard key={`${t.author}-${i}`} t={t} />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

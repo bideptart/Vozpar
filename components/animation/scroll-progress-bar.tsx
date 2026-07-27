@@ -74,21 +74,9 @@ export function ScrollProgressBar() {
       {!reduced && (
         <motion.span
           aria-hidden
-          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2"
-          style={{ left: headLeft }}
-        >
-          {/* Soft outer halo, gently breathing. */}
-          <motion.span
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#60b8ff]/40 blur-[6px]"
-            animate={{ width: [14, 20, 14], height: [14, 20, 14], opacity: [0.5, 0.85, 0.5] }}
-            transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-          />
-          {/* Bright core dot. */}
-          <span
-            className="relative block h-[9px] w-[9px] rounded-full bg-white"
-            style={{ boxShadow: "0 0 12px 3px rgba(96,184,255,0.9), 0 0 4px 1px rgba(255,255,255,0.8)" }}
-          />
-        </motion.span>
+          className="absolute top-1/2 h-2 w-2 -translate-y-1/2 -translate-x-1/2 rounded-full bg-[#60b8ff]"
+          style={{ left: headLeft, boxShadow: "0 0 4px 1px rgba(96,184,255,0.55)" }}
+        />
       )}
     </div>
   )
