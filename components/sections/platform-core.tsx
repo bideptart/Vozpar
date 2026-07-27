@@ -26,7 +26,7 @@ const ARCHITECTURE_TABS = [
     nodes: [
       { label: "Calendar", icon: Calendar },
       { label: "CRM", icon: Database },
-      { label: "Knowledge Base", icon: FileText },
+      { label: "Vector DB", icon: FileText },
     ],
     viz: "hub" as ArchKind,
     metrics: [
@@ -242,11 +242,11 @@ export function PlatformCore() {
 
                 <div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-4">
                   <a
-                    href="/get-started"
-                    className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-[#2d98f1] hover:underline"
+                    href="/contact"
+                    className="group inline-flex items-center gap-2 font-mono text-xs font-semibold text-[#2d98f1] hover:underline"
                   >
-                    Explore full architecture docs
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    Talk to our engineering team
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
                   </a>
                 </div>
               </div>

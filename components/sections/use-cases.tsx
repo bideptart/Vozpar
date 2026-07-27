@@ -169,7 +169,7 @@ const TAB_ICON_MOTION: Record<CaseId, { rotate?: number[]; scale?: number[]; y?:
   afterhours: { scale: [1, 1.12, 1], opacity: [1, 0.7, 1] },
 }
 
-const CASE_INTERVAL = 5000
+const CASE_INTERVAL = 2500
 
 export function UseCases() {
   const [active, setActive] = useState<CaseId>("booking")
@@ -297,10 +297,18 @@ export function UseCases() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="grid gap-6 p-5 sm:p-6 lg:grid-cols-12 lg:items-center lg:min-h-[340px]"
+              className="grid gap-6 p-5 sm:p-6 lg:grid-cols-12 lg:h-[420px]"
             >
-              {/* Left Column: Details & Objective */}
-              <div className="lg:col-span-7 flex flex-col justify-between">
+              {/* Left Column: Details & Objective. Fixed-height parent
+                  (lg:h-[420px] above, default grid stretch here — the old
+                  lg:items-center let each column size to its own content,
+                  so a shorter headline/description shifted the whole card
+                  and the workflow checklist never sat at the same spot
+                  twice. line-clamp on the headline/description caps how
+                  tall they can get; justify-between then always pins the
+                  workflow block to the same bottom edge regardless of how
+                  much text is above it. */}
+              <div className="flex h-full flex-col justify-between lg:col-span-7">
                 <div>
                   <div className="flex items-center gap-3">
                     <span
@@ -319,11 +327,11 @@ export function UseCases() {
                     </span>
                   </div>
 
-                  <h3 className="mt-3 font-heading text-xl font-semibold leading-tight text-white sm:text-2xl md:text-3xl">
+                  <h3 className="mt-3 line-clamp-2 min-h-[2.6em] font-heading text-xl font-semibold leading-tight text-white sm:text-2xl md:text-3xl">
                     {cur.headline}
                   </h3>
 
-                  <p className="mt-2.5 text-[13px] leading-relaxed text-white/50 sm:text-sm">
+                  <p className="mt-2.5 line-clamp-3 min-h-[3.9em] text-[13px] leading-relaxed text-white/50 sm:text-sm">
                     {cur.description}
                   </p>
 
@@ -367,10 +375,14 @@ export function UseCases() {
                 </div>
               </div>
 
-              {/* Right Column: Live Call Audio Simulator Box */}
-              <div className="lg:col-span-5">
+              {/* Right Column: Live Call Audio Simulator Box — a fixed
+                  height (not just centered) so it's the exact same size on
+                  every tab, and nudged down a bit within its column (was
+                  dead-centered, which read as sitting too high next to the
+                  top-anchored left column). */}
+              <div className="flex h-full flex-col items-stretch justify-center pt-6 lg:col-span-5 lg:pt-10">
                 <div
-                  className="relative overflow-hidden rounded-2xl border p-5"
+                  className="relative flex flex-col justify-between overflow-hidden rounded-2xl border p-5 lg:h-[336px]"
                   style={{
                     background: "linear-gradient(145deg, #0a0a0a 0%, #000000 100%)",
                     borderColor: `${cur.tint}35`,
@@ -411,7 +423,7 @@ export function UseCases() {
                       used to just recolour the same plot; now the shape
                       itself changes with the content. */}
                   <div
-                    className="mt-4 flex flex-col items-center justify-center gap-2.5 rounded-xl border border-white/[0.06] bg-black/50 p-4 transition-all duration-300 hover:scale-[1.02]"
+                    className="mt-4 flex flex-1 flex-col items-center justify-center gap-2.5 rounded-xl border border-white/[0.06] bg-black/50 p-4 transition-all duration-300 hover:scale-[1.02]"
                     onMouseEnter={() => setIsWaveHovered(true)}
                     onMouseLeave={() => setIsWaveHovered(false)}
                     style={{
