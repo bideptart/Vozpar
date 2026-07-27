@@ -1,67 +1,36 @@
 "use client"
 
-import { useRef } from "react"
 import Link from "next/link"
-import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react"
+import { motion } from "motion/react"
 import { ArrowDown, Zap, Clock, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
 
 export function PricingHero3D() {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  // Interactive mouse tracking
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const nx = useMotionValue(0)
-  const ny = useMotionValue(0)
-
-  const springCfg = { stiffness: 100, damping: 22, mass: 0.8 }
-  const sx = useSpring(mouseX, springCfg)
-  const sy = useSpring(mouseY, springCfg)
-
-  const rotateX = useTransform(ny, [-0.5, 0.5], [6, -6])
-  const rotateY = useTransform(nx, [-0.5, 0.5], [-6, 6])
-
-  const spotlight = useMotionTemplate`radial-gradient(650px circle at ${sx}px ${sy}px, rgba(4, 107, 210, 0.25), transparent 70%)`
-
-  function handleMouseMove(e: React.MouseEvent) {
-    const el = containerRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    mouseX.set(x)
-    mouseY.set(y)
-    nx.set(x / rect.width - 0.5)
-    ny.set(y / rect.height - 0.5)
-  }
-
-  function handleMouseLeave() {
-    mouseX.set(0)
-    mouseY.set(0)
-    nx.set(0)
-    ny.set(0)
-  }
-
   return (
     <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden border-b border-white/10 bg-[#04060a] pt-20 pb-12 md:pt-24 md:pb-16"
+      className="relative overflow-hidden border-b border-white/10 bg-black pt-20 pb-12 md:pt-24 md:pb-16"
       suppressHydrationWarning
     >
-      {/* Dynamic Cursor Spotlight */}
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 opacity-100"
-        style={{ background: spotlight }}
+      <FloatingAccents />
+      <ParticleField />
+      <FloatingIconBadges />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
       />
 
       {/* 3D Grid Canvas with Perspective */}
       <div className="absolute inset-0 -z-10 overflow-hidden" style={{ perspective: "1000px" }}>
-        <motion.div
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        <div
           className="absolute inset-[-30%] bg-grid bg-[size:50px_50px] opacity-15 pointer-events-none"
         />
 

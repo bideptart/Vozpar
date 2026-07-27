@@ -46,7 +46,7 @@ const CHANNELS = [
 
 export default function ContactPage() {
   return (
-    <main className="min-h-dvh bg-[#04060a] text-foreground">
+    <main className="min-h-dvh bg-black text-foreground">
       <SiteHeader />
 
       <BreadcrumbJsonLd

@@ -260,7 +260,7 @@ export function FeatureJourney() {
           </p>
         </ScrollReveal>
 
-        <div className="sticky top-16 z-30 -mx-6 mt-8 flex gap-2 overflow-x-auto border-b border-border/40 bg-background/90 px-6 py-2.5 backdrop-blur-md lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="sticky top-16 z-30 -mx-6 mt-8 flex gap-2 overflow-x-auto border-b border-border/40 bg-black/90 px-6 py-2.5 backdrop-blur-md lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {STAGES.map((s, i) => {
             const isActive = s.key === activeStage
             return (

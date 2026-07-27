@@ -27,7 +27,7 @@
  * than they did on navy, which is the point.
  */
 :root {
-  --background: #0b1220;
+  --background: #000000;
   --foreground: #ffffff;
   --card: rgba(255, 255, 255, 0.04);
   --card-foreground: #ffffff;
@@ -79,7 +79,7 @@
   --features-navy: #0e2246;
   --features-green: var(--chart-2);      /* #1F9D55 growth green */
   --features-amber: var(--chart-4);      /* #F2A71B amber */
-  --features-hero-bg: var(--background); /* #000000 */
+  --features-hero-bg: #000000; /* #000000 pure black matching /industries reference */
   /* Light mid-stop for .text-aurora-blue. Kept because that gradient still
      interpolates through it — and an undefined var() with no fallback
      invalidates the entire `background` declaration at computed-value time,

@@ -3,6 +3,11 @@
 import React, { useRef, useState } from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { Clock, Sparkles } from "lucide-react"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
 
 export function ContactHero3D() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -48,9 +53,20 @@ export function ContactHero3D() {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden border-b border-white/10 bg-[#04060a] pt-24 pb-16 md:pt-32 md:pb-24"
+      className="relative overflow-hidden border-b border-white/10 bg-black pt-24 pb-16 md:pt-32 md:pb-24"
       suppressHydrationWarning
     >
+      <FloatingAccents />
+      <ParticleField />
+      <FloatingIconBadges />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+      />
       {/* 3D Dynamic Cursor Spotlight */}
       <motion.div
         aria-hidden="true"

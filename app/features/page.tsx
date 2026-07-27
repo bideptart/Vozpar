@@ -29,7 +29,7 @@ export const metadata: Metadata = pageSeo({
 // modifying the DOM after React already rendered it.
 export default function FeaturesPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground" suppressHydrationWarning>
+    <div className="flex min-h-screen flex-col bg-black text-foreground" suppressHydrationWarning>
       <SiteHeader />
 
       <BreadcrumbJsonLd

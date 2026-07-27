@@ -5,6 +5,11 @@ import { SiteFooter } from "@/components/site-footer"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
 
 export const metadata: Metadata = pageSeo({
   title: "Terms of Service",
@@ -15,7 +20,7 @@ export const metadata: Metadata = pageSeo({
 
 export default function TermsOfServicePage() {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="min-h-dvh bg-black text-foreground">
       <SiteHeader />
 
       <BreadcrumbJsonLd
@@ -26,11 +31,29 @@ export default function TermsOfServicePage() {
       />
 
       {/* Hero */}
-      <section className="border-b border-border/50 bg-muted/20 py-12 md:py-16">
-        <div className="mx-auto w-full max-w-4xl px-4 md:px-6">
-          <span className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">Legal</span>
-          <h1 className="mt-2 font-serif text-3xl font-normal tracking-tight md:text-5xl">Terms of Service</h1>
-          <p className="mt-3 text-sm text-muted-foreground">Last updated: February 2026 · Version 2.1</p>
+      <section className="relative overflow-hidden border-b border-border/50 bg-black">
+        <FloatingAccents />
+        <ParticleField />
+        <FloatingIconBadges />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+        />
+        <div className="relative mx-auto w-full max-w-4xl px-4 py-12 text-center md:px-6 md:py-16">
+          <ScrollReveal>
+            <span className="ai-pill-magenta">
+              <span className="h-1 w-1 rounded-full bg-accent" />
+              Legal
+            </span>
+            <h1 className="mt-6 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl">
+              Terms of <span className="text-primary">Service.</span>
+            </h1>
+            <p className="mt-5 text-sm text-muted-foreground">Last updated on 24 June 2026</p>
+          </ScrollReveal>
         </div>
       </section>
 

@@ -6,6 +6,11 @@ import { BlogFilterSection } from "@/components/blog/blog-filter-section"
 import { BLOG_POSTS } from "@/lib/blog"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
 
 export const metadata: Metadata = pageSeo({
   title: "Blog",
@@ -16,7 +21,7 @@ export const metadata: Metadata = pageSeo({
 
 export default function BlogIndexPage() {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="min-h-dvh bg-black text-foreground">
       <SiteHeader />
 
       <BreadcrumbJsonLd
@@ -27,15 +32,14 @@ export default function BlogIndexPage() {
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border/50 py-20 md:py-28">
+      <section className="relative overflow-hidden border-b border-border/50 bg-black py-20 md:py-28">
+        <FloatingAccents />
+        <ParticleField />
+        <FloatingIconBadges />
         {/* Glow ambient background effects */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 -top-24 h-[500px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(220,38,38,0.18),transparent_75%)]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-10 h-72 w-96 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
+          className="pointer-events-none absolute inset-x-0 -top-24 h-[500px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(37,99,235,0.14),transparent_75%)]"
         />
         <div
           aria-hidden

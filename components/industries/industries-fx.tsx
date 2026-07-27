@@ -144,7 +144,7 @@ export function PulsingDot({ className = "h-1 w-1 rounded-full bg-accent" }: { c
   return <span className={cn("industries-pulse-dot inline-block", className)} aria-hidden />
 }
 
-const ICON_BADGES = [
+export const ICON_BADGES = [
   { icon: Phone, left: "7%", top: "24%", size: 44, duration: 9, delay: 0, driftX: 8 },
   { icon: Users, left: "91%", top: "18%", size: 40, duration: 11, delay: 0.6, driftX: -8 },
   { icon: Activity, left: "11%", top: "74%", size: 38, duration: 10.5, delay: 1.1, driftX: 8 },
@@ -152,10 +152,24 @@ const ICON_BADGES = [
   { icon: Link2, left: "50%", top: "10%", size: 34, duration: 9.5, delay: 1.5, driftX: 0 },
 ]
 
-export function FloatingIconBadges() {
+export const FEATURE_ICON_BADGES = [
+  { icon: Phone, left: "2%", top: "6%", size: 40, duration: 9, delay: 0, driftX: 6 },
+  { icon: Users, left: "95%", top: "10%", size: 40, duration: 11, delay: 0.6, driftX: -6 },
+  { icon: Activity, left: "2%", top: "88%", size: 36, duration: 10.5, delay: 1.1, driftX: 6 },
+  { icon: MessageCircle, left: "94%", top: "84%", size: 44, duration: 12, delay: 0.3, driftX: -6 },
+  { icon: Link2, left: "48%", top: "2%", size: 34, duration: 9.5, delay: 1.5, driftX: 0 },
+]
+
+export function FloatingIconBadges({
+  badges = ICON_BADGES,
+  className = "hidden lg:block",
+}: {
+  badges?: typeof ICON_BADGES
+  className?: string
+}) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {ICON_BADGES.map((badge, i) => {
+    <div aria-hidden className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
+      {badges.map((badge, i) => {
         const Icon = badge.icon
         const accent = i % 2 === 0 ? "#2d98f1" : "#046bd2"
         return (

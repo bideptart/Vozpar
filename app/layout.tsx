@@ -103,9 +103,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background" suppressHydrationWarning>
+    <html lang="en" className="bg-black text-foreground" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${archivo.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${archivo.variable} ${instrumentSerif.variable} ${geistMono.variable} font-sans antialiased bg-black text-foreground`}
         suppressHydrationWarning
       >
         <OrganizationJsonLd />

@@ -3,6 +3,11 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
 
 type LegalPageProps = {
   /** Plain part of the heading, e.g. "Cookie" */
@@ -30,7 +35,7 @@ export function LegalPage({
   children,
 }: LegalPageProps) {
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="min-h-dvh bg-black text-foreground">
       <SiteHeader />
 
       <BreadcrumbJsonLd
@@ -40,10 +45,13 @@ export function LegalPage({
         ]}
       />
 
-      <section className="relative overflow-hidden border-b border-border/50">
+      <section className="relative overflow-hidden border-b border-border/50 bg-black">
+        <FloatingAccents />
+        <ParticleField />
+        <FloatingIconBadges />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
         />
         <div
           aria-hidden

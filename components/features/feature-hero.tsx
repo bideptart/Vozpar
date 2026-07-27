@@ -13,6 +13,12 @@ import {
 } from "motion/react"
 import { FeatureOrbit } from "@/components/animation/feature-orbit"
 import { Magnetic } from "@/components/animation/magnetic"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+  FEATURE_ICON_BADGES,
+} from "@/components/industries/industries-fx"
 
 /**
  * FeatureHero
@@ -90,8 +96,7 @@ export function FeatureHero() {
     <section
       ref={sectionRef}
       id="features-hero"
-      className="features-hero-dark relative isolate flex items-center overflow-hidden border-t border-border lg:min-h-[calc(100svh-4rem)]"
-      style={{ background: "var(--features-hero-bg)" }}
+      className="features-hero-dark relative isolate flex items-center overflow-hidden border-t border-border lg:min-h-[calc(100svh-4rem)] bg-black"
       onPointerMove={(e) => {
         if (reduced || e.pointerType !== "mouse") return
         const el = sectionRef.current
@@ -105,15 +110,20 @@ export function FeatureHero() {
         my.set(0)
       }}
     >
-      {/* Aurora orbs, flat grid, perspective floor, and the brief top-of-page
-          vignette all removed — the vignette read as an obvious blue wash
-          rather than the near-invisible tint the /industries reference has,
-          so the canvas is back to flat #000 throughout. Any colour comes only
-          from the content on top (orbit visual, chips, accents), never the
-          page itself. */}
+      <FloatingAccents />
+      <ParticleField />
+      <FloatingIconBadges badges={FEATURE_ICON_BADGES} className="hidden xl:block" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+      />
 
       <motion.div
-        className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 md:py-20 lg:grid-cols-12 lg:gap-8 lg:py-0"
+        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 md:py-20 lg:grid-cols-12 lg:gap-8 lg:py-0"
         style={{ y: contentY, opacity: contentOpacity }}
       >
         {/* ---------------- LEFT — copy ---------------- */}

@@ -28,7 +28,7 @@ export default async function PricingPage({
 }) {
   const { canceled } = await searchParams
   return (
-    <main className="min-h-dvh bg-background text-foreground" suppressHydrationWarning>
+    <main className="min-h-dvh bg-black text-foreground" suppressHydrationWarning>
       <SiteHeader />
 
       <BreadcrumbJsonLd

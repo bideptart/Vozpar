@@ -9,6 +9,11 @@ import { BLOG_POSTS, getPost, formatPostDate, type Block } from "@/lib/blog"
 import { pageSeo } from "@/lib/seo"
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/jsonld"
 import { RelatedLinks } from "@/components/seo/related-links"
+import {
+  FloatingAccents,
+  ParticleField,
+  FloatingIconBadges,
+} from "@/components/industries/industries-fx"
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }))
@@ -118,7 +123,7 @@ export default async function BlogPostPage({
   const faqItems = post.content.flatMap((b) => (b.type === "faq" ? b.items : []))
 
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="min-h-dvh bg-black text-foreground">
       <SiteHeader />
 
       <BreadcrumbJsonLd
@@ -131,10 +136,13 @@ export default async function BlogPostPage({
       {faqItems.length > 0 && <FaqJsonLd items={faqItems} />}
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border/50">
+      <section className="relative overflow-hidden border-b border-border/50 bg-black">
+        <FloatingAccents />
+        <ParticleField />
+        <FloatingIconBadges />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(37,99,235,0.12),transparent_70%)]"
         />
         <div
           aria-hidden

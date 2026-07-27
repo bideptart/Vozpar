@@ -54,7 +54,7 @@ export default function FaqClient() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10">
+      <section className="relative overflow-hidden border-b border-white/10 bg-black">
         <FloatingAccents />
         <ParticleField />
         <FloatingIconBadges />
