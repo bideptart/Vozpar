@@ -55,26 +55,26 @@ export function BlogFilterSection({ posts }: BlogFilterSectionProps) {
 
         {/* Right Live Search Bar */}
         <div className="w-full max-w-md">
-          <div className="relative flex items-center rounded-full border border-primary/30 bg-black/40 p-1.5 backdrop-blur-xl shadow-[0_0_25px_rgba(220,38,38,0.12)] transition-all duration-300 focus-within:border-primary focus-within:shadow-[0_0_35px_rgba(220,38,38,0.25)]">
+          <div className="relative flex items-center rounded-full border border-primary/40 bg-black/60 p-1.5 backdrop-blur-xl shadow-[0_0_25px_rgba(4,107,210,0.2)] transition-all duration-300 focus-within:border-primary focus-within:shadow-[0_0_35px_rgba(4,107,210,0.4)]">
             <Search className="ml-3.5 h-4 w-4 shrink-0 text-muted-foreground" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search articles, topics..."
-              className="w-full bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+              className="w-full bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none font-sans"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="mr-2 text-xs text-muted-foreground hover:text-foreground"
+                className="mr-2 text-xs text-muted-foreground hover:text-foreground font-medium"
               >
                 Clear
               </button>
             )}
             <button
               onClick={() => {}}
-              className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-xs font-semibold text-white transition-transform hover:scale-105 active:scale-95 shadow-md shadow-primary/30"
+              className="inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary/90 px-6 py-2 text-xs font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-95 shadow-md shadow-primary/40"
             >
               Search <ArrowRight className="h-3.5 w-3.5" />
             </button>
