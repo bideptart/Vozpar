@@ -736,11 +736,16 @@
        width, or subtle horizontal drift) elsewhere on the same page. There
        was no overflow-x containment at all on html/body, so any single
        animated element anywhere on the site could do this. Both html and
-       body are now hard-clipped so nothing can ever expand the page's
-       horizontal scroll bounds, regardless of what an individual component
-       does internally. */
-    overflow-x: hidden;
-    max-width: 100vw;
+       body are now clipped so nothing can ever expand the page's horizontal
+       scroll bounds, regardless of what an individual component does
+       internally.
+
+       `clip`, NOT `hidden`: overflow-x:hidden turns the element into a
+       scroll container, which silently breaks `position: sticky` on every
+       descendant — that's what made the sticky site header scroll away
+       instead of staying pinned. overflow:clip clips exactly the same but
+       creates no scroll container, so sticky keeps working. */
+    overflow-x: clip;
     /* Firefox scrollbar — thin, blue thumb on a black track. The WebKit
        equivalent is the ::-webkit-scrollbar block below. Both are here rather
        than on `*` so the internal scroll containers that opt out with
@@ -754,8 +759,9 @@
     /* Pure black. The ambient blue glow that used to live here was removed on
        request — the canvas is flat #000, and any blue now comes only from the
        elements on top of it, not the page itself. */
-    overflow-x: hidden;
-    max-width: 100vw;
+    /* clip, not hidden — see the note on html above: hidden would create a
+       scroll container here too and break the sticky header. */
+    overflow-x: clip;
     position: relative;
   }
 
