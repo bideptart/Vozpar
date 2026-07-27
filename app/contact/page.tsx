@@ -66,9 +66,9 @@ export default function ContactPage() {
           className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[600px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500/5 blur-[160px]"
         />
 
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-12 items-start">
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-8 items-stretch">
           {/* Form */}
-          <ScrollReveal className="lg:col-span-7">
+          <ScrollReveal className="lg:col-span-7 flex flex-col h-full">
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-sky-400 shadow-[0_0_15px_rgba(4,107,210,0.15)]">
                 <span className="h-2 w-2 rounded-full bg-sky-400" />
@@ -82,11 +82,13 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <ContactForm />
+            <div className="flex-1">
+              <ContactForm />
+            </div>
           </ScrollReveal>
 
           {/* Other ways to reach us */}
-          <ScrollReveal className="lg:col-span-5">
+          <ScrollReveal className="lg:col-span-5 flex flex-col h-full">
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 rounded-full border border-sky-500/40 bg-sky-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-sky-400 shadow-[0_0_15px_rgba(4,107,210,0.15)]">
                 <span className="h-2 w-2 rounded-full bg-sky-400" />
@@ -100,14 +102,14 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <StaggerGroup className="flex flex-col gap-5">
+            <StaggerGroup className="flex flex-1 flex-col justify-between gap-4">
               {CHANNELS.map((c) => {
                 const Icon = c.icon
                 const isExternal = c.href.startsWith("mailto:")
                 return (
-                  <StaggerItem key={c.title}>
+                  <StaggerItem key={c.title} className="flex-1">
                     <div
-                      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#080a10]/80 p-6 backdrop-blur-xl transition-all duration-300 hover:border-sky-500/50 hover:bg-[#0a0d16] hover:shadow-[0_0_30px_rgba(4,107,210,0.25)] hover:-translate-y-1"
+                      className="group relative h-full flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-[#080a10]/80 p-5 backdrop-blur-xl transition-all duration-300 hover:border-sky-500/50 hover:bg-[#0a0d16] hover:shadow-[0_0_30px_rgba(4,107,210,0.25)] hover:-translate-y-1"
                       style={{ transformStyle: "preserve-3d" }}
                     >
                       {/* Corner Accents */}
