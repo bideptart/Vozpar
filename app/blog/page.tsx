@@ -56,8 +56,8 @@ export default function BlogIndexPage() {
               VOICE AI INSIGHTS & ENGINEERING
             </div>
 
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.08] tracking-tight sm:text-5xl md:text-7xl">
-              Voice AI <span className="bg-gradient-to-r from-primary via-red-400 to-accent bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(220,38,38,0.25)]">Notes.</span>
+            <h1 className="mt-6 text-balance font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]">
+              Voice AI <span className="bg-gradient-to-r from-primary via-blue-400 to-accent bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(4,107,210,0.25)]">Notes.</span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">

@@ -147,7 +147,7 @@ export function FeatureHero() {
                 own background box, and a transformed descendant is promoted to
                 its own layer — staggering words inside would clip them out of
                 the gradient entirely, i.e. render them invisible. */}
-          <h1 className="mt-5 text-balance font-heading text-[2rem] font-medium leading-[1.07] tracking-[-0.035em] text-foreground sm:text-4xl md:mt-6 md:text-5xl lg:text-6xl">
+          <h1 className="mt-5 text-balance font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]">
             {HEAD_LEAD.map((w, i) => (
               <Fragment key={w + i}>
                 <motion.span

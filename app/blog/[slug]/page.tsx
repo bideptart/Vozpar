@@ -165,7 +165,7 @@ export default async function BlogPostPage({
                 <Clock className="h-3.5 w-3.5" /> {post.readingMinutes} min read
               </span>
             </div>
-            <h1 className="mt-4 text-balance text-3xl font-serif font-normal leading-[1.1] tracking-tight md:text-5xl">
+            <h1 className="mt-4 text-balance font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]">
               {post.title}
             </h1>
             <p className="mt-4 text-sm text-muted-foreground">By {post.author}</p>

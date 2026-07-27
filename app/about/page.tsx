@@ -86,7 +86,7 @@ export default function AboutPage() {
               <span className="h-1 w-1 rounded-full bg-accent" />
               About Vozpar
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal leading-[1.05] tracking-tight md:text-6xl">
+            <h1 className="mt-6 text-balance font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]">
               Voice AI that <span className="text-primary">actually sounds human.</span>
             </h1>
             <p className="mt-6 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">

@@ -29,7 +29,7 @@ import { industriesBody, industriesHeading, industriesHeadingAlt, industriesMono
 // desktop-tuned pixel value while the text shrinks around it.
 export const headingType = {
   /** H1 — hero */
-  h1: `${industriesHeading.className} font-bold text-[clamp(2.25rem,calc(1.4rem_+_5vw),68px)] leading-[1.08] tracking-[-0.032em] sm:leading-[1.04]`,
+  h1: `${industriesHeading.className} text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]`,
   /** H2 — section headline (swapped to industriesHeadingAlt per reference image; see industries-fonts.ts) */
   h2: `${industriesHeadingAlt.className} font-bold text-[clamp(1.75rem,calc(1.1rem_+_4vw),56px)] leading-[1.1] tracking-[-0.025em] sm:leading-[1.05]`,
   /** H3 */

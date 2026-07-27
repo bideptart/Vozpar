@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
               <span className="h-1 w-1 rounded-full bg-accent" />
               Legal
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl">
+            <h1 className="mt-6 text-balance font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]">
               Privacy <span className="text-primary">Policy.</span>
             </h1>
             <p className="mt-5 text-sm text-muted-foreground">Last updated on 24 June 2026</p>

@@ -77,7 +77,7 @@ export function PricingHero3D() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 text-balance font-serif text-5xl font-normal leading-[1.08] tracking-tight text-white md:text-7xl"
+          className="mt-6 text-balance font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]"
         >
           Pricing built for{" "}
           <span className="relative inline-block bg-gradient-to-r from-sky-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">

@@ -106,7 +106,7 @@
      h1–h4. `font-serif` is legacy (Instrument Serif) and still used by
      pages that haven't been migrated to the brand reference yet. */
   --font-heading: var(--font-archivo), 'Archivo Fallback', system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), Georgia, 'Times New Roman', serif;
+  --font-serif: var(--font-archivo), 'Archivo Fallback', system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, 'Geist Mono Fallback', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

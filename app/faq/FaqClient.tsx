@@ -83,7 +83,7 @@ export default function FaqClient() {
               <span className="h-1 w-1 rounded-full bg-accent" />
               FAQ
             </span>
-            <h1 className="mt-8 text-balance text-4xl font-serif font-normal tracking-tight md:text-6xl lg:text-7xl">
+            <h1 className="mt-8 text-balance font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]">
               Everything you <span className="text-primary">wanted to know.</span>
             </h1>
             <p className="mt-6 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg max-w-2xl mx-auto">
