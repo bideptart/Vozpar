@@ -176,35 +176,40 @@ export default function FaqClient() {
             </ScrollReveal>
 
             <ScrollReveal className="mt-6 space-y-3">
-              {group.items.map((item, i) => (
-                <div key={i} className="group/faq">
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem
-                      value={`${group.id}-${i}`}
-                      className="border-0 rounded-2xl bg-[#0b0b0e] border border-white/[0.07] px-6 py-1
-                        transition-all duration-300 ease-out
-                        hover:border-primary/30 hover:bg-[#0f0f14] hover:shadow-[0_0_0_1px_rgba(4,107,210,0.15),0_8px_32px_-8px_rgba(4,107,210,0.20)]
-                        data-[state=open]:bg-[#0f0f14] data-[state=open]:border-primary/40
-                        data-[state=open]:shadow-[0_0_0_1px_rgba(4,107,210,0.25),0_12px_40px_-8px_rgba(4,107,210,0.18)]"
-                    >
-                      <AccordionTrigger className="text-left text-base font-medium hover:no-underline text-white py-5 group-hover/faq:text-primary/90 transition-colors duration-300 [&>svg]:text-slate-500 [&>svg]:group-hover/faq:text-primary [&>svg]:transition-colors [&>svg]:duration-300">
-                        <div className="flex items-center gap-3 pr-4">
-                          <span>{item.q}</span>
-                          {item.popular && (
-                            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium border border-primary/20">
-                              <Zap className="h-3 w-3 fill-current" />
-                              Popular
-                            </span>
-                          )}
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="text-pretty leading-relaxed text-slate-400 pt-0 pb-5 text-[15px]">
-                        {item.a}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </div>
-              ))}
+              {group.items.map((item, i) => {
+                const borderColors = [
+                  "hover:border-sky-400/90 hover:bg-sky-950/20 hover:shadow-[0_0_20px_rgba(56,189,248,0.25)] data-[state=open]:border-sky-400 data-[state=open]:bg-sky-950/30",
+                  "hover:border-emerald-400/90 hover:bg-emerald-950/20 hover:shadow-[0_0_20px_rgba(52,211,153,0.25)] data-[state=open]:border-emerald-400 data-[state=open]:bg-emerald-950/30",
+                  "hover:border-red-500/90 hover:bg-red-950/20 hover:shadow-[0_0_20px_rgba(239,68,68,0.25)] data-[state=open]:border-red-500 data-[state=open]:bg-red-950/30",
+                  "hover:border-amber-400/90 hover:bg-amber-950/20 hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] data-[state=open]:border-amber-400 data-[state=open]:bg-amber-950/30",
+                ]
+                const colorClass = borderColors[i % borderColors.length]
+                return (
+                  <div key={i} className="group/faq">
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value={`${group.id}-${i}`}
+                        className={`rounded-2xl bg-[#0b0b0e] border border-white/15 px-6 py-1 transition-all duration-300 ease-out ${colorClass}`}
+                      >
+                        <AccordionTrigger className="text-left text-base font-medium hover:no-underline text-white py-5 group-hover/faq:text-white transition-colors duration-300 [&>svg]:text-slate-500 [&>svg]:group-hover/faq:text-white [&>svg]:transition-colors [&>svg]:duration-300">
+                          <div className="flex items-center gap-3 pr-4">
+                            <span>{item.q}</span>
+                            {item.popular && (
+                              <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium border border-primary/20">
+                                <Zap className="h-3 w-3 fill-current" />
+                                Popular
+                              </span>
+                            )}
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="text-pretty leading-relaxed text-slate-400 pt-0 pb-5 text-[15px]">
+                          {item.a}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
+                )
+              })}
             </ScrollReveal>
           </section>
         ))}

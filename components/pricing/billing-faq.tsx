@@ -42,6 +42,38 @@ const faqs: FaqItem[] = [
   },
 ]
 
+// Strictly matching the 4 logo colors from the user image: Blue, Green, Red, Yellow (No Purple)
+const LOGO_COLOR_STYLES = [
+  {
+    // 1. Logo Electric Blue
+    hoverBorder: "hover:border-sky-400/90 hover:shadow-[0_0_25px_rgba(56,189,248,0.35)] hover:bg-sky-950/20",
+    openBorder: "data-[state=open]:border-sky-400 data-[state=open]:bg-sky-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(56,189,248,0.4)]",
+    accent: "from-sky-400 to-blue-600",
+    textHover: "group-hover/item:text-sky-300",
+  },
+  {
+    // 2. Logo Emerald Green
+    hoverBorder: "hover:border-emerald-400/90 hover:shadow-[0_0_25px_rgba(52,211,153,0.35)] hover:bg-emerald-950/20",
+    openBorder: "data-[state=open]:border-emerald-400 data-[state=open]:bg-emerald-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(52,211,153,0.4)]",
+    accent: "from-emerald-400 to-teal-600",
+    textHover: "group-hover/item:text-emerald-300",
+  },
+  {
+    // 3. Logo Red
+    hoverBorder: "hover:border-red-500/90 hover:shadow-[0_0_25px_rgba(239,68,68,0.35)] hover:bg-red-950/20",
+    openBorder: "data-[state=open]:border-red-500 data-[state=open]:bg-red-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(239,68,68,0.4)]",
+    accent: "from-red-400 to-rose-600",
+    textHover: "group-hover/item:text-red-400",
+  },
+  {
+    // 4. Logo Yellow / Gold
+    hoverBorder: "hover:border-amber-400/90 hover:shadow-[0_0_25px_rgba(245,158,11,0.35)] hover:bg-amber-950/20",
+    openBorder: "data-[state=open]:border-amber-400 data-[state=open]:bg-amber-950/30 data-[state=open]:shadow-[0_4px_30px_rgba(245,158,11,0.4)]",
+    accent: "from-amber-400 to-yellow-500",
+    textHover: "group-hover/item:text-amber-300",
+  },
+]
+
 export function BillingFAQ() {
   return (
     <section className="mx-auto w-full max-w-5xl px-4 pt-6 pb-16 md:px-6 md:pt-10 md:pb-20" suppressHydrationWarning>
@@ -69,27 +101,30 @@ export function BillingFAQ() {
 
         {/* Accordion Cards */}
         <Accordion type="single" collapsible className="w-full space-y-3.5" suppressHydrationWarning>
-          {faqs.map((faq, idx) => (
-            <AccordionItem
-              key={idx}
-              value={`item-${idx}`}
-              className="group/item relative overflow-hidden rounded-2xl border border-white/25 last:border-b-white/25 bg-white/[0.03] px-6 transition-all duration-300 hover:border-sky-500/50 hover:bg-white/[0.05] data-[state=open]:border-sky-500/60 data-[state=open]:bg-white/[0.06] data-[state=open]:shadow-[0_4px_24px_rgba(56,189,248,0.2)] shadow-[0_2px_12px_rgba(0,0,0,0.4)]"
-              suppressHydrationWarning
-            >
-              {/* Glowing side accent line */}
-              <div 
-                className="absolute left-0 inset-y-0 w-1 bg-gradient-to-b from-sky-400 to-blue-600 scale-y-0 transition-transform duration-300 origin-center group-data-[state=open]/item:scale-y-100" 
-                aria-hidden="true"
+          {faqs.map((faq, idx) => {
+            const theme = LOGO_COLOR_STYLES[idx % LOGO_COLOR_STYLES.length]
+            return (
+              <AccordionItem
+                key={idx}
+                value={`item-${idx}`}
+                className={`group/item relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] px-6 transition-all duration-300 ${theme.hoverBorder} ${theme.openBorder} shadow-[0_2px_12px_rgba(0,0,0,0.4)]`}
                 suppressHydrationWarning
-              />
-              <AccordionTrigger className="text-left font-sans text-base font-semibold text-slate-100 hover:text-sky-300 hover:no-underline data-[state=open]:text-sky-400 transition-colors py-5">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="font-sans text-sm leading-relaxed text-slate-300/90 pb-5">
-                {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
+              >
+                {/* Glowing side accent line */}
+                <div
+                  className={`absolute left-0 inset-y-0 w-1 bg-gradient-to-b ${theme.accent} scale-y-0 transition-transform duration-300 origin-center group-hover/item:scale-y-100 group-data-[state=open]/item:scale-y-100`}
+                  aria-hidden="true"
+                  suppressHydrationWarning
+                />
+                <AccordionTrigger className={`text-left font-sans text-base font-semibold text-slate-100 hover:no-underline transition-colors py-5 ${theme.textHover}`}>
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="font-sans text-sm leading-relaxed text-slate-300/90 pb-5">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            )
+          })}
         </Accordion>
       </ScrollReveal>
     </section>
