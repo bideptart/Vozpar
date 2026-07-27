@@ -38,7 +38,7 @@ const ICE = "#60b8ff"
 
 const MESH = [
   {
-    color: "rgba(4,107,210,0.30)",
+    color: "rgba(4,107,210,0.18)",
     size: 780,
     left: "58%",
     top: "-22%",
@@ -50,7 +50,7 @@ const MESH = [
     breatheMax: 0.9,
   },
   {
-    color: "rgba(45,152,241,0.20)",
+    color: "rgba(45,152,241,0.12)",
     size: 620,
     left: "-14%",
     top: "6%",
@@ -62,7 +62,7 @@ const MESH = [
     breatheMax: 0.7,
   },
   {
-    color: "rgba(30,41,59,0.85)",
+    color: "rgba(5,6,10,0.9)",
     size: 900,
     left: "8%",
     top: "42%",
@@ -74,7 +74,7 @@ const MESH = [
     breatheMax: 0.8,
   },
   {
-    color: "rgba(17,24,39,0.9)",
+    color: "rgba(2,3,6,0.95)",
     size: 700,
     left: "68%",
     top: "48%",
@@ -660,16 +660,19 @@ function HeroIndustrialBgImpl() {
       className="pointer-events-none absolute inset-0 overflow-hidden"
       style={{ "--hero-px": 0, "--hero-py": 0 } as React.CSSProperties}
     >
-      {/* Slate depth wash over the black base — #020617 → #0B1220 → #111827
-          → #1E293B, dissolving back to #000 at the bottom edge. */}
+      {/* Pure-black depth wash — was a slate navy ramp (#020617 → #0B1220 →
+          #111827 → #1E293B); the whole hero read as a blue-toned panel
+          rather than matching the black canvas every other Home section
+          uses. Collapsed to near-black stops so only the mesh/scene accents
+          carry color, same as the rest of the page. */}
       <div
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 120% 80% at 72% 8%, #1E293B 0%, transparent 58%),
-            radial-gradient(ellipse 100% 70% at 12% 26%, #111827 0%, transparent 62%),
-            radial-gradient(ellipse 140% 90% at 50% 96%, #0B1220 0%, transparent 66%),
-            linear-gradient(180deg, #020617 0%, #020617 55%, #000000 100%)
+            radial-gradient(ellipse 120% 80% at 72% 8%, #0a0c10 0%, transparent 58%),
+            radial-gradient(ellipse 100% 70% at 12% 26%, #060708 0%, transparent 62%),
+            radial-gradient(ellipse 140% 90% at 50% 96%, #030405 0%, transparent 66%),
+            linear-gradient(180deg, #000000 0%, #000000 55%, #000000 100%)
           `,
         }}
       />
@@ -701,8 +704,8 @@ function HeroIndustrialBgImpl() {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 46% 52% at 26% 48%, rgba(2,6,23,0.88) 0%, rgba(2,6,23,0.55) 45%, transparent 76%),
-            radial-gradient(ellipse 40% 46% at 76% 50%, rgba(2,6,23,0.55) 0%, transparent 72%)
+            radial-gradient(ellipse 46% 52% at 26% 48%, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 45%, transparent 76%),
+            radial-gradient(ellipse 40% 46% at 76% 50%, rgba(0,0,0,0.55) 0%, transparent 72%)
           `,
         }}
       />
