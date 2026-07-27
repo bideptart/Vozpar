@@ -5,7 +5,8 @@
 import type React from "react"
 import Link from "next/link"
 import { Star, ArrowRight, PhoneCall } from "lucide-react"
-import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
+import { useReducedMotion } from "motion/react"
+import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 const METRICS = [
   { value: "2.4M+", label: "Calls / month", tint: "#2d98f1" },
@@ -46,7 +47,60 @@ const TESTIMONIALS = [
     tint: "#10b981",
     rating: 4.8,
   },
+  {
+    quote: "We run three languages across two time zones with one agent config. Callers never notice a handoff.",
+    author: "Ops Lead",
+    company: "Logistics",
+    initial: "O",
+    tint: "#f59e0b",
+    rating: 4.9,
+  },
+  {
+    quote: "Booking confirmations, reschedules, no-show follow-ups — it does the entire front desk without a script feeling.",
+    author: "Practice Manager",
+    company: "Dental Clinic",
+    initial: "P",
+    tint: "#ec4899",
+    rating: 5.0,
+  },
 ] as const
+
+type Testimonial = (typeof TESTIMONIALS)[number]
+
+function TestimonialCard({ t }: { t: Testimonial }) {
+  return (
+    <figure
+      className="
+        group relative flex h-full flex-col overflow-hidden rounded-2xl
+        border border-white/[0.08] bg-[#000000] p-4
+        transition-[border-color,box-shadow] duration-300 ease-out
+        hover:border-[var(--tint-border)]
+        hover:shadow-[0_14px_36px_-16px_var(--tint-glow)]
+      "
+      style={{ "--tint-border": `${t.tint}50`, "--tint-glow": `${t.tint}55` } as React.CSSProperties}
+    >
+      <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
+        style={{ background: `linear-gradient(90deg, transparent, ${t.tint}, transparent)` }} />
+
+      <StarRating rating={t.rating} tint={t.tint} />
+
+      <blockquote className="mt-2.5 flex-1 text-[13px] leading-relaxed text-white/65">
+        &ldquo;{t.quote}&rdquo;
+      </blockquote>
+
+      <figcaption className="mt-3 flex items-center gap-2.5 border-t border-white/[0.06] pt-3">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
+          style={{ background: `${t.tint}18`, color: t.tint, outline: `1px solid ${t.tint}30` }}>
+          {t.initial}
+        </div>
+        <div>
+          <p className="text-xs font-semibold text-white">{t.author}</p>
+          <p className="text-[10px] text-white/30">{t.company}</p>
+        </div>
+      </figcaption>
+    </figure>
+  )
+}
 
 function StarRating({ rating, tint }: { rating: number; tint: string }) {
   const full = Math.floor(rating)
@@ -82,6 +136,33 @@ function StarRating({ rating, tint }: { rating: number; tint: string }) {
  * stacking effect (that pattern is built to consume viewport height on
  * purpose, which is the opposite of what's needed here).
  */
+// Split into two alternating columns so each loop shows a varied mix rather
+// than "top half" / "bottom half" of the same list.
+const COLUMN_A = TESTIMONIALS.filter((_, i) => i % 2 === 0)
+const COLUMN_B = TESTIMONIALS.filter((_, i) => i % 2 === 1)
+
+function MarqueeColumn({ items, direction, duration }: { items: Testimonial[]; direction: "up" | "down"; duration: number }) {
+  const reduced = useReducedMotion()
+  // Duplicated so the seam lands exactly on -50%/0% — invisible loop point.
+  // Skipped under reduced motion so the column doesn't statically repeat.
+  const rendered = reduced ? items : [...items, ...items]
+
+  return (
+    <div className="relative h-[440px] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]">
+      <div
+        className={direction === "up" ? "testimonial-marquee-up" : "testimonial-marquee-down"}
+        style={{ "--tm-duration": `${duration}s` } as React.CSSProperties}
+      >
+        <div className="flex flex-col gap-3 pb-3">
+          {rendered.map((t, i) => (
+            <TestimonialCard key={`${t.author}-${i}`} t={t} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function Testimonials() {
   return (
     <section id="testimonials" className="relative overflow-hidden border-t border-white/[0.06] bg-black">
@@ -128,44 +209,13 @@ export function Testimonials() {
             </div>
           </ScrollReveal>
 
-          {/* RIGHT — compact 2×2 testimonial grid. Card box stays fixed;
-              hover is glow/scale-only, matching the Benefits card language. */}
-          <StaggerGroup className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-7">
-            {TESTIMONIALS.map(t => (
-              <StaggerItem key={t.author}>
-                <figure
-                  className="
-                    group relative flex h-full flex-col overflow-hidden rounded-2xl
-                    border border-white/[0.08] bg-[#000000] p-4
-                    transition-[scale,border-color,box-shadow] duration-300 ease-out
-                    hover:scale-[1.01] hover:border-[var(--tint-border)]
-                    hover:shadow-[0_14px_36px_-16px_var(--tint-glow)]
-                  "
-                  style={{ "--tint-border": `${t.tint}50`, "--tint-glow": `${t.tint}55` } as React.CSSProperties}
-                >
-                  <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
-                    style={{ background: `linear-gradient(90deg, transparent, ${t.tint}, transparent)` }} />
-
-                  <StarRating rating={t.rating} tint={t.tint} />
-
-                  <blockquote className="mt-2.5 flex-1 text-[13px] leading-relaxed text-white/65">
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-
-                  <figcaption className="mt-3 flex items-center gap-2.5 border-t border-white/[0.06] pt-3">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
-                      style={{ background: `${t.tint}18`, color: t.tint, outline: `1px solid ${t.tint}30` }}>
-                      {t.initial}
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-white">{t.author}</p>
-                      <p className="text-[10px] text-white/30">{t.company}</p>
-                    </div>
-                  </figcaption>
-                </figure>
-              </StaggerItem>
-            ))}
-          </StaggerGroup>
+          {/* RIGHT — two vertically-looping columns (one scrolling up, one
+              down, each doubled so the loop seam is invisible), instead of a
+              static grid. Pauses on hover so a card can actually be read. */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-7">
+            <MarqueeColumn items={COLUMN_A} direction="up" duration={30} />
+            <MarqueeColumn items={COLUMN_B} direction="down" duration={34} />
+          </div>
         </div>
       </div>
     </section>
