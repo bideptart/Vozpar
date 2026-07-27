@@ -77,7 +77,7 @@ function VoiceIllustration({ reduced }: { reduced: boolean }) {
     <div
       aria-label="AI voice intelligence 3D visualization"
       role="img"
-      className="relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/[0.07] bg-[#030509]"
+      className="relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/[0.07] bg-[#000000]"
     >
       {/* Deep background radial glow — changes color with scene */}
       <motion.div

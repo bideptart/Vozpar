@@ -1,12 +1,14 @@
 "use client"
 
+import type React from "react"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link" 
 import {
   ArrowRight, PhoneCall, CheckCircle, Zap, Shield,
-  Globe2, Calendar, Headphones, TrendingUp, PhoneOutgoing, Moon, Mic,
+  Globe2, Calendar, Headphones, TrendingUp, PhoneOutgoing, Moon,
 } from "lucide-react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
+import { HeroIndustrialBg } from "@/components/sections/hero-industrial-bg"
 
 // ── Rotating headline words ───────────────────────────────────────────────────
 const WORDS = ["Books Appointments", "Closes More Deals", "Handles Support", "Converts Callers", "Never Sleeps"] as const
@@ -21,7 +23,6 @@ const SCENES = [
     metricLabel: "show-up rate",
     fact: "Confirms slots, sends reminders & reschedules on its own — your calendar stays full.",
     color: "#2d98f1",
-    bg: "from-[#0a1628] to-[#060d1f]",
     particleColor: "#2d98f1",
   },
   {
@@ -32,7 +33,6 @@ const SCENES = [
     metricLabel: "issues resolved on first call",
     fact: "Pulls answers from your docs and CRM. Escalates only the 11% that truly need a human.",
     color: "#6366f1",
-    bg: "from-[#0d0a28] to-[#07051a]",
     particleColor: "#6366f1",
   },
   {
@@ -43,7 +43,6 @@ const SCENES = [
     metricLabel: "more qualified pipeline",
     fact: "Scores every inbound caller and routes only the ready-to-buy prospects to your closers.",
     color: "#0ea5e9",
-    bg: "from-[#061520] to-[#030d18]",
     particleColor: "#0ea5e9",
   },
   {
@@ -54,7 +53,6 @@ const SCENES = [
     metricLabel: "re-engagement rate",
     fact: "Reaches cold leads, re-qualifies them, and books demos — while your team focuses on closing.",
     color: "#8b5cf6",
-    bg: "from-[#100a28] to-[#07051a]",
     particleColor: "#8b5cf6",
   },
   {
@@ -65,28 +63,152 @@ const SCENES = [
     metricLabel: "calls answered, 24 / 7 / 365",
     fact: "No voicemail. No missed revenue. Every caller is handled — even at 3 AM on a holiday.",
     color: "#10b981",
-    bg: "from-[#061a14] to-[#031009]",
     particleColor: "#10b981",
   },
 ] as const
 
 const INTERVAL = 3400
 
-// ── Waveform bars ─────────────────────────────────────────────────────────────
-const BH = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8, 0.6, 0.72, 0.5, 0.88]
-function Waveform({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+// ── Card micro-visualisations ─────────────────────────────────────────────────
+// Each of the 5 rotating cards gets its own visual identity — no two reuse the
+// same shape. Every bar/element below has a FIXED, unanimated height/size in
+// its own box; only `transform: scaleY()` / `scale()` / `rotate()` move, via
+// the shared viz-* CSS keyframes (see globals.css — same mechanism the
+// Benefits cards use). That's the fix for the up/down jitter: the old
+// Waveform animated the `height` style directly inside an auto-height flex
+// row, so the row's own box grew and shrank every frame and pushed the
+// "Metric" block below it up and down. A transform never changes layout, so
+// the row height — and everything below it — now stays perfectly still.
+const VIZ_ROW = "flex h-6 items-end gap-[3px]"
+
+/** Card 1 · Appointment Booking — audio waveform, bars anchored to a centre line. */
+function AudioWaveformViz({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+  const bars = [0.4, 0.75, 0.5, 1, 0.6, 0.85, 0.45, 0.9, 0.55, 0.7, 0.4, 0.8]
   return (
-    <div className="flex items-center gap-[3px]" aria-hidden>
-      {BH.map((h, i) => (
-        <motion.span key={i} className="block w-[2.5px] rounded-full" style={{ background: color }}
-          animate={!reduced && active
-            ? { height: [h * 6, h * 22, h * 10, h * 20, h * 6], opacity: 0.85 }
-            : { height: h * 8, opacity: 0.3 }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.07 }} />
+    <div className="flex h-6 items-center gap-[3px]" aria-hidden>
+      {bars.map((h, i) => (
+        <span key={i}
+          className={reduced ? "block w-[2.5px] rounded-full" : "viz-bar block w-[2.5px] rounded-full"}
+          style={{
+            height: 22,
+            background: color,
+            opacity: active ? 0.85 : 0.3,
+            "--viz-bar-origin": "center",
+            "--viz-bar-min": h * 0.28,
+            "--viz-bar-max": h,
+            "--viz-bar-static": h * 0.5,
+            "--viz-bar-duration": `${1.3 + (i % 4) * 0.15}s`,
+            "--viz-bar-delay": `${i * 0.07}s`,
+          } as React.CSSProperties}
+        />
       ))}
     </div>
   )
 }
+
+/** Card 2 · 24/7 Support — segmented equalizer meter, bottom-anchored blocks. */
+function EqualizerViz({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+  const cols = [0.5, 0.85, 0.35, 0.95, 0.6, 0.75, 0.42, 0.68, 0.55, 0.9]
+  return (
+    <div className={VIZ_ROW} aria-hidden>
+      {cols.map((f, i) => (
+        <span key={i}
+          className={reduced ? "block w-[3px] rounded-[1px]" : "viz-bar block w-[3px] rounded-[1px]"}
+          style={{
+            height: 22,
+            background: `linear-gradient(to top, ${color}55, ${color})`,
+            opacity: active ? 0.9 : 0.32,
+            maskImage: "repeating-linear-gradient(to top, #000 0px, #000 3px, transparent 3px, transparent 5px)",
+            WebkitMaskImage: "repeating-linear-gradient(to top, #000 0px, #000 3px, transparent 3px, transparent 5px)",
+            "--viz-bar-origin": "bottom",
+            "--viz-bar-min": 0.25,
+            "--viz-bar-max": f,
+            "--viz-bar-static": f * 0.6,
+            "--viz-bar-duration": `${1.1 + (i % 5) * 0.18}s`,
+            "--viz-bar-delay": `${(i % 6) * 0.09}s`,
+          } as React.CSSProperties}
+        />
+      ))}
+    </div>
+  )
+}
+
+/** Card 3 · Lead Qualification — stepped signal pulse with a travelling charge. */
+function SignalPulseViz({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+  const path = "M0 18 H14 V6 H26 V18 H40 V10 H54 V18 H68 V4 H82 V18 H96 V12 H108"
+  return (
+    <div className="h-6 w-full" aria-hidden style={{ opacity: active ? 0.95 : 0.32 }}>
+      <svg viewBox="0 0 108 22" preserveAspectRatio="none" className="h-full w-full">
+        <path d={path} fill="none" stroke={color} strokeOpacity="0.3" strokeWidth="1.5" />
+        {!reduced && (
+          <path className="viz-dash" d={path} pathLength={100} fill="none" stroke={color} strokeWidth="2"
+            strokeLinecap="round" style={{ "--viz-dash-duration": "2.6s" } as React.CSSProperties} />
+        )}
+      </svg>
+    </div>
+  )
+}
+
+/** Card 4 · Outbound Follow-Up — a short chain of pulsing nodes with travelling links. */
+function NetworkPulseViz({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+  const nodes = [8, 32, 56, 80, 104]
+  return (
+    <div className="h-6 w-full" aria-hidden style={{ opacity: active ? 0.95 : 0.32 }}>
+      <svg viewBox="0 0 112 22" preserveAspectRatio="none" className="h-full w-full">
+        <g stroke={color} strokeOpacity="0.3" strokeWidth="1">
+          {nodes.slice(0, -1).map((x, i) => (
+            <line key={i} x1={x} y1={11} x2={nodes[i + 1]} y2={11} />
+          ))}
+        </g>
+        {!reduced && (
+          <g stroke={color} strokeWidth="1.6" strokeLinecap="round">
+            {nodes.slice(0, -1).map((x, i) => (
+              <line key={i} className="viz-dash" pathLength={100} x1={x} y1={11} x2={nodes[i + 1]} y2={11}
+                style={{ "--viz-dash-duration": `${2 + i * 0.4}s`, "--viz-dash-delay": `${i * 0.35}s` } as React.CSSProperties} />
+            ))}
+          </g>
+        )}
+        <g fill={color}>
+          {nodes.map((x, i) => (
+            <circle key={i} className={reduced ? undefined : "viz-node"} cx={x} cy={11} r="2.4"
+              style={{ "--viz-node-duration": `${1.8 + (i % 3) * 0.4}s`, "--viz-node-delay": `${i * 0.22}s` } as React.CSSProperties} />
+          ))}
+        </g>
+      </svg>
+    </div>
+  )
+}
+
+/** Card 5 · After-Hours Coverage — a small radar sweep beside blinking status dots. */
+function RadarPulseViz({ color, active, reduced }: { color: string; active: boolean; reduced: boolean }) {
+  return (
+    <div className="flex h-6 items-center gap-2.5" aria-hidden style={{ opacity: active ? 0.95 : 0.32 }}>
+      <span className="relative block h-6 w-6 shrink-0 overflow-hidden rounded-full border" style={{ borderColor: `${color}45` }}>
+        <span className="absolute left-1/2 top-1/2 h-[3px] w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: color }} />
+        {!reduced && (
+          <span className="viz-radar absolute inset-0 rounded-full"
+            style={{
+              background: `conic-gradient(from 0deg, ${color}00 0deg, ${color}00 270deg, ${color}70 350deg, ${color}00 360deg)`,
+              "--viz-radar-duration": "3s",
+            } as React.CSSProperties} />
+        )}
+      </span>
+      <span className="flex items-center gap-1">
+        {[0, 1, 2].map((i) => (
+          <span key={i} className={reduced ? "block h-1.5 w-1.5 rounded-full" : "viz-blink block h-1.5 w-1.5 rounded-full"}
+            style={{
+              background: color,
+              boxShadow: `0 0 5px ${color}`,
+              "--viz-blink-duration": `${1.4 + i * 0.3}s`,
+              "--viz-blink-delay": `${i * 0.3}s`,
+            } as React.CSSProperties} />
+        ))}
+      </span>
+    </div>
+  )
+}
+
+const CARD_VIZ = [AudioWaveformViz, EqualizerViz, SignalPulseViz, NetworkPulseViz, RadarPulseViz]
 
 // ── 3D Carousel (all cards visible in 3D spread) ──────────────────────────────
 function Scene3D({ reduced }: { reduced: boolean }) {
@@ -178,7 +300,10 @@ function Scene3D({ reduced }: { reduced: boolean }) {
             <div
               className="relative w-[260px] overflow-hidden rounded-2xl border sm:w-[280px]"
               style={{
-                background: "linear-gradient(145deg, #0a0d1a 0%, #060810 60%, #080b14 100%)",
+                // Pure black card surface (was a faintly navy-tinted
+                // #0a0d1a → #080b14 gradient) — matches the rest of the
+                // Home page's unified black card system.
+                background: "linear-gradient(145deg, #050505 0%, #000000 60%, #020202 100%)",
                 borderColor: isFront ? `${card.color}45` : "rgba(255,255,255,0.07)",
                 boxShadow: isFront
                   ? `0 0 0 1px ${card.color}25, 0 32px 80px -20px ${card.color}35, 0 0 60px -10px ${card.color}20`
@@ -234,9 +359,14 @@ function Scene3D({ reduced }: { reduced: boolean }) {
                 {/* Fact */}
                 <p className="mt-2 text-[13px] leading-relaxed text-white/40">{card.fact}</p>
 
-                {/* Waveform */}
+                {/* Micro-visualisation — a different shape per card (see
+                    CARD_VIZ above), each in a fixed-height row so it never
+                    reflows the card layout. */}
                 <div className="mt-5">
-                  <Waveform color={card.color} active={isFront} reduced={reduced} />
+                  {(() => {
+                    const Viz = CARD_VIZ[i % CARD_VIZ.length]
+                    return <Viz color={card.color} active={isFront} reduced={Boolean(reduced)} />
+                  })()}
                 </div>
 
                 {/* Metric */}
@@ -290,13 +420,10 @@ export function Hero() {
   return (
     <section className="relative min-h-[calc(100svh-4.5rem)] overflow-hidden bg-black">
 
-      {/* Background atmosphere */}
-      <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-[700px] w-[700px] -translate-y-1/4 translate-x-1/4"
-        style={{ background: "radial-gradient(circle, rgba(4,107,210,0.20) 0%, transparent 65%)" }} />
-      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[500px] -translate-x-1/4 translate-y-1/4"
-        style={{ background: "radial-gradient(circle, rgba(4,107,210,0.09) 0%, transparent 65%)" }} />
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.032]"
-        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.65) 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+      {/* Immersive industrial background — mesh gradients, hex/blueprint grid,
+          digital-factory + robotics + cloud silhouettes, neural links,
+          holographic particles and pointer parallax. All CSS-keyframe driven. */}
+      <HeroIndustrialBg />
 
       {/* Main 2-col grid */}
       <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 md:grid-cols-2 lg:min-h-[calc(100svh-4.5rem)] lg:gap-12 lg:py-0 xl:gap-20">
@@ -393,9 +520,9 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Bottom fade */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-28"
-        style={{ background: "linear-gradient(to bottom, transparent, #000)" }} />
+      {/* NOTE: the bottom fade-to-black now lives inside <HeroIndustrialBg />,
+          so the scene dissolves *behind* the content rather than a second
+          gradient painting over the top of it. */}
     </section>
   )
 }

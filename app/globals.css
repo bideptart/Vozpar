@@ -280,6 +280,253 @@
   animation: industries-pulse-dot 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+   Home hero — immersive industrial background.
+
+   Every keyframe below animates ONLY `transform` and `opacity` so the whole
+   scene stays on the compositor thread (no layout, no paint) — the one
+   exception is `hero-circuit-pulse`, which drives stroke-dashoffset on a
+   handful of hairline paths inside a small region; that repaint area is
+   negligible and it is the only way to get a true "charge travelling down a
+   wire" read.
+
+   Parallax is fed by two custom properties (--hero-px / --hero-py) that the
+   HeroIndustrialBg component writes once per animation frame. Each layer
+   multiplies them by its own depth factor, so a single pointer read drives
+   the entire parallax stack.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Slow mesh-gradient drift — the "alive" base layer. */
+@keyframes hero-mesh-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33%      { transform: translate3d(var(--hero-mesh-x, 22px), var(--hero-mesh-y, -18px), 0) scale(1.06); }
+  66%      { transform: translate3d(calc(var(--hero-mesh-x, 22px) * -0.6), calc(var(--hero-mesh-y, -18px) * -0.5), 0) scale(0.97); }
+}
+.hero-mesh-drift {
+  animation: hero-mesh-drift var(--hero-mesh-duration, 22s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--hero-mesh-delay, 0s);
+  will-change: transform;
+}
+
+/* Soft breathing — opacity only, used for the ambient wash layers. */
+@keyframes hero-breathe {
+  0%, 100% { opacity: var(--hero-breathe-min, 0.35); }
+  50%      { opacity: var(--hero-breathe-max, 0.7); }
+}
+.hero-breathe {
+  animation: hero-breathe var(--hero-breathe-duration, 9s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--hero-breathe-delay, 0s);
+}
+
+/* Holographic particles — slow vertical float with an opacity swell. */
+@keyframes hero-particle-float {
+  0%, 100% { opacity: 0.05; transform: translate3d(0, 0, 0); }
+  50%      { opacity: var(--hero-particle-peak, 0.5); transform: translate3d(var(--hero-particle-x, 0), var(--hero-particle-y, -26px), 0); }
+}
+.hero-particle {
+  animation: hero-particle-float var(--hero-particle-duration, 12s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--hero-particle-delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* Energy travelling along the circuit traces. Paths carry pathLength="100",
+   so the dash maths is geometry-independent. */
+@keyframes hero-circuit-pulse {
+  0%   { stroke-dashoffset: 100; opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+.hero-circuit-pulse {
+  stroke-dasharray: 14 86;
+  animation: hero-circuit-pulse var(--hero-circuit-duration, 6s) linear infinite;
+  animation-delay: var(--hero-circuit-delay, 0s);
+}
+
+/* Neural / IoT node glow. */
+@keyframes hero-node-pulse {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.55); }
+}
+.hero-node-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hero-node-pulse var(--hero-node-duration, 4s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--hero-node-delay, 0s);
+}
+
+/* Conveyor payloads tracking left→right along the belt. */
+@keyframes hero-conveyor {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(var(--hero-conveyor-distance, 150px), 0, 0); }
+}
+.hero-conveyor {
+  animation: hero-conveyor var(--hero-conveyor-duration, 9s) linear infinite;
+  animation-delay: var(--hero-conveyor-delay, 0s);
+}
+
+/* Robotic arm — a restrained articulation, not a wave. */
+@keyframes hero-arm-swing {
+  0%, 100% { transform: rotate(var(--hero-arm-from, -4deg)); }
+  50%      { transform: rotate(var(--hero-arm-to, 5deg)); }
+}
+.hero-arm-swing {
+  transform-box: fill-box;
+  transform-origin: var(--hero-arm-origin, center);
+  animation: hero-arm-swing var(--hero-arm-duration, 11s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--hero-arm-delay, 0s);
+}
+
+/* Wide, very low-opacity light sweep across the whole scene. */
+@keyframes hero-scan-sweep {
+  0%   { transform: translate3d(-40%, 0, 0); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translate3d(140%, 0, 0); opacity: 0; }
+}
+.hero-scan-sweep {
+  animation: hero-scan-sweep var(--hero-scan-duration, 16s) linear infinite;
+  animation-delay: var(--hero-scan-delay, 4s);
+  will-change: transform, opacity;
+}
+
+/* Blueprint / hex grid slow drift. */
+@keyframes hero-grid-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(var(--hero-grid-x, 14px), var(--hero-grid-y, 10px), 0); }
+}
+.hero-grid-drift {
+  animation: hero-grid-drift var(--hero-grid-duration, 30s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+/* Parallax carrier. Depth is per-layer; the pointer values are shared. */
+.hero-parallax {
+  transform: translate3d(
+    calc(var(--hero-px, 0) * var(--hero-depth, 0) * 1px),
+    calc(var(--hero-py, 0) * var(--hero-depth, 0) * 1px),
+    0
+  );
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Feature-card visualisations (home · Benefits).
+
+   The card *box* never moves — no float, no drift, no idle transform. All the
+   life lives inside the visualisation strip, and every keyframe here animates
+   transform or opacity only.
+
+   Note this replaces height-based bar animation. Animating `height` forces
+   layout on every frame for every bar; `scaleY` with a pinned transform-origin
+   is visually identical and composites on the GPU.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Waveform / analytics bars. */
+@keyframes viz-bar {
+  0%, 100% { transform: scaleY(var(--viz-bar-min, 0.3)); }
+  50%      { transform: scaleY(var(--viz-bar-max, 1)); }
+}
+.viz-bar {
+  transform-origin: var(--viz-bar-origin, center);
+  animation: viz-bar var(--viz-bar-duration, 2.6s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--viz-bar-delay, 0s);
+  will-change: transform;
+}
+
+/* Network / IoT nodes. */
+@keyframes viz-node {
+  0%, 100% { transform: scale(1); opacity: 0.35; }
+  50%      { transform: scale(1.5); opacity: 1; }
+}
+.viz-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: viz-node var(--viz-node-duration, 2.8s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--viz-node-delay, 0s);
+}
+
+/* Charge travelling along a signal path or network edge. */
+@keyframes viz-dash {
+  0%   { stroke-dashoffset: 100; opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+.viz-dash {
+  stroke-dasharray: 16 84;
+  animation: viz-dash var(--viz-dash-duration, 3.2s) linear infinite;
+  animation-delay: var(--viz-dash-delay, 0s);
+}
+
+/* Radar sweep. */
+@keyframes viz-radar {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.viz-radar {
+  animation: viz-radar var(--viz-radar-duration, 4.5s) linear infinite;
+  will-change: transform;
+}
+
+/* Expanding security rings. */
+@keyframes viz-ring {
+  0%   { transform: scale(0.35); opacity: 0; }
+  25%  { opacity: 0.85; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.viz-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: viz-ring var(--viz-ring-duration, 3.4s) cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: var(--viz-ring-delay, 0s);
+}
+
+/* Status LED blink. */
+@keyframes viz-blink {
+  0%, 100% { opacity: 0.22; }
+  50%      { opacity: 1; }
+}
+.viz-blink {
+  animation: viz-blink var(--viz-blink-duration, 2.2s) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: var(--viz-blink-delay, 0s);
+}
+
+/* Peak-hold dot for the spectrum-meter card — a distinct "spike then decay"
+   curve (fast rise, slow fall, brief hold at the top) rather than the smooth
+   sine breathing every other keyframe here uses, so this card's motion
+   language reads as clearly its own. Height is per-column via --viz-peak-
+   height; translateY is negative because the dot sits at bottom:0. */
+@keyframes viz-peak {
+  0%   { transform: translateY(0); opacity: 0; }
+  8%   { opacity: 1; }
+  22%  { transform: translateY(calc(var(--viz-peak-height, 40px) * -1)); }
+  34%  { transform: translateY(calc(var(--viz-peak-height, 40px) * -1)); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+.viz-peak {
+  animation: viz-peak var(--viz-peak-duration, 2.2s) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  animation-delay: var(--viz-peak-delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* Scanline crossing the signal plot. Percentages in `transform` resolve
+   against the *animated element's own* box — so this class is applied to a
+   full-width/height wrapper (0%→100% then correctly spans the whole plot),
+   with the visible 2px bar as an absolutely-positioned child at left:0.
+   Animating a thin 2px element directly would only ever travel a few px. */
+@keyframes viz-scan {
+  0%   { transform: translateX(-4%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(104%); opacity: 0; }
+}
+.viz-scan {
+  animation: viz-scan var(--viz-scan-duration, 4s) linear infinite;
+  animation-delay: var(--viz-scan-delay, 0s);
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee,
   .marquee-reverse,
@@ -298,8 +545,55 @@
   .industries-particle,
   .industries-wave-bar,
   .industries-scan-x,
-  .industries-pulse-dot {
+  .industries-pulse-dot,
+  .hero-mesh-drift,
+  .hero-breathe,
+  .hero-particle,
+  .hero-circuit-pulse,
+  .hero-node-pulse,
+  .hero-conveyor,
+  .hero-arm-swing,
+  .hero-scan-sweep,
+  .hero-grid-drift,
+  .viz-bar,
+  .viz-node,
+  .viz-dash,
+  .viz-radar,
+  .viz-ring,
+  .viz-blink,
+  .viz-scan,
+  .viz-peak {
     animation: none !important;
+  }
+
+  /* Bars sit at their 0% keyframe (scaleY 0.3) with animation off, which
+     collapses the plot. Pin them to a readable static composition instead. */
+  .viz-bar { transform: scaleY(var(--viz-bar-static, 0.62)) !important; }
+  .viz-node { transform: scale(1.15) !important; opacity: 0.8 !important; }
+  .viz-dash { opacity: 0.6 !important; stroke-dashoffset: 45 !important; }
+  .viz-ring { opacity: 0.3 !important; transform: scale(1.1) !important; }
+  .viz-blink { opacity: 0.7 !important; }
+  .viz-scan { opacity: 0 !important; }
+  .viz-peak {
+    opacity: 0.8 !important;
+    transform: translateY(calc(var(--viz-peak-height, 40px) * -1)) !important;
+  }
+
+  /* Particles and circuit pulses resolve to opacity 0 at the 0% keyframe, so
+     without this they would vanish entirely rather than settling into a
+     static composition. */
+  .hero-particle { opacity: 0.28 !important; }
+  .hero-circuit-pulse { opacity: 0.55 !important; stroke-dashoffset: 40 !important; }
+  .hero-scan-sweep { opacity: 0 !important; }
+  /* Without an override these settle at the inherited opacity: 1 (brighter
+     than any point in their animated cycle) since `animation: none` removes
+     the keyframe rather than resolving to a mid-cycle value. */
+  .hero-breathe { opacity: 0.55 !important; }
+  .hero-conveyor { transform: translate3d(75px, 0, 0) !important; }
+
+  .hero-parallax {
+    transform: none !important;
+    transition: none !important;
   }
 }
 

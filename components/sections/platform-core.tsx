@@ -275,7 +275,7 @@ export function PlatformCore() {
 
         {/* Main 2-Column Content Showcase */}
         <div
-          className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-[#07080d] shadow-2xl"
+          className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-[#000000] shadow-2xl"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >

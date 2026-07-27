@@ -141,7 +141,7 @@ export function HowItWorks() {
                           ? "scale-110 border-transparent text-white shadow-lg"
                           : isActive
                           ? "border-[#046bd2]/60 bg-black text-[#2d98f1]"
-                          : "border-white/10 bg-[#08090e] text-white/30 hover:border-white/30 hover:text-white/60"
+                          : "border-white/10 bg-[#000000] text-white/30 hover:border-white/30 hover:text-white/60"
                       }`}
                       style={{
                         background: isCurrent ? s.tint : undefined,
@@ -178,13 +178,13 @@ export function HowItWorks() {
                     onMouseLeave={() => setIsPaused(false)}
                     whileHover={reduced ? undefined : { y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                    className="group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-[#08090e] p-6"
+                    className="group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-[#000000] p-6"
                   >
                     {/* Sliding active highlight — shared layoutId animates smoothly between cards */}
                     {isSelected && (
                       <motion.div
                         layoutId="step-card-highlight"
-                        className="pointer-events-none absolute inset-0 rounded-2xl border bg-[#0b0e18]"
+                        className="pointer-events-none absolute inset-0 rounded-2xl border bg-[#000000]"
                         style={{
                           borderColor: `${s.tint}99`,
                           boxShadow: `0 0 40px -10px ${s.tint}59`,
@@ -282,7 +282,7 @@ export function HowItWorks() {
             const Icon = s.icon
             return (
               <ScrollReveal key={s.n} delay={i * 0.08}>
-                <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#08090e] p-6 transition-all hover:border-[#046bd2]/40">
+                <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#000000] p-6 transition-all hover:border-[#046bd2]/40">
                   <div
                     className="absolute inset-x-0 top-0 h-[2px]"
                     style={{

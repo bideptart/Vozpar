@@ -44,7 +44,7 @@ export function CTA() {
             <SpotlightPanel
               glow="var(--features-blue)"
               size={520}
-              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-[#0b0b0e] px-6 py-8 sm:px-8 sm:py-10 md:px-12 md:py-12"
+              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-[#000000] px-6 py-8 sm:px-8 sm:py-10 md:px-12 md:py-12"
             >
               {!reduced && (
                 <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">

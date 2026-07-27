@@ -72,7 +72,7 @@ export function Testimonials() {
         <StaggerGroup className="mb-10 grid gap-3 sm:grid-cols-3">
           {METRICS.map(m => (
             <StaggerItem key={m.label}>
-              <div className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] px-7 py-7 text-center">
+              <div className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#000000] px-7 py-7 text-center">
                 <div className="absolute inset-x-0 top-0 h-px"
                   style={{ background: `linear-gradient(to right, transparent, ${m.tint}50, transparent)` }} />
                 <p className="font-heading text-4xl font-medium tracking-tight" style={{ color: m.tint }}>
@@ -91,7 +91,7 @@ export function Testimonials() {
               <motion.figure
                 whileHover={reduced ? undefined : { y: -4 }}
                 transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                className="group relative h-full overflow-hidden rounded-2xl border border-white/[0.07] bg-[#08090e] p-7"
+                className="group relative h-full overflow-hidden rounded-2xl border border-white/[0.07] bg-[#000000] p-7"
               >
                 <div className="absolute inset-x-0 top-0 h-px"
                   style={{ background: `linear-gradient(to right, transparent, ${t.tint}45, transparent)` }} />
