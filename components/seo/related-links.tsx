@@ -1,185 +1,140 @@
 "use client"
 
-import { useRef } from "react"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
-import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react"
+import type { ElementType } from "react"
+import { ArrowUpRight, Receipt, Layers, CircleQuestionMark, Zap, BookOpen, Rocket } from "lucide-react"
+import { motion, useReducedMotion } from "motion/react"
+import { SpotlightPanel } from "@/components/animation/magnetic"
 
 export type RelatedLink = {
   href: string
   title: string
   description: string
+  icon?: string
 }
 
-// Blue-black themed cards — matching image 2 layout (arrow top-right, title+desc bottom)
-// but adapted to the Vozpar dark blue palette instead of pink
-const CARD_THEMES = [
-  {
-    cardBg: "rgba(4, 107, 210, 0.07)",
-    cardBgHover: "rgba(4, 107, 210, 0.13)",
-    borderColor: "border-[#046bd2]/20",
-    borderHover: "group-hover:border-[#046bd2]/50",
-    badgeBg: "rgba(4, 107, 210, 0.15)",
-    badgeBgHover: "#046bd2",
-    badgeText: "#60a5fa",
-    badgeShadow: "0 0 22px 4px rgba(4, 107, 210, 0.45)",
-    glowColor: "rgba(4, 107, 210, 0.20)",
-    hoverTitle: "group-hover:text-blue-300",
-    lineGradient: "from-blue-500 via-blue-400 to-transparent",
-  },
-  {
-    cardBg: "rgba(37, 117, 252, 0.07)",
-    cardBgHover: "rgba(37, 117, 252, 0.13)",
-    borderColor: "border-[#2575fc]/20",
-    borderHover: "group-hover:border-[#2575fc]/50",
-    badgeBg: "rgba(37, 117, 252, 0.15)",
-    badgeBgHover: "#2575fc",
-    badgeText: "#818cf8",
-    badgeShadow: "0 0 22px 4px rgba(37, 117, 252, 0.45)",
-    glowColor: "rgba(37, 117, 252, 0.20)",
-    hoverTitle: "group-hover:text-indigo-300",
-    lineGradient: "from-indigo-500 via-blue-400 to-transparent",
-  },
-  {
-    cardBg: "rgba(0, 134, 249, 0.07)",
-    cardBgHover: "rgba(0, 134, 249, 0.13)",
-    borderColor: "border-[#0086f9]/20",
-    borderHover: "group-hover:border-[#0086f9]/50",
-    badgeBg: "rgba(0, 134, 249, 0.15)",
-    badgeBgHover: "#0086f9",
-    badgeText: "#38bdf8",
-    badgeShadow: "0 0 22px 4px rgba(0, 134, 249, 0.45)",
-    glowColor: "rgba(0, 134, 249, 0.20)",
-    hoverTitle: "group-hover:text-sky-300",
-    lineGradient: "from-sky-500 via-blue-400 to-transparent",
-  },
-]
+const TINTS = ["#3b82f6", "#10b981", "#ff7a00"]
+
+function getLinkIcon(href: string): ElementType {
+  if (href.includes("pricing")) return Receipt
+  if (href.includes("industries")) return Layers
+  if (href.includes("faq")) return CircleQuestionMark
+  if (href.includes("get-started") || href.includes("start")) return Zap
+  if (href.includes("docs")) return BookOpen
+  return Rocket
+}
+
+function getPathBadge(href: string): string {
+  if (href === "/") return "/HOME"
+  return href.toUpperCase()
+}
 
 function InteractiveCard({ link, index }: { link: RelatedLink; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const theme = CARD_THEMES[index % CARD_THEMES.length]
-
-  // Mouse tracking for 3D tilt & cursor spotlight
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const nx = useMotionValue(0)
-  const ny = useMotionValue(0)
-
-  const springConfig = { stiffness: 200, damping: 20, mass: 0.5 }
-  const sx = useSpring(nx, springConfig)
-  const sy = useSpring(ny, springConfig)
-
-  const rotateX = useTransform(sy, [-0.5, 0.5], [5, -5])
-  const rotateY = useTransform(sx, [-0.5, 0.5], [-5, 5])
-
-  const mx = useSpring(mouseX, springConfig)
-  const my = useSpring(mouseY, springConfig)
-
-  const spotlight = useMotionTemplate`radial-gradient(280px circle at ${mx}px ${my}px, ${theme.glowColor}, transparent 80%)`
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const el = cardRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    mouseX.set(x)
-    mouseY.set(y)
-    nx.set(x / rect.width - 0.5)
-    ny.set(y / rect.height - 0.5)
-  }
-
-  function handleMouseLeave() {
-    nx.set(0)
-    ny.set(0)
-    mouseX.set(0)
-    mouseY.set(0)
-  }
+  const reduced = useReducedMotion()
+  const tint = TINTS[index % TINTS.length]
+  const Icon = getLinkIcon(link.href)
+  const pathBadge = getPathBadge(link.href)
 
   return (
     <motion.li
-      initial={{ opacity: 0, y: 28 }}
+      initial={reduced ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, delay: index * 0.09, ease: [0.22, 1, 0.36, 1] }}
       className="h-full"
-      style={{ perspective: "1000px" }}
     >
-      <motion.div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="h-full"
+      <SpotlightPanel
+        glow={tint}
+        size={340}
+        className="h-full overflow-hidden rounded-2xl border bg-card/30 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5"
+        style={{
+          borderColor: `color-mix(in srgb, ${tint} 38%, transparent)`,
+          boxShadow: `0 0 24px -6px color-mix(in srgb, ${tint} 20%, transparent)`,
+        }}
       >
-        <Link
-          href={link.href}
-          className={`group relative flex h-full min-h-[200px] flex-col justify-between overflow-hidden rounded-2xl border p-7 transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_50px_-12px_rgba(4,107,210,0.35)] ${theme.borderColor} ${theme.borderHover}`}
-          style={{ background: "rgba(11,11,14,0.95)" }}
-        >
-          {/* Dynamic cursor spotlight */}
-          <motion.div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            style={{ background: spotlight }}
-          />
+        {/* Top hairline */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px origin-left scale-x-0 transition-transform duration-500 group-hover/spot:scale-x-100"
+          style={{
+            background: `linear-gradient(90deg, ${tint}, color-mix(in srgb, ${tint} 10%, transparent))`,
+          }}
+        />
 
-          {/* Subtle corner glow */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full opacity-10 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:opacity-30"
-            style={{ background: theme.glowColor }}
-          />
+        {/* Accent wash from top-left */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover/spot:opacity-40"
+          style={{
+            background: `radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, ${tint} 10%, transparent), transparent 65%)`,
+          }}
+        />
 
-          {/* Arrow badge — top right, like image 2 */}
-          <div className="relative z-10 flex justify-end" style={{ transform: "translateZ(20px)" }}>
-            <div
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-45 group-hover:shadow-lg"
+        {/* Gradient sheen sweep */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 w-2/3 group-hover/spot:[animation:sheen-x_0.9s_ease-out]"
+          style={{
+            transform: "translateX(-140%) skewX(-18deg)",
+            background: `linear-gradient(90deg, transparent, color-mix(in srgb, ${tint} 18%, transparent), transparent)`,
+          }}
+        />
+
+        <Link href={link.href} className="relative flex h-full flex-col p-5 sm:p-6">
+          {/* Header */}
+          <div className="flex items-start justify-between gap-4">
+            <span
+              className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border transition-transform duration-300 group-hover/spot:-rotate-6 group-hover/spot:scale-105"
               style={{
-                background: theme.badgeBg,
-                color: theme.badgeText,
-                boxShadow: "none",
-              }}
-              onMouseEnter={e => {
-                ;(e.currentTarget as HTMLDivElement).style.background = theme.badgeBgHover
-                ;(e.currentTarget as HTMLDivElement).style.boxShadow = theme.badgeShadow
-                ;(e.currentTarget as HTMLDivElement).style.color = "#fff"
-              }}
-              onMouseLeave={e => {
-                ;(e.currentTarget as HTMLDivElement).style.background = theme.badgeBg
-                ;(e.currentTarget as HTMLDivElement).style.boxShadow = "none"
-                ;(e.currentTarget as HTMLDivElement).style.color = theme.badgeText
+                background: `linear-gradient(155deg, color-mix(in srgb, ${tint} 30%, transparent), color-mix(in srgb, ${tint} 8%, transparent))`,
+                borderColor: `color-mix(in srgb, ${tint} 40%, transparent)`,
+                color: tint,
+                boxShadow: `0 8px 24px -10px color-mix(in srgb, ${tint} 60%, transparent)`,
               }}
             >
-              <ArrowUpRight className="h-5 w-5" aria-hidden />
-            </div>
+              <Icon className="h-5 w-5" aria-hidden />
+            </span>
+            <span
+              className="rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em]"
+              style={{
+                color: `color-mix(in srgb, ${tint} 90%, white)`,
+                borderColor: `color-mix(in srgb, ${tint} 30%, transparent)`,
+                background: `color-mix(in srgb, ${tint} 10%, transparent)`,
+              }}
+            >
+              {pathBadge}
+            </span>
           </div>
 
-          {/* Title + description — bottom, like image 2 */}
-          <div className="relative z-10 mt-6" style={{ transform: "translateZ(18px)" }}>
-            <h3 className={`font-sans text-[1.05rem] font-bold leading-snug tracking-tight text-white transition-colors duration-300 ${theme.hoverTitle}`}>
+          <div className="mt-6 flex-1">
+            <p className="font-heading text-lg font-medium leading-snug tracking-[-0.02em] text-foreground">
               {link.title}
-            </h3>
-            <p className="mt-2.5 font-sans text-sm leading-relaxed text-slate-400 transition-colors duration-300 group-hover:text-slate-300">
+            </p>
+            <p className="mt-2.5 text-[13px] font-light leading-relaxed text-muted-foreground">
               {link.description}
             </p>
           </div>
 
-          {/* Bottom expanding accent line */}
+          {/* CTA bar */}
           <span
-            className={`absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r ${theme.lineGradient} scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100`}
-            aria-hidden="true"
-          />
-
-          {/* Shimmer sweep */}
-          <motion.span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent opacity-0 group-hover:opacity-100"
-            animate={{ x: ["-140%", "340%"] }}
-            transition={{ duration: 2, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" }}
-          />
+            className="relative mt-6 inline-flex h-10 items-center justify-between gap-2 overflow-hidden rounded-full border px-4 text-xs font-medium"
+            style={{
+              borderColor: `color-mix(in srgb, ${tint} 35%, transparent)`,
+              color: tint,
+            }}
+          >
+            <span
+              aria-hidden
+              className="absolute inset-0 origin-left scale-x-0 transition-transform duration-[400ms] ease-out group-hover/spot:scale-x-100"
+              style={{ background: tint }}
+            />
+            <span className="relative transition-colors duration-300 group-hover/spot:text-black font-semibold">
+              Explore
+            </span>
+            <ArrowUpRight className="relative h-4 w-4 transition-[transform,color] duration-300 group-hover/spot:translate-x-0.5 group-hover/spot:-translate-y-0.5 group-hover/spot:text-black" />
+          </span>
         </Link>
-      </motion.div>
+      </SpotlightPanel>
     </motion.li>
   )
 }
@@ -195,13 +150,17 @@ export function RelatedLinks({
   variant?: "default" | "flip"
 }) {
   return (
-    <section aria-labelledby="related-heading" className="bg-black w-full px-4 pb-24 pt-16 md:px-0 md:pb-28 md:pt-20">
+    <section aria-labelledby="related-heading" className="w-full bg-black px-4 pb-24 pt-16 md:px-0 md:pb-28 md:pt-20">
       <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
-        <div className="mb-12">
-          <h2 id="related-heading" className="font-serif text-4xl font-normal leading-[1.1] tracking-tight text-white md:text-5xl">
+        <div className="mb-10 text-center">
+          <span className="ai-pill-blue mb-3 inline-flex items-center gap-1.5">
+            <span className="h-1 w-1 rounded-full bg-current" />
+            Next
+          </span>
+          <h2 id="related-heading" className="mt-2 font-heading text-2xl font-medium tracking-tight text-white md:text-4xl">
             {heading}
           </h2>
-          <p className="mt-3 max-w-2xl font-sans text-base leading-relaxed text-slate-400 md:text-lg">
+          <p className="mx-auto mt-3 max-w-2xl text-[15px] font-light leading-relaxed text-muted-foreground">
             {description}
           </p>
         </div>
