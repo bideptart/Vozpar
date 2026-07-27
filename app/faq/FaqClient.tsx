@@ -19,11 +19,11 @@ import {
 
 const getCategoryIcon = (id: string) => {
   switch (id) {
-    case "billing":       return <CreditCard className="h-4 w-4" />
-    case "phone-numbers": return <Phone className="h-4 w-4" />
-    case "agents":        return <Headset className="h-4 w-4" />
-    case "compliance":    return <Shield className="h-4 w-4" />
-    case "account":       return <Users className="h-4 w-4" />
+    case "billing":       return <CreditCard className="h-4 w-4 icon-card-swipe" />
+    case "phone-numbers": return <Phone className="h-4 w-4 icon-phone-ring" />
+    case "agents":        return <Headset className="h-4 w-4 icon-headset-pulse" />
+    case "compliance":    return <Shield className="h-4 w-4 icon-shield-scan" />
+    case "account":       return <Users className="h-4 w-4 icon-users-sync" />
     default:              return null
   }
 }
@@ -154,8 +154,8 @@ export default function FaqClient() {
                     }`}
                   >
                     <span
-                      className={`transition-colors duration-300 ${isActive ? "" : "text-slate-500 group-hover:text-[var(--tint)]"}`}
-                      style={isActive ? { color: tint } : undefined}
+                      className="transition-opacity duration-300"
+                      style={{ color: tint }}
                     >
                       {getCategoryIcon(g.id)}
                     </span>

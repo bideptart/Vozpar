@@ -87,7 +87,7 @@ function BenefitCard({ icon: Icon, eyebrow, title, body, tint, viz }: Benefit) {
     <article
       className="
         group relative flex h-full flex-col overflow-hidden rounded-[18px]
-        border border-white/[0.08] p-5 xl:p-6
+        border border-white/[0.08] p-4 sm:p-5 xl:p-6
         shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]
         transition-[scale,border-color,box-shadow] duration-300 ease-out
         hover:scale-[1.012]
@@ -130,7 +130,7 @@ function BenefitCard({ icon: Icon, eyebrow, title, body, tint, viz }: Benefit) {
 
       <div className="relative flex h-full flex-col">
         {/* Icon + eyebrow */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <span
             className="
               flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]
@@ -144,7 +144,7 @@ function BenefitCard({ icon: Icon, eyebrow, title, body, tint, viz }: Benefit) {
             <Icon className="h-[18px] w-[18px] transition-[filter] duration-300 group-hover:[filter:drop-shadow(0_0_5px_var(--tint))]" />
           </span>
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.2em] transition-colors duration-300"
+            className="font-mono text-[9px] uppercase tracking-[0.2em] transition-colors duration-300 sm:text-[10px]"
             style={{ color: `${tint}b0` }}
           >
             {eyebrow}
@@ -152,15 +152,15 @@ function BenefitCard({ icon: Icon, eyebrow, title, body, tint, viz }: Benefit) {
         </div>
 
         {/* Visualisation */}
-        <div className="mt-4">
+        <div className="mt-3.5 sm:mt-4">
           <BenefitViz kind={viz} tint={tint} />
         </div>
 
         {/* Copy */}
-        <h3 className="mt-4 font-heading text-[0.98rem] font-medium leading-snug tracking-tight text-white xl:text-[1.05rem]">
+        <h3 className="mt-3.5 font-heading text-[0.94rem] font-medium leading-snug tracking-tight text-white sm:mt-4 sm:text-[0.98rem] xl:text-[1.05rem]">
           {title}
         </h3>
-        <p className="mt-2 text-[13px] leading-relaxed text-white/40 transition-colors duration-300 group-hover:text-white/55">
+        <p className="mt-2 text-[12.5px] leading-relaxed text-white/40 transition-colors duration-300 group-hover:text-white/55 sm:text-[13px]">
           {body}
         </p>
       </div>
@@ -191,10 +191,10 @@ export function Benefits() {
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:py-14 xl:py-16">
-        <ScrollReveal className="mx-auto mb-7 max-w-2xl text-center lg:mb-9">
-          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1] sm:text-xs">Why Vozpar</p>
-          <h2 className="font-heading text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14 xl:py-16">
+        <ScrollReveal className="mx-auto mb-6 max-w-2xl text-center sm:mb-7 lg:mb-9">
+          <p className="mb-2.5 font-mono text-[9px] uppercase tracking-[0.22em] text-[#2d98f1] sm:mb-3 sm:text-xs">Why Vozpar</p>
+          <h2 className="font-heading text-xl font-medium leading-tight tracking-tight text-white sm:text-2xl md:text-3xl lg:text-4xl">
             Built for real calls, <span className="text-white/60">not demo videos.</span>
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-white/40 sm:text-base">
@@ -210,7 +210,7 @@ export function Benefits() {
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07, delayChildren: 0.08 } } }}
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
+          className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5"
         >
           {BENEFITS.map((b) => (
             <motion.div

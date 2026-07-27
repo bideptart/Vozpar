@@ -317,7 +317,7 @@ function Scene3D({ reduced }: { reduced: boolean }) {
             onClick={() => { setActive(i); start() }}
           >
             <div
-              className="relative w-[260px] overflow-hidden rounded-2xl border sm:w-[280px]"
+              className="relative w-[220px] overflow-hidden rounded-2xl border sm:w-[250px] md:w-[270px] lg:w-[280px]"
               style={{
                 // Pure black card surface (was a faintly navy-tinted
                 // #0a0d1a → #080b14 gradient) — matches the rest of the
@@ -349,10 +349,10 @@ function Scene3D({ reduced }: { reduced: boolean }) {
                 />
               )}
 
-              <div className="p-6">
+              <div className="p-4 sm:p-5 md:p-6">
                 {/* Tag + live dot */}
                 <div className="flex items-center justify-between">
-                  <span className="rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em]"
+                  <span className="rounded-full border px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.16em] sm:text-[9px] sm:tracking-[0.18em]"
                     style={{ borderColor: `${card.color}30`, color: card.color, background: `${card.color}0e` }}>
                     {card.tag}
                   </span>
@@ -365,18 +365,18 @@ function Scene3D({ reduced }: { reduced: boolean }) {
                 </div>
 
                 {/* Icon */}
-                <div className="mt-5 flex h-12 w-12 items-center justify-center rounded-2xl border"
+                <div className="mt-4 flex h-10 w-10 items-center justify-center rounded-2xl border sm:mt-5 sm:h-12 sm:w-12"
                   style={{ borderColor: `${card.color}28`, background: `${card.color}14`, color: card.color }}>
                   <Icon className="h-5 w-5" />
                 </div>
 
                 {/* Title */}
-                <h3 className="mt-4 font-heading text-xl font-semibold tracking-tight text-white">
+                <h3 className="mt-3.5 font-heading text-[1.05rem] font-semibold tracking-tight text-white sm:mt-4 sm:text-xl">
                   {card.title}
                 </h3>
 
                 {/* Fact */}
-                <p className="mt-2 text-[13px] leading-relaxed text-white/40">{card.fact}</p>
+                <p className="mt-2 text-[12px] leading-relaxed text-white/40 sm:text-[13px]">{card.fact}</p>
 
                 {/* Micro-visualisation — a different shape per card (see
                     CARD_VIZ above), each in a fixed-height row so it never
@@ -389,14 +389,14 @@ function Scene3D({ reduced }: { reduced: boolean }) {
                 </div>
 
                 {/* Metric */}
-                <div className="mt-4 flex items-end justify-between border-t border-white/[0.06] pt-4">
+                <div className="mt-4 flex items-end justify-between border-t border-white/[0.06] pt-3.5 sm:mt-5 sm:pt-4">
                   <div>
-                    <p className="font-heading text-3xl font-bold" style={{ color: card.color }}>
+                    <p className="font-heading text-2xl font-bold sm:text-3xl" style={{ color: card.color }}>
                       {card.metric}
                     </p>
                     <p className="mt-0.5 text-[10px] text-white/30">{card.metricLabel}</p>
                   </div>
-                  <CheckCircle className="mb-1 h-5 w-5" style={{ color: `${card.color}60` }} />
+                  <CheckCircle className="mb-1 h-4 w-4 sm:h-5 sm:w-5" style={{ color: `${card.color}60` }} />
                 </div>
               </div>
             </div>
@@ -405,7 +405,7 @@ function Scene3D({ reduced }: { reduced: boolean }) {
       })}
 
       {/* Dot indicators */}
-      <div className="absolute -bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute -bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 sm:-bottom-6">
         {SCENES.map((s, i) => (
           <button key={i} onClick={() => { setActive(i); start() }}
             aria-label={`Scene ${i + 1}`}
@@ -451,7 +451,7 @@ export function Hero() {
       {/* py-20 on phones left ~80px of dead space between the floating
           header and the badge (visible as a large empty gap). Tightened to
           py-8 there; sm and up are unchanged. */}
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-4 py-8 sm:gap-10 sm:px-6 sm:py-24 md:grid-cols-2 lg:min-h-[calc(100svh-4.5rem)] lg:gap-12 lg:py-0 xl:gap-20">
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-20 md:grid-cols-2 md:gap-10 lg:min-h-[calc(100svh-4.5rem)] lg:gap-12 lg:py-0 xl:gap-20">
 
         {/* ─── LEFT: copy ─────────────────────────────────────────────── */}
         <div className="flex flex-col">
@@ -459,12 +459,12 @@ export function Hero() {
           {/* Badge */}
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}>
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-3 py-1.5 sm:px-4 sm:py-2">
               <span className="relative flex h-1.5 w-1.5 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#2d98f1]">
+              <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#2d98f1] sm:text-[10px] sm:tracking-[0.2em]">
                 Vozpar AI · Now Live · Sub-300ms
               </span>
             </div>
@@ -473,7 +473,7 @@ export function Hero() {
           {/* Headline with rotating word */}
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-5 font-heading text-[2.6rem] font-medium leading-[1.07] tracking-[-0.035em] text-white sm:text-5xl md:text-[3rem] lg:text-[3.25rem]">
+            className="mt-4 font-heading text-[2rem] font-medium leading-[1.05] tracking-[-0.035em] text-white sm:mt-5 sm:text-[2.6rem] sm:leading-[1.07] md:text-[3rem] lg:text-[3.25rem]">
             Your AI Phone Agent
             <br />
             {/* Rotating word */}
@@ -497,7 +497,7 @@ export function Hero() {
           {/* Description */}
           <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 max-w-lg text-base leading-relaxed text-white/45 sm:text-[1.05rem]">
+            className="mt-3 max-w-lg text-[15px] leading-relaxed text-white/45 sm:mt-4 sm:text-base md:text-[1.05rem]">
             Plug Vozpar into your existing number today. It answers every call,
             books appointments, qualifies leads, and resolves support — sounding
             completely human, responding in under 300ms, running on your own infrastructure.
@@ -506,14 +506,14 @@ export function Hero() {
           {/* CTAs */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 flex flex-1 flex-wrap items-center gap-3">
+            className="mt-5 flex flex-1 flex-wrap items-center gap-2.5 sm:mt-6 sm:gap-3">
             <Link href="/get-started"
-              className="group inline-flex flex-1 min-w-[140px] h-12 items-center justify-center gap-2 rounded-full bg-[#046bd2] px-7 text-sm font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_44px_rgba(4,107,210,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+              className="group inline-flex flex-1 min-w-[130px] h-11 items-center justify-center gap-2 rounded-full bg-[#046bd2] px-5 text-sm font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_44px_rgba(4,107,210,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:px-7">
               Deploy Your Agent Free
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <Link href="/features"
-              className="inline-flex flex-1 min-w-[140px] h-12 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-7 text-sm font-medium text-white/65 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
+              className="inline-flex flex-1 min-w-[130px] h-11 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm font-medium text-white/65 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:px-7">
               <PhoneCall className="h-4 w-4" />
               Hear It In Action
             </Link>
@@ -522,15 +522,15 @@ export function Hero() {
           {/* Trust chips */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.52 }}
-            className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+            className="mt-4 flex flex-wrap gap-x-4 gap-y-2 sm:mt-5 sm:gap-x-5">
             {[
               { icon: Shield,      text: "Your data, your server" },
               { icon: Globe2,      text: "Works with any carrier"  },
               { icon: Zap,         text: "Live in under an hour"   },
               { icon: CheckCircle, text: "No long-term contract"   },
             ].map(({ icon: Icon, text }) => (
-              <span key={text} className="flex items-center gap-1.5 text-xs text-white/28">
-                <Icon className="h-3.5 w-3.5 text-[#046bd2]" />
+              <span key={text} className="flex items-center gap-1.5 text-[11px] text-white/28 sm:text-xs">
+                <Icon className="h-3 w-3 text-[#046bd2] sm:h-3.5 sm:w-3.5" />
                 {text}
               </span>
             ))}
@@ -540,7 +540,7 @@ export function Hero() {
         {/* ─── RIGHT: 3D scene ───────────────────────────────────────── */}
         <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.75, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="relative flex items-center justify-center pb-8">
+          className="relative flex items-center justify-center pb-4 sm:pb-8">
           <Scene3D reduced={Boolean(reduced)} />
         </motion.div>
       </div>

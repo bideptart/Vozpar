@@ -282,8 +282,8 @@ export function ProductStory() {
         style={{ background: "#046bd2", opacity: 0.055 }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 md:py-20">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 md:py-20">
+        <div className="grid items-center gap-8 lg:grid-cols-2 sm:gap-10 lg:gap-16">
 
           {/* Left: 3D illustration */}
           <ScrollReveal className="aspect-square w-full max-w-md lg:max-w-lg">
@@ -310,7 +310,7 @@ export function ProductStory() {
               </p>
             </ScrollReveal>
 
-            <div className="mt-7 flex flex-col gap-5">
+            <div className="mt-6 flex flex-col gap-4 sm:mt-7 sm:gap-5">
               {POINTS.map((p, i) => {
                 const Icon = p.icon
                 return (

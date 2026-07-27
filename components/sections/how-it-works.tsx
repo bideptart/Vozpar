@@ -91,14 +91,14 @@ export function HowItWorks() {
         style={{ background: "rgba(99,102,241,0.06)" }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:py-24">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-16 md:py-20 lg:py-24">
         {/* Header */}
-        <ScrollReveal className="mx-auto mb-10 max-w-3xl text-center md:mb-14">
+        <ScrollReveal className="mx-auto mb-8 max-w-3xl text-center md:mb-14">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#2d98f1]">
             <Sparkles className="h-3 w-3 text-[#2d98f1]" />
             Simplified 4-Step Process
           </div>
-          <h2 className="font-heading text-3xl font-medium leading-[1.1] tracking-[-0.03em] text-white sm:text-4xl md:text-5xl lg:text-6xl">
+          <h2 className="font-heading text-[1.75rem] font-medium leading-[1.1] tracking-[-0.03em] text-white sm:text-3xl md:text-4xl lg:text-5xl">
             Launch Your AI Phone Agent
             <br />
             <span className="bg-gradient-to-r from-[#2d98f1] via-[#60b8ff] to-[#6366f1] bg-clip-text text-transparent">
@@ -180,7 +180,7 @@ export function HowItWorks() {
                     onMouseLeave={() => setIsPaused(false)}
                     whileHover={reduced ? undefined : { y: -6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                    className="group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-[#000000] p-6"
+                    className="group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-[#000000] p-5 sm:p-6"
                   >
                     {/* Sliding active highlight — shared layoutId animates smoothly between cards */}
                     {isSelected && (
@@ -284,7 +284,7 @@ export function HowItWorks() {
             const Icon = s.icon
             return (
               <ScrollReveal key={s.n} delay={i * 0.08}>
-                <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#000000] p-6 transition-all hover:border-[#046bd2]/40">
+                <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#000000] p-5 transition-all hover:border-[#046bd2]/40 sm:p-6">
                   <div
                     className="absolute inset-x-0 top-0 h-[2px]"
                     style={{
@@ -294,7 +294,7 @@ export function HowItWorks() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border font-mono text-sm font-bold"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border font-mono text-sm font-bold sm:h-10 sm:w-10"
                         style={{
                           borderColor: `${s.tint}35`,
                           background: `${s.tint}12`,

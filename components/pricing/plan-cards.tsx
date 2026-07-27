@@ -21,7 +21,7 @@ export function PlanCards() {
           transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
           whileHover={{ y: -4 }}
           className={cn(
-            "relative flex flex-col rounded-2xl border p-7 transition-colors",
+            "relative flex flex-col rounded-2xl border p-5 transition-colors sm:p-6 md:p-7",
             plan.recommended
               ? "border-primary/40 bg-gradient-to-b from-primary/[0.06] to-transparent"
               : "border-border/60 bg-card/40 hover:border-border",
@@ -38,8 +38,8 @@ export function PlanCards() {
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{plan.tagline}</p>
           </div>
 
-          <div className="mt-6 flex items-baseline gap-2">
-            <span className="text-5xl font-semibold tracking-tight">${plan.amount}</span>
+          <div className="mt-5 flex items-baseline gap-2 sm:mt-6">
+            <span className="text-4xl font-semibold tracking-tight sm:text-5xl">${plan.amount}</span>
             <span className="text-sm text-muted-foreground">credit</span>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">

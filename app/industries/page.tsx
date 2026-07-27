@@ -45,16 +45,16 @@ export default function IndustriesPage() {
         <ParticleField />
         <AmbientWaveform />
         <FloatingIconBadges />
-        <div className="relative mx-auto w-full max-w-6xl px-4 py-20 md:px-6 md:py-28">
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-12 sm:py-16 md:px-6 md:py-24 lg:py-28">
           <ScrollReveal className="mx-auto max-w-3xl text-center" duration={0.9} y={22}>
             <span className="ai-pill-cyan" style={monoStyle.sectionTag}>
               <PulsingDot />
               Industries
             </span>
-            <h1 className={`mt-6 text-balance ${headingType.h1}`}>
+            <h1 className={`mt-5 text-balance sm:mt-6 ${headingType.h1}`}>
               An AI voice agent fluent in <span className="text-primary">your industry.</span>
             </h1>
-            <p className={`mt-5 text-pretty text-muted-foreground ${bodyType.intro}`}>
+            <p className={`mt-4 text-pretty text-muted-foreground sm:mt-5 ${bodyType.intro}`}>
               Ten pre-tuned playbooks, each shipped with the scripts, integrations, and compliance guardrails your
               business already runs on. Find the closest match below and go live in under 5 minutes.
             </p>

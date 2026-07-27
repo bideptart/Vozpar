@@ -89,7 +89,7 @@ export function CTA() {
   const reduced = useReducedMotion()
 
   return (
-    <section id="cta" className="relative overflow-hidden border-t border-white/[0.06] bg-black py-12 md:py-16">
+    <section id="cta" className="relative overflow-hidden border-t border-white/[0.06] bg-black py-10 sm:py-12 md:py-16">
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         {/* Ambient breathing glow behind the card. */}
         <motion.div

@@ -719,6 +719,117 @@
   animation: dot-float 1.4s ease-in-out infinite;
 }
 
+/* ========== Per-icon loop animations — pricing badges + FAQ categories ==========
+   Every icon gets its own recognisable motion so the pill row reads as a set of
+   individual features rather than three/five generic icons.  Durations and key
+   counts are deliberately staggered so none of them ever align on the same
+   frame — the group stays visually loose and alive.                              */
+
+/* 1. Pricing — Per-Second Billing: clock hand spins 0→360° on a slow 6s loop so
+      it genuinely reads as "ticking seconds".                                     */
+@keyframes icon-clock-spin {
+  to { transform: rotate(360deg); }
+}
+.icon-clock-spin {
+  transform-origin: 50% 50%;
+  animation: icon-clock-spin 6s linear infinite;
+}
+
+/* 2. Pricing — Sub-Second Latency: zap does a sharp on/off + slight shake,
+      timed to feel like an electrical crackle.                                   */
+@keyframes icon-zap-flicker {
+  0%, 100%  { opacity: 1;   transform: translateX(0) scale(1);   }
+  8%        { opacity: 0.35; transform: translateX(-0.5px) scale(0.96); }
+  12%       { opacity: 1;   transform: translateX(0.7px)  scale(1.06); }
+  18%       { opacity: 0.5; transform: translateX(0)       scale(0.98); }
+  24%       { opacity: 1;   transform: translateX(0)       scale(1);   }
+  68%       { opacity: 1;   transform: translateX(0)       scale(1);   }
+  72%       { opacity: 0.6; transform: translateX(0.4px)  scale(1.02); }
+  76%       { opacity: 1;   transform: translateX(0)       scale(1);   }
+}
+.icon-zap-flicker {
+  animation: icon-zap-flicker 2.6s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+/* 3. Pricing — Phone Number Included: shield's check-mark draws in (stroke
+      dashoffset 0→100) then holds, loops every 5.5s.                              */
+@keyframes icon-shield-check-draw {
+  0%, 14%   { stroke-dashoffset: 30; opacity: 0.25; }
+  34%, 78%  { stroke-dashoffset: 0;  opacity: 1;    }
+  90%, 100% { stroke-dashoffset: 30; opacity: 0.25; }
+}
+.icon-shield-check-draw {
+  stroke-dasharray: 30;
+  animation: icon-shield-check-draw 5.5s ease-in-out infinite;
+}
+
+/* 4. FAQ — Billing & credit: credit card "swipe" — a specular highlight
+      travels left→right across the card every 3.2s.                               */
+@keyframes icon-card-swipe {
+  0%, 22%   { filter: brightness(1);       transform: translateX(0);     }
+  40%       { filter: brightness(1.25);    transform: translateX(1px);   }
+  52%       { filter: brightness(1.45);    transform: translateX(-1px);  }
+  66%       { filter: brightness(1.15);    transform: translateX(0);     }
+  100%      { filter: brightness(1);       transform: translateX(0);     }
+}
+.icon-card-swipe {
+  animation: icon-card-swipe 3.2s ease-in-out infinite;
+}
+
+/* 5. FAQ — Phone numbers & connectivity: ring/vibrate — small lateral jitter
+      on a quick 1.6s loop, feels like an incoming call.                          */
+@keyframes icon-phone-ring {
+  0%, 100%  { transform: rotate(0deg)      translate(0, 0); }
+  12%       { transform: rotate(-6deg)     translate(-0.5px, 0); }
+  24%       { transform: rotate(6deg)      translate(0.5px, 0); }
+  36%       { transform: rotate(-4deg)     translate(-0.3px, 0); }
+  48%       { transform: rotate(4deg)      translate(0.3px, 0); }
+  60%       { transform: rotate(0deg)      translate(0, 0); }
+}
+.icon-phone-ring {
+  transform-origin: 50% 85%;
+  animation: icon-phone-ring 1.6s ease-in-out infinite;
+}
+
+/* 6. FAQ — Agents & capabilities: headset mic pulse — small scale swell
+      timed to feel like someone is speaking into the boom mic every 2 seconds.   */
+@keyframes icon-headset-pulse {
+  0%, 100%  { transform: scale(1);       filter: brightness(1);     }
+  30%       { transform: scale(1.12);    filter: brightness(1.35);  }
+  52%       { transform: scale(0.97);    filter: brightness(1.05);  }
+  72%       { transform: scale(1.08);    filter: brightness(1.25);  }
+}
+.icon-headset-pulse {
+  transform-origin: 50% 75%;
+  animation: icon-headset-pulse 2s ease-in-out infinite;
+}
+
+/* 7. FAQ — Compliance & data: shield scan — a vertical scan-line style opacity
+      sweep passes across the shield every 4.4s, like an audit pass.               */
+@keyframes icon-shield-scan {
+  0%, 16%   { opacity: 0.55; filter: drop-shadow(0 0 0 transparent); }
+  38%       { opacity: 1;    filter: drop-shadow(0 0 2px currentColor); }
+  66%       { opacity: 1;    filter: drop-shadow(0 0 4px currentColor); }
+  88%, 100% { opacity: 0.55; filter: drop-shadow(0 0 0 transparent); }
+}
+.icon-shield-scan {
+  animation: icon-shield-scan 4.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* 8. FAQ — Account & support: users sync — two figures gently alternate scale
+      to feel like an active handoff between agents.                              */
+@keyframes icon-users-sync {
+  0%, 100%  { transform: scale(1)           translateY(0); }
+  28%       { transform: scale(1.06)        translateY(-0.5px); }
+  52%       { transform: scale(0.96)        translateY(0.5px); }
+  76%       { transform: scale(1.04)        translateY(-0.2px); }
+}
+.icon-users-sync {
+  transform-origin: 50% 50%;
+  animation: icon-users-sync 3.4s ease-in-out infinite;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

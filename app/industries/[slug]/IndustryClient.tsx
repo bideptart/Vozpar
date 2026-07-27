@@ -52,13 +52,13 @@ function Stat({ label, value, sub }: { label: string; value: string; sub: string
     <motion.div
       whileHover={{ y: -4, boxShadow: "0 10px 20px -10px rgba(0,0,0,0.3)" }}
       transition={{ type: "spring", stiffness: 280, damping: 20 }}
-      className="rounded-xl border border-border/60 bg-card/40 p-5"
+      className="rounded-xl border border-border/60 bg-card/40 p-4 sm:p-5"
     >
       <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
         <Sparkles className="size-4 text-primary" aria-hidden />
         {label}
       </div>
-      <p className="mt-3 text-2xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-3 text-xl font-semibold tracking-tight sm:text-2xl">{value}</p>
       <p className="mt-1 text-sm text-muted-foreground">{sub}</p>
     </motion.div>
   )
@@ -77,9 +77,9 @@ export function IndustryClient({ industry, related }: { industry: IndustryData; 
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(60%_60%_at_50%_0%,rgba(220,38,38,0.10),transparent_70%)]"
         />
-        <div className="mx-auto w-full max-w-5xl px-4 py-16 md:px-6 md:py-24">
+        <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:py-14 md:px-6 md:py-20 lg:py-24">
           <ScrollReveal>
-            <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted-foreground">
+            <nav aria-label="Breadcrumb" className="mb-5 text-xs text-muted-foreground sm:mb-6">
               <ol className="flex flex-wrap items-center gap-2">
                 <li>
                   <Link href="/" className="hover:text-foreground">
@@ -101,14 +101,14 @@ export function IndustryClient({ industry, related }: { industry: IndustryData; 
               <Icon className="size-3.5 text-primary" aria-hidden />
               {industry.name}
             </span>
-            <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
+            <h1 className="mt-5 text-balance text-[2.1rem] font-semibold tracking-tight leading-[1.1] sm:text-4xl md:text-5xl lg:text-6xl">
               AI voice agents for {industry.name.toLowerCase()}.
             </h1>
-            <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p className="mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-muted-foreground sm:mt-5 md:text-lg">
               {industry.pitch}
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link href={`/get-started?industry=${industry.slug}`}>
@@ -127,10 +127,10 @@ export function IndustryClient({ industry, related }: { industry: IndustryData; 
       </section>
 
       {/* What it does */}
-      <section className="mx-auto w-full max-w-5xl px-4 py-16 md:px-6 md:py-20">
-        <div className="grid gap-12 md:grid-cols-2">
+      <section className="mx-auto w-full max-w-5xl px-4 py-12 sm:py-14 md:px-6 md:py-20">
+        <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           <ScrollReveal>
-            <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-4xl">
+            <h2 className="text-balance text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl">
               What the agent does on day one
             </h2>
             <p className="mt-3 text-pretty text-muted-foreground">
@@ -166,7 +166,7 @@ export function IndustryClient({ industry, related }: { industry: IndustryData; 
                 <StaggerItem key={i}>
                   <motion.div
                     whileHover={{ y: -2, boxShadow: "0 5px 15px -5px rgba(0,0,0,0.2)" }}
-                    className="rounded-xl border border-border/60 bg-card/30 p-4"
+                    className="rounded-xl border border-border/60 bg-card/30 p-3.5 sm:p-4"
                   >
                     <div className="flex items-start gap-3">
                       <MessageSquareQuote className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
@@ -182,8 +182,8 @@ export function IndustryClient({ industry, related }: { industry: IndustryData; 
 
       {/* Why teams switch */}
       <section className="border-y border-border/50 bg-card/20">
-        <div className="mx-auto w-full max-w-5xl px-4 py-16 md:px-6 md:py-20">
-          <StaggerGroup className="grid gap-8 md:grid-cols-3" stagger={0.12}>
+        <div className="mx-auto w-full max-w-5xl px-4 py-12 sm:py-14 md:px-6 md:py-20">
+          <StaggerGroup className="grid gap-4 sm:gap-5 md:grid-cols-3 md:gap-8" stagger={0.12}">
             <StaggerItem>
               <Stat
                 label="First-touch response"
@@ -240,7 +240,7 @@ export function IndustryClient({ industry, related }: { industry: IndustryData; 
             </p>
           </div>
 
-          <div className="mt-10 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap gap-3 sm:mt-10">
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                 <Link href={`/get-started?industry=${industry.slug}`}>
