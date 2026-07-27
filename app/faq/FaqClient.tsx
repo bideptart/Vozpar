@@ -14,7 +14,6 @@ import { RelatedLinks } from "@/components/seo/related-links"
 import {
   FloatingAccents,
   ParticleField,
-  AmbientWaveform,
   FloatingIconBadges,
 } from "@/components/industries/industries-fx"
 
@@ -77,7 +76,6 @@ export default function FaqClient() {
       <section className="relative overflow-hidden border-b border-border/50 bg-black">
         <FloatingAccents />
         <ParticleField />
-        <AmbientWaveform />
         <FloatingIconBadges />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-28 md:px-6 md:py-44">
           <ScrollReveal className="text-center">

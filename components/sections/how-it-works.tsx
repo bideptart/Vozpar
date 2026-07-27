@@ -164,8 +164,10 @@ export function HowItWorks() {
             </div>
           </div>
 
-          {/* Cards Grid */}
-          <StaggerGroup className="grid grid-cols-4 gap-5">
+          {/* Cards Grid — was an unqualified grid-cols-4, which forced four
+              ~70px columns on a phone and crushed/overflowed the card
+              content. Steps up 1 → 2 → 4 instead. */}
+          <StaggerGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {STEPS.map((s, i) => {
               const Icon = s.icon
               const isSelected = i === activeStep

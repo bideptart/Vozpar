@@ -76,25 +76,25 @@ const TESTIMONIALS = [
 type Testimonial = (typeof TESTIMONIALS)[number]
 
 /**
- * `fluid` switches the card between its two hosts:
- *   • false (desktop marquee) — fixed 340×230 box. A horizontal marquee
- *     REQUIRES fixed-width children; percentage widths inside a translating
- *     flex row collapse to zero. This is the exact desktop card, unchanged.
- *   • true (mobile/tablet grid) — w-full, height driven by content. No fixed
- *     px width, nothing to overflow, text wraps and the card grows instead
- *     of clipping.
+ * Fixed width/height at every breakpoint — a horizontal marquee REQUIRES
+ * fixed-width children (percentage widths inside a translating flex row
+ * collapse to zero), and the marquee now runs on mobile too. The card is
+ * narrower on phones so more than one is visible at a time; the parent
+ * clips with overflow-hidden + contain:paint so this never causes page
+ * overflow.
  */
-function TestimonialCard({ t, fluid = false }: { t: Testimonial; fluid?: boolean }) {
+function TestimonialCard({ t }: { t: Testimonial }) {
   return (
     <figure
-      className={`
-        group relative flex flex-col overflow-hidden rounded-2xl
-        border border-white/[0.08] bg-[#000000] p-5
+      className="
+        group relative flex h-[220px] w-[260px] shrink-0 flex-col overflow-hidden rounded-2xl
+        border border-white/[0.08] bg-[#000000] p-4
         transition-[border-color,box-shadow] duration-300 ease-out
         hover:border-[var(--tint-border)]
         hover:shadow-[0_14px_36px_-16px_var(--tint-glow)]
-        ${fluid ? "h-full w-full min-w-0" : "h-[230px] w-[340px] shrink-0"}
-      `}
+        sm:h-[230px] sm:w-[300px] sm:p-5
+        lg:w-[340px]
+      "
       style={{ "--tint-border": `${t.tint}50`, "--tint-glow": `${t.tint}55` } as React.CSSProperties}
     >
       <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
@@ -102,16 +102,13 @@ function TestimonialCard({ t, fluid = false }: { t: Testimonial; fluid?: boolean
 
       <StarRating rating={t.rating} tint={t.tint} />
 
-      {/* Clamped only in the fixed-height marquee card, where an over-long
-          quote would otherwise be cut mid-line. In the fluid grid the card
-          grows to fit, so the full quote is always readable. */}
-      <blockquote
-        className={`mt-3 flex-1 break-words text-sm leading-relaxed text-white/65 ${fluid ? "" : "line-clamp-4"}`}
-      >
+      {/* Clamped so an over-long quote can't be cut mid-line inside the
+          fixed-height card. */}
+      <blockquote className="mt-3 line-clamp-4 flex-1 break-words text-[13px] leading-relaxed text-white/65 sm:text-sm">
         &ldquo;{t.quote}&rdquo;
       </blockquote>
 
-      <figcaption className="mt-4 flex shrink-0 items-center gap-3 border-t border-white/[0.06] pt-3.5">
+      <figcaption className="mt-3 flex shrink-0 items-center gap-3 border-t border-white/[0.06] pt-3 sm:mt-4 sm:pt-3.5">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
           style={{ background: `${t.tint}18`, color: t.tint, outline: `1px solid ${t.tint}30` }}>
           {t.initial}
@@ -164,7 +161,12 @@ export function Testimonials() {
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[320px]"
         style={{ background: "radial-gradient(50% 40% at 50% 0%, rgba(4,107,210,0.07), transparent 70%)" }} />
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:py-14">
+      {/* --tm-speed: the loop covers one full copy of the list per cycle, so
+          a narrower card set on phones needs a shorter duration to feel like
+          the same physical speed. Desktop is faster than the previous 34s. */}
+      <div
+        className="relative mx-auto w-full max-w-6xl px-4 py-12 [--tm-speed:17s] sm:px-6 lg:py-14 lg:[--tm-speed:13s]"
+      >
         {/* min-w-0 on the grid and on both columns: a grid/flex item defaults
             to min-width:auto, which lets its content push the track wider
             than its allotted share — the standard cause of "my grid overflows
@@ -252,32 +254,23 @@ export function Testimonials() {
             </div>
           </ScrollReveal>
 
-          {/* RIGHT — two distinct implementations rather than one that tries
-              to be both. A horizontal marquee needs fixed-width children, so
-              it can never satisfy "w-full cards, one per row, no overflow" on
-              mobile; forcing it to was the root of the overflow. Below lg it
-              is replaced outright by a plain responsive grid. */}
+          {/* RIGHT — one looping marquee at every size now. It bleeds past
+              the page gutter with -mx below lg so cards can scroll in from
+              the true screen edge instead of being boxed inside the padding.
+              contain:paint (on top of overflow-hidden) makes this a hard
+              clipping boundary, so the doubled ~3000px animated row can
+              never register against any ancestor's scrollable width — that
+              containment is what keeps this from causing page-level
+              horizontal overflow on phones. */}
           <div className="min-w-0 lg:col-span-7">
-
-            {/* MOBILE + TABLET (<1024px) — static grid, no animation, no
-                fixed widths. 1 column on phones, 2 from sm (=640px) where
-                two cards genuinely fit. Cards are w-full and equal-height
-                per row via items-stretch. */}
-            <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:hidden">
-              {TESTIMONIALS.slice(0, 4).map(t => (
-                <TestimonialCard key={t.author} t={t} fluid />
-              ))}
-            </div>
-
-            {/* DESKTOP (≥1024px) — unchanged looping marquee.
-                contain:paint (on top of overflow-hidden) makes this a hard
-                clipping boundary so the doubled ~3000px animated row can
-                never register against any ancestor's scrollable width. */}
             <div
-              className="relative hidden overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)] lg:block"
+              className="relative -mx-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)] sm:-mx-6 lg:mx-0"
               style={{ contain: "paint" }}
             >
-              <div className="marquee flex gap-3" style={{ animationDuration: "34s" }}>
+              <div
+                className="marquee flex gap-3 px-4 sm:px-6 lg:px-0"
+                style={{ animationDuration: "var(--tm-speed)" }}
+              >
                 {rendered.map((t, i) => (
                   <TestimonialCard key={`${t.author}-${i}`} t={t} />
                 ))}

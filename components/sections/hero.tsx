@@ -221,6 +221,13 @@ function Scene3D({ reduced }: { reduced: boolean }) {
     timerRef.current = setInterval(() => setActive(a => (a + 1) % n), INTERVAL)
   }
 
+  // Mobile only shows the front card (no 3D side-peek to tap), so it had no
+  // way to change cards at all — a swipe gesture is the natural fix. Restarts
+  // the auto-rotate timer afterward, same as a click already does.
+  const goNext = () => { setActive(a => (a + 1) % n); start() }
+  const goPrev = () => { setActive(a => (a - 1 + n) % n); start() }
+  const SWIPE_THRESHOLD = 40
+
   useEffect(() => {
     if (reduced) return
     start()
@@ -268,12 +275,24 @@ function Scene3D({ reduced }: { reduced: boolean }) {
   }
 
   return (
-    <div
-      className="relative flex w-full items-center justify-center"
+    <motion.div
+      className="relative flex w-full touch-pan-y items-center justify-center"
       style={{
         height: isMobile ? 420 : 460,
         perspective: "1100px",
         perspectiveOrigin: "50% 45%",
+      }}
+      // Swipe-to-change on mobile — the 3D depth stack collapses to just the
+      // front card there, so tapping a side card (the desktop interaction)
+      // isn't available. drag="x" only, with dragConstraints locked to 0 so
+      // the whole stack springs back to center after each swipe rather than
+      // actually panning away.
+      drag={isMobile && !reduced ? "x" : false}
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.55}
+      onDragEnd={(_, info) => {
+        if (info.offset.x <= -SWIPE_THRESHOLD) goNext()
+        else if (info.offset.x >= SWIPE_THRESHOLD) goPrev()
       }}
     >
       {/* Ambient glow that changes with active card */}
@@ -402,7 +421,7 @@ function Scene3D({ reduced }: { reduced: boolean }) {
           </button>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -418,7 +437,10 @@ export function Hero() {
   }, [reduced])
 
   return (
-    <section className="relative min-h-[calc(100svh-4.5rem)] overflow-hidden bg-black">
+    // min-h only from lg: on a phone forcing a full viewport height just
+    // padded the section out with empty space, since the content is much
+    // shorter than the screen there.
+    <section className="relative overflow-hidden bg-black lg:min-h-[calc(100svh-4.5rem)]">
 
       {/* Immersive industrial background — mesh gradients, hex/blueprint grid,
           digital-factory + robotics + cloud silhouettes, neural links,
@@ -426,7 +448,10 @@ export function Hero() {
       <HeroIndustrialBg />
 
       {/* Main 2-col grid */}
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-20 sm:px-6 sm:py-24 md:grid-cols-2 lg:min-h-[calc(100svh-4.5rem)] lg:gap-12 lg:py-0 xl:gap-20">
+      {/* py-20 on phones left ~80px of dead space between the floating
+          header and the badge (visible as a large empty gap). Tightened to
+          py-8 there; sm and up are unchanged. */}
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-4 py-8 sm:gap-10 sm:px-6 sm:py-24 md:grid-cols-2 lg:min-h-[calc(100svh-4.5rem)] lg:gap-12 lg:py-0 xl:gap-20">
 
         {/* ─── LEFT: copy ─────────────────────────────────────────────── */}
         <div className="flex flex-col">
