@@ -1,26 +1,47 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    @media (prefers-color-scheme: light) {
-      .background { fill: black; }
-      .foreground { fill: white; }
-    }
-    @media (prefers-color-scheme: dark) {
-      .background { fill: white; }
-      .foreground { fill: black; }
-    }
-  </style>
-  <g clip-path="url(#clip0_7960_43945)">
-    <rect class="background" width="180" height="180" rx="37" />
-    <g style="transform: scale(95%); transform-origin: center">
-      <path class="foreground"
-        d="M101.141 53H136.632C151.023 53 162.689 64.6662 162.689 79.0573V112.904H148.112V79.0573C148.112 78.7105 148.098 78.3662 148.072 78.0251L112.581 112.898C112.701 112.902 112.821 112.904 112.941 112.904H148.112V126.672H112.941C98.5504 126.672 86.5638 114.891 86.5638 100.5V66.7434H101.141V100.5C101.141 101.15 101.191 101.792 101.289 102.422L137.56 66.7816C137.255 66.7563 136.945 66.7434 136.632 66.7434H101.141V53Z" />
-      <path class="foreground"
-        d="M65.2926 124.136L14 66.7372H34.6355L64.7495 100.436V66.7372H80.1365V118.47C80.1365 126.278 70.4953 129.958 65.2926 124.136Z" />
-    </g>
-  </g>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <clipPath id="clip0_7960_43945">
-      <rect width="180" height="180" fill="white" />
-    </clipPath>
+    <linearGradient id="vzTile" x1="0" y1="0" x2="0" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2a2a2e" />
+      <stop offset="100%" stop-color="#151517" />
+    </linearGradient>
+    <linearGradient id="vzGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+    <linearGradient id="vzRed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f87171" />
+      <stop offset="100%" stop-color="#c81e1e" />
+    </linearGradient>
+    <linearGradient id="vzAmber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fcd34d" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="vzLeftArm" x1="248" y1="126" x2="310" y2="386" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="28%" stop-color="#ef4444" />
+      <stop offset="58%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#fbbf24" />
+    </linearGradient>
+    <linearGradient id="vzRightArm" x1="310" y1="386" x2="418" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
   </defs>
+
+  <!-- Dark rounded tile, matching the app icon artwork. -->
+  <rect width="512" height="512" rx="114" fill="url(#vzTile)" />
+
+  <!-- Ascending bars. Widened to 52px with 16px gaps: at a 16px favicon each
+       bar lands on roughly a whole pixel, so they stay three distinct marks
+       instead of blurring into one block. Brighter top stops for the same
+       reason — thin dark shapes vanish first when downscaled. -->
+  <rect x="56" y="292" width="52" height="100" rx="10" fill="url(#vzGreen)" />
+  <rect x="124" y="240" width="52" height="152" rx="10" fill="url(#vzRed)" />
+  <rect x="192" y="176" width="52" height="216" rx="10" fill="url(#vzAmber)" />
+
+  <!-- V-arrow, shifted right so it clears the bars instead of overlapping
+       them (the overlap was hiding the bars at small sizes). -->
+  <path d="M262 132 L312 382" stroke="url(#vzLeftArm)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M312 382 L404 176" stroke="url(#vzRightArm)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round" />
+  <polygon points="466,96 372,124 434,184" fill="#38bdf8" />
 </svg>

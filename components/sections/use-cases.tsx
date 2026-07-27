@@ -230,9 +230,12 @@ export function UseCases() {
           </p>
         </ScrollReveal>
 
-        {/* Tab Navigation Pill Bar */}
+        {/* Tab Navigation — below lg, real cards: a tinted icon badge sits
+            on its own line above the label instead of inline beside it, so
+            each tab reads as a distinct little module rather than a plain
+            text pill. lg+ keeps the original compact centered pill row. */}
         <div
-          className="mb-5 flex flex-wrap justify-center gap-1.5 lg:mb-6"
+          className="mb-5 grid grid-cols-3 gap-2 lg:mb-6 lg:flex lg:flex-wrap lg:justify-center lg:gap-1.5"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -245,14 +248,16 @@ export function UseCases() {
                 onClick={() => setActive(c.id)}
                 onMouseEnter={() => setActive(c.id)}
                 aria-pressed={isActive}
-                className={`relative flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-medium transition-all duration-300 focus:outline-none ${
-                  isActive ? "text-white shadow-lg" : "text-white/40 hover:text-white/70"
+                className={`relative flex min-w-0 flex-col items-center justify-center gap-2 rounded-2xl border px-2.5 py-4 text-center transition-all duration-300 focus:outline-none lg:flex-row lg:gap-1.5 lg:rounded-full lg:border-0 lg:px-3.5 lg:py-2 lg:text-left ${
+                  isActive
+                    ? "border-white/[0.12] bg-white/[0.03] text-white shadow-lg"
+                    : "border-white/[0.06] bg-white/[0.015] text-white/40 hover:border-white/[0.1] hover:text-white/70 lg:border-0 lg:bg-transparent"
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeTabPill"
-                    className="absolute inset-0 rounded-full border"
+                    className="absolute inset-0 rounded-2xl border lg:rounded-full"
                     style={{
                       borderColor: `${c.tint}60`,
                       background: `linear-gradient(135deg, ${c.tint}25 0%, ${c.tint}10 100%)`,
@@ -262,7 +267,11 @@ export function UseCases() {
                   />
                 )}
                 <motion.span
-                  className="relative z-10 inline-flex shrink-0"
+                  className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border lg:h-auto lg:w-auto lg:rounded-none lg:border-0 lg:bg-transparent"
+                  style={{
+                    borderColor: isActive ? `${c.tint}55` : "rgba(255,255,255,0.08)",
+                    background: isActive ? `${c.tint}18` : "rgba(255,255,255,0.03)",
+                  }}
                   animate={isActive && !reduced ? TAB_ICON_MOTION[c.id] : undefined}
                   transition={{ duration: 1.4, repeat: isActive && !reduced ? Infinity : 0, repeatDelay: 0.6, ease: "easeInOut" }}
                 >
@@ -271,7 +280,9 @@ export function UseCases() {
                     style={{ color: isActive ? c.tint : "currentColor" }}
                   />
                 </motion.span>
-                <span className="relative z-10">{c.label}</span>
+                <span className="relative z-10 line-clamp-2 min-w-0 min-h-[2.2em] text-[10.5px] font-medium leading-tight sm:text-[11px] lg:min-h-0 lg:truncate lg:text-xs">
+                  {c.label}
+                </span>
               </button>
             )
           })}

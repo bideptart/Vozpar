@@ -76,13 +76,19 @@ export const metadata: Metadata = {
     description: SITE.description,
   },
   robots: { index: true, follow: true },
+  // Only files that actually exist in public/ are listed here. Referencing a
+  // size that hasn't been generated yet makes the browser fall back to a
+  // blank/default tab icon, so this list and the contents of public/ must
+  // stay in sync. scripts/generate-icons.mjs can produce the full set from a
+  // single master image if more sizes are wanted later.
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: "/apple-icon.png",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/icon-192x192.png",
   },
 }
 

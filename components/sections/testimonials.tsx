@@ -165,7 +165,7 @@ export function Testimonials() {
           a narrower card set on phones needs a shorter duration to feel like
           the same physical speed. Desktop is faster than the previous 34s. */}
       <div
-        className="relative mx-auto w-full max-w-6xl px-4 py-12 [--tm-speed:17s] sm:px-6 lg:py-14 lg:[--tm-speed:13s]"
+        className="relative mx-auto w-full max-w-6xl px-4 py-12 [--tm-speed:10s] sm:px-6 lg:py-14 lg:[--tm-speed:7s]"
       >
         {/* min-w-0 on the grid and on both columns: a grid/flex item defaults
             to min-width:auto, which lets its content push the track wider

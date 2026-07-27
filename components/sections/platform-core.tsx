@@ -135,9 +135,12 @@ export function PlatformCore() {
           </p>
         </ScrollReveal>
 
-        {/* Tab Switcher Pills */}
+        {/* Tab Switcher — below lg, full-width cards with a circular tinted
+            icon badge and generous padding so nothing crowds the border
+            (same treatment as the Use Cases tab bar). lg+ keeps the
+            original compact centered pill row. */}
         <div
-          className="mb-5 flex flex-wrap justify-center gap-2"
+          className="mb-5 flex flex-col gap-2 sm:grid sm:grid-cols-3 lg:flex lg:flex-row lg:flex-wrap lg:justify-center lg:gap-2"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -150,14 +153,16 @@ export function PlatformCore() {
                 onClick={() => setActiveTab(tab.id)}
                 onMouseEnter={() => setActiveTab(tab.id)}
                 aria-pressed={isSelected}
-                className={`relative flex items-center gap-2 rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium transition-all duration-300 focus:outline-none ${
-                  isSelected ? "text-white shadow-lg" : "text-white/40 hover:text-white/70"
+                className={`relative flex min-w-0 items-center gap-3 rounded-2xl border px-3.5 py-3 text-left text-xs font-medium transition-all duration-300 focus:outline-none sm:text-[11px] lg:w-auto lg:rounded-full lg:border-0 lg:px-4 lg:py-2.5 lg:text-sm ${
+                  isSelected
+                    ? "border-white/[0.12] bg-white/[0.03] text-white shadow-lg"
+                    : "border-white/[0.06] bg-white/[0.015] text-white/40 hover:border-white/[0.1] hover:text-white/70 lg:border-0 lg:bg-transparent"
                 }`}
               >
                 {isSelected && (
                   <motion.div
                     layoutId="platformCoreTab"
-                    className="absolute inset-0 rounded-full border"
+                    className="absolute inset-0 rounded-2xl border lg:rounded-full"
                     style={{
                       borderColor: `${tab.tint}60`,
                       background: `linear-gradient(135deg, ${tab.tint}22 0%, ${tab.tint}08 100%)`,
@@ -166,8 +171,16 @@ export function PlatformCore() {
                     transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
-                <Icon className="relative z-10 h-4 w-4" style={{ color: isSelected ? tab.tint : "currentColor" }} />
-                <span className="relative z-10">{tab.tag}</span>
+                <span
+                  className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border lg:h-auto lg:w-auto lg:rounded-none lg:border-0 lg:bg-transparent"
+                  style={{
+                    borderColor: isSelected ? `${tab.tint}55` : "rgba(255,255,255,0.08)",
+                    background: isSelected ? `${tab.tint}18` : "rgba(255,255,255,0.03)",
+                  }}
+                >
+                  <Icon className="h-4 w-4" style={{ color: isSelected ? tab.tint : "currentColor" }} />
+                </span>
+                <span className="relative z-10 min-w-0 truncate leading-tight">{tab.tag}</span>
               </button>
             )
           })}
