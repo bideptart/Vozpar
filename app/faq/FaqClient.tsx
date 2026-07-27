@@ -3,9 +3,11 @@
 import Link from "next/link"
 import { useState, useMemo, useRef } from "react"
 import { Search, ArrowRight, CreditCard, Phone, Headset, Shield, Users, Zap } from "lucide-react"
+import { motion, useReducedMotion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
+import { Magnetic, SpotlightPanel } from "@/components/animation/magnetic"
 import { FAQ_GROUPS } from "@/lib/faq"
 import { RelatedLinks } from "@/components/seo/related-links"
 import {
@@ -182,59 +184,90 @@ export default function FaqClient() {
       {/* Still have a question section */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
         <ScrollReveal>
-          <div className="relative overflow-hidden rounded-3xl border border-white/[0.07] bg-[#0b0b0e] p-8 md:p-12 shadow-xl">
-            {/* Background glow */}
-            <div className="absolute -inset-4 bg-primary/10 blur-2xl opacity-40" />
-            <div className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-primary/15 blur-3xl" />
-            <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-primary/15 blur-3xl" />
-            
-            <div className="relative z-10">
-              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                <div className="max-w-2xl">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-4 py-2 text-xs font-semibold mb-4">
-                    <Zap className="h-3 w-3 fill-current" />
-                    LIVE DEMO • NO SIGNUP
+          <div className="relative overflow-hidden rounded-3xl p-px">
+            <span
+              aria-hidden
+              className="spin-slow pointer-events-none absolute left-1/2 top-1/2 h-[300%] w-[160%] -translate-x-1/2 -translate-y-1/2"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, transparent 0deg, #3b82f6 40deg, transparent 100deg, transparent 200deg, #1d4ed8 250deg, transparent 310deg)",
+                opacity: 0.85,
+              }}
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-3xl border"
+              style={{ borderColor: "color-mix(in srgb, #3b82f6 35%, transparent)" }}
+            />
+
+            <SpotlightPanel
+              glow="#3b82f6"
+              size={520}
+              className="relative overflow-hidden rounded-[calc(1.5rem-1px)] bg-[#0b0b0e] px-6 py-8 sm:px-8 sm:py-10 md:px-12 md:py-12"
+            >
+              <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+                <span
+                  className="sheen-sweep absolute inset-y-0 w-1/3"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, color-mix(in srgb, #3b82f6 12%, transparent), transparent)",
+                  }}
+                />
+              </span>
+
+              <div className="relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
+                <div className="max-w-xl">
+                  <span className="ai-pill-blue">
+                    <span className="h-1 w-1 rounded-full bg-current" />
+                    Live support
                   </span>
-                  <h3 className="text-balance text-3xl font-serif font-semibold tracking-tight md:text-4xl">
-                    Still have <span className="text-primary">a question?</span>
+
+                  <h3 className="mt-4 text-balance font-heading text-2xl font-medium leading-[1.15] tracking-[-0.03em] text-foreground sm:text-3xl md:text-4xl">
+                    Still have a question?
                   </h3>
-                  <p className="mt-4 text-muted-foreground md:text-lg">
-                    Talk to a live Vozpar agent — yes, that's actually how we do support — or book 20 minutes with a
-                    solutions engineer.
+
+                  <p className="mt-3 text-[15px] font-light leading-relaxed text-muted-foreground">
+                    Talk to a live Vozpar agent — yes, that&apos;s actually how we do support — or book 20 minutes with a solutions engineer.
                   </p>
-                  
-                  <div className="mt-6 flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+
+                  <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+                    <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#3b82f6]" />
                       Sub-second latency
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#10b981]" />
                       Bring your own carrier
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      Self-hosted control panel
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      No contracts
-                    </div>
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#ff7a00]" />
+                      No contracts required
+                    </span>
                   </div>
                 </div>
-                
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 transition-all duration-300 duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30">
-                    <Link href="/get-started">
-                      Get started <ArrowRight className="ml-2 h-4 w-4" />
+
+                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+                  <Magnetic strength={0.28} className="w-full sm:w-auto">
+                    <Link
+                      href="/get-started"
+                      className="btn-ai inline-flex h-11 w-full items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-[filter,box-shadow] duration-300 sm:w-auto"
+                    >
+                      Get started
+                      <ArrowRight className="h-4 w-4" aria-hidden />
                     </Link>
-                  </Button>
-                  <Button asChild size="lg" variant="outline" className="rounded-full px-8 border-2 transition-all duration-300 duration-300 hover:scale-105 hover:border-primary/50">
-                    <Link href="/pricing">View pricing</Link>
-                  </Button>
+                  </Magnetic>
+
+                  <Magnetic strength={0.22} className="w-full sm:w-auto">
+                    <Link
+                      href="/pricing"
+                      className="inline-flex h-11 w-full items-center justify-center rounded-full bg-black/80 px-6 text-sm font-medium text-foreground border border-white/10 transition-colors duration-300 hover:border-white/30 hover:bg-black sm:w-auto"
+                    >
+                      View pricing
+                    </Link>
+                  </Magnetic>
                 </div>
               </div>
-            </div>
+            </SpotlightPanel>
           </div>
         </ScrollReveal>
       </section>
