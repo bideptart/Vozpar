@@ -175,65 +175,66 @@ export default function FaqClient() {
               <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">{group.title}</h2>
             </ScrollReveal>
 
-            <ScrollReveal className="mt-6">
-              <Accordion type="single" collapsible className="w-full space-y-3">
-                {group.items.map((item, i) => {
-                  const colorThemes = [
-                    {
-                      hoverBorder: "hover:border-sky-400/90 hover:bg-sky-950/20 hover:shadow-[0_0_25px_rgba(56,189,248,0.25)] data-[state=open]:border-sky-400 data-[state=open]:bg-sky-950/30",
-                      accent: "from-sky-400 to-blue-600",
-                      textHover: "group-hover/item:text-sky-300 data-[state=open]:text-sky-400",
-                      svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/item:text-sky-400 [&>svg]:data-[state=open]:text-sky-400",
-                    },
-                    {
-                      hoverBorder: "hover:border-emerald-400/90 hover:bg-emerald-950/20 hover:shadow-[0_0_20px_rgba(52,211,153,0.25)] data-[state=open]:border-emerald-400 data-[state=open]:bg-emerald-950/30",
-                      accent: "from-emerald-400 to-teal-600",
-                      textHover: "group-hover/item:text-emerald-300 data-[state=open]:text-emerald-400",
-                      svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/item:text-emerald-400 [&>svg]:data-[state=open]:text-emerald-400",
-                    },
-                    {
-                      hoverBorder: "hover:border-red-500/90 hover:bg-red-950/20 hover:shadow-[0_0_20px_rgba(239,68,68,0.25)] data-[state=open]:border-red-500 data-[state=open]:bg-red-950/30",
-                      accent: "from-red-400 to-rose-600",
-                      textHover: "group-hover/item:text-red-300 data-[state=open]:text-red-400",
-                      svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/item:text-red-400 [&>svg]:data-[state=open]:text-red-400",
-                    },
-                    {
-                      hoverBorder: "hover:border-amber-400/90 hover:bg-amber-950/20 hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] data-[state=open]:border-amber-400 data-[state=open]:bg-amber-950/30",
-                      accent: "from-amber-400 to-yellow-500",
-                      textHover: "group-hover/item:text-amber-300 data-[state=open]:text-amber-400",
-                      svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/item:text-amber-400 [&>svg]:data-[state=open]:text-amber-400",
-                    },
-                  ]
-                  const theme = colorThemes[i % colorThemes.length]
-                  return (
-                    <AccordionItem
-                      key={i}
-                      value={`${group.id}-${i}`}
-                      className={`group/item relative overflow-hidden rounded-2xl bg-[#0b0b0e] border border-white/15 px-6 py-1 transition-all duration-300 ease-out ${theme.hoverBorder}`}
-                    >
-                      {/* Glowing left side accent bar */}
-                      <div
-                        className={`absolute left-0 inset-y-0 w-1 bg-gradient-to-b ${theme.accent} scale-y-0 transition-transform duration-300 origin-center group-hover/item:scale-y-100 group-data-[state=open]/item:scale-y-100`}
-                        aria-hidden="true"
-                      />
-                      <AccordionTrigger className={`text-left font-sans text-base font-semibold text-slate-100 hover:no-underline transition-colors py-5 ${theme.textHover} ${theme.svgHover}`}>
-                        <div className="flex items-center gap-3 pr-4">
-                          <span>{item.q}</span>
-                          {item.popular && (
-                            <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium border border-primary/20">
-                              <Zap className="h-3 w-3 fill-current" />
-                              Popular
-                            </span>
-                          )}
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="text-pretty leading-relaxed text-slate-400 pt-0 pb-5 text-[15px]">
-                        {item.a}
-                      </AccordionContent>
-                    </AccordionItem>
-                  )
-                })}
-              </Accordion>
+            <ScrollReveal className="mt-6 space-y-3">
+              {group.items.map((item, i) => {
+                const colorThemes = [
+                  {
+                    hoverBorder: "hover:border-sky-400/90 hover:bg-sky-950/20 hover:shadow-[0_0_20px_rgba(56,189,248,0.25)] data-[state=open]:border-sky-400 data-[state=open]:bg-sky-950/30",
+                    accent: "from-sky-400 to-blue-600",
+                    textHover: "group-hover/faq:text-sky-300 data-[state=open]:text-sky-400",
+                    svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/faq:text-sky-400 [&>svg]:data-[state=open]:text-sky-400",
+                  },
+                  {
+                    hoverBorder: "hover:border-emerald-400/90 hover:bg-emerald-950/20 hover:shadow-[0_0_20px_rgba(52,211,153,0.25)] data-[state=open]:border-emerald-400 data-[state=open]:bg-emerald-950/30",
+                    accent: "from-emerald-400 to-teal-600",
+                    textHover: "group-hover/faq:text-emerald-300 data-[state=open]:text-emerald-400",
+                    svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/faq:text-emerald-400 [&>svg]:data-[state=open]:text-emerald-400",
+                  },
+                  {
+                    hoverBorder: "hover:border-red-500/90 hover:bg-red-950/20 hover:shadow-[0_0_20px_rgba(239,68,68,0.25)] data-[state=open]:border-red-500 data-[state=open]:bg-red-950/30",
+                    accent: "from-red-400 to-rose-600",
+                    textHover: "group-hover/faq:text-red-300 data-[state=open]:text-red-400",
+                    svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/faq:text-red-400 [&>svg]:data-[state=open]:text-red-400",
+                  },
+                  {
+                    hoverBorder: "hover:border-amber-400/90 hover:bg-amber-950/20 hover:shadow-[0_0_20px_rgba(245,158,11,0.25)] data-[state=open]:border-amber-400 data-[state=open]:bg-amber-950/30",
+                    accent: "from-amber-400 to-yellow-500",
+                    textHover: "group-hover/faq:text-amber-300 data-[state=open]:text-amber-400",
+                    svgHover: "[&>svg]:text-slate-500 [&>svg]:group-hover/faq:text-amber-400 [&>svg]:data-[state=open]:text-amber-400",
+                  },
+                ]
+                const theme = colorThemes[i % colorThemes.length]
+                return (
+                  <div key={i} className="group/faq">
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value={`${group.id}-${i}`}
+                        className={`relative overflow-hidden rounded-2xl bg-[#0b0b0e] border border-white/15 px-6 py-1 transition-all duration-300 ease-out ${theme.hoverBorder}`}
+                      >
+                        {/* Glowing left side accent bar */}
+                        <div
+                          className={`absolute left-0 inset-y-0 w-1 bg-gradient-to-b ${theme.accent} scale-y-0 transition-transform duration-300 origin-center group-hover/faq:scale-y-100 group-data-[state=open]/faq:scale-y-100`}
+                          aria-hidden="true"
+                        />
+                        <AccordionTrigger className={`text-left font-sans text-base font-semibold text-slate-100 hover:no-underline transition-colors py-5 ${theme.textHover} ${theme.svgHover}`}>
+                          <div className="flex items-center gap-3 pr-4">
+                            <span>{item.q}</span>
+                            {item.popular && (
+                              <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium border border-primary/20">
+                                <Zap className="h-3 w-3 fill-current" />
+                                Popular
+                              </span>
+                            )}
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="text-pretty leading-relaxed text-slate-400 pt-0 pb-5 text-[15px]">
+                          {item.a}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
+                )
+              })}
             </ScrollReveal>
           </section>
         ))}
