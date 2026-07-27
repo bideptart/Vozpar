@@ -41,9 +41,10 @@ export function BlogFilterSection({ posts }: BlogFilterSectionProps) {
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         {/* Left Title & Subtitle */}
         <div className="flex-1">
-          <span className="text-xs font-bold uppercase tracking-widest text-primary">
-            CATEGORIES
-          </span>
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1 text-xs font-bold uppercase tracking-widest text-primary shadow-[0_0_15px_rgba(4,107,210,0.15)]">
+            <span className="h-2 w-2 rounded-full bg-primary" />
+            <span>CATEGORIES</span>
+          </div>
           <h2 className="mt-2 text-3xl font-serif font-normal tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Browse by categories
           </h2>
