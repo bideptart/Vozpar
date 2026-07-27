@@ -57,7 +57,7 @@ export default function E911Page() {
         <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
         <li><strong>Legal:</strong> <a href="mailto:legal@Vozpar">legal@Vozpar</a></li>
       </ul>
-      <p>Vozpar, 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Rozper, 46 Shopping Plaza, Unit #5092 Chagrin Falls, OH 44022.</p>
     </LegalPage>
   )
 }

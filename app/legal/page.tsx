@@ -78,7 +78,7 @@ export default function LegalCenterPage() {
               Compliance <span className="text-primary">Center.</span>
             </h1>
             <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-              Vozpar is operated by Vozpar for the USA, EU, UK, and Latin America. Every
+              Vozpar is operated by Rozper for the USA, EU, UK, and Latin America. Every
               policy that governs the platform is here.
             </p>
           </ScrollReveal>
@@ -118,8 +118,7 @@ export default function LegalCenterPage() {
           <p>
             Questions about any policy? Contact <a className="text-primary hover:underline" href="mailto:legal@Vozpar">legal@Vozpar</a>{" "}
             (legal), <a className="text-primary hover:underline" href="mailto:privacy@Vozpar">privacy@Vozpar</a>{" "}
-            (privacy/DPO), or <Link className="text-primary hover:underline" href="/contact">our contact page</Link>. Operator:
-            Vozpar, 1 Scotts Road #24-10 Shaw Centre, Singapore 228208.
+            (privacy/DPO), or <Link className="text-primary hover:underline" href="/contact">our contact page</Link>. Operator: Rozper, 46 Shopping Plaza, Unit #5092 Chagrin Falls, OH 44022.
           </p>
         </ScrollReveal>
       </section>

@@ -9,7 +9,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/jsonld"
 export const metadata: Metadata = pageSeo({
   title: "Terms of Service",
   description:
-    "The Terms of Service governing your use of the Vozpar AI voice agent platform, operated by Vozpar.",
+    "The Terms of Service governing your use of the Vozpar AI voice agent platform, operated by Rozper.",
   path: "/terms",
 })
 
@@ -38,7 +38,7 @@ export default function TermsOfServicePage() {
       <article className="legal mx-auto w-full max-w-3xl px-4 py-10 md:px-6 md:py-12">
         <p>
           These Terms of Service (&ldquo;Agreement&rdquo;) govern your access to and use of the Vozpar platform
-          operated by Vozpar. Please read them carefully before using the Services.
+          operated by Rozper. Please read them carefully before using the Services.
         </p>
 
         <h2 id="acceptance">1. Acceptance and Modification of Terms</h2>
@@ -581,7 +581,7 @@ export default function TermsOfServicePage() {
             <strong>Company Name:</strong> Vozpar
           </li>
           <li>
-            <strong>Address:</strong> 1 Scotts Road #24-10 Shaw Centre, Singapore 228208, Singapore
+            <strong>Address:</strong> 46 Shopping Plaza, Unit #5092 Chagrin Falls, OH 44022
           </li>
           <li>
             <strong>Support Email:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a>

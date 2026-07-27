@@ -79,7 +79,7 @@ export default function AiDisclosurePage() {
         <li><strong>Privacy:</strong> <a href="mailto:privacy@Vozpar">privacy@Vozpar</a></li>
         <li><strong>Support:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a></li>
       </ul>
-      <p>Vozpar, 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.</p>
+      <p>Rozper, 46 Shopping Plaza, Unit #5092 Chagrin Falls, OH 44022.</p>
     </LegalPage>
   )
 }

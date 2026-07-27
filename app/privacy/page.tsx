@@ -552,7 +552,7 @@ export default function PrivacyPolicyPage() {
             <strong>Company Name:</strong> Vozpar
           </li>
           <li>
-            <strong>Address:</strong> 1 Scotts Road #24-10 Shaw Centre, Singapore 228208, Singapore
+            <strong>Address:</strong> 46 Shopping Plaza, Unit #5092 Chagrin Falls, OH 44022
           </li>
           <li>
             <strong>Support Email:</strong> <a href="mailto:support@Vozpar">support@Vozpar</a>

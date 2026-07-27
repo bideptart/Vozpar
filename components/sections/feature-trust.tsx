@@ -250,7 +250,7 @@ export function FeatureTrust() {
         <ScrollReveal className="mt-8">
           <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card/30 px-5 py-5 text-center backdrop-blur-sm sm:flex-row sm:justify-between sm:text-left">
             <p className="text-xs font-light leading-relaxed text-muted-foreground/70">
-              Operated by Vozpar, 1 Scotts Road, #24-10, Shaw Centre, Singapore 228208.
+              Operated by Rozper, 46 Shopping Plaza, Unit #5092 Chagrin Falls, OH 44022.
             </p>
             <Link
               href="/contact"
