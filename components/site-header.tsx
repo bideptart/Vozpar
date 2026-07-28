@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowRight, Menu, X, AudioLines, Building2, HelpCircle, Tag, Newspaper } from "lucide-react"
+import { ArrowRight, Menu, X, AudioLines, Building2, HelpCircle, Tag } from "lucide-react"
 import { motion, AnimatePresence, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react"
 import { Logo } from "@/components/logo"
 
@@ -11,7 +11,6 @@ const NAV = [
   { href: "/features",   label: "Features",   icon: AudioLines },
   { href: "/industries", label: "Industries", icon: Building2  },
   { href: "/pricing",    label: "Pricing",    icon: Tag        },
-  { href: "/blog",       label: "Blog",       icon: Newspaper  },
   { href: "/faq",        label: "FAQ",        icon: HelpCircle },
 ]
 
@@ -155,7 +154,7 @@ export function SiteHeader() {
               </span>
 
               <span className="relative z-10 inline-flex items-center gap-1.5">
-                Start free
+                Build your agent
                 <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
               </span>
 
@@ -177,7 +176,7 @@ export function SiteHeader() {
 
             <Link
               href="/contact"
-              aria-label="Start free"
+              aria-label="Build your agent"
               className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:hidden"
               style={{
                 background: "linear-gradient(135deg, #0a4fa0 0%, #046bd2 45%, #2d98f1 100%)",
@@ -267,8 +266,7 @@ export function SiteHeader() {
                     <span className="relative flex h-1.5 w-1.5 shrink-0">
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-300" />
                     </span>
-                    Start free
-                    <ArrowRight className="h-4 w-4" />
+                    Build your agent
                   </Link>
                 </div>
               </nav>

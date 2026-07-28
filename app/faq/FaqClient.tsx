@@ -77,7 +77,11 @@ export default function FaqClient() {
         <FloatingAccents />
         <ParticleField />
         <FloatingIconBadges />
+<<<<<<< Updated upstream
         <div className="relative mx-auto w-full max-w-6xl px-4 py-10 md:px-6 md:py-44">
+=======
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-16 md:px-6 md:py-24">
+>>>>>>> Stashed changes
           <ScrollReveal className="text-center">
             <span className="ai-pill-magenta">
               <span className="h-1 w-1 rounded-full bg-accent" />
@@ -93,7 +97,7 @@ export default function FaqClient() {
           </ScrollReveal>
 
           {/* Search Bar */}
-          <ScrollReveal className="mt-36 md:mt-44">
+          <ScrollReveal className="mt-10 md:mt-12">
             <div className="relative mx-auto max-w-xl group">
               <div className="absolute -inset-1.5 rounded-full bg-primary/20 blur opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative flex items-center">
@@ -105,9 +109,19 @@ export default function FaqClient() {
                   placeholder="Search questions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                    }
+                  }}
                   className="w-full pl-12 pr-32 py-4 text-base rounded-full border-2 border-primary/30 bg-card focus:outline-none focus:border-primary/50 transition-all duration-300"
                 />
                 <button
+                  onClick={() => {
+                    if (searchQuery.trim()) {
+                      contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                    }
+                  }}
                   className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 font-semibold flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/30"
                 >
                   Search <ArrowRight className="h-4 w-4" />
