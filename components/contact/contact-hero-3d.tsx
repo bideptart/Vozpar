@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useRef, useState } from "react"
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion"
 import { Clock, Sparkles } from "lucide-react"
 import {
   FloatingAccents,
@@ -12,6 +12,7 @@ import {
 export function ContactHero3D() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
+  const reduced = useReducedMotion()
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -74,25 +75,20 @@ export function ContactHero3D() {
         style={{ background: spotlight }}
       />
 
-      {/* Ambient 3D Glowing Orbs */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" style={{ perspective: "1000px" }}>
+      {/* Ambient 3D Glowing Orbs — no useReducedMotion check before, and a
+          120px blur on a 450px box is one of the most expensive things a
+          mobile GPU renders per frame. Cut to 60px below md; the transform
+          loop itself stays (cheap, GPU-composited) but respects the OS
+          reduced-motion setting now. */}
         <motion.div
-          animate={{
-            y: [0, -25, 0],
-            scale: [1, 1.08, 1],
-            opacity: [0.35, 0.5, 0.35],
-          }}
+          animate={reduced ? undefined : { y: [0, -25, 0], scale: [1, 1.08, 1], opacity: [0.35, 0.5, 0.35] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-[15%] left-[25%] h-[450px] w-[450px] rounded-full bg-sky-500/15 blur-[120px]"
+          className="absolute -top-[15%] left-[25%] h-[450px] w-[450px] rounded-full bg-sky-500/15 blur-[60px] md:blur-[120px]"
         />
         <motion.div
-          animate={{
-            y: [0, 25, 0],
-            scale: [1, 1.1, 1],
-            opacity: [0.25, 0.45, 0.25],
-          }}
+          animate={reduced ? undefined : { y: [0, 25, 0], scale: [1, 1.1, 1], opacity: [0.25, 0.45, 0.25] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[25%] right-[20%] h-[400px] w-[400px] rounded-full bg-blue-600/15 blur-[120px]"
+          className="absolute top-[25%] right-[20%] h-[400px] w-[400px] rounded-full bg-blue-600/15 blur-[60px] md:blur-[120px]"
         />
 
         {/* 3D Perspective Grid */}

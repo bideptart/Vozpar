@@ -1,6 +1,7 @@
 "use client"
 
 import type { ElementType } from "react"
+import { useEffect, useState } from "react"
 import { AudioLines, PhoneCall, Wrench, ShieldCheck, Activity, Languages } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 
@@ -60,18 +61,18 @@ function Ring({
   positions,
   duration,
   reverse,
-  reduced,
+  paused,
 }: {
   items: readonly { icon: ElementType; label: string }[]
   positions: { left: number; top: number }[]
   duration: number
   reverse?: boolean
-  reduced: boolean | null
+  paused: boolean
 }) {
   return (
     <motion.div
       className="absolute inset-0"
-      animate={reduced ? undefined : { rotate: reverse ? -360 : 360 }}
+      animate={paused ? undefined : { rotate: reverse ? -360 : 360 }}
       transition={{ duration, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
     >
       {items.map((item, i) => {
@@ -86,7 +87,7 @@ function Ring({
             <motion.div
               className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-card/85 backdrop-blur-md"
               style={{ color: "var(--features-blue)" }}
-              animate={reduced ? undefined : { rotate: reverse ? 360 : -360 }}
+              animate={paused ? undefined : { rotate: reverse ? 360 : -360 }}
               transition={{ duration, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
             >
               <Icon className="h-5 w-5" aria-hidden="true" />
@@ -100,6 +101,22 @@ function Ring({
 
 export function FeatureOrbit() {
   const reduced = useReducedMotion()
+
+  // This was the one animated visual on the site with no mobile gate at
+  // all — two counter-rotating rings, three expanding pulse rings, and a
+  // 7-bar waveform, all `repeat: Infinity`, running full-tilt on every
+  // device including a low-end phone. `paused` (reduced-motion OR mobile)
+  // turns off the transform loops there; the rings and core still render,
+  // just static, same as every other section touched this session.
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)")
+    setIsMobile(mq.matches)
+    const h = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", h)
+    return () => mq.removeEventListener("change", h)
+  }, [])
+  const paused = Boolean(reduced) || isMobile
 
   return (
     <div
@@ -122,14 +139,14 @@ export function FeatureOrbit() {
           className="absolute inset-[30%] rounded-full border"
           style={{ borderColor: "color-mix(in srgb, var(--features-blue) 40%, transparent)" }}
           initial={{ scale: 0.7, opacity: 0 }}
-          animate={reduced ? undefined : { scale: [0.7, 1.9], opacity: [0.6, 0] }}
+          animate={paused ? undefined : { scale: [0.7, 1.9], opacity: [0.6, 0] }}
           transition={{ duration: 3.6, repeat: Number.POSITIVE_INFINITY, ease: "easeOut", delay: i * 1.2 }}
         />
       ))}
 
       {/* Orbiting feature badges — radii as % of the container */}
-      <Ring items={OUTER} positions={OUTER_POS} duration={38} reduced={reduced} />
-      <Ring items={INNER} positions={INNER_POS} duration={26} reverse reduced={reduced} />
+      <Ring items={OUTER} positions={OUTER_POS} duration={38} paused={paused} />
+      <Ring items={INNER} positions={INNER_POS} duration={26} reverse paused={paused} />
 
       {/* Core */}
       <div className="absolute inset-[32%] flex items-center justify-center rounded-full border border-border bg-card/85 backdrop-blur-md">
@@ -144,7 +161,7 @@ export function FeatureOrbit() {
                 background: "linear-gradient(to top, var(--features-blue-deep), var(--features-blue))",
               }}
               initial={{ scaleY: 0.25 }}
-              animate={reduced ? { scaleY: 0.6 } : { scaleY: [0.25, peak, 0.4, peak * 0.75, 0.25] }}
+              animate={paused ? { scaleY: 0.6 } : { scaleY: [0.25, peak, 0.4, peak * 0.75, 0.25] }}
               transition={{
                 duration: 1.5 + i * 0.08,
                 repeat: Number.POSITIVE_INFINITY,

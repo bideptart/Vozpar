@@ -40,7 +40,7 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="relative overflow-hidden rounded-3xl border border-sky-500/50 bg-[#080b12] p-8 text-center backdrop-blur-xl shadow-[0_0_40px_rgba(4,107,210,0.35)]">
+      <div className="relative overflow-hidden rounded-3xl border border-sky-500/50 bg-[#080b12] p-8 text-center shadow-[0_0_40px_rgba(4,107,210,0.35)] backdrop-blur-md sm:backdrop-blur-xl">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sky-500/20 text-sky-400 ring-1 ring-sky-400/30 shadow-[0_0_20px_rgba(56,189,248,0.3)]">
           <CheckCircle2 className="h-8 w-8" aria-hidden />
         </div>
@@ -64,7 +64,7 @@ export function ContactForm() {
   return (
     <div
       onClick={() => setIsFocused(true)}
-      className={`group relative h-full flex flex-col justify-between overflow-hidden rounded-3xl border p-6 sm:p-8 md:p-9 backdrop-blur-xl transition-all duration-500 ${
+      className={`group relative h-full flex flex-col justify-between overflow-hidden rounded-3xl border p-6 backdrop-blur-md transition-all duration-500 sm:p-8 sm:backdrop-blur-xl md:p-9 ${
         isFocused
           ? "border-sky-400 bg-[#080c16] shadow-[0_0_45px_rgba(56,189,248,0.35)]"
           : "border-sky-500/50 bg-[#080b12] shadow-[0_0_35px_rgba(4,107,210,0.35)] hover:border-sky-400/80"

@@ -260,7 +260,7 @@ export function PricingPlans() {
     <div suppressHydrationWarning>
       {/* Billing cycle toggle */}
       <div className="mb-5 flex flex-col items-center justify-center">
-        <div className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/[0.04] p-1.5 text-sm backdrop-blur-xl shadow-lg">
+        <div className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/[0.04] p-1.5 text-sm shadow-lg backdrop-blur-md sm:backdrop-blur-xl">
           <button
             type="button"
             onClick={() => setCycle("monthly")}
@@ -397,9 +397,13 @@ export function PricingPlans() {
                           Choose {p.label}
                         </Link>
                       </Button>
+                      {/* Desktop only — same reasoning as the navbar's
+                          shimmer: an infinite-loop transform sweep inside a
+                          pricing card that's frequently mid-scroll is one
+                          more thing repainting every frame on mobile. */}
                       <motion.span
                         aria-hidden
-                        className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        className="pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent sm:block"
                         animate={{ x: ["-140%", "340%"] }}
                         transition={{ duration: 2.4, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3.5, ease: "easeInOut" }}
                       />

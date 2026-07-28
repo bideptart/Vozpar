@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 import { ArrowDown, Zap, Clock, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,6 +11,8 @@ import {
 } from "@/components/industries/industries-fx"
 
 export function PricingHero3D() {
+  const reduced = useReducedMotion()
+
   return (
     <div
       className="relative overflow-hidden border-b border-white/10 bg-black pt-8 pb-12 md:pt-24 md:pb-16"
@@ -34,24 +36,21 @@ export function PricingHero3D() {
           className="absolute inset-[-30%] bg-grid bg-[size:50px_50px] opacity-15 pointer-events-none"
         />
 
-        {/* Ambient Glowing Orbs */}
+        {/* Ambient Glowing Orbs — had no useReducedMotion check at all, so
+            these kept animating even with the OS setting on. The transform
+            (y/scale) loop itself is cheap and GPU-composited either way;
+            the real per-frame cost on a mobile GPU is the blur radius, so
+            that's cut from 120/130px to 60/65px below md, where a phone's
+            small screen makes the difference invisible anyway. */}
         <motion.div
-          animate={{
-            y: [0, -40, 0],
-            scale: [1, 1.2, 1],
-            opacity: [0.25, 0.45, 0.25],
-          }}
+          animate={reduced ? undefined : { y: [0, -40, 0], scale: [1, 1.2, 1], opacity: [0.25, 0.45, 0.25] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-[20%] left-[20%] h-[500px] w-[500px] rounded-full bg-sky-500/25 blur-[120px]"
+          className="absolute -top-[20%] left-[20%] h-[500px] w-[500px] rounded-full bg-sky-500/25 opacity-30 blur-[60px] md:opacity-100 md:blur-[120px]"
         />
         <motion.div
-          animate={{
-            y: [0, 40, 0],
-            scale: [1, 1.15, 1],
-            opacity: [0.15, 0.35, 0.15],
-          }}
+          animate={reduced ? undefined : { y: [0, 40, 0], scale: [1, 1.15, 1], opacity: [0.15, 0.35, 0.15] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute top-[20%] right-[15%] h-[420px] w-[420px] rounded-full bg-blue-600/20 blur-[130px]"
+          className="absolute top-[20%] right-[15%] h-[420px] w-[420px] rounded-full bg-blue-600/20 opacity-20 blur-[65px] md:opacity-100 md:blur-[130px]"
         />
       </div>
 

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowRight, Menu, X, AudioLines, Building2, HelpCircle, Tag } from "lucide-react"
+import { ArrowRight, Menu, X, AudioLines, Building2, HelpCircle, Tag, Newspaper } from "lucide-react"
 import { motion, AnimatePresence, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react"
 import { Logo } from "@/components/logo"
 
@@ -11,6 +11,7 @@ const NAV = [
   { href: "/features",   label: "Features",   icon: AudioLines },
   { href: "/industries", label: "Industries", icon: Building2  },
   { href: "/pricing",    label: "Pricing",    icon: Tag        },
+  { href: "/blog",       label: "Blog",       icon: Newspaper  },
   { href: "/faq",        label: "FAQ",        icon: HelpCircle },
 ]
 
@@ -58,10 +59,18 @@ export function SiteHeader() {
               "living border" technique used on the CTA and PlatformCore
               panels, so the header carries the site's own signature detail
               instead of a static hairline. */}
+          {/* Desktop only: this is the header sitting in a `position: sticky`
+              element that repaints on every scroll frame. A rotating
+              conic-gradient plus a full-strength backdrop-blur (below) are
+              exactly the two things that make a sticky bar feel laggy while
+              scrolling on a mid-range phone — the gradient forces a fresh
+              composite every frame it's visible, on top of the blur's own
+              per-frame cost. It's decorative, so it's the first thing to
+              drop rather than fighting the blur cost on mobile. */}
           {!reduced && (
             <span
               aria-hidden
-              className="spin-slow pointer-events-none absolute left-1/2 top-1/2 h-[400%] w-[140%] -translate-x-1/2 -translate-y-1/2"
+              className="spin-slow pointer-events-none absolute left-1/2 top-1/2 hidden h-[400%] w-[140%] -translate-x-1/2 -translate-y-1/2 md:block"
               style={{
                 background:
                   "conic-gradient(from 0deg, transparent 0deg, #046bd2 30deg, transparent 80deg, transparent 220deg, #2d98f1 260deg, transparent 310deg)",
@@ -71,10 +80,10 @@ export function SiteHeader() {
           )}
 
           <div
-            className={`relative flex w-full items-center justify-between rounded-[calc(1rem-1px)] border px-3 transition-[height,background-color,border-color,box-shadow] duration-300 sm:px-5 ${
+            className={`relative flex w-full items-center justify-between rounded-[calc(1rem-1px)] border px-3 backdrop-blur-md transition-[height,background-color,border-color,box-shadow] duration-300 sm:px-5 sm:backdrop-blur-lg ${
               scrolled
-                ? "h-14 border-white/[0.12] bg-black/90 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.65)] backdrop-blur-xl"
-                : "h-16 border-white/[0.08] bg-black/65 backdrop-blur-lg"
+                ? "h-14 border-white/[0.12] bg-black/90 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.65)] md:backdrop-blur-xl"
+                : "h-16 border-white/[0.08] bg-black/65"
             }`}
           >
             {/* Logo, with a soft glow halo that appears on hover. */}
@@ -125,7 +134,7 @@ export function SiteHeader() {
             {/* Right actions */}
             <div className="flex items-center gap-2">
               <a
-                href="https://voice.Vozpar/" target="_blank" rel="noopener noreferrer"
+                href="https://voice.vozpar.app/" target="_blank" rel="noopener noreferrer"
                 className="hidden h-9 items-center rounded-full border border-white/10 px-4 text-sm text-white/55 transition-colors hover:border-white/20 hover:bg-white/[0.04] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:inline-flex"
               >
                 Sign in
@@ -164,10 +173,15 @@ export function SiteHeader() {
                 className="pointer-events-none absolute inset-0 bg-white opacity-0 transition-opacity duration-300 group-hover/btn:opacity-[0.12]"
               />
 
+              {/* Desktop only — same reasoning as the conic border above:
+                  an infinite-loop transform animation inside the sticky
+                  header is one more thing repainting on every scroll frame
+                  on mobile, for a highlight that's easy to miss at that
+                  size anyway. */}
               {!reduced && (
                 <motion.span
                   aria-hidden
-                  className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                  className="pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent sm:block"
                   animate={{ x: ["-140%", "340%"] }}
                   transition={{ duration: 2.4, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3.5, ease: "easeInOut" }}
                 />
@@ -253,7 +267,7 @@ export function SiteHeader() {
                 </ul>
 
                 <div className="mt-4 flex flex-col gap-2 border-t border-white/[0.07] pt-4">
-                  <a href="https://voice.Vozpar/" target="_blank" rel="noopener noreferrer"
+                  <a href="https://voice.vozpar.app/" target="_blank" rel="noopener noreferrer"
                     className="flex h-11 items-center justify-center rounded-xl border border-white/10 text-sm text-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1]">
                     Sign in
                   </a>
