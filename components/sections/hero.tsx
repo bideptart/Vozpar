@@ -313,7 +313,7 @@ function Scene3D({ reduced }: { reduced: boolean }) {
             className="absolute cursor-pointer"
             style={{ transformStyle: "preserve-3d", zIndex: s.zIndex }}
             animate={{ x: s.x, z: s.z, rotateY: s.rotateY, scale: s.scale, opacity: s.opacity }}
-            transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 150, damping: 28, mass: 1, restDelta: 0.01 }}
+            transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 32, mass: 0.9, restDelta: 0.01 }}
             onClick={() => { setActive(i); start() }}
           >
             <div
