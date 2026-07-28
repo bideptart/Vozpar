@@ -295,18 +295,38 @@ function Scene3D({ reduced }: { reduced: boolean }) {
         else if (info.offset.x >= SWIPE_THRESHOLD) goPrev()
       }}
     >
-      {/* Ambient glow that changes with active card */}
-      <motion.div aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-3xl blur-[80px]"
-        animate={{ background: `radial-gradient(ellipse at 50% 60%, ${SCENES[active].color}12, transparent 65%)` }}
-        transition={{ duration: 0.7 }}
-      />
+      {/* Ambient glow that changes with active card.
+          On mobile this is a plain div with no blur filter: an 80px blur on
+          a full-size box is re-rasterised on every card change, and Motion
+          animating `background` (a paint property, not a composited one)
+          means that work lands on the main thread mid-transition. The tint
+          is barely perceptible at phone size, so mobile gets a static,
+          filter-free wash instead. */}
+      {isMobile ? (
+        <div aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-3xl"
+          style={{ background: `radial-gradient(ellipse at 50% 60%, ${SCENES[active].color}10, transparent 65%)` }}
+        />
+      ) : (
+        <motion.div aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-3xl blur-[80px]"
+          animate={{ background: `radial-gradient(ellipse at 50% 60%, ${SCENES[active].color}12, transparent 65%)` }}
+          transition={{ duration: 0.7 }}
+        />
+      )}
 
-      {/* All cards rendered simultaneously in 3D space */}
+      {/* All cards rendered simultaneously in 3D space — except on mobile,
+          where getStyle() already collapses every non-active card to
+          opacity 0. Those were still mounted, still running their own
+          micro-visualisation keyframes, and still being composited each
+          frame: five cards' worth of animation to display one. Mounting
+          only the active card cuts that by 80%. */}
       {SCENES.map((card, i) => {
         const Icon = card.icon
         const s = getStyle(i)
         const isFront = i === active
+
+        if (isMobile && !isFront) return null
 
         return (
           <motion.div key={i}
@@ -338,8 +358,10 @@ function Scene3D({ reduced }: { reduced: boolean }) {
                 style={{ background: `radial-gradient(ellipse 70% 50% at 50% -10%, ${card.color}16, transparent 65%)` }}
                 aria-hidden />
 
-              {/* Shine sweep on active */}
-              {isFront && !reduced && (
+              {/* Shine sweep on active — desktop only. It's a Motion loop
+                  that never stops, so on mobile it burns frame budget
+                  permanently for a highlight you barely register. */}
+              {isFront && !reduced && !isMobile && (
                 <motion.div aria-hidden
                   className="pointer-events-none absolute inset-y-0 w-1/2 -skew-x-12"
                   style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)" }}
@@ -506,15 +528,30 @@ export function Hero() {
           {/* CTAs */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-5 flex flex-1 flex-wrap items-center gap-2.5 sm:mt-6 sm:gap-3">
+            className="mt-5 flex w-full flex-col items-stretch gap-2.5 sm:mt-6 sm:flex-row sm:items-center sm:gap-3">
+            {/* Full-width stacked on phones (matching the Features hero) so
+                each label gets the whole row instead of being squeezed into
+                half of it, then side-by-side from sm up. The shimmer sweep
+                is the one addition over the Features version — a slow
+                specular pass that makes the primary CTA read as the live
+                element on the page. */}
             <Link href="/get-started"
-              className="group inline-flex flex-1 min-w-0 h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#046bd2] px-3 text-[12px] font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_44px_rgba(4,107,210,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:gap-2 sm:px-7 sm:text-sm">
-              Deploy Your Agent Free
-              <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-1 sm:h-4 sm:w-4" />
+              className="btn-ai group relative w-full overflow-hidden inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 text-sm font-semibold transition-[filter,box-shadow] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:w-auto sm:px-7">
+              {!reduced && (
+                <motion.span aria-hidden
+                  className="pointer-events-none absolute inset-y-0 w-1/3 -skew-x-12"
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }}
+                  initial={{ left: "-40%" }}
+                  animate={{ left: ["-40%", "140%"] }}
+                  transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 2.6, ease: "easeInOut" }}
+                />
+              )}
+              <span className="relative">Deploy Your Agent Free</span>
+              <ArrowRight className="relative h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <Link href="/features"
-              className="inline-flex flex-1 min-w-0 h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 text-[12px] font-medium text-white/65 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:gap-2 sm:px-7 sm:text-sm">
-              <PhoneCall className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+              className="inline-flex h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-white/15 px-6 text-sm font-medium text-white/75 backdrop-blur-sm transition-colors duration-300 hover:border-white/35 hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:w-auto sm:px-7">
+              <PhoneCall className="h-4 w-4 shrink-0" />
               Hear It In Action
             </Link>
           </motion.div>

@@ -3,6 +3,7 @@
 import { motion, useReducedMotion, AnimatePresence } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { Mic, Brain, MessageSquare, Phone, Zap, Globe } from "lucide-react"
+import type React from "react"
 import { useEffect, useState } from "react"
 
 // ─── Rotating feature scenes in the 3D box ───────────────────────────────────
@@ -40,6 +41,26 @@ const FEATURE_SCENES = [
     bars: [0.5, 0.9, 0.65, 0.4, 0.8, 0.55, 0.75, 1, 0.45, 0.7, 0.85, 0.5, 0.9, 0.6, 0.35, 0.75, 0.55, 0.8],
   },
 ]
+
+// ─── Radial waveform ring ────────────────────────────────────────────────────
+// Precomputed once at module scope so the values are stable across renders
+// (a scene change must not reshuffle the ring). Deterministic pseudo-random
+// via trig rather than Math.random(), so server and client agree — otherwise
+// this would hydrate-mismatch.
+const RADIAL_BAR_COUNT = 64
+
+const RADIAL_BARS = Array.from({ length: RADIAL_BAR_COUNT }).map((_, i) => {
+  const wave = Math.abs(Math.sin(i * 0.9)) * 0.6 + Math.abs(Math.cos(i * 0.37)) * 0.4
+  const len = 10 + wave * 26
+  return {
+    angle: (360 / RADIAL_BAR_COUNT) * i,
+    len,
+    min: 0.3 + (i % 3) * 0.08,
+    max: 0.75 + wave * 0.25,
+    duration: `${1.5 + (i % 7) * 0.16}s`,
+    delay: `${(i % 11) * 0.09}s`,
+  }
+})
 
 // ─── Animated waveform ───────────────────────────────────────────────────────
 function AnimWaveform({ bars, color, reduced }: { bars: readonly number[]; color: string; reduced: boolean }) {
@@ -97,15 +118,93 @@ function VoiceIllustration({ reduced }: { reduced: boolean }) {
         }}
       />
 
-      {/* Concentric pulsing rings */}
-      {!reduced && [1, 2, 3, 4].map((n) => (
-        <motion.div
-          key={n}
+      {/* Two faint guide rings — just enough structure to frame the radial
+          waveform without competing with it. */}
+      {[168, 246].map((d, n) => (
+        <div
+          key={d}
           aria-hidden
           className="absolute rounded-full border"
-          style={{ borderColor: scene.color, width: n * 70, height: n * 70 }}
-          animate={{ scale: [1, 1.04, 1], opacity: [0.12, 0.04, 0.12] }}
-          transition={{ duration: 3.5 + n * 0.6, repeat: Infinity, ease: "easeInOut", delay: n * 0.4 }}
+          style={{
+            borderColor: `${scene.color}${n === 1 ? "14" : "1f"}`,
+            width: d,
+            height: d,
+            borderStyle: n === 1 ? "dashed" : "solid",
+          }}
+        />
+      ))}
+
+      {/* ── Radial waveform ────────────────────────────────────────────
+          The centrepiece: RADIAL_BARS spokes arranged around the orb,
+          each scaling on its own cycle so the whole ring breathes like a
+          live spectrum analyser. Every spoke animates via the shared
+          `.viz-bar` CSS keyframe (transform: scaleY only, GPU-composited),
+          and the rotation/placement lives on a separate parent span — a
+          single element can't hold both, since .viz-bar owns `transform`. */}
+      {RADIAL_BARS.map((b, i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2"
+          style={{
+            transform: `translate(-50%, -50%) rotate(${b.angle}deg) translateY(-104px)`,
+          }}
+        >
+          <span
+            className={reduced ? "block rounded-full" : "viz-bar block rounded-full"}
+            style={
+              {
+                width: 2,
+                height: b.len,
+                background: `linear-gradient(to top, ${scene.color}00, ${scene.color})`,
+                opacity: 0.85,
+                // .viz-bar sets will-change:transform, which is a useful hint
+                // for a handful of bars but counterproductive across 64 —
+                // it would promote 64 separate compositor layers. Transform
+                // animations composite fine without the hint.
+                willChange: "auto",
+                "--viz-bar-origin": "bottom",
+                "--viz-bar-min": b.min,
+                "--viz-bar-max": b.max,
+                "--viz-bar-static": b.max * 0.55,
+                "--viz-bar-duration": b.duration,
+                "--viz-bar-delay": b.delay,
+              } as React.CSSProperties
+            }
+          />
+        </span>
+      ))}
+
+      {/* Radar sweep behind the waveform ring. */}
+      {!reduced && (
+        <motion.div
+          aria-hidden
+          className="absolute rounded-full"
+          style={{
+            width: 300,
+            height: 300,
+            background: `conic-gradient(from 0deg, transparent 0deg, transparent 270deg, ${scene.color}1c 348deg, transparent 360deg)`,
+            maskImage: "radial-gradient(circle, transparent 24%, #000 34%, #000 100%)",
+            WebkitMaskImage: "radial-gradient(circle, transparent 24%, #000 34%, #000 100%)",
+          }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 13, repeat: Infinity, ease: "linear" }}
+        />
+      )}
+
+      {/* Corner frame brackets — reads as an instrument viewport rather
+          than a plain rounded box. */}
+      {[
+        "left-3 top-3 border-l border-t rounded-tl-md",
+        "right-3 top-3 border-r border-t rounded-tr-md",
+        "left-3 bottom-3 border-l border-b rounded-bl-md",
+        "right-3 bottom-3 border-r border-b rounded-br-md",
+      ].map((pos) => (
+        <span
+          key={pos}
+          aria-hidden
+          className={`pointer-events-none absolute h-5 w-5 ${pos}`}
+          style={{ borderColor: `${scene.color}30` }}
         />
       ))}
 
@@ -172,10 +271,19 @@ function VoiceIllustration({ reduced }: { reduced: boolean }) {
             ],
           }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ width: 72, height: 72, background: `${scene.color}` }}
+          style={{
+            width: 76,
+            height: 76,
+            // Off-centre highlight + darker lower edge reads as a lit sphere
+            // rather than a flat disc, which is what made the old orb look
+            // like a placeholder circle.
+            background: `radial-gradient(circle at 34% 28%, ${scene.color}, ${scene.color} 38%, color-mix(in srgb, ${scene.color} 62%, #000) 100%)`,
+          }}
         >
-          {/* Inner highlight */}
-          <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(145deg, rgba(255,255,255,0.25) 0%, transparent 60%)" }} />
+          {/* Specular highlight */}
+          <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(150deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.05) 42%, transparent 62%)" }} />
+          {/* Crisp rim light */}
+          <div className="absolute inset-0 rounded-full" style={{ boxShadow: `inset 0 1px 1px rgba(255,255,255,0.45), inset 0 -8px 16px -8px rgba(0,0,0,0.6)` }} />
 
           {/* Scene icon with crossfade */}
           <AnimatePresence mode="wait">
@@ -242,6 +350,31 @@ function VoiceIllustration({ reduced }: { reduced: boolean }) {
         <span className="font-mono text-[9px] text-white/40">&lt;300ms</span>
       </div>
 
+      {/* Pipeline stage rail, top-left — shows the four scenes as a
+          progress track so the box communicates a *sequence*, not just a
+          single blinking state. */}
+      <div className="absolute left-4 top-4 flex flex-col gap-1.5">
+        {FEATURE_SCENES.map((s, i) => (
+          <div key={s.id} className="flex items-center gap-1.5">
+            <motion.span
+              className="block h-1.5 rounded-full"
+              animate={{
+                width: i === sceneIdx ? 14 : 6,
+                background: i === sceneIdx ? s.color : "rgba(255,255,255,0.14)",
+              }}
+              transition={{ duration: 0.35 }}
+            />
+            <motion.span
+              className="font-mono text-[8px] uppercase tracking-[0.16em]"
+              animate={{ color: i === sceneIdx ? s.color : "rgba(255,255,255,0.18)" }}
+              transition={{ duration: 0.35 }}
+            >
+              {s.label}
+            </motion.span>
+          </div>
+        ))}
+      </div>
+
       {/* Corner watermark */}
       <span
         aria-hidden
@@ -283,34 +416,42 @@ export function ProductStory() {
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 md:py-20">
-        <div className="grid items-center gap-8 lg:grid-cols-2 sm:gap-10 lg:gap-16">
+        {/* items-stretch (not items-center) + h-full on both children: the
+            right column now matches the illustration's height exactly
+            instead of being a shorter block floating next to a tall square.
+            The max-w cap on the left is gone from lg up so the two columns
+            are genuinely equal width. */}
+        <div className="grid items-stretch gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-16">
 
-          {/* Left: 3D illustration */}
-          <ScrollReveal className="aspect-square w-full max-w-md lg:max-w-lg">
+          {/* Left: 3D illustration. Capped at 420px square — letting it fill
+              a half-width column made it ~600px tall on a 1366px laptop,
+              which pushed the section past the fold. The cap keeps the whole
+              row visible on a standard laptop viewport. */}
+          <ScrollReveal className="mx-auto aspect-square w-full max-w-[340px] sm:max-w-[400px] lg:mx-0 lg:max-w-[420px]">
             <VoiceIllustration reduced={Boolean(reduced)} />
           </ScrollReveal>
 
           {/* Right: copy */}
-          <div>
+          <div className="flex h-full flex-col justify-center">
             <ScrollReveal>
               <span className="inline-flex items-center gap-2 rounded-full border border-[#046bd2]/30 bg-[#046bd2]/[0.08] px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[#2d98f1]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#2d98f1]" />
                 Voice intelligence
               </span>
-              <h2 className="mt-4 text-balance font-heading text-4xl font-medium leading-[1.04] tracking-[-0.04em] text-white md:text-5xl">
+              <h2 className="mt-4 text-balance font-heading text-3xl font-medium leading-[1.06] tracking-[-0.04em] text-white sm:text-4xl lg:text-[2.6rem]">
                 A voice agent that{" "}
                 <span className="bg-gradient-to-r from-[#2d98f1] to-[#046bd2] bg-clip-text text-transparent">
                   actually listens.
                 </span>
               </h2>
-              <p className="mt-4 text-pretty text-lg leading-relaxed text-white/45">
+              <p className="mt-3.5 text-pretty text-[15px] leading-relaxed text-white/45 lg:text-base">
                 Most voice bots transcribe speech, run it through a language model, and synthesise audio back —
                 three separate systems stitched together. Vozpar uses a single audio-native model that processes
                 voice end-to-end, removing the latency and the artefacts that make bots sound robotic.
               </p>
             </ScrollReveal>
 
-            <div className="mt-6 flex flex-col gap-4 sm:mt-7 sm:gap-5">
+            <div className="mt-5 flex flex-col gap-3.5 sm:mt-6 sm:gap-4">
               {POINTS.map((p, i) => {
                 const Icon = p.icon
                 return (

@@ -105,7 +105,13 @@ function MeshGradients() {
       {MESH.map((m, i) => (
         <span
           key={i}
-          className="hero-mesh-drift absolute rounded-full"
+          // Only the first two washes survive below md. A 60px blur on a
+          // 900px box is one of the most expensive things a mobile GPU can
+          // be asked to composite every frame, and five of them stacked is
+          // what makes a budget phone drop frames on this section. The two
+          // that remain carry the colour; the rest were depth nuance that
+          // is invisible at phone size anyway.
+          className={`hero-mesh-drift absolute rounded-full ${i > 1 ? "hidden md:block" : ""}`}
           style={
             {
               width: m.size,
@@ -113,7 +119,9 @@ function MeshGradients() {
               left: m.left,
               top: m.top,
               background: `radial-gradient(circle at 50% 50%, ${m.color} 0%, transparent 68%)`,
-              filter: "blur(60px)",
+              // Blur is set via a custom property so the mobile override in
+              // globals.css can drop it to a much cheaper radius.
+              filter: "blur(var(--hero-mesh-blur, 60px))",
               "--hero-mesh-x": m.driftX,
               "--hero-mesh-y": m.driftY,
               "--hero-mesh-duration": `${m.duration}s`,
@@ -168,9 +176,11 @@ function GridLayer() {
         }
       />
 
-      {/* Hexagonal lattice */}
+      {/* Hexagonal lattice — desktop only. An SVG <pattern> tiled across the
+          full hero and then masked is rasterised on the CPU; at 5.5% opacity
+          it contributes almost nothing visually on a phone. */}
       <svg
-        className="hero-grid-drift absolute -inset-16 h-[calc(100%+8rem)] w-[calc(100%+8rem)] opacity-[0.055]"
+        className="hero-grid-drift absolute -inset-16 hidden h-[calc(100%+8rem)] w-[calc(100%+8rem)] opacity-[0.055] md:block"
         style={
           {
             "--hero-grid-x": "-14px",
@@ -679,14 +689,23 @@ function HeroIndustrialBgImpl() {
 
       <MeshGradients />
       <GridLayer />
-      <NeuralLayer />
-      <IndustrialScene />
-      <ParticleLayer />
+
+      {/* Below md these three are display:none, so the browser never paints
+          or composites them at all. Together they are ~40 animated SVG nodes
+          (neural charges, conveyor, robot arm, circuit pulses) plus 22
+          glowing particles — detail that is essentially unreadable on a
+          phone-width canvas but costs a budget device real frame time. */}
+      <div className="hidden md:contents">
+        <NeuralLayer />
+        <IndustrialScene />
+        <ParticleLayer />
+      </div>
 
       {/* Wide, very low-opacity light sweep — the "alive" cue you notice only
-          after a few seconds. */}
+          after a few seconds. Hidden below md: a 48px blur combined with
+          mix-blend-screen forces an expensive offscreen compositing pass. */}
       <div
-        className="hero-scan-sweep absolute inset-y-0 left-0 w-[38%] opacity-[0.05] mix-blend-screen"
+        className="hero-scan-sweep absolute inset-y-0 left-0 hidden w-[38%] opacity-[0.05] mix-blend-screen md:block"
         style={
           {
             background: `linear-gradient(90deg, transparent, ${ICE}, transparent)`,

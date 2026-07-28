@@ -308,6 +308,23 @@
   will-change: transform;
 }
 
+/* Mobile budget pass for the hero background.
+   `will-change: transform` on several large blurred boxes forces the
+   compositor to keep a full-size layer for each one alive permanently —
+   fine on desktop, but on a low-RAM phone the layers get evicted and
+   re-rasterised constantly, which is exactly what reads as "lag" while
+   scrolling. Below md we drop the promotion hint, shrink the blur radius
+   (the single biggest per-frame cost here), and slow the drift so any
+   repaint that does happen occurs less often. */
+@media (max-width: 767px) {
+  .hero-mesh-drift {
+    will-change: auto;
+    animation-duration: calc(var(--hero-mesh-duration, 22s) * 1.6);
+  }
+  .hero-particle { will-change: auto; }
+  :root { --hero-mesh-blur: 28px; }
+}
+
 /* Soft breathing — opacity only, used for the ambient wash layers. */
 @keyframes hero-breathe {
   0%, 100% { opacity: var(--hero-breathe-min, 0.35); }
