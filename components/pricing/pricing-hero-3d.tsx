@@ -105,32 +105,36 @@ export function PricingHero3D() {
           <span className="font-semibold text-emerald-400">no setup fees or hidden markups</span>, you can get started in seconds.
         </motion.p>
 
-        {/* Floating Feature Badges */}
+        {/* Floating Feature Badges — a real grid on phones (equal-width,
+            never a lopsided wrap where the last pill sits alone), a
+            centered row from sm up. Each pill now carries its own tint on
+            the border/glow at rest too, not just on hover, so they read as
+            distinct chips instead of three identical grey outlines. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-3 md:gap-4"
+          className="mt-8 grid grid-cols-1 gap-2 sm:mt-10 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3 md:gap-4"
         >
-          <div className="group flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-slate-300 backdrop-blur-md transition-all duration-300 hover:border-sky-500/40 hover:bg-sky-500/10 hover:text-white">
-            <span className="flex h-4 w-4 items-center justify-center text-sky-400 transition-transform duration-300 group-hover:scale-110">
+          <div className="group flex items-center justify-center gap-2 rounded-xl border border-sky-500/20 bg-sky-500/[0.05] px-4 py-2.5 text-xs font-medium text-slate-300 backdrop-blur-md transition-all duration-300 hover:border-sky-500/40 hover:bg-sky-500/10 hover:text-white sm:justify-start sm:py-2">
+            <span className="flex h-4 w-4 shrink-0 items-center justify-center text-sky-400 transition-transform duration-300 group-hover:scale-110">
               <Clock className="h-4 w-4 icon-clock-spin" />
             </span>
-            <span>Per-Second Precision Billing</span>
+            <span className="whitespace-nowrap">Per-Second Precision Billing</span>
           </div>
 
-          <div className="group flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-slate-300 backdrop-blur-md transition-all duration-300 hover:border-amber-500/40 hover:bg-amber-500/10 hover:text-white">
-            <span className="flex h-4 w-4 items-center justify-center text-amber-400 transition-transform duration-300 group-hover:scale-110">
+          <div className="group flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/[0.05] px-4 py-2.5 text-xs font-medium text-slate-300 backdrop-blur-md transition-all duration-300 hover:border-amber-500/40 hover:bg-amber-500/10 hover:text-white sm:justify-start sm:py-2">
+            <span className="flex h-4 w-4 shrink-0 items-center justify-center text-amber-400 transition-transform duration-300 group-hover:scale-110">
               <Zap className="h-4 w-4 icon-zap-flicker" />
             </span>
-            <span>Sub-Second Latency</span>
+            <span className="whitespace-nowrap">Sub-Second Latency</span>
           </div>
 
-          <div className="group flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-medium text-slate-300 backdrop-blur-md transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10 hover:text-white">
-            <span className="flex h-4 w-4 items-center justify-center text-emerald-400 transition-transform duration-300 group-hover:scale-110">
+          <div className="group flex items-center justify-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] px-4 py-2.5 text-xs font-medium text-slate-300 backdrop-blur-md transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10 hover:text-white sm:justify-start sm:py-2">
+            <span className="flex h-4 w-4 shrink-0 items-center justify-center text-emerald-400 transition-transform duration-300 group-hover:scale-110">
               <ShieldCheck className="h-4 w-4 icon-shield-check-draw" />
             </span>
-            <span>Phone Number Included</span>
+            <span className="whitespace-nowrap">Phone Number Included</span>
           </div>
         </motion.div>
 
