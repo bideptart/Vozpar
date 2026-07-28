@@ -151,6 +151,7 @@ function VoiceIllustration({ reduced }: { reduced: boolean }) {
           }}
         >
           <span
+            suppressHydrationWarning
             className={reduced ? "block rounded-full" : "viz-bar block rounded-full"}
             style={
               {

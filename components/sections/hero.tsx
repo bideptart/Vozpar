@@ -556,19 +556,24 @@ export function Hero() {
             </Link>
           </motion.div>
 
-          {/* Trust chips */}
+          {/* Trust chips — a fixed 2×2 grid on phones instead of a
+              horizontal scroll. Scrolling made the row feel like a swipeable
+              carousel, which read as a bug rather than a static trust line.
+              A 2-col grid has no ragged wrap (both rows have exactly 2 items,
+              always) and needs no gesture to read. Single row from sm up,
+              where there's room. */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.52 }}
-            className="mt-4 flex flex-wrap gap-x-4 gap-y-2 sm:mt-5 sm:gap-x-5">
+            className="mt-4 grid grid-cols-2 gap-x-3 gap-y-2 sm:mt-5 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2">
             {[
               { icon: Shield,      text: "Your data, your server" },
               { icon: Globe2,      text: "Works with any carrier"  },
               { icon: Zap,         text: "Live in under an hour"   },
               { icon: CheckCircle, text: "No long-term contract"   },
             ].map(({ icon: Icon, text }) => (
-              <span key={text} className="flex items-center gap-1.5 text-[11px] text-white/28 sm:text-xs">
-                <Icon className="h-3 w-3 text-[#046bd2] sm:h-3.5 sm:w-3.5" />
-                {text}
+              <span key={text} className="flex min-w-0 items-center gap-1.5 text-[11px] text-white/28 sm:text-xs">
+                <Icon className="h-3 w-3 shrink-0 text-[#046bd2] sm:h-3.5 sm:w-3.5" />
+                <span className="truncate">{text}</span>
               </span>
             ))}
           </motion.div>

@@ -7,15 +7,19 @@ import { useInView, useReducedMotion, animate } from "motion/react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { FeatureHero } from "@/components/features/feature-hero"
 
+// Each stat carries its own tint. Four identical blue icons made the band
+// read as one repeated cell; giving each a colour lets the eye separate them
+// at a glance, matching the tinted-chip system used on the FAQ pills and the
+// Industries marquee.
 const STATS = [
-  { icon: Gauge, prefix: "<", target: 300, decimals: 0, suffix: "ms", label: "Round-trip voice latency" },
-  { icon: Globe2, prefix: "", target: 60, decimals: 0, suffix: "+", label: "Countries with local numbers" },
+  { icon: Gauge, prefix: "<", target: 300, decimals: 0, suffix: "ms", label: "Round-trip voice latency", tint: "#2d98f1" },
+  { icon: Globe2, prefix: "", target: 60, decimals: 0, suffix: "+", label: "Countries with local numbers", tint: "#10b981" },
   // 99.9, not 99.95 — this has to match what /sla actually commits to
   // ("at least 99.9% of the time each calendar month"). Marketing a tighter
   // number than the contract is the kind of thing a procurement review
   // catches, and the credits schedule is written against 99.9.
-  { icon: ShieldCheck, prefix: "", target: 99.9, decimals: 1, suffix: "%", label: "Monthly uptime commitment" },
-  { icon: Clock, prefix: "", target: 24, decimals: 0, suffix: "/7", label: "Autonomous call handling" },
+  { icon: ShieldCheck, prefix: "", target: 99.9, decimals: 1, suffix: "%", label: "Monthly uptime commitment", tint: "#a855f7" },
+  { icon: Clock, prefix: "", target: 24, decimals: 0, suffix: "/7", label: "Autonomous call handling", tint: "#f59e0b" },
 ]
 
 function AnimatedStat({
@@ -25,6 +29,7 @@ function AnimatedStat({
   decimals,
   suffix,
   label,
+  tint,
 }: {
   icon: ElementType
   prefix: string
@@ -32,6 +37,7 @@ function AnimatedStat({
   decimals: number
   suffix: string
   label: string
+  tint: string
 }) {
   const ref = useRef<HTMLDivElement>(null)
   // `once: false` — the count-up replays every time the band scrolls back into
@@ -63,27 +69,55 @@ function AnimatedStat({
   return (
     <div
       ref={ref}
-      className="group relative flex flex-col items-center gap-2 px-3 py-6 text-center transition-colors duration-300 hover:bg-white/[0.02] sm:px-4 sm:py-7"
+      className="group relative flex flex-col items-center gap-2.5 px-3 py-7 text-center sm:px-4 sm:py-8"
     >
-      {/* Bottom accent bar, same idea as the comparison table's row marker —
-          hidden until hover, so the static grid still feels alive without
-          any of the cells carrying a permanent tint. */}
+      {/* Ambient tint wash from the top of the cell, revealed on hover. */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-4 bottom-0 h-px scale-x-0 opacity-0 transition-[transform,opacity] duration-300 group-hover:scale-x-100 group-hover:opacity-100 sm:inset-x-6"
-        style={{ background: "var(--features-blue)" }}
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: `radial-gradient(120% 90% at 50% 0%, ${tint}14, transparent 70%)` }}
       />
-      <Icon
-        className="h-4 w-4 transition-transform duration-300 group-hover:scale-110"
-        style={{ color: "var(--features-blue)" }}
-        aria-hidden="true"
+
+      {/* Top accent bar — moved from the bottom edge to the top so it aligns
+          with the wash above and doesn't collide with the grid's own
+          dividing rules. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-4 top-0 h-px scale-x-0 opacity-0 transition-[transform,opacity] duration-300 group-hover:scale-x-100 group-hover:opacity-100 sm:inset-x-6"
+        style={{ background: tint }}
       />
-      <span className="font-heading text-2xl font-medium tracking-[-0.02em] text-foreground transition-transform duration-300 group-hover:scale-[1.03] sm:text-3xl md:text-4xl">
+
+      {/* Icon in a tinted badge rather than a bare glyph — gives the cell a
+          fixed visual anchor and lets each stat own a colour. */}
+      <span
+        className="relative flex h-9 w-9 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105"
+        style={{
+          borderColor: `${tint}33`,
+          background: `linear-gradient(155deg, ${tint}1f, ${tint}08)`,
+          color: tint,
+          boxShadow: `0 6px 18px -10px ${tint}80`,
+        }}
+      >
+        <Icon className="h-4 w-4" aria-hidden="true" />
+      </span>
+
+      {/* Number gets a subtle vertical gradient so it reads as a display
+          figure instead of flat body text. */}
+      <span
+        className="relative font-heading text-[1.75rem] font-semibold tracking-[-0.03em] transition-transform duration-300 group-hover:scale-[1.04] sm:text-[2rem] md:text-[2.35rem]"
+        style={{
+          background: "linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.72) 100%)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+        }}
+      >
         {prefix}
         {value.toFixed(decimals)}
         {suffix}
       </span>
-      <span className="text-[11px] leading-snug text-muted-foreground transition-colors duration-300 group-hover:text-foreground/80 sm:text-xs">
+
+      <span className="relative text-[11px] leading-snug text-muted-foreground transition-colors duration-300 group-hover:text-foreground/80 sm:text-xs">
         {label}
       </span>
     </div>
@@ -112,7 +146,7 @@ export function Features() {
               // the second row) and a right rule on cell 2 (doubling the
               // container border). The two rule sets are scoped to opposite
               // sides of `sm` so they never fight over the same property.
-              className="grid grid-cols-2 overflow-hidden rounded-2xl border border-border [&>*]:border-border max-sm:[&>*:nth-child(-n+2)]:border-b max-sm:[&>*:nth-child(odd)]:border-r sm:grid-cols-4 sm:[&>*:not(:last-child)]:border-r"
+              className="grid grid-cols-2 overflow-hidden rounded-2xl border border-border bg-[#050506] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.9)] [&>*]:border-border max-sm:[&>*:nth-child(-n+2)]:border-b max-sm:[&>*:nth-child(odd)]:border-r sm:grid-cols-4 sm:[&>*:not(:last-child)]:border-r"
             >
               {STATS.map((s) => (
                 <AnimatedStat key={s.label} {...s} />

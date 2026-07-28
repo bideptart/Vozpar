@@ -923,6 +923,18 @@
 }
 
 @layer utilities {
+  /* Hide scrollbars on an intentionally-scrollable row (e.g. the hero trust
+     chips) without disabling scroll itself — the edge mask signals it's
+     scrollable, a visible scrollbar on a 4-item strip would just look like
+     a layout bug. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Glass surface — frosted navy card */
   .glass {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
