@@ -80,6 +80,7 @@ export function ContactHero3D() {
           mobile GPU renders per frame. Cut to 60px below md; the transform
           loop itself stays (cheap, GPU-composited) but respects the OS
           reduced-motion setting now. */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" style={{ perspective: "1000px" }}>
         <motion.div
           animate={reduced ? undefined : { y: [0, -25, 0], scale: [1, 1.08, 1], opacity: [0.35, 0.5, 0.35] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
