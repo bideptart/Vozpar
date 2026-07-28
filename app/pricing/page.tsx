@@ -58,7 +58,7 @@ export default async function PricingPage({
       <BillingFAQ />
 
       {/* CTA */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-6">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-12 md:px-6 md:pb-24">
         <ScrollReveal>
           <div className="relative overflow-hidden rounded-3xl p-px">
             <span

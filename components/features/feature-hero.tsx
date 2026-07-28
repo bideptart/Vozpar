@@ -123,7 +123,7 @@ export function FeatureHero() {
       />
 
       <motion.div
-        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 md:py-20 lg:grid-cols-12 lg:gap-8 lg:py-0"
+        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-8 sm:px-6 sm:py-20 lg:grid-cols-12 lg:gap-8 lg:py-0"
         style={{ y: contentY, opacity: contentOpacity }}
       >
         {/* ---------------- LEFT — copy ---------------- */}

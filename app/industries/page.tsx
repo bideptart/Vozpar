@@ -45,7 +45,7 @@ export default function IndustriesPage() {
         <ParticleField />
         <AmbientWaveform />
         <FloatingIconBadges />
-        <div className="relative mx-auto w-full max-w-6xl px-4 py-12 sm:py-16 md:px-6 md:py-24 lg:py-28">
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-8 sm:py-16 md:px-6 md:py-24 lg:py-28">
           <ScrollReveal className="mx-auto max-w-3xl text-center" duration={0.9} y={22}>
             <span className="ai-pill-cyan" style={monoStyle.sectionTag}>
               <PulsingDot />

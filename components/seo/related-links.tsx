@@ -150,7 +150,7 @@ export function RelatedLinks({
   variant?: "default" | "flip"
 }) {
   return (
-    <section aria-labelledby="related-heading" className="w-full bg-black px-4 pb-24 pt-16 md:px-0 md:pb-28 md:pt-20">
+    <section aria-labelledby="related-heading" className="w-full bg-black px-4 pb-16 pt-8 md:px-0 md:pb-28 md:pt-20">
       <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
         <div className="mb-10 text-center">
           <span className="ai-pill-blue mb-3 inline-flex items-center gap-1.5">

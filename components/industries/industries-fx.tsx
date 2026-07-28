@@ -84,7 +84,7 @@ const WAVEFORM_BAR_COUNT = 28
 export function AmbientWaveform() {
   const reduced = useReducedMotion()
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-20 md:h-28">
+    <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-14 h-10 opacity-60 sm:bottom-0 sm:h-20 sm:opacity-100 md:h-28">
       <div className="relative flex h-full items-stretch justify-center gap-[4px] opacity-70">
         {Array.from({ length: WAVEFORM_BAR_COUNT }).map((_, i) => {
           const peak = 0.25 + 0.65 * Math.abs(Math.sin(i * 1.37))

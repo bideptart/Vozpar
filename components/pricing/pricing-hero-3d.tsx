@@ -13,7 +13,7 @@ import {
 export function PricingHero3D() {
   return (
     <div
-      className="relative overflow-hidden border-b border-white/10 bg-black pt-20 pb-12 md:pt-24 md:pb-16"
+      className="relative overflow-hidden border-b border-white/10 bg-black pt-8 pb-12 md:pt-24 md:pb-16"
       suppressHydrationWarning
     >
       <FloatingAccents />

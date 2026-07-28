@@ -77,7 +77,7 @@ export default function FaqClient() {
         <FloatingAccents />
         <ParticleField />
         <FloatingIconBadges />
-        <div className="relative mx-auto w-full max-w-6xl px-4 py-28 md:px-6 md:py-44">
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-10 md:px-6 md:py-44">
           <ScrollReveal className="text-center">
             <span className="ai-pill-magenta">
               <span className="h-1 w-1 rounded-full bg-accent" />

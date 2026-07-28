@@ -508,13 +508,13 @@ export function Hero() {
             transition={{ duration: 0.55, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
             className="mt-5 flex flex-1 flex-wrap items-center gap-2.5 sm:mt-6 sm:gap-3">
             <Link href="/get-started"
-              className="group inline-flex flex-1 min-w-[130px] h-11 items-center justify-center gap-2 rounded-full bg-[#046bd2] px-5 text-sm font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_44px_rgba(4,107,210,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:px-7">
+              className="group inline-flex flex-1 min-w-0 h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#046bd2] px-3 text-[12px] font-semibold text-white shadow-[0_0_28px_rgba(4,107,210,0.45)] transition-all duration-200 hover:bg-[#0579e8] hover:shadow-[0_0_44px_rgba(4,107,210,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:gap-2 sm:px-7 sm:text-sm">
               Deploy Your Agent Free
-              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-1 sm:h-4 sm:w-4" />
             </Link>
             <Link href="/features"
-              className="inline-flex flex-1 min-w-[130px] h-11 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm font-medium text-white/65 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:px-7">
-              <PhoneCall className="h-4 w-4" />
+              className="inline-flex flex-1 min-w-0 h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 text-[12px] font-medium text-white/65 backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:h-12 sm:gap-2 sm:px-7 sm:text-sm">
+              <PhoneCall className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
               Hear It In Action
             </Link>
           </motion.div>
