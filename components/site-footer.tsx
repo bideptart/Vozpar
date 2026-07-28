@@ -12,7 +12,7 @@ const PLATFORM: FooterLink[] = [
   { label: "Features", href: "/features" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },
-  { label: "Dashboard", href: "https://voice.9278.ai/", external: true },
+  { label: "Dashboard", href: "https://voice.vozpar.app/", external: true },
 ]
 
 const INDUSTRIES: FooterLink[] = [
@@ -124,7 +124,7 @@ export function SiteFooter() {
 
             {/* Dashboard link — full-width tappable row on phones, pill from sm. */}
             <a
-              href="https://voice.Vozpar/"
+              href="https://voice.vozpar.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="group mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2.5 text-sm text-white/60 transition-all hover:border-[#046bd2]/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d98f1] sm:mt-5 sm:inline-flex sm:w-auto sm:justify-start sm:py-2"

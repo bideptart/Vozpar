@@ -116,7 +116,7 @@ export default function FaqClient() {
             </div>
           </ScrollReveal>
 
-          {/* Category tabs — slim flat pills like 9278.ai reference */}
+          {/* Category tabs — slim flat pills */}
           <ScrollReveal className="mt-8">
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
               {FAQ_GROUPS.map((g) => {

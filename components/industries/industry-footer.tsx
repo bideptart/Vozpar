@@ -32,7 +32,7 @@ const PLATFORM: FooterLink[] = [
   { label: "Features", href: "/features" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },
-  { label: "Dashboard", href: "https://voice.9278.ai/", external: true },
+  { label: "Dashboard", href: "https://voice.vozpar.app/", external: true },
 ]
 
 const INDUSTRIES_LINKS: FooterLink[] = [
