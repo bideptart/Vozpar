@@ -27,7 +27,12 @@ export async function generateMetadata({
   const { slug } = await params
   const post = getPost(slug)
   if (!post) return pageSeo({ title: "Blog", description: "Vozpar blog.", path: "/blog" })
-  return pageSeo({ title: post.title, description: post.excerpt, path: `/blog/${post.slug}` })
+  return pageSeo({
+    title: post.title,
+    description: post.excerpt,
+    path: `/blog/${post.slug}`,
+    image: post.cover,
+  })
 }
 
 function BlockView({ block }: { block: Block }) {

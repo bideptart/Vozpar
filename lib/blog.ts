@@ -272,7 +272,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "ai-voice-agent-for-real-estate",
-    cover: "/blog/ai-voice-agent-for-real-estate/cover.png",
+    cover: "/blog/ai-voice-agent-for-real-estate/cover.jpg",
     title: "AI voice agent for real estate: stop losing leads to missed calls",
     excerpt:
       "An AI voice agent for real estate answers every lead instantly, qualifies buyers, and books showings 24/7. See the missed-call math and how to deploy one.",
@@ -287,7 +287,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "In real estate, the agent who answers first usually wins the deal. Yet busy agents miss a large share of calls, and roughly half of all leads come in after the office closes. An AI voice agent for real estate fixes the math: it answers every call on the first ring, qualifies the lead, and books the showing while the prospect is still interested. Here is what it does, the numbers behind it, and how to put one on your line.",
       },
       { type: "h2", text: "The missed-call problem, in numbers" },
-      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/missed-call.png", alt: "The missed-call problem, in numbers" },
+      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/missed-call.jpg", alt: "The missed-call problem, in numbers" },
       {
         type: "p",
         text: "Lead loss in real estate is rarely about effort. It is about timing. The data is consistent and unforgiving:",
@@ -311,7 +311,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "It helps to translate the loss into dollars, because the abstraction hides the pain. Picture an agent who gets forty inbound inquiries a week and misses sixteen of them, a conservative forty percent. Say one in ten qualified calls eventually becomes a closing, and an average commission is several thousand dollars. Even a handful of missed inquiries a month carries an expected value that dwarfs the cost of answering them. This is why the missed-call problem is not a customer-service footnote for brokerages, it is a revenue line. The leads were paid for already, through portals, ads, and signage. Letting them hit voicemail is paying to generate demand and then declining to pick up the phone when it arrives.",
       },
       { type: "h2", text: "What an AI voice agent does for agents and brokerages" },
-      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/what-it-does.png", alt: "What an AI voice agent does for agents and brokerages" },
+      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/what-it-does.jpg", alt: "What an AI voice agent does for agents and brokerages" },
       {
         type: "p",
         text: "An AI voice agent acts as an always-on member of the team. It does the repetitive front-line work so human agents spend their hours on the conversations that close.",
@@ -334,7 +334,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "The outbound side is where many teams find the surprise upside. Most CRMs are full of leads that went cold simply because no one called them back in time, or at all. An agent can work that aging list patiently, reviving prospects a human team would never get to, and hand the ones who re-engage straight to an agent. On the inbound side, speed to lead is the whole game: when a buyer fills out a form on a listing, a callback within seconds, while they are still looking at the photos, converts at a wildly higher rate than one that comes the next morning. Doing that by hand across every portal and every hour is impossible for a human team. It is routine for an agent that never sleeps, never forgets a follow-up, and treats the two-hundredth call of the day with the same energy as the first.",
       },
       { type: "h2", text: "A day in the life: the 9 pm inquiry" },
-      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/day-in-life.png", alt: "A day in the life: the 9 pm inquiry" },
+      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/day-in-life.jpg", alt: "A day in the life: the 9 pm inquiry" },
             {
         type: "p",
         text: "A buyer calls about a listing at 9 pm. The agent picks up on the first ring, confirms which property, asks whether they are pre-approved and when they want to tour, then offers two showing windows and books one. The CRM is updated, the human agent gets a briefed handoff in the morning, and the lead never had a reason to call anyone else. That single saved call is the whole argument: at typical conversion rates and commissions, the expected value of one captured inquiry is large, which is why missed calls quietly cost brokerages thousands a month.",
@@ -344,7 +344,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Now compare that to the status quo. The same buyer calls at 9 pm, reaches voicemail, and leaves a half-hearted message, or more often leaves none and calls the next agent on the search results. By the time someone listens to the message the next morning, the buyer has already booked a showing with a competitor who answered. Nothing about the first agent's skill or listings decided that outcome; availability did. The agent who was reachable won, and the one who was asleep lost a lead they had already paid to generate. Multiply that across a year of evenings and weekends and the pattern, not any single call, is what separates a growing pipeline from a leaking one.",
       },
       { type: "h2", text: "How to deploy one without disrupting your stack" },
-      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/deploy.png", alt: "How to deploy one without disrupting your stack" },
+      { type: "image", src: "/blog/ai-voice-agent-for-real-estate/deploy.jpg", alt: "How to deploy one without disrupting your stack" },
       {
         type: "p",
         text: "You do not need to change phone numbers or rebuild your tools. The path is short:",
@@ -382,7 +382,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "ai-receptionist-for-small-business",
-    cover: "/blog/ai-receptionist-for-small-business/cover.png",
+    cover: "/blog/ai-receptionist-for-small-business/cover.jpg",
     title: "AI receptionist for small business: how it works",
     excerpt:
       "An AI receptionist for small business answers every call 24/7, books appointments, and qualifies leads. See how it works, what it costs, and where it fits.",
@@ -397,7 +397,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Every missed call is a customer who called a competitor next. For a small business that cannot staff a front desk around the clock, that adds up fast. An AI receptionist for small business closes the gap: it answers instantly, day or night, handles the routine work, and hands off only what truly needs a person. Here is how it works, what it costs, and how to tell if it fits your shop.",
       },
       { type: "h2", text: "What an AI receptionist actually does" },
-      { type: "image", src: "/blog/ai-receptionist-for-small-business/what-it-does.png", alt: "What an AI receptionist actually does" },
+      { type: "image", src: "/blog/ai-receptionist-for-small-business/what-it-does.jpg", alt: "What an AI receptionist actually does" },
       {
         type: "p",
         text: "An AI receptionist is an automated front desk that picks up the phone and takes action. It is not a phone tree. It listens, understands intent, and responds in plain language. The core jobs are consistent across industries:",
@@ -420,7 +420,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "That judgment shows up in small ways callers notice. A real receptionist does not make a frustrated customer repeat their phone number three times, and a good AI agent does not either. It remembers what was said earlier in the call, handles a caller who interrupts halfway through a sentence, and switches language when it hears one. It can pull an answer from your actual hours and policies instead of guessing, and when a question lands outside its scope, it says so plainly and routes the caller to a person rather than looping. The goal is not to trick anyone into thinking they reached a human. It is to give every caller a fast, competent answer at any hour, which is exactly what most people wanted from your front desk in the first place.",
       },
       { type: "h2", text: "Why missed calls cost small businesses real money" },
-      { type: "image", src: "/blog/ai-receptionist-for-small-business/missed-calls.png", alt: "Why missed calls cost small businesses real money" },
+      { type: "image", src: "/blog/ai-receptionist-for-small-business/missed-calls.jpg", alt: "Why missed calls cost small businesses real money" },
       {
         type: "p",
         text: "The case for an AI receptionist is mostly arithmetic. A human answers one call at a time, takes lunch, and goes home. Calls that arrive during those gaps go unanswered, and a large share of callers will not leave a message. They simply dial the next listing.",
@@ -438,7 +438,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Consider the shape of a typical week. Calls cluster at lunch, when your one front-desk person is eating, and after five, when the office is closed. Those are precisely the windows a single human cannot cover, and they are when a large share of callers reach voicemail and hang up. Industry estimates of missed inbound calls for busy small offices often sit between twenty and forty percent. Even at the low end, on a hundred calls a week that is twenty conversations lost, and a portion of those were ready to book, buy, or return. An AI receptionist does not get you a better salesperson; it simply stops the leak. For most owners, recovering even half of those missed calls pays for the service many times over, before you count the staff hours freed up for higher-value work.",
       },
       { type: "h2", text: "How it works behind the scenes" },
-      { type: "image", src: "/blog/ai-receptionist-for-small-business/how-it-works.png", alt: "How it works behind the scenes" },
+      { type: "image", src: "/blog/ai-receptionist-for-small-business/how-it-works.jpg", alt: "How it works behind the scenes" },
       {
         type: "p",
         text: "You do not need to host models or wire up infrastructure. Setup follows three plain steps, and the first agent can be live the same day.",
@@ -452,7 +452,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Two design choices keep the agent from feeling generic. The first is grounding it in your own source of truth, so it cites your real policies and prices instead of inventing plausible-sounding answers. The second is the guardrails: clear rules about what it must never promise, when it should escalate, and how it should speak. A few hours spent writing those rules well is the difference between an agent that protects your reputation and one that improvises. Start with your most common ten or fifteen call reasons, script those tightly, and let the agent route everything else to a person while you expand its coverage over the first couple of weeks.",
       },
       { type: "h2", text: "What it costs and how to choose" },
-      { type: "image", src: "/blog/ai-receptionist-for-small-business/cost.png", alt: "What it costs and how to choose" },
+      { type: "image", src: "/blog/ai-receptionist-for-small-business/cost.jpg", alt: "What it costs and how to choose" },
       {
         type: "p",
         text: "An AI receptionist is usually billed per minute, not per salary, which flips the economics for a small business. Self-serve voice rates commonly sit around $0.10 to $0.15 per minute. A shop handling a few thousand answered minutes a month typically spends a fraction of a part-time hire, with no benefits, sick days, or training time.",
@@ -497,7 +497,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "tcpa-compliance-ai-outbound-calling",
-    cover: "/blog/tcpa-compliance-ai-outbound-calling/cover.png",
+    cover: "/blog/tcpa-compliance-ai-outbound-calling/cover.jpg",
     title: "TCPA compliance for AI outbound calling: a 2026 playbook",
     excerpt:
       "TCPA compliance for AI outbound calling in 2026: consent rules, the AI disclosure requirement, DNC and calling windows, plus a practical checklist for teams.",
@@ -512,7 +512,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "AI can dial, qualify, and follow up at a scale no human team can match, which is exactly why regulators are watching. TCPA class actions rose sharply in 2025, and AI voices are now squarely inside the rules. This playbook lays out what TCPA compliance for AI outbound calling looks like in 2026: who the rules cover, the consent and disclosure standards, and a checklist you can hand to your team. One caveat up front: this is general information, not legal advice, so validate your program with counsel.",
       },
       { type: "h2", text: "AI voices are covered by the TCPA" },
-      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/covered.png", alt: "AI voices are covered by the TCPA" },
+      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/covered.jpg", alt: "AI voices are covered by the TCPA" },
       {
         type: "p",
         text: "The starting point is settled. The FCC has confirmed that AI-generated and AI-cloned voices count as artificial voices for TCPA purposes. That single ruling pulls AI outbound calling under the same framework that governs prerecorded and artificial-voice campaigns. If your agent speaks in a synthetic voice and dials consumers, you are operating inside the TCPA, full stop.",
@@ -559,7 +559,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "The practical version is simple: write the disclosure into the first sentence of every outbound agent and test that it fires on every call. A clear opener also builds trust, and trust tends to lift answer and completion rates rather than hurt them.",
       },
       { type: "h2", text: "Calling windows, do-not-call, and revocation" },
-      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/windows.png", alt: "Calling windows, do-not-call, and revocation" },
+      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/windows.jpg", alt: "Calling windows, do-not-call, and revocation" },
       {
         type: "p",
         text: "Consent and disclosure get you in the door. Operational hygiene keeps you there.",
@@ -582,7 +582,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "State law adds a layer on top of the federal rules, and it is where many programs trip. A number of states maintain their own do-not-call lists, mini-TCPA statutes, and tighter calling windows or consent standards than the federal baseline, and a few are notably aggressive about enforcement. Because your callers may sit in any state, the practical move is to design to the strictest rule you are likely to touch rather than the loosest, and to scrub against state registries alongside the national one. Revocation deserves the same rigor: when someone says stop, in any words, the system should capture it, suppress the number immediately, and never let a later campaign quietly call it again. Honoring an opt-out a day late is still a violation, so the safe default is to make it instant and irreversible.",
       },
       { type: "h2", text: "Your pre-launch compliance checklist" },
-      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/checklist.png", alt: "Your pre-launch compliance checklist" },
+      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/checklist.jpg", alt: "Your pre-launch compliance checklist" },
       {
         type: "p",
         text: "Before a single outbound campaign goes live, walk this list:",
@@ -616,7 +616,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "ai-voice-agent-for-dental-clinics",
-    cover: "/blog/ai-voice-agent-for-dental-clinics/cover.png",
+    cover: "/blog/ai-voice-agent-for-dental-clinics/cover.jpg",
     title: "AI voice agent for dental & medical clinics: 0 missed calls & 40% fewer no-shows",
     excerpt:
       "Dental front desks miss over 30% of incoming patient calls during peak hours. Discover how AI voice agents automate scheduling, triage emergencies, and eliminate no-shows 24/7.",
@@ -626,7 +626,7 @@ export const BLOG_POSTS: BlogPost[] = [
     author: "The Vozpar Team",
     content: [
       { type: "h2", text: "Introduction" },
-      { type: "image", src: "/blog/ai-voice-agent-for-dental-clinics/cover.png", alt: "AI Voice Agent for Dental & Medical Clinics Workflow" },
+      { type: "image", src: "/blog/ai-voice-agent-for-dental-clinics/cover.jpg", alt: "AI Voice Agent for Dental & Medical Clinics Workflow" },
       {
         type: "p",
         text: "In dental and medical practices, the front desk is simultaneously checking in patients, processing insurance, taking payments, and answering ringing phones. When morning rushes hit, incoming calls go straight to voicemail. Studies show that over 65% of patients seeking a new dentist will hang up and call another practice if they hit a voicemail box. An AI voice agent acts as an automated, 24/7 clinical receptionist that answers every call on the first ring, books appointments directly into your EHR/PMS system, and confirms patient visits.",
@@ -646,7 +646,7 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "h2",
         text: "Key features of a medical AI voice receptionist",
       },
-      { type: "image", src: "/blog/ai-voice-agent-for-dental-clinics/features.png", alt: "Key features of a medical AI voice receptionist" },
+      { type: "image", src: "/blog/ai-voice-agent-for-dental-clinics/features.jpg", alt: "Key features of a medical AI voice receptionist" },
       {
         type: "cards",
         items: [
@@ -718,7 +718,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "ai-voice-agent-for-financial-services",
-    cover: "/blog/tcpa-compliance-ai-outbound-calling/cover.png",
+    cover: "/blog/tcpa-compliance-ai-outbound-calling/cover.jpg",
     title: "AI voice agents for financial services: 24/7 lead intake & SOC-2 compliance",
     excerpt:
       "Mortgage brokers, wealth managers, and insurance agencies handle massive call volumes. See how AI voice agents qualify leads, collect loan details, and enforce strict financial compliance.",
@@ -760,7 +760,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "ai-voice-agent-for-home-services-contractors",
-    cover: "/blog/ai-receptionist-for-small-business/cover.png",
+    cover: "/blog/ai-receptionist-for-small-business/cover.jpg",
     title: "AI voice agent for HVAC, plumbing & electrical: Never miss an emergency job",
     excerpt:
       "When a homeowner's furnace breaks at 10 PM, they call until someone picks up. Discover how AI voice agents dispatch emergency crews and capture high-margin jobs 24/7.",
