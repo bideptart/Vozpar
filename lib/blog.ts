@@ -48,7 +48,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "On a phone call, speed is not a vanity metric. It is the difference between a conversation that feels human and one that feels like waiting for a machine. The architecture under the hood, speech-to-speech or cascaded, sets that ceiling before you tune anything else. This guide explains how each works, why latency stacks the way it does, and how to choose the right one for your use case.",
       },
       { type: "h2", text: "How cascaded voice AI works" },
-      { type: "image", src: "/blog/speech-to-speech-vs-cascaded-voice-ai/cascaded.png", alt: "How cascaded voice AI works" },
+      { type: "image", src: "/blog/speech-to-speech-vs-cascaded-voice-ai/cascaded.jpg", alt: "How cascaded voice AI works" },
       {
         type: "p",
         text: "The cascaded approach, sometimes called STT, LLM, TTS, chains three separate models. First speech-to-text transcribes what the caller said. Then a language model reads that text and decides on a reply. Then text-to-speech turns the reply back into audio. Each model can be excellent on its own, yet they run in series, and the call pays for every handoff between them.",
@@ -80,7 +80,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Interruptions are where the difference becomes obvious. On a real call, people talk over each other constantly. They cut in to correct a detail, to say \"actually, wait,\" or to answer before the agent finishes. A cascaded pipeline struggles here, because an interruption means tearing down a half-finished transcribe-reason-speak cycle and starting again, which produces the awkward stammer everyone recognizes as a bot. An audio-native model that streams can stop the instant it hears the caller, listen, and respond in stride, the way a person naturally yields the floor. That single behavior, smooth barge-in, does more to make a call feel human than almost anything else, and it is far easier to achieve when there is one model in the loop rather than three.",
       },
       { type: "h2", text: "Latency, side by side" },
-      { type: "image", src: "/blog/speech-to-speech-vs-cascaded-voice-ai/latency.png", alt: "Latency, side by side" },
+      { type: "image", src: "/blog/speech-to-speech-vs-cascaded-voice-ai/latency.jpg", alt: "Latency, side by side" },
       {
         type: "p",
         text: "The clearest way to compare is to line the two paths up against the things callers actually feel.",
@@ -105,7 +105,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "It is worth understanding why that threshold is so unforgiving. In natural human conversation, the gap between turns is astonishingly small, often around 200 ms, and we are exquisitely tuned to it. A pause longer than that reads as hesitation, confusion, or distraction, the same way it would from a person. So when an agent consistently takes most of a second to respond, callers do not consciously think \"high latency\"; they think the line is laggy, or that the agent did not understand, and they repeat themselves or interrupt. That repetition then collides with a pipeline still finishing its previous turn, and the call degrades into the stop-start rhythm that screams automation. The architecture decision, made long before any prompt tuning, is what sets the ceiling on how natural that rhythm can ever feel.",
       },
       { type: "h2", text: "When cascaded still makes sense" },
-      { type: "image", src: "/blog/speech-to-speech-vs-cascaded-voice-ai/when-cascaded.png", alt: "When cascaded still makes sense" },
+      { type: "image", src: "/blog/speech-to-speech-vs-cascaded-voice-ai/when-cascaded.jpg", alt: "When cascaded still makes sense" },
       {
         type: "p",
         text: "Speed is not the only thing teams optimize for. Cascaded pipelines dominate some enterprise deployments for reasons worth respecting.",
@@ -148,7 +148,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "ai-voice-agent-pricing-per-minute",
-    cover: "/blog/ai-voice-agent-pricing-per-minute/cover.png",
+    cover: "/blog/ai-voice-agent-pricing-per-minute/cover.jpg",
     title: "AI voice agent pricing: what you actually pay per minute",
     excerpt:
       "AI voice agent pricing looks simple at $0.10 per minute, but add-ons change the math. See what AI voice agents really cost per minute in 2026, line by line.",
@@ -163,7 +163,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "AI voice agent pricing reads like a single number on a landing page, then arrives as something larger on the invoice. The gap is not a trick so much as a bundling choice, and once you know the layers you can compare any vendor in minutes. This guide breaks down what an AI voice agent really costs per minute in 2026, where the hidden charges hide, and how to model your own monthly spend before you sign anything.",
       },
       { type: "h2", text: "What AI voice agents cost per minute in 2026" },
-      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/cost-per-minute.png", alt: "What AI voice agents cost per minute in 2026" },
+      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/cost-per-minute.jpg", alt: "What AI voice agents cost per minute in 2026" },
       {
         type: "p",
         text: "Across the market, published AI voice agent pricing spans a wide band: roughly $0.05 to $1.50 per minute, and enterprise voice with managed support can run past $2. The spread is not random. It tracks how much of the call stack the rate covers and how much hand-holding comes with it.",
@@ -186,7 +186,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Why does the same product span such a wide range? Three forces push the number around. The first is bundling, which we cover below: a low rate often means more line items live outside it. The second is support and accountability. A $1.50 rate frequently buys an SLA, a named contact, and someone to call at 2am, while a $0.10 rate assumes you run the agent yourself. The third is volume, since per-minute rates almost always step down as you commit more, because the vendor's own infrastructure cost falls with scale. None of these is good or bad on its own. The mistake is comparing a managed enterprise rate against a self-serve rate as if they were the same purchase. They are not, and the right tier depends on how much you want to own versus hand off.",
       },
       { type: "h2", text: "The hidden layers behind the headline rate" },
-      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/hidden-layers.png", alt: "The hidden layers behind the headline rate" },
+      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/hidden-layers.jpg", alt: "The hidden layers behind the headline rate" },
       {
         type: "p",
         text: "Most platforms advertise the orchestration rate, the cost of running the conversation loop. That figure often excludes the parts that actually make the call happen. When you stack them, a \"$0.05\" agent can land closer to $0.14 all-in.",
@@ -209,7 +209,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "The practical test when you read any rate card is one blunt question: does this number include the language model and the voice, or just the loop that connects them? If the answer is vague, assume the worst and ask for an all-in figure in writing. A vendor that is confident in its pricing will give you one without flinching. A vendor that cannot, or will not, is telling you something about the invoice that is coming. Keep that habit and you will rarely be surprised by a bill.",
       },
       { type: "h2", text: "Pricing models: prepaid credit, usage, and seats" },
-      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/pricing-models.png", alt: "Pricing models: prepaid credit, usage, and seats" },
+      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/pricing-models.jpg", alt: "Pricing models: prepaid credit, usage, and seats" },
       {
         type: "p",
         text: "Beyond the rate, the billing model shapes your risk. There are three common shapes, and each rewards a different buyer.",
@@ -234,7 +234,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "There is no universally correct model, only a correct fit. A law firm with steady weekday intake may prefer the predictability of a subscription. A seasonal home-services contractor whose phones explode in July and go quiet in February is far better served by pure usage or prepaid credit, where the bill tracks the actual season. Map your call volume across a full year before you choose, and weight the busy months heavily, because that is when a poorly chosen model hurts most.",
       },
       { type: "h2", text: "How to estimate your real monthly cost" },
-      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/estimate-cost.png", alt: "How to estimate your real monthly cost" },
+      { type: "image", src: "/blog/ai-voice-agent-pricing-per-minute/estimate-cost.jpg", alt: "How to estimate your real monthly cost" },
       {
         type: "p",
         text: "The math is simple once you separate voice from telephony. Use this order so nothing slips through:",
@@ -272,7 +272,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "ai-voice-agent-for-real-estate",
-    cover: "/blog/ai-voice-agent-for-real-estate/cover.jpg",
+    cover: "/blog/ai-voice-agent-for-real-estate/cover.png",
     title: "AI voice agent for real estate: stop losing leads to missed calls",
     excerpt:
       "An AI voice agent for real estate answers every lead instantly, qualifies buyers, and books showings 24/7. See the missed-call math and how to deploy one.",
@@ -452,7 +452,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Two design choices keep the agent from feeling generic. The first is grounding it in your own source of truth, so it cites your real policies and prices instead of inventing plausible-sounding answers. The second is the guardrails: clear rules about what it must never promise, when it should escalate, and how it should speak. A few hours spent writing those rules well is the difference between an agent that protects your reputation and one that improvises. Start with your most common ten or fifteen call reasons, script those tightly, and let the agent route everything else to a person while you expand its coverage over the first couple of weeks.",
       },
       { type: "h2", text: "What it costs and how to choose" },
-      { type: "image", src: "/blog/ai-receptionist-for-small-business/cost.jpg", alt: "What it costs and how to choose" },
+      { type: "image", src: "/blog/ai-receptionist-for-small-business/cost.png", alt: "What it costs and how to choose" },
       {
         type: "p",
         text: "An AI receptionist is usually billed per minute, not per salary, which flips the economics for a small business. Self-serve voice rates commonly sit around $0.10 to $0.15 per minute. A shop handling a few thousand answered minutes a month typically spends a fraction of a part-time hire, with no benefits, sick days, or training time.",
@@ -512,7 +512,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "AI can dial, qualify, and follow up at a scale no human team can match, which is exactly why regulators are watching. TCPA class actions rose sharply in 2025, and AI voices are now squarely inside the rules. This playbook lays out what TCPA compliance for AI outbound calling looks like in 2026: who the rules cover, the consent and disclosure standards, and a checklist you can hand to your team. One caveat up front: this is general information, not legal advice, so validate your program with counsel.",
       },
       { type: "h2", text: "AI voices are covered by the TCPA" },
-      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/covered.jpg", alt: "AI voices are covered by the TCPA" },
+      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/covered.png", alt: "AI voices are covered by the TCPA" },
       {
         type: "p",
         text: "The starting point is settled. The FCC has confirmed that AI-generated and AI-cloned voices count as artificial voices for TCPA purposes. That single ruling pulls AI outbound calling under the same framework that governs prerecorded and artificial-voice campaigns. If your agent speaks in a synthetic voice and dials consumers, you are operating inside the TCPA, full stop.",
@@ -559,7 +559,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "The practical version is simple: write the disclosure into the first sentence of every outbound agent and test that it fires on every call. A clear opener also builds trust, and trust tends to lift answer and completion rates rather than hurt them.",
       },
       { type: "h2", text: "Calling windows, do-not-call, and revocation" },
-      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/windows.jpg", alt: "Calling windows, do-not-call, and revocation" },
+      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/windows.png", alt: "Calling windows, do-not-call, and revocation" },
       {
         type: "p",
         text: "Consent and disclosure get you in the door. Operational hygiene keeps you there.",
@@ -582,7 +582,7 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "State law adds a layer on top of the federal rules, and it is where many programs trip. A number of states maintain their own do-not-call lists, mini-TCPA statutes, and tighter calling windows or consent standards than the federal baseline, and a few are notably aggressive about enforcement. Because your callers may sit in any state, the practical move is to design to the strictest rule you are likely to touch rather than the loosest, and to scrub against state registries alongside the national one. Revocation deserves the same rigor: when someone says stop, in any words, the system should capture it, suppress the number immediately, and never let a later campaign quietly call it again. Honoring an opt-out a day late is still a violation, so the safe default is to make it instant and irreversible.",
       },
       { type: "h2", text: "Your pre-launch compliance checklist" },
-      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/checklist.jpg", alt: "Your pre-launch compliance checklist" },
+      { type: "image", src: "/blog/tcpa-compliance-ai-outbound-calling/checklist.png", alt: "Your pre-launch compliance checklist" },
       {
         type: "p",
         text: "Before a single outbound campaign goes live, walk this list:",
@@ -646,6 +646,7 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "h2",
         text: "Key features of a medical AI voice receptionist",
       },
+      { type: "image", src: "/blog/ai-voice-agent-for-dental-clinics/features.png", alt: "Key features of a medical AI voice receptionist" },
       {
         type: "cards",
         items: [
@@ -674,7 +675,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "sub-300ms-voice-ai-latency-guide",
-    cover: "/blog/speech-to-speech-vs-cascaded-voice-ai/latency.png",
+    cover: "/blog/speech-to-speech-vs-cascaded-voice-ai/latency.jpg",
     title: "Why sub-300ms latency is mandatory for conversational AI voice agents",
     excerpt:
       "Human conversation relies on a 200ms turn-taking baseline. Learn how streaming WebRTC, neural audio engines, and full-duplex barge-in eliminate robotic delays.",
@@ -797,7 +798,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
   {
     slug: "voice-ai-crm-integration-playbook",
-    cover: "/blog/ai-voice-agent-pricing-per-minute/cover.png",
+    cover: "/blog/ai-voice-agent-pricing-per-minute/cover.jpg",
     title: "Integrating AI voice agents with Salesforce, HubSpot, and GoHighLevel",
     excerpt:
       "Learn how real-time webhooks, custom function calling, and automated transcript parsing push call data directly into your CRM within milliseconds.",

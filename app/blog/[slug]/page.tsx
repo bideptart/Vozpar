@@ -180,7 +180,7 @@ export default async function BlogPostPage({
           <img
             src={post.cover}
             alt={post.title}
-            className="mt-8 w-full rounded-2xl border border-border/60"
+            className="mt-8 aspect-[3/2] w-full rounded-2xl border border-border/60 object-contain"
           />
         </div>
       )}

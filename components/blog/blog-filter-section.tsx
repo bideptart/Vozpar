@@ -159,12 +159,12 @@ export function BlogFilterSection({ posts }: BlogFilterSectionProps) {
                   <img
                     src={featured.cover}
                     alt={featured.title}
-                    className="hidden h-full w-full rounded-xl object-cover ring-1 ring-white/10 md:block"
+                    className="hidden aspect-video w-full self-center rounded-xl bg-white object-contain ring-1 ring-white/10 md:block"
                   />
                 ) : (
                   <div
                     aria-hidden
-                    className="hidden rounded-xl bg-[radial-gradient(120%_120%_at_20%_0%,rgba(220,38,38,0.14),transparent_60%)] ring-1 ring-white/10 md:block"
+                    className="hidden aspect-video w-full self-center rounded-xl bg-[radial-gradient(120%_120%_at_20%_0%,rgba(220,38,38,0.14),transparent_60%)] ring-1 ring-white/10 md:block"
                   />
                 )}
               </Link>
@@ -196,7 +196,7 @@ export function BlogFilterSection({ posts }: BlogFilterSectionProps) {
                         <img
                           src={post.cover}
                           alt={post.title}
-                          className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          className="aspect-video w-full bg-white object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                       )}
                       <div className="flex flex-1 flex-col p-6">

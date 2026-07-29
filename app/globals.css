@@ -1314,6 +1314,12 @@
   border-radius: 0.75rem;
   background: var(--card);
 }
+/* Post images ship on a uniform 3:2 canvas, so lock the box: every figure
+   renders the same size and reserves its space before the lazy load lands. */
+.legal figure img {
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+}
 .legal figcaption {
   margin-top: 0.5rem;
   font-size: 0.8rem;
