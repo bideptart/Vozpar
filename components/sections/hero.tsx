@@ -447,7 +447,7 @@ function Scene3D({ reduced }: { reduced: boolean }) {
   )
 }
 
-// ── HERO ──────────────────────────────────────────────────────────────────────
+ // ── HERO ──────────────────────────────────────────────────────────────────────
 export function Hero() {
   const reduced = useReducedMotion()
   const [wordIdx, setWordIdx] = useState(0)
