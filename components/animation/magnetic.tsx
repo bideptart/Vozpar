@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useRef } from "react"
-import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react"
+import { motion, useMotionValue, useSpring, useReducedMotion } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 
 /**

@@ -1,7 +1,7 @@
 "use client"
 
 import { Wand2, BookOpen, Rocket, ArrowRight } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 const steps = [

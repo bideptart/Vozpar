@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CalendarDays, PhoneCall, Sparkles } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 export function CTA() {

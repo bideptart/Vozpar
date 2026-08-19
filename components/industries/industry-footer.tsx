@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { ArrowUpRight, Layers, Building2, Users, Scale, type LucideIcon } from "lucide-react"
-import { motion } from "motion/react"
+import { motion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { FloatingAccents, ParticleField, Magnetic, PulsingDot } from "@/components/industries/industries-fx"
 import { Logo } from "@/components/logo"

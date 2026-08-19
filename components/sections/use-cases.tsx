@@ -1,7 +1,7 @@
 "use client"
 
 import { Headset, TrendingUp, Languages } from "lucide-react"
-import { motion } from "motion/react"
+import { motion } from "@/lib/motion"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 const items = [

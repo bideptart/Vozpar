@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion } from "@/lib/motion"
 
 /**
  * Word-by-word "assemble in" reveal for the big per-industry H2 headline —

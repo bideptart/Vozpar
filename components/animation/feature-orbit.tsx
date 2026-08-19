@@ -2,7 +2,7 @@
 
 import type { ElementType } from "react"
 import { AudioLines, PhoneCall, Wrench, ShieldCheck, Activity, Languages } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 
 /**
  * FeatureOrbit

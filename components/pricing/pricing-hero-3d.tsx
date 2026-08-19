@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react"
+import { motion, useMotionValue, useSpring, useTransform } from "@/lib/motion"
 
 export function PricingHero3D() {
   const ref = useRef<HTMLDivElement>(null)

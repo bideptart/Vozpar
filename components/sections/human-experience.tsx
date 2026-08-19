@@ -1,7 +1,7 @@
 "use client"
 
 import { Waves, Hand, Infinity as InfinityIcon } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 import { SpotlightPanel } from "@/components/animation/magnetic"
 

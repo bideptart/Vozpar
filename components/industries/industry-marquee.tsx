@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion } from "@/lib/motion"
 import { INDUSTRIES } from "@/lib/industries"
 import { monoStyle } from "@/lib/industries-typography"
 

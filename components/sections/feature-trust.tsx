@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { ArrowUpRight, Check, Database, Lock, PhoneForwarded, ShieldCheck } from "lucide-react"
 import type { ElementType } from "react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { SpotlightPanel } from "@/components/animation/magnetic"
 

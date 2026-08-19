@@ -3,7 +3,7 @@
 import { ShieldCheck, Gauge, Globe2, Clock } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import type { ElementType } from "react"
-import { useInView, useReducedMotion, animate } from "motion/react"
+import { useInView, useReducedMotion, animate } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { FeatureHero } from "@/components/sections/feature-hero"
 

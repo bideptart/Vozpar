@@ -10,7 +10,7 @@ import {
   useScroll,
   useSpring,
   useTransform,
-} from "motion/react"
+} from "@/lib/motion"
 import { FeatureOrbit } from "@/components/animation/feature-orbit"
 import { Magnetic } from "@/components/animation/magnetic"
 

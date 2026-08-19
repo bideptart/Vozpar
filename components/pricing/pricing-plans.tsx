@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useRef } from "react"
 import Link from "next/link"
 import { Check, Loader2 } from "lucide-react"
-import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react"
+import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "@/lib/motion"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"

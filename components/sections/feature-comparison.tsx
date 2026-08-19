@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Check, Minus, Sparkles, X } from "lucide-react"
-import { animate, motion, useInView, useReducedMotion } from "motion/react"
+import { animate, motion, useInView, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 /**

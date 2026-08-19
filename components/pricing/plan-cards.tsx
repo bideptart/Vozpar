@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "motion/react"
+import { motion } from "@/lib/motion"
 import { Check, Loader2 } from "lucide-react"
 import { useFormStatus } from "react-dom"
 import { cn } from "@/lib/utils"

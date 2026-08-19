@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Timer, BadgeCheck, Receipt, ArrowRight } from "lucide-react"
-import { motion } from "motion/react"
+import { motion } from "@/lib/motion"
 import { Button } from "@/components/ui/button"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 

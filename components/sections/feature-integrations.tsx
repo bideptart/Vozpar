@@ -9,7 +9,7 @@
  */
 
 import { useRef } from "react"
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
+import { motion, useScroll, useTransform, useReducedMotion } from "@/lib/motion"
 import { Plug, Zap } from "lucide-react"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 

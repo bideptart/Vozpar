@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useInView } from "motion/react"
+import { useInView } from "@/lib/motion"
 
 /**
  * Shared scroll-triggered count-up number, used by the hero stat strip

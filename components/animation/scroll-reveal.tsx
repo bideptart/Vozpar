@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { motion, type Variants } from "motion/react"
+import { motion, type Variants } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 
 type ScrollRevealProps = {

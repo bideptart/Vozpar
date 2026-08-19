@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import type { ElementType } from "react"
 import { AudioLines, Building2, Cable, Languages, PhoneCall, Radio, Repeat } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 import { CardStack, type CardStackItem } from "@/components/ui/card-stack"
 

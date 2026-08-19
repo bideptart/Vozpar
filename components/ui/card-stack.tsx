@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 import { Pause, Play, SquareArrowOutUpRight } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
@@ -12,9 +12,9 @@ import { cn } from "@/lib/utils"
  * splay out behind it on an arc.
  *
  * Two deviations from the source this was adapted from:
- *   · imports come from `motion/react` rather than `framer-motion`. Both are
- *     installed and `motion` re-exports framer-motion wholesale, but every
- *     other component in this codebase uses `motion/react` and mixing the two
+ *   · imports come from `@/lib/motion` rather than `@/lib/motion`. Both are
+ *     installed and `motion` re-exports @/lib/motion wholesale, but every
+ *     other component in this codebase uses `@/lib/motion` and mixing the two
  *     entry points in one tree risks two copies of the layout engine.
  *   · it uses the shared `cn` from `@/lib/utils` instead of shipping a private
  *     one.

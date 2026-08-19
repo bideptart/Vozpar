@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { ElementType } from "react"
 import { Check, Hourglass, PhoneOff, RotateCcw, Sparkles } from "lucide-react"
-import { motion, useInView, useReducedMotion } from "motion/react"
+import { motion, useInView, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 /**

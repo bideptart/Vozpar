@@ -1,7 +1,7 @@
 "use client"
 
 import { Globe2, PhoneForwarded, ShieldCheck } from "lucide-react"
-import { motion } from "motion/react"
+import { motion } from "@/lib/motion"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 const items = [

@@ -3,7 +3,7 @@
 import type React from "react"
 import { useRef } from "react"
 import { Phone, Users, Activity, MessageCircle, Link2 } from "lucide-react"
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react"
+import { motion, useMotionValue, useReducedMotion, useSpring } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 
 /**

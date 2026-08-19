@@ -1,7 +1,7 @@
 "use client"
 
 import { Quote, Star, TrendingUp, Clock, PhoneCall } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/animation/scroll-reveal"
 
 const metrics = [

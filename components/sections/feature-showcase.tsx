@@ -19,7 +19,7 @@ import {
   RadioTower,
   ArrowRight,
 } from "lucide-react"
-import { motion, AnimatePresence, useReducedMotion } from "motion/react"
+import { motion, AnimatePresence, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 /**

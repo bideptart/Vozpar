@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useSpring } from "motion/react"
+import { motion, useScroll, useSpring } from "@/lib/motion"
 
 /**
  * Thin fixed bar across the very top of the viewport that fills as the

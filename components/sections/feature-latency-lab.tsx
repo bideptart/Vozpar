@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Gauge, RotateCcw } from "lucide-react"
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react"
+import { AnimatePresence, motion, useInView, useReducedMotion } from "@/lib/motion"
 import { ScrollReveal } from "@/components/animation/scroll-reveal"
 
 /**

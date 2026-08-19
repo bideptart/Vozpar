@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useRef } from "react"
-import { motion, useMotionTemplate, useMotionValue, useSpring } from "motion/react"
+import { motion, useMotionTemplate, useMotionValue, useSpring } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 
 type MouseGlowCardProps = {

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, PhoneCall, Sparkles, Mic, Volume2, Cpu, Radio } from "lucide-react"
-import { AnimatePresence, animate, motion, useReducedMotion, type Variants } from "motion/react"
+import { AnimatePresence, animate, motion, useReducedMotion, type Variants } from "@/lib/motion"
 
 /**
  * The call the panel is demoing, cycling on a loop. Previously this was two
